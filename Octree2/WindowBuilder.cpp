@@ -26,7 +26,7 @@ WindowBuilder::WindowBuilder()
 	settings.minorVersion = 2;
 	settings.attributeFlags = sf::ContextSettings::Core;
 
-	window.create(sf::VideoMode(800, 600), "openGL", sf::Style::Close, settings);
+	window.create(sf::VideoMode(640, 360), "openGL", sf::Style::Close, settings);
 	glewInit();
 	glewExperimental = GL_TRUE;
 	glMatrixMode(GL_PROJECTION);
@@ -39,6 +39,7 @@ WindowBuilder::WindowBuilder()
 	
 	Cube cube(0.5f);
 	Cube cube2(0.2f);
+	glm::mat4 projection = glm::perspective(0.75f, 1.77f, 0.1f, 200.0f);
 	sf::Clock clock;
 	float rotation = 1.0f;
 	while (window.isOpen())
@@ -49,11 +50,15 @@ WindowBuilder::WindowBuilder()
 		sf::Event event;
 		if (clock.getElapsedTime().asMilliseconds() >= sf::milliseconds(30).asMilliseconds())
 		{
-			glm::mat4 transfo = glm::rotate(1.0f,glm::vec3(1.0,0.0,0))*glm::rotate(rotation*0.05f, glm::vec3(0.0, 0.0, 1.0));
+			glm::mat4 transfo =glm::rotate(rotation*0.05f, glm::vec3(0.0, 0.0, 1.0));
+			glm::mat4 translation = glm::translate(glm::vec3(0, 0, -2.0f));
 			rotation++;
-			cube.setObjectSpace(transfo);
-			cube2.setObjectSpace( transfo * glm::translate(glm::vec3(0.5, 0.5, 0.0)) * transfo );
+			glm::mat4 camRot = glm::rotate(5.0f, glm::vec3(1.0, 0, 0));
+			glm::mat4 cameraspace = projection * translation * camRot;
+			cube.setObjectSpace( cameraspace * transfo);
+			cube2.setObjectSpace( cameraspace * transfo * glm::translate(glm::vec3(0.5, 0.5, 0.0)) * transfo);
 			clock.restart();
+			
 
 		}
 		glClear(GL_COLOR_BUFFER_BIT);
