@@ -14,7 +14,9 @@ namespace perso {
 		//For now we assume the shape is concave.
 		//will split the polygon in triangles, and will return an array of those triangles.
 		std::vector<Polygon> triangleSplitting();
-		const GLfloat* getVertArray();
+		std::vector<glm::vec3> getPoints();
+		std::vector<GLfloat> getVertArray();
+		unsigned int getVertArraySize();
 	private:
 		std::vector<Polygon> earSplitting();
 		bool isInPolygon(std::vector<Vec3> triangle);

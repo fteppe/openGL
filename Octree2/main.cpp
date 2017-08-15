@@ -12,14 +12,9 @@ void stuffs();
 int main(int argc, char **argv)
 {
 
-	//WindowBuilder window;
-	std::vector<glm::vec3> points = { -Vec3::u(),-Vec3::w(),Vec3::u(),Vec3::w() };
-	perso::Polygon poly(points);
-	const float * vertices = poly.getVertArray();
-	for (int i=0; i < 12; i++)
-	{
-		std::cout << vertices[i] << std::endl;
-	}
+	WindowBuilder window;
+
+
 	//stuffs();
 }
 

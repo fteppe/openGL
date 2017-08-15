@@ -30,17 +30,27 @@ std::vector<Polygon> Polygon::triangleSplitting()
 	return earSplitting();
 }
 
-const GLfloat * perso::Polygon::getVertArray()
+std::vector<glm::vec3> perso::Polygon::getPoints()
 {
-	GLfloat * vertices = new GLfloat[points.size() * 3];
+	return points;
+}
+
+std::vector<GLfloat> perso::Polygon::getVertArray()
+{
+	std::vector<GLfloat> vertices;
 	//we put all the coordinates in one GLfoat array.
 	for (int i = 0; i < points.size(); i++)
 	{
-		vertices[3*i] = points[i].x;
-		vertices[3*i + 1] = points[i].y;
-		vertices[3*i + 2] = points[i].z;
+		vertices.push_back( points[i].x);
+		vertices.push_back( points[i].y);
+		vertices.push_back( points[i].z);
 	}
 	return vertices;
+}
+
+unsigned int perso::Polygon::getVertArraySize()
+{
+	return points.size() * 3 * sizeof(GLfloat);
 }
 
 std::vector<Polygon> Polygon::earSplitting()

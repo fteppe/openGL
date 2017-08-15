@@ -10,7 +10,9 @@ public:
 	Solid(std::vector < perso::Polygon> poly);
 	~Solid();
 	void draw();
-private:
+	std::string description();
+	void setObjectSpace(glm::mat4 transfo);
+protected:
 	std::vector<perso::Polygon> polygons;
 	glm::mat4 objectSpace;
 	bool triangulated;

@@ -39,6 +39,11 @@ Shader::Shader(std::string vertex, std::string fragment)
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
+	// Generate 1 buffer, put the resulting identifier in vertexbuffer
+	glGenBuffers(1, &vertexbuffer);
+	// The following commands will talk about our 'vertexbuffer' buffer
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+
 }
 
 
@@ -62,7 +67,7 @@ void Shader::compile()
 void Shader::compileVertex()
 {
 	const char* shadersource = sourceVertex.c_str();
-	std::cout << "source: " << sourceVertex << std::endl;;
+
 	glShaderSource(vertexId, 1, &shadersource, NULL);
 	glCompileShader(vertexId);
 	int  success;
@@ -80,7 +85,7 @@ void Shader::compileVertex()
 void Shader::compileFragment()
 {
 	const char* shadersource = sourceFragment.c_str();
-	std::cout << "source: " << shadersource << std::endl;;
+
 	glShaderSource(fragmentId, 1, &shadersource, NULL);
 	glCompileShader(fragmentId);
 	int  success;
@@ -98,14 +103,10 @@ void Shader::compileFragment()
 
 void Shader::setVertex(const GLfloat * vertices, unsigned int size)
 {
-	// Generate 1 buffer, put the resulting identifier in vertexbuffer
-	glGenBuffers(1, &vertexbuffer);
-	// The following commands will talk about our 'vertexbuffer' buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	std::cout << "size: " << size << " " << vertices[15] << std::endl;
+	verticesNum = size / (sizeof(GLfloat)*3);
+
 	// Give our vertices to OpenGL.
 	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
-	
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);
@@ -121,8 +122,12 @@ void Shader::setVertex(const GLfloat * vertices, unsigned int size)
 
 void Shader::draw()
 {
-	glDrawArrays(GL_TRIANGLES, 0, 6); //drawing 6 vertices.
+	glDrawArrays(GL_TRIANGLES, 0, verticesNum); //drawing as many vertices as their are: 
 	glDisableVertexAttribArray(0);
+
+	//glDeleteVertexArrays(1, &vertexbuffer);
+	//glDeleteBuffers(1, &vertexbuffer);
+
 }
 
 GLuint Shader::getvertexBuffer()
