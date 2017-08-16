@@ -20,22 +20,22 @@ Shader::Shader(std::string vertex, std::string fragment)
 	std::ifstream fragmentContent(fragment);
 	sourceVertex = std::string((std::istreambuf_iterator<char>(vertexContent)), std::istreambuf_iterator<char>());
 	sourceFragment = std::string((std::istreambuf_iterator<char>(fragmentContent)), std::istreambuf_iterator<char>());
-	
+
 	vertexId = glCreateShader(GL_VERTEX_SHADER);
 	fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
 
 	//compiling both shaders
+
 	compile();
 	program = glCreateProgram();
 	glAttachShader(program, vertexId);
 	glAttachShader(program, fragmentId);
 	//once they are linked to a program they are deleted
 	glDeleteShader(vertexId);
-	glDeleteShader(fragmentId); 
+	glDeleteShader(fragmentId);
 	glLinkProgram(program);
 	glUseProgram(program);
 
-	verticesNum = 0;
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
@@ -98,15 +98,29 @@ void Shader::compileFragment()
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 		std::cout << shadersource;
 	}
-
 }
 
-void Shader::setVertex(const GLfloat * vertices, unsigned int size)
+void Shader::setVertex(std::vector<GLfloat> vertices, std::vector<int> index)
 {
-	verticesNum = size / (sizeof(GLfloat)*3);
+	indexSize = index.size();
+	GLuint elementbuffer;
+	glGenBuffers(1, &elementbuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	float vertices2[] = {
+		0.5f,  0.5f, 0.0f,  // top right
+		0.5f, -0.5f, 0.0f,  // bottom right
+		-0.5f, -0.5f, 0.0f,  // bottom left
+		-0.5f,  0.5f, 0.0f   // top left 
+	};
+	unsigned int indices[] = {  // note that we start from 0!
+		0, 1, 3,   // first triangle
+		1, 2, 3    // second triangle
+	};
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size()*sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
 	// Give our vertices to OpenGL.
-	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);
@@ -115,14 +129,17 @@ void Shader::setVertex(const GLfloat * vertices, unsigned int size)
 		3,                  // size
 		GL_FLOAT,           // type
 		GL_FALSE,           // normalized?
-		0,                  // stride
+		3 * sizeof(float),                  // stride
 		(void*)0            // array buffer offset
 	);
+	//std::cout << "error :" << glGetError() << std::endl;
 }
 
 void Shader::draw()
 {
-	glDrawArrays(GL_TRIANGLES, 0, verticesNum); //drawing as many vertices as their are: 
+	//glDrawArrays(GL_TRIANGLES, 0, verticesNum); //drawing as many vertices as their are: 
+	//std::cout << "error :"<<glGetError()<<std::endl;
+	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
 	glDisableVertexAttribArray(0);
 
 	//glDeleteVertexArrays(1, &vertexbuffer);

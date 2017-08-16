@@ -7,14 +7,15 @@
 #include "Octree.h"
 #include "WindowBuilder.h"
 #include "Shader.h"
+#include "Cube.h"
 void stuffs();
 
 int main(int argc, char **argv)
 {
 
 	WindowBuilder window;
-
-
+	//Cube cube(0.5f);
+	//std::cout << cube.description();
 	//stuffs();
 }
 

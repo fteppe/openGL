@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <glew\glew.h>
 #include <glm/matrix.hpp>
 class Shader
@@ -9,7 +10,7 @@ public:
 	Shader(std::string vertex, std::string fragment);
 	~Shader();
 	unsigned int getProgram();
-	void setVertex(const GLfloat* vertices,unsigned int size);
+	void setVertex(std::vector<GLfloat> vertices,std::vector<int> index);
 	void draw();
 	GLuint getvertexBuffer();
 private:
@@ -21,7 +22,7 @@ private:
 
 	GLuint vertexbuffer;
 	GLuint VertexArrayID;
-	unsigned int verticesNum;
+	unsigned int indexSize;
 	unsigned int program;
 	unsigned int vertexId;
 	unsigned int fragmentId;

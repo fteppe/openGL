@@ -11,6 +11,8 @@ public:
 
 private:
 	std::vector<perso::Polygon> makePolys(float side);
+	std::vector<std::vector<int>> makeIndex();
+	std::vector<glm::vec3> makeVert(float side);
 
 };
 

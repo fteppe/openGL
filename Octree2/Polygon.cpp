@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Polygon.h"
 #include <sstream>
+#include <numeric>//iota
 
 using namespace perso;
 Polygon::Polygon(std::vector<glm::vec3> pointsList)
@@ -28,6 +29,50 @@ std::string Polygon::description()
 std::vector<Polygon> Polygon::triangleSplitting()
 {
 	return earSplitting();
+}
+
+std::vector<std::vector<int>> perso::Polygon::triangleSplittingIndex(perso::Polygon polygon, int offset)
+{
+	int size = polygon.getPoints().size();
+	//points is the array of point taken in order
+	std::vector<int> points(size);
+	std::iota(std::begin(points), std::end(points), offset); // Fill with 0, 1, ..., size.
+	std::vector<std::vector<int>> ears;
+	int startPoint = 0;
+	while (size> 3)
+	{
+		size = points.size();
+		//std::cout << size;
+		std::vector<int> trianglePoints({points[startPoint],points[(startPoint + 1) % size] ,points[(startPoint + 2) % size] });
+		ears.push_back(trianglePoints);
+		//We remove the second point of the triangle
+		points.erase(points.begin() + (startPoint + 1) % size);
+		//To try and make the triangles more varied. They also should be smaller
+		startPoint = (startPoint + 1) % size;
+	}
+
+	return ears;
+}
+
+std::vector<std::vector<int>> perso::Polygon::triangleSplittingIndex(std::vector<glm::vec3> points, std::vector<int> index, int offset)
+{
+	int size = index.size();
+	//points is the array of point taken in order
+	std::vector<std::vector<int>> ears;
+	int startPoint = 0;
+	while (size> 3)
+	{
+		size = index.size();
+		//std::cout << size;
+		std::vector<int> trianglePoints({ index[startPoint],index[(startPoint + 1) % size] ,index[(startPoint + 2) % size] });
+		ears.push_back(trianglePoints);
+		//We remove the second point of the triangle
+		index.erase(index.begin() + (startPoint + 1) % size);
+		//To try and make the triangles more varied. They also should be smaller
+		startPoint = (startPoint + 1) % size;
+	}
+
+	return ears;
 }
 
 std::vector<glm::vec3> perso::Polygon::getPoints()

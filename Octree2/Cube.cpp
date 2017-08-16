@@ -2,7 +2,7 @@
 #include "Cube.h"
 
 
-Cube::Cube(float side) : Solid(makePolys(side))
+Cube::Cube(float side) : Solid(makeVert(side),makeIndex())
 {
 }
 
@@ -38,4 +38,37 @@ std::vector<perso::Polygon> Cube::makePolys(float side)
 	polys.push_back(perso::Polygon({ points[0], points[1], points[5], points[4] }));
 
 	return polys;
+}
+
+std::vector<std::vector<int>> Cube::makeIndex()
+{
+	std::vector<std::vector<int>> index;
+	index.push_back({ 0,1,2,3 });
+	index.push_back({ 0,3,7,4 });
+	index.push_back({ 3,2,6,7 });
+	index.push_back({ 4,5,6,7 });
+	index.push_back({ 1,2,6,5 });
+	index.push_back({ 0,1,5,4 });
+
+	return index;
+}
+
+std::vector<glm::vec3> Cube::makeVert(float side)
+{
+	float half = side / 2;
+	std::vector<glm::vec3> points;
+	points.push_back(glm::vec3(-half, half, half));
+	points.push_back(glm::vec3(half, half, half));
+
+	points.push_back(glm::vec3(half, -half, half));
+	points.push_back(glm::vec3(-half, -half, half));
+
+
+	points.push_back(glm::vec3(-half, half, -half));
+	points.push_back(glm::vec3(half, half, -half));
+
+	points.push_back(glm::vec3(half, -half, -half));
+	points.push_back(glm::vec3(-half, -half, -half));
+
+	return points;
 }
