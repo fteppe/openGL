@@ -10,7 +10,7 @@ public:
 	Shader(std::string vertex, std::string fragment);
 	~Shader();
 	unsigned int getProgram();
-	void setVertex(std::vector<GLfloat> vertices,std::vector<int> index);
+	void setVertex(std::vector<std::vector<GLfloat>> vertices,std::vector<int> index);
 	void draw();
 	GLuint getvertexBuffer();
 private:

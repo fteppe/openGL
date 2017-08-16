@@ -153,6 +153,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Vec3.h" />
+    <ClInclude Include="waveFrontLoader.h" />
     <ClInclude Include="WindowBuilder.h" />
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +170,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Vec3.cpp" />
+    <ClCompile Include="waveFrontLoader.cpp" />
     <ClCompile Include="WindowBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +179,13 @@
   <ItemGroup>
     <None Include="shaders\col.frag" />
     <None Include="shaders\transform.ver" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="obj\cube.obj">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Resource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

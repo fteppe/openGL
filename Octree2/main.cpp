@@ -8,12 +8,13 @@
 #include "WindowBuilder.h"
 #include "Shader.h"
 #include "Cube.h"
+#include "WaveFrontLoader.h"
 void stuffs();
 
 int main(int argc, char **argv)
 {
-
-	WindowBuilder window;
+	WaveFrontLoader wavefront;
+	//WindowBuilder window;
 	//Cube cube(0.5f);
 	//std::cout << cube.description();
 	//stuffs();

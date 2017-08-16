@@ -102,22 +102,36 @@ void Shader::compileFragment()
 	}
 }
 
-void Shader::setVertex(std::vector<GLfloat> vertices, std::vector<int> index)
+void Shader::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index)
 {
 	indexSize = index.size();
+	int arraySize = 0;
+	std::vector<GLfloat> flatVert;
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		flatVert.insert(flatVert.end(), vertices[i].begin(), vertices[i].end());
+	}
 
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size()*sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
 	// Give our vertices to OpenGL.
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * flatVert.size(), &flatVert[0], GL_STATIC_DRAW);
+	//We are going to set each vertex data
+	int offset = 0;
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		//all the argments are one after the other, so there is no stride, but we set the offset
+		glVertexAttribPointer(i, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
+		glEnableVertexAttribArray(i);
+		//std::cout << "offset :" << offset/sizeof(GLfloat);
+		offset += vertices[i].size() * sizeof(GLfloat);
+	}
 	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+
 	// color attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
 }
 
 void Shader::draw()

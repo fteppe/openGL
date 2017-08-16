@@ -35,16 +35,17 @@ Solid::~Solid()
 void Solid::draw()
 {
 	std::vector<GLfloat> vertArray;
+	std::vector<GLfloat> colArray;
 	std::vector<GLfloat> vec;
 	std::vector<int> flatIndex;
-	GLfloat col[] = { 0.1f,0.2f,0.2f };
+	std::vector<GLfloat> col = { 0.1f,0.2f,0.2f };
 	for (int i = 0; i < vertices.size(); i++)
 	{
 		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
 		vertArray.insert(vertArray.end(), vec.begin(), vec.end());
 
-		vertArray.insert(vertArray.end(), col, col+3);
-		col[0] += 0.05f; col[1] += 0.1f; col[2] += 0.01f;
+		colArray.insert(colArray.end(), col.begin(), col.end());
+		//col[0] += 0.05f; col[1] += 0.1f; col[2] += 0.01f;
 	}
 	for (int i = 0; i < index.size(); i++)
 	{
@@ -54,7 +55,9 @@ void Solid::draw()
 			flatIndex.push_back(index[i][j]);
 		}
 	}
-	shader.setVertex(vertArray, flatIndex);
+	//std::cout << " vert size " << vertArray.size() << " " << colArray.size();
+
+	shader.setVertex({ vertArray,colArray }, flatIndex);
 
 	//glm::mat4 mvp = glm::perspective(glm::radians(45.0f), 800 / 600, 0.1f, 100.0f);
 	unsigned int program = shader.getProgram();

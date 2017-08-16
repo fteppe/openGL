@@ -64,7 +64,7 @@ WindowBuilder::WindowBuilder()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		cube.draw();
-		cube2.draw();
+		//cube2.draw();
 		draw();
 		window.display();
 		while (window.pollEvent(event))

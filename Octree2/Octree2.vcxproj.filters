@@ -16,6 +16,9 @@
     <Filter Include="Resource Files\shaders">
       <UniqueIdentifier>{d15e73c2-8092-46ae-b093-3231c254123a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\obj">
+      <UniqueIdentifier>{7b8dd3f1-b2fa-4499-8de9-9f01bee12bfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -51,6 +54,9 @@
     <ClInclude Include="Solid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="waveFrontLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -80,6 +86,9 @@
     <ClCompile Include="Solid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="waveFrontLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Octree2.rc">
@@ -93,5 +102,10 @@
     <None Include="shaders\col.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="obj\cube.obj">
+      <Filter>Resource Files\obj</Filter>
+    </Object>
   </ItemGroup>
 </Project>
