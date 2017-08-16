@@ -21,6 +21,7 @@ private:
 	std::string sourceFragment;
 
 	GLuint vertexbuffer;
+	GLuint elementbuffer;
 	GLuint VertexArrayID;
 	unsigned int indexSize;
 	unsigned int program;
