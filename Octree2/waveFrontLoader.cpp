@@ -5,30 +5,46 @@
 #include <iostream>
 #include <sstream>
 #include <regex>
+#include <vector>
+#include <stdlib.h>     /* strtol */
 
 
 WaveFrontLoader::WaveFrontLoader()
 {
-	std::string fileName = "obj/cube.obj";
+
+
+}
+
+
+WaveFrontLoader::~WaveFrontLoader()
+{
+}
+
+std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
+{
 	std::ifstream inFile(fileName);
 	std::string strOneLine;
+	std::vector<glm::vec3> normalsObj;
+	std::vector <std::vector<int >> polygons;
+	std:: cout << "started loading file";
 	while (inFile)
 	{
 		while (getline(inFile, strOneLine, '\n'))
 		{
+
 			//for each line we try to know how it start
 			//This line will designate a normal
-			if (strOneLine.substr(0,2) == "vn")
+			if (strOneLine.substr(0, 2) == "vn")
 			{
 				std::istringstream s(strOneLine.substr(2));
 				glm::vec3 vertex;
 				//We put all the info in a new vertex
 
 				s >> vertex.x; s >> vertex.y; s >> vertex.z;
-				normals.push_back(vertex);
+				normalsObj.push_back(vertex);
 			}
 			//this line designates a vertex
-			if (strOneLine.substr(0,2) == "v ")
+			if (strOneLine.substr(0, 2) == "v ")
 			{
 				std::istringstream s(strOneLine.substr(2));
 				glm::vec3 vertex;
@@ -46,15 +62,24 @@ WaveFrontLoader::WaveFrontLoader()
 				std::smatch match;
 				std::regex_search(s, match, r);
 
+				std::vector<int> face;
 				for (std::sregex_iterator i = std::sregex_iterator(s.begin(), s.end(), r);
 					i != std::sregex_iterator();
 					++i)
 				{
 					std::smatch match = *i;
-					std::cout << match[1] << match[2] << match[3];
-				}
+					//std::cout << match[1] << match[2] << match[3];
+					std::string vertIndex = match[1].str();
+					//vertices in a obj file are indexed from 1, our index starts at one
+					int index = strtol(vertIndex.c_str(), NULL, 10) - 1;
+					//We take the normal index.
+					int indexNormal = strtol(match[3].str().c_str(), NULL, 10) - 1;
 
-				std::cout << std::endl;
+					index = addVertexToPolygon(index, indexNormal, vertexToNormal, vertexSynonyme, vertices);
+					face.push_back(index);
+				}
+				polygons.push_back(face);
+				//std::cout << std::endl;
 
 			}
 			//std::cout << strOneLine << std::endl;
@@ -62,21 +87,26 @@ WaveFrontLoader::WaveFrontLoader()
 	}
 
 	inFile.close();
-
+	//We build the vector of all the normals at the same index than the corresponding vertex. Using the map
 	for (int i = 0; i < vertices.size(); i++)
 	{
-		std::cout << vertices[i].x << " " << vertices[i].y << " " << vertices[i].z << std::endl;
+		int vertexIndex =i;
+		int normalIndex = vertexToNormal[i];
+		glm::vec3 normal = normalsObj[normalIndex];
+		normals.push_back(normal);
 	}
 
+	Solid result = Solid(vertices, polygons);
+	result.setNormals(normals);
+	std::vector<Solid> returnValue;
+	returnValue.push_back(result);
+	//TODO: change that
+	std::cout << "done loading file";
+	return returnValue;
 }
 
-
-WaveFrontLoader::~WaveFrontLoader()
-{
-}
-
-void WaveFrontLoader::addVertexToPolygon(unsigned int vertex, unsigned int normal,
-int &vertexFinal, std::map<int, int> &vertexToNormal, std::map<int, std::vector<int>> &vertexSynonyme, std::vector<glm::vec3> &vertices)
+int WaveFrontLoader::addVertexToPolygon(unsigned int vertex, unsigned int normal, 
+	std::map<int, int> &vertexToNormal, std::map<int, std::vector<int>> &vertexSynonyme, std::vector<glm::vec3> &vertices)
 {
 
 	bool vertexCloned = true;
@@ -124,5 +154,5 @@ int &vertexFinal, std::map<int, int> &vertexToNormal, std::map<int, std::vector<
 		vertexToNormal[correspondingVertex] = (normal);
 	}
 	//once we know what vertex needs to be added, we puhs it to the current polygon;
-	vertexFinal = correspondingVertex;
+	return correspondingVertex;
 }

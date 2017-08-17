@@ -13,10 +13,12 @@ public:
 	void draw();
 	std::string description();
 	void setObjectSpace(glm::mat4 transfo);
+	void setNormals(std::vector<glm::vec3> normalIn);
 protected:
 	void builVerticesIndex(std::vector<perso::Polygon> polygons);
 	std::vector<perso::Polygon> polygons;
 	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec3> normals;
 	std::vector<std::vector<int>> index;
 	glm::mat4 objectSpace;
 	bool triangulated;

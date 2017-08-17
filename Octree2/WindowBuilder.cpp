@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include "Polygon.h"
-
+#include "waveFrontLoader.h"
 #include "Solid.h"
 #include "Cube.h"
 
@@ -26,20 +26,21 @@ WindowBuilder::WindowBuilder()
 	settings.minorVersion = 2;
 	settings.attributeFlags = sf::ContextSettings::Core;
 
-	window.create(sf::VideoMode(640, 360), "openGL", sf::Style::Close, settings);
+	float width = 800;
+	float height = 600;
+
+	window.create(sf::VideoMode(width, height), "openGL", sf::Style::Close, settings);
 	glewInit();
 	glewExperimental = GL_TRUE;
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//gluPerspective(45.0, float(800) / float(600), 0.1, 100.0);
 	
-	
-	
-	Cube cube(0.5f);
-	Cube cube2(0.2f);
-	glm::mat4 projection = glm::perspective(0.75f, 1.77f, 0.1f, 200.0f);
+	WaveFrontLoader loader;
+	Solid cube = loader.GetSolidsFromFile("obj/monkey.obj")[0];
+	Cube cube2(1.0f);
+
+	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
 	float rotation = 1.0f;
 	while (window.isOpen())
@@ -50,13 +51,15 @@ WindowBuilder::WindowBuilder()
 		sf::Event event;
 		if (clock.getElapsedTime().asMilliseconds() >= sf::milliseconds(30).asMilliseconds())
 		{
-			glm::mat4 transfo =glm::rotate(rotation*0.05f, glm::vec3(0.0, 0.0, 1.0));
-			glm::mat4 translation = glm::translate(glm::vec3(0, 0, -2.0f));
+			glm::mat4 transfo =glm::rotate(rotation*0.05f, glm::vec3(0.0,0.0, 1.0));
+			transfo =  transfo * glm::rotate(3.14f / 2, glm::vec3(1, 0, 0));
+			glm::mat4 translation = glm::translate(glm::vec3(0, 0, -6.0));
 			rotation++;
 			glm::mat4 camRot = glm::rotate(5.0f, glm::vec3(1.0, 0, 0));
-			glm::mat4 cameraspace = projection * translation * camRot;
+			glm::mat4 camPos = glm::lookAt(glm::vec3(0.0, 5.0, 2.0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+			glm::mat4 cameraspace = projection * camPos;
 			cube.setObjectSpace( cameraspace * transfo);
-			cube2.setObjectSpace( cameraspace * transfo * glm::translate(glm::vec3(0.5, 0.5, 0.0)) * transfo);
+			//cube2.setObjectSpace( cameraspace * transfo * glm::translate(glm::vec3(0.5, 0.5, 0.0)) * transfo);
 			clock.restart();
 			
 

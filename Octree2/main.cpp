@@ -13,8 +13,11 @@ void stuffs();
 
 int main(int argc, char **argv)
 {
-	WaveFrontLoader wavefront;
-	//WindowBuilder window;
+	WaveFrontLoader loader;
+	//Solid cube = loader.GetSolidsFromFile("obj/cube.obj")[0];
+	//std::cout << "CUbe :" << cube.description();
+	//Shader shade("transform.ver", "col.frag");
+	WindowBuilder window;
 	//Cube cube(0.5f);
 	//std::cout << cube.description();
 	//stuffs();

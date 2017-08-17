@@ -5,6 +5,7 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtx\transform.hpp>
 #include <glew\glew.h>
+
 Solid::Solid() : objectSpace() , polygons(), triangulated(false)
 {
 }
@@ -21,8 +22,17 @@ Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> in
 	int offset = 0;
 	for (int i = 0; i < indexIn.size(); i++)
 	{
-		triangles = perso::Polygon::triangleSplittingIndex(vertices,indexIn[i],offset);
-		index.insert(index.end(), triangles.begin(), triangles.end());
+		if (indexIn[i].size() > 3)
+		{
+			//std::cout << "Solid.cpp >> needs splitting";
+			triangles = perso::Polygon::triangleSplittingIndex(vertices, indexIn[i], offset);
+			index.insert(index.end(), triangles.begin(), triangles.end());
+		}
+		else
+		{
+			index.push_back(indexIn[i]);
+		}
+
 
 	}
 }
@@ -43,8 +53,8 @@ void Solid::draw()
 	{
 		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
 		vertArray.insert(vertArray.end(), vec.begin(), vec.end());
-
-		colArray.insert(colArray.end(), col.begin(), col.end());
+		std::vector<GLfloat>normal({ normals[i].x,normals[i].y,normals[i].z });
+		colArray.insert(colArray.end(), normal.begin(), normal.end());
 		//col[0] += 0.05f; col[1] += 0.1f; col[2] += 0.01f;
 	}
 	for (int i = 0; i < index.size(); i++)
@@ -56,8 +66,10 @@ void Solid::draw()
 		}
 	}
 	//std::cout << " vert size " << vertArray.size() << " " << colArray.size();
-
-	shader.setVertex({ vertArray,colArray }, flatIndex);
+	std::vector<std::vector<GLfloat>> vertexData;
+	vertexData.push_back(vertArray);
+	vertexData.push_back(colArray);
+	shader.setVertex({ vertArray, colArray }, flatIndex);
 
 	//glm::mat4 mvp = glm::perspective(glm::radians(45.0f), 800 / 600, 0.1f, 100.0f);
 	unsigned int program = shader.getProgram();
@@ -80,10 +92,20 @@ std::string Solid::description()
 		}
 		ss << std::endl;
 	}
+	ss << "vertices :" << std::endl;
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		ss << vertices[i] << std::endl;
+	}
 	return ss.str();
 }
 
 void Solid::setObjectSpace(glm::mat4 transfo)
 {
 	objectSpace = transfo;
+}
+
+void Solid::setNormals(std::vector<glm::vec3> normalIn)
+{
+	normals = normalIn;
 }
