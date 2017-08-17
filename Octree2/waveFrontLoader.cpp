@@ -75,11 +75,17 @@ WaveFrontLoader::~WaveFrontLoader()
 {
 }
 
-void WaveFrontLoader::addVertexToPolygon(unsigned int vertex, unsigned int normal, unsigned int polygon)
+void WaveFrontLoader::addVertexToPolygon(unsigned int vertex, unsigned int normal,
+int &vertexFinal, std::map<int, int> &vertexToNormal, std::map<int, std::vector<int>> &vertexSynonyme, std::vector<glm::vec3> &vertices)
 {
 
 	bool vertexCloned = true;
 	unsigned int correspondingVertex = vertex;
+	//if a vertex has no synonyme, we add himself
+	if (vertexSynonyme.find(vertex) == vertexSynonyme.end())
+	{
+		vertexSynonyme[vertex].push_back(vertex);
+	}
 	//If this vertex has no normal linked to it, no need to clone it. We just need to link a vertex to it.
 	if (vertexToNormal.find(vertex) == vertexToNormal.end())
 	{
@@ -118,5 +124,5 @@ void WaveFrontLoader::addVertexToPolygon(unsigned int vertex, unsigned int norma
 		vertexToNormal[correspondingVertex] = (normal);
 	}
 	//once we know what vertex needs to be added, we puhs it to the current polygon;
-	polygons[polygon].push_back(correspondingVertex);
+	vertexFinal = correspondingVertex;
 }
