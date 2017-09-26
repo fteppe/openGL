@@ -177,6 +177,16 @@
     <ResourceCompile Include="Octree2.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Dependencies\DLLs\glew32.dll" />
+    <None Include="Dependencies\DLLs\openal32.dll" />
+    <None Include="Dependencies\DLLs\sfml-audio-2.dll" />
+    <None Include="Dependencies\DLLs\sfml-audio-d-2.dll" />
+    <None Include="Dependencies\DLLs\sfml-graphics-2.dll" />
+    <None Include="Dependencies\DLLs\sfml-graphics-d-2.dll" />
+    <None Include="Dependencies\DLLs\sfml-system-2.dll" />
+    <None Include="Dependencies\DLLs\sfml-system-d-2.dll" />
+    <None Include="Dependencies\DLLs\sfml-window-2.dll" />
+    <None Include="Dependencies\DLLs\sfml-window-d-2.dll" />
     <None Include="shaders\col.frag" />
     <None Include="shaders\transform.ver" />
   </ItemGroup>
@@ -186,6 +196,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="obj\monkey.obj">
+      <FileType>Document</FileType>
+    </Media>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

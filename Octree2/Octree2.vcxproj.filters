@@ -19,6 +19,9 @@
     <Filter Include="Resource Files\obj">
       <UniqueIdentifier>{7b8dd3f1-b2fa-4499-8de9-9f01bee12bfe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="references">
+      <UniqueIdentifier>{320e3c17-29cf-47f6-9a5a-884ca86b11d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -102,10 +105,43 @@
     <None Include="shaders\col.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="Dependencies\DLLs\sfml-graphics-d-2.dll">
+      <Filter>references</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-system-2.dll">
+      <Filter>references</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-system-d-2.dll">
+      <Filter>references</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-window-2.dll">
+      <Filter>references</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-window-d-2.dll">
+      <Filter>references</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\glew32.dll">
+      <Filter>references</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\openal32.dll">
+      <Filter>references</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-audio-2.dll">
+      <Filter>references</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-audio-d-2.dll">
+      <Filter>references</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-graphics-2.dll">
+      <Filter>references</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Object Include="obj\cube.obj">
+    <Resource Include="obj\cube.obj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="obj\monkey.obj">
       <Filter>Resource Files\obj</Filter>
-    </Object>
+    </Media>
   </ItemGroup>
 </Project>
