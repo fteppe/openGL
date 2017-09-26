@@ -54,6 +54,7 @@ void Solid::draw()
 		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
 		vertArray.insert(vertArray.end(), vec.begin(), vec.end());
 		std::vector<GLfloat>normal({ normals[i].x,normals[i].y,normals[i].z });
+		//This creates an error I'm not sure why yet
 		colArray.insert(colArray.end(), normal.begin(), normal.end());
 		//col[0] += 0.05f; col[1] += 0.1f; col[2] += 0.01f;
 	}

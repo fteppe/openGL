@@ -36,7 +36,8 @@ Shader::Shader(std::string vertex, std::string fragment)
 	glLinkProgram(program);
 	glUseProgram(program);
 
-	glGenVertexArrays(1, &VertexArrayID);
+	GLuint* arrayAdress = &VertexArrayID;
+	glGenVertexArrays(1, arrayAdress);
 	glBindVertexArray(VertexArrayID);
 
 	// Generate 1 buffer, put the resulting identifier in vertexbuffer
@@ -147,8 +148,8 @@ void Shader::draw()
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
 	glDisableVertexAttribArray(0);
 
-	//glDeleteVertexArrays(1, &vertexbuffer);
-	//glDeleteBuffers(1, &vertexbuffer);
+	glDeleteVertexArrays(1, &VertexArrayID);
+	glDeleteBuffers(1, &vertexbuffer);
 
 }
 

@@ -30,14 +30,18 @@ WindowBuilder::WindowBuilder()
 	float height = 600;
 
 	window.create(sf::VideoMode(width, height), "openGL", sf::Style::Close, settings);
-	glewInit();
 	glewExperimental = GL_TRUE;
+	int success = glewInit();
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
+	//if(!success)
+	//{
+	//	std::cout << "Failure:::";
+	//}
 	
 	WaveFrontLoader loader;
-	Solid cube = loader.GetSolidsFromFile("obj/monkey.obj")[0];
+	Solid cube =  loader.GetSolidsFromFile("obj/monkey.obj")[0];
 	Cube cube2(1.0f);
 
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
