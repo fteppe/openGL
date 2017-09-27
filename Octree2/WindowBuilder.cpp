@@ -41,8 +41,9 @@ WindowBuilder::WindowBuilder()
 	//}
 	
 	WaveFrontLoader loader;
-	Solid cube =  loader.GetSolidsFromFile("obj/monkey.obj")[0];
-	Cube cube2(1.0f);
+	std::vector<Solid> scene(loader.GetSolidsFromFile("obj/scene.obj"));
+	Solid cube(scene[0]);
+	Solid cube2(scene[1]);
 
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
@@ -60,17 +61,23 @@ WindowBuilder::WindowBuilder()
 			glm::mat4 translation = glm::translate(glm::vec3(0, 0, -6.0));
 			rotation++;
 			glm::mat4 camRot = glm::rotate(5.0f, glm::vec3(1.0, 0, 0));
-			glm::mat4 camPos = glm::lookAt(glm::vec3(0.0, 5.0, 2.0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+			glm::mat4 camPos = glm::lookAt(glm::vec3(0.0, 10.0, 2.0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
 			glm::mat4 cameraspace = projection * camPos;
-			cube.setObjectSpace( cameraspace * transfo);
-			//cube2.setObjectSpace( cameraspace * transfo * glm::translate(glm::vec3(0.5, 0.5, 0.0)) * transfo);
+			for (int i = 0; i < scene.size(); i++)
+			{
+				scene[i].setObjectSpace(cameraspace * transfo);
+			}
 			clock.restart();
 			
 
 		}
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		cube.draw();
+		for (int i = 0; i < scene.size(); i++)
+		{
+			scene[i].draw();
+		}
+		//cube.draw();
 		//cube2.draw();
 		draw();
 		window.display();

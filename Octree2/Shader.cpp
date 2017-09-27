@@ -148,8 +148,8 @@ void Shader::draw()
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
 	glDisableVertexAttribArray(0);
 
-	glDeleteVertexArrays(1, &VertexArrayID);
-	glDeleteBuffers(1, &vertexbuffer);
+	//glDeleteVertexArrays(1, &VertexArrayID);
+	//glDeleteBuffers(1, &vertexbuffer);
 
 }
 

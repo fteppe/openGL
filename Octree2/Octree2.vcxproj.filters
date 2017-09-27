@@ -135,6 +135,7 @@
     <None Include="Dependencies\DLLs\sfml-graphics-2.dll">
       <Filter>references</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="obj\cube.obj" />

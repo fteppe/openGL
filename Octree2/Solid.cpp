@@ -53,15 +53,19 @@ void Solid::draw()
 	{
 		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
 		vertArray.insert(vertArray.end(), vec.begin(), vec.end());
-		std::vector<GLfloat>normal({ normals[i].x,normals[i].y,normals[i].z });
-		//This creates an error I'm not sure why yet
-		colArray.insert(colArray.end(), normal.begin(), normal.end());
-		//col[0] += 0.05f; col[1] += 0.1f; col[2] += 0.01f;
+
+		if (normals.size())
+		{
+			std::vector<GLfloat>normal({ normals[i].x,normals[i].y,normals[i].z });
+			//This creates an error I'm not sure why yet
+			colArray.insert(colArray.end(), normal.begin(), normal.end());
+			//col[0] += 0.05f; col[1] += 0.1f; col[2] += 0.01f;
+		}
 	}
 	for (int i = 0; i < index.size(); i++)
 	{
 
-		for (int j = 0; j < index[j].size(); j++)
+		for (int j = 0; j < index[i].size(); j++)
 		{
 			flatIndex.push_back(index[i][j]);
 		}
@@ -69,7 +73,11 @@ void Solid::draw()
 	//std::cout << " vert size " << vertArray.size() << " " << colArray.size();
 	std::vector<std::vector<GLfloat>> vertexData;
 	vertexData.push_back(vertArray);
-	vertexData.push_back(colArray);
+	if (colArray.size())
+	{
+		vertexData.push_back(colArray);
+	}
+	
 	shader.setVertex({ vertArray, colArray }, flatIndex);
 
 	//glm::mat4 mvp = glm::perspective(glm::radians(45.0f), 800 / 600, 0.1f, 100.0f);

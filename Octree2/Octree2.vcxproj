@@ -177,6 +177,7 @@
     <ResourceCompile Include="Octree2.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="Dependencies\DLLs\glew32.dll" />
     <None Include="Dependencies\DLLs\openal32.dll" />
     <None Include="Dependencies\DLLs\sfml-audio-2.dll" />

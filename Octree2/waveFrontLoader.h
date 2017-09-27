@@ -17,16 +17,24 @@ private:
 	//The synonyme 2D map is to link a vertex in the OBJ to all the cloned vertices that have the same coordinates but a different normal.
 	//The array of vertices, is just that, the vertices from the OBJ file + all the cloned vertices resulting from our operations.
 	//return : the index that the vertex in the vertex/normal couple should have.
-	int addVertexToPolygon(unsigned int vertex, unsigned int normal,
-		 std::map<int, int> &vertexToNormal, std::map<int,std::vector<int>> &vertexSynonyme, std::vector<glm::vec3> &vertices);
+	int addVertexToPolygon(unsigned int vertex, unsigned int normal);
+
+	//Takes all the data that has been gather and transforms it to correspond to the Solid data model, and creates a Solid.
+	Solid makeSolidFromData();
+	std::map<int, int> fileToSolidVertexIndex;
 	//For each vertex index, which normal is associated
 	std::map<int,int > vertexToNormal;
 	//Since some vertices need to be cloned, we need to keep track of of what vertex is on the same position as another
 	std::map<int, std::vector<int>> vertexSynonyme;
 	//The array of polygons that can be used to build a solid.
-	std::vector<std::vector<unsigned int>> polygons;
-	//the vertices
+	std::vector<std::vector<int>> polygons;
+	//the vertices of all the objets
 	std::vector<glm::vec3> vertices;
+	//the vertices but only for one solid;
+	std::vector<glm::vec3> solidVertices;
+	//the normals indexed as in the solid
 	std::vector<glm::vec3> normals;
+	//the normals indexed as in the file
+	std::vector<glm::vec3> normalsObj;
 };
 

@@ -24,9 +24,8 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 {
 	std::ifstream inFile(fileName);
 	std::string strOneLine;
-	std::vector<glm::vec3> normalsObj;
-	std::vector <std::vector<int >> polygons;
-	std:: cout << "started loading file";
+	std::vector<Solid> returnValue;
+	std:: cout << "started loading file" << std::endl;
 	while (inFile)
 	{
 		while (getline(inFile, strOneLine, '\n'))
@@ -52,6 +51,11 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 
 				s >> vertex.x; s >> vertex.y; s >> vertex.z;
 				vertices.push_back(vertex);
+				//We also put this vertex info in an array specific to this solid.
+				solidVertices.push_back(vertex);
+				//We map the two so we can know which idex is which vertex
+				fileToSolidVertexIndex[vertices.size() - 1] = solidVertices.size() - 1;
+				
 			}
 			//this line designates a polygon
 			if (strOneLine.substr(0, 2) == "f ")
@@ -75,7 +79,7 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 					//We take the normal index.
 					int indexNormal = strtol(match[3].str().c_str(), NULL, 10) - 1;
 
-					index = addVertexToPolygon(index, indexNormal, vertexToNormal, vertexSynonyme, vertices);
+					index = addVertexToPolygon(index, indexNormal);
 					face.push_back(index);
 				}
 				polygons.push_back(face);
@@ -83,44 +87,50 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 
 			}
 			//std::cout << strOneLine << std::endl;
+			if (strOneLine.substr(0, 2) == "o " && vertices.size() > 0)
+			{
+				//we have a new object
+				Solid result(makeSolidFromData());
+				returnValue.push_back(result);
+			}
 		}
 	}
 
 	inFile.close();
 	//We build the vector of all the normals at the same index than the corresponding vertex. Using the map
-	for (int i = 0; i < vertices.size(); i++)
-	{
-		int vertexIndex =i;
-		int normalIndex = vertexToNormal[i];
-		glm::vec3 normal = normalsObj[normalIndex];
-		normals.push_back(normal);
-	}
 
-	Solid result = Solid(vertices, polygons);
-	result.setNormals(normals);
-	std::vector<Solid> returnValue;
+	//for (int i = 0; i < vertices.size(); i++)
+	//{
+	//	int vertexIndex = i;
+	//	int normalIndex = vertexToNormal[i];
+	//	glm::vec3 normal = normalsObj[normalIndex];
+	//	normals.push_back(normal);
+	//}
+	//Solid result(vertices, polygons);
+	//result.setNormals(normals);
+	Solid result(makeSolidFromData());
 	returnValue.push_back(result);
 	//TODO: change that
-	std::cout << "done loading file";
+	std::cout << "done loading file" << std::endl;
 	return returnValue;
 }
 
-int WaveFrontLoader::addVertexToPolygon(unsigned int vertex, unsigned int normal, 
-	std::map<int, int> &vertexToNormal, std::map<int, std::vector<int>> &vertexSynonyme, std::vector<glm::vec3> &vertices)
+//THis function is used to clone vertices when to different normals are associated to it.
+int WaveFrontLoader::addVertexToPolygon(unsigned int vertex, unsigned int normal)
 {
-
 	bool vertexCloned = true;
-	unsigned int correspondingVertex = vertex;
-	//if a vertex has no synonyme, we add himself
+	unsigned int solidVertex = fileToSolidVertexIndex[vertex];
+	unsigned int correspondingVertex = solidVertex;
+	//if a vertex has no synonyme, we add the corresponding solid vertex index as his on synonyme.
 	if (vertexSynonyme.find(vertex) == vertexSynonyme.end())
 	{
-		vertexSynonyme[vertex].push_back(vertex);
+		vertexSynonyme[vertex].push_back(solidVertex);
 	}
-	//If this vertex has no normal linked to it, no need to clone it. We just need to link a vertex to it.
-	if (vertexToNormal.find(vertex) == vertexToNormal.end())
+	//If this vertex has no normal linked to it, no need to clone it. We just need to link the vertex to it.
+	if (vertexToNormal.find(solidVertex) == vertexToNormal.end())
 	{
 		//then, since it should be done in order if we add a vertex it should be the right index.
-		vertexToNormal[vertex] = (normal);
+		vertexToNormal[solidVertex] = (normal);
 		vertexCloned = false;
 	}
 	else
@@ -146,13 +156,42 @@ int WaveFrontLoader::addVertexToPolygon(unsigned int vertex, unsigned int normal
 	if (vertexCloned == true)
 	{
 		//cloning the vertex
-		vertices.push_back(vertices[vertex]);
+		solidVertices.push_back(solidVertices[solidVertex]);
 		//Since it's a cloned index at the end of the vertices vector, it's index is the size of the vector -1
-		correspondingVertex = vertices.size() - 1;
+		correspondingVertex = solidVertices.size() - 1;
 		//We set this vertex's index as a clone of the orginial vertex
 		vertexSynonyme[vertex].push_back(correspondingVertex);
+		//Since the normal in input was never associated to this vertex, we associate the normal to this newly cloned vertex
 		vertexToNormal[correspondingVertex] = (normal);
 	}
 	//once we know what vertex needs to be added, we puhs it to the current polygon;
 	return correspondingVertex;
+}
+
+Solid WaveFrontLoader::makeSolidFromData()
+{
+	std::cout << "making obj"<<std::endl;
+	for (int i = 0; i < solidVertices.size(); i++)
+	{
+		int vertexIndex = i;
+		int normalIndex = vertexToNormal[i];
+		glm::vec3 normal = normalsObj[normalIndex];
+		normals.push_back(normal);
+	}
+	Solid result(solidVertices, polygons);
+	result.setNormals(normals);
+
+	//We clear the info that are exclusive to a single solid
+	solidVertices.clear();
+	vertexSynonyme.clear();
+	polygons.clear();
+	normals.clear();
+	vertexToNormal.clear();
+	/*normals.clear();
+	polygons.clear();
+	vertices.clear();
+	normalsObj.clear();
+	vertexSynonyme.clear();
+	vertexToNormal.clear();*/
+	return result;
 }
