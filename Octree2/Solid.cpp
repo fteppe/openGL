@@ -45,6 +45,7 @@ void Solid::draw(Camera cam, Light light)
 	std::vector<GLfloat> vec;
 	std::vector<int> flatIndex;
 	std::vector<GLfloat> col = { 0.1f,0.2f,0.2f };
+	//We should be able to do that before instead of doing it every frame.
 	for (int i = 0; i < vertices.size(); i++)
 	{
 		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
@@ -76,12 +77,14 @@ void Solid::draw(Camera cam, Light light)
 	
 	shader.setVertex({ vertArray, colArray }, flatIndex);
 
-	//glm::mat4 mvp = glm::perspective(glm::radians(45.0f), 800 / 600, 0.1f, 100.0f);
-	unsigned int program = shader.getProgram();
 
+	unsigned int program = shader.getProgram();
+	//we get the camera space and calulculate the projection that will be done to all the vertices
 	glm::mat4 cameraSpace = cam.getProjection();
 	glm::mat4 worldSpace = cameraSpace * objectSpace;
+	//the projection matrix sent to the shader
 	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, false, glm::value_ptr(worldSpace));
+	//the objectspace that can be used to calculate lights or the posiiton of a vertex to a point. We send it to the shader.
 	glUniformMatrix4fv(glGetUniformLocation(program, "objectSpace"), 1, false, glm::value_ptr(objectSpace));
 
 	shader.draw();
