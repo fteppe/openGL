@@ -10,11 +10,11 @@ This class contains objects, a light and a camera. So we should be able to rende
 class Scene
 {
 public:
-	Scene();
-	Scene(std::vector<Solid> elem);
+	Scene(Camera cam);
+	Scene(std::vector<Solid> elem, Camera cam);
 	~Scene();
 
-	void setCamera(Camera &camera);
+	void setCamera(Camera camera);
 	void renderScene();
 private:
 	Camera cam;

@@ -31,10 +31,10 @@ WindowBuilder::WindowBuilder()
 	float height = 600;
 
 	window.create(sf::VideoMode(width, height), "openGL", sf::Style::Close, settings);
+	glEnable(GL_DEPTH_TEST);
 	glewExperimental = GL_TRUE;
-	int success = glewInit();
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	glewInit();
+
 
 	//if(!success)
 	//{
@@ -43,18 +43,21 @@ WindowBuilder::WindowBuilder()
 	
 	WaveFrontLoader loader;
 	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
-	Scene scene(elem);
+	
 
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
 	float rotation = 1.0f;
+	Camera cam(600.0f, 800.0f, 0.75f);
+	Scene scene(elem, cam);
+
 	while (window.isOpen())
 	{
 		// check all the window's events that were triggered since the last iteration of the loop
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glEnable(GL_DEPTH_TEST);
+		
 		sf::Event event;
-		Camera cam(600.0f, 800.0f, 0.75f);
+		
 		
 
 		if (clock.getElapsedTime().asMilliseconds() >= sf::milliseconds(30).asMilliseconds())
@@ -69,12 +72,7 @@ WindowBuilder::WindowBuilder()
 			cam.setUp(glm::vec3(0, 0, 1));
 			scene.setCamera(cam);
 			clock.restart();
-			
-
 		}
-		glClear(GL_COLOR_BUFFER_BIT);
-
-
 		
 		scene.renderScene();
 		window.display();

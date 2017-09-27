@@ -82,6 +82,7 @@ void Solid::draw(Camera cam, Light light)
 	glm::mat4 cameraSpace = cam.getProjection();
 	glm::mat4 worldSpace = cameraSpace * objectSpace;
 	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, false, glm::value_ptr(worldSpace));
+	glUniformMatrix4fv(glGetUniformLocation(program, "objectSpace"), 1, false, glm::value_ptr(objectSpace));
 
 	shader.draw();
 }
