@@ -64,7 +64,7 @@ std::vector<std::vector<int>> perso::Polygon::triangleSplittingIndex(std::vector
 	{
 		size = index.size();
 		//std::cout << size;
-		std::vector<int> trianglePoints({ index[startPoint],index[(startPoint + 1) % size] ,index[(startPoint + 2) % size] });
+		std::vector<int> trianglePoints({ index[startPoint % size],index[(startPoint + 1) % size] ,index[(startPoint + 2) % size] });
 		ears.push_back(trianglePoints);
 		//We remove the second point of the triangle
 		index.erase(index.begin() + (startPoint + 1) % size);

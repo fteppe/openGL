@@ -8,6 +8,7 @@
 #include <glm\vec3.hpp>
 #include <iostream>
 
+#include "Scene.h"
 #include "Polygon.h"
 #include "waveFrontLoader.h"
 #include "Solid.h"
@@ -41,9 +42,8 @@ WindowBuilder::WindowBuilder()
 	//}
 	
 	WaveFrontLoader loader;
-	std::vector<Solid> scene(loader.GetSolidsFromFile("obj/scene.obj"));
-	Solid cube(scene[0]);
-	Solid cube2(scene[1]);
+	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
+	Scene scene(elem);
 
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
@@ -54,37 +54,32 @@ WindowBuilder::WindowBuilder()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 		sf::Event event;
+		Camera cam(600.0f, 800.0f, 0.75f);
+		
+
 		if (clock.getElapsedTime().asMilliseconds() >= sf::milliseconds(30).asMilliseconds())
 		{
-			glm::mat4 transfo =glm::rotate(rotation*0.05f, glm::vec3(0.0,0.0, 1.0));
-			transfo =  transfo * glm::rotate(3.14f / 2, glm::vec3(1, 0, 0));
-			glm::mat4 translation = glm::translate(glm::vec3(0, 0, -6.0));
+			glm::mat4 camPos = glm::lookAt(glm::vec3(0.0, 5.0, 2.0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+	
 			rotation++;
-			glm::mat4 camRot = glm::rotate(5.0f, glm::vec3(1.0, 0, 0));
-			glm::mat4 camPos = glm::lookAt(glm::vec3(0.0, 10.0, 2.0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
-			glm::mat4 cameraspace = projection * camPos;
-			for (int i = 0; i < scene.size(); i++)
-			{
-				scene[i].setObjectSpace(cameraspace * transfo);
-			}
+			glm::mat4 rot = glm::rotate(rotation * 0.02f, glm::vec3(0, 0, 1));
+			glm::vec3 pos(10.0f, 10.0f, 10.0f);
+			cam.setPosition( rot * glm::vec4(pos,1));
+			cam.setTarget(glm::vec3(0, 0, 0));
+			cam.setUp(glm::vec3(0, 0, 1));
+			scene.setCamera(cam);
 			clock.restart();
 			
 
 		}
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		for (int i = 0; i < scene.size(); i++)
-		{
-			scene[i].draw();
-		}
-		//cube.draw();
-		//cube2.draw();
-		draw();
+
+		
+		scene.renderScene();
 		window.display();
 		while (window.pollEvent(event))
 		{
-			
-
 			// "close requested" event: we close the window
 			if (event.type == sf::Event::Closed)
 				window.close();
@@ -99,13 +94,4 @@ WindowBuilder::~WindowBuilder()
 
 void WindowBuilder::draw()
 {
-	
-	
-	//glm::mat4 trans = glm::translate(glm::mat4(), glm::vec3(0.5,0.0,0.0));
-	//Shader shader("transform.ver", "col.frag");
-	std::vector<glm::vec3> points = { -Vec3::u().multiply(0.5),-Vec3::v(),Vec3::u(), Vec3::v() };
-	//Solid carre({ points });
-	//carre.draw();
-
-
 }

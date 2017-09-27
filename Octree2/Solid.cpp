@@ -6,14 +6,10 @@
 #include <glm\gtx\transform.hpp>
 #include <glew\glew.h>
 
-Solid::Solid() : objectSpace() , polygons(), triangulated(false)
+Solid::Solid() : objectSpace(), triangulated(false)
 {
 }
 
-Solid::Solid(std::vector<perso::Polygon> poly) : objectSpace(glm::mat4())
-{
-
-}
 
 Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn):objectSpace(glm::mat4()), shader("transform.ver", "col.frag")
 {
@@ -42,7 +38,7 @@ Solid::~Solid()
 {
 }
 
-void Solid::draw()
+void Solid::draw(Camera cam, Light light)
 {
 	std::vector<GLfloat> vertArray;
 	std::vector<GLfloat> colArray;
@@ -83,7 +79,9 @@ void Solid::draw()
 	//glm::mat4 mvp = glm::perspective(glm::radians(45.0f), 800 / 600, 0.1f, 100.0f);
 	unsigned int program = shader.getProgram();
 
-	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, false, glm::value_ptr(objectSpace));
+	glm::mat4 cameraSpace = cam.getProjection();
+	glm::mat4 worldSpace = cameraSpace * objectSpace;
+	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, false, glm::value_ptr(worldSpace));
 
 	shader.draw();
 }
