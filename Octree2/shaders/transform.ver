@@ -5,11 +5,13 @@ out vec4 vertexColor;
 
 uniform mat4 mvp;
 uniform mat4 objectSpace;
+uniform float[7] light;
 
 void main()
 {
+	vec3 lightCol = vec3(light[3],light[4],light[5]);
 	vec3 vector = vec3(0.5,0.5,0.5);
-	vector = aCol;
+	vector = aCol * lightCol;
 	vertexColor = objectSpace * vec4(vector,1.0);
     gl_Position = mvp*vec4(aPos, 1.0);
 }

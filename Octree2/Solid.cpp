@@ -76,8 +76,8 @@ void Solid::draw(Camera cam, Light light)
 	}
 	
 	shader.setVertex({ vertArray, colArray }, flatIndex);
-
-
+	//We get the light data;
+	std::vector<float> lightData(light.getDataArray() );
 	unsigned int program = shader.getProgram();
 	//we get the camera space and calulculate the projection that will be done to all the vertices
 	glm::mat4 cameraSpace = cam.getProjection();
@@ -86,6 +86,8 @@ void Solid::draw(Camera cam, Light light)
 	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, false, glm::value_ptr(worldSpace));
 	//the objectspace that can be used to calculate lights or the posiiton of a vertex to a point. We send it to the shader.
 	glUniformMatrix4fv(glGetUniformLocation(program, "objectSpace"), 1, false, glm::value_ptr(objectSpace));
+	//we send the light data to the shader, for now we can handle only one light
+	glUniform1fv(glGetUniformLocation(program, "light"), lightData.size(), &lightData[0]);
 
 	shader.draw();
 }

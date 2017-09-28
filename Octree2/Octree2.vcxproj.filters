@@ -117,12 +117,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\transform.ver">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="shaders\col.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
     <None Include="Dependencies\DLLs\sfml-graphics-d-2.dll">
       <Filter>references</Filter>
     </None>
@@ -162,5 +156,13 @@
     <Media Include="obj\monkey.obj">
       <Filter>Resource Files\obj</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\transform.ver">
+      <Filter>Resource Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\col.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
