@@ -194,12 +194,12 @@
     <None Include="Dependencies\DLLs\sfml-system-d-2.dll" />
     <None Include="Dependencies\DLLs\sfml-window-2.dll" />
     <None Include="Dependencies\DLLs\sfml-window-d-2.dll" />
-    <FxCompile Include="shaders\col.frag">
+    <None Include="shaders\col.frag">
       <FileType>Document</FileType>
-    </FxCompile>
-    <FxCompile Include="shaders\transform.ver">
+    </None>
+    <None Include="shaders\transform.ver">
       <FileType>Document</FileType>
-    </FxCompile>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="obj\cube.obj">

@@ -60,18 +60,10 @@ WindowBuilder::WindowBuilder()
 		
 		
 
-		if (clock.getElapsedTime().asMilliseconds() >= sf::milliseconds(30).asMilliseconds())
+		if (clock.getElapsedTime().asMilliseconds() % 300 >= sf::milliseconds(30).asMilliseconds())
 		{
-			glm::mat4 camPos = glm::lookAt(glm::vec3(0.0, 5.0, 2.0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
-	
-			rotation++;
-			glm::mat4 rot = glm::rotate(rotation * 0.02f, glm::vec3(0, 0, 1));
-			glm::vec3 pos(10.0f, 10.0f, 10.0f);
-			cam.setPosition( rot * glm::vec4(pos,1));
-			cam.setTarget(glm::vec3(0, 0, 0));
-			cam.setUp(glm::vec3(0, 0, 1));
-			scene.setCamera(cam);
-			clock.restart();
+			scene.animate(clock);
+			//clock.restart();
 		}
 		
 		scene.renderScene();
