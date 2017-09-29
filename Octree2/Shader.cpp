@@ -104,10 +104,11 @@ void Shader::compileFragment()
 }
 
 /*
-*@param vertices a 2D array of series of 3 doubles, each 3 double representing a vertex. 1st line vertex and other lines vertex attributes
+*@param vertices a 2D array of series of n doubles, each n double representing a vertex. 1st line vertex coord and other lines vertex attributes
 *@param index indexes of the vertices to build the triangles (read it in sets of 3). ex: 1 2 3 1 4 5 2 3 5...
+*@param nbData for each row. So we can have different vector sizes for each attributes
 */
-void Shader::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index)
+void Shader::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData)
 {
 	indexSize = index.size();
 	int arraySize = 0;
@@ -122,13 +123,13 @@ void Shader::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<i
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
 	// Give our vertices to OpenGL.
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * flatVert.size(), &flatVert[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER,  flatVert.size() * sizeof(GLfloat), &flatVert[0], GL_STATIC_DRAW);
 	//We are going to set each vertex data
 	int offset = 0;
 	for (int i = 0; i < vertices.size(); i++)
 	{
 		//all the argments are one after the other, so there is no stride, but we set the offset
-		glVertexAttribPointer(i, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
+		glVertexAttribPointer(i, nbData[i], GL_FLOAT, GL_FALSE, 0, (void*)(offset));
 		//we enable the attrib array, meaning i is the number of attribute for one vertex
 		glEnableVertexAttribArray(i);
 		//std::cout << "offset :" << offset/sizeof(GLfloat);

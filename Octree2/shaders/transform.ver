@@ -11,7 +11,7 @@ uniform mat4 objectSpace;
 
 void main()
 {
-	
+	//fine stuffs
 	normal = normalize(aNormal);
 	normal = vec3(objectSpace*vec4(normal,1));
 	vertexPos = vec3(objectSpace * vec4(aPos,1));

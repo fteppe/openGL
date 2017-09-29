@@ -19,7 +19,9 @@ void main()
 	intensity = max(dot(normal, lightDir),0) * intensity * inversesqrt(lightDistance);
 	vec3 intensityVec = vec3(intensity, intensity, intensity) * lightCol;
 
+	//we add a constant value to the intensity, so it is never dark.
+	intensityVec = intensityVec + vec3(0.1,0.1,0.1);
 	vec3 color = vec3(-normal.xy,normal.z);
-    FragColor = vec4(intensityVec * color,1);
+    FragColor = vec4(intensityVec * color ,1);
 	//FragColor = vec4(normal * vec3(1,1,1), 1);
 } 

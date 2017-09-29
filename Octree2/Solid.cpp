@@ -75,7 +75,7 @@ void Solid::draw(Camera cam, Light light)
 		vertexData.push_back(colArray);
 	}
 	
-	shader.setVertex({ vertArray, colArray }, flatIndex);
+	shader.setVertex({ vertArray, colArray }, flatIndex, {3,3});
 	//We get the light data;
 	std::vector<float> lightData(light.getDataArray() );
 	unsigned int program = shader.getProgram();
