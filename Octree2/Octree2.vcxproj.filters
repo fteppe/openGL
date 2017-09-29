@@ -93,6 +93,9 @@
     <Resource Include="obj\cube.obj">
       <Filter>obj</Filter>
     </Resource>
+    <Resource Include="obj\scene.obj">
+      <Filter>obj</Filter>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Media Include="obj\monkey.obj">
