@@ -60,11 +60,9 @@ WindowBuilder::WindowBuilder()
 		
 		
 
-		if (clock.getElapsedTime().asMilliseconds()  >= sf::milliseconds(60).asMilliseconds())
+		if (clock.getElapsedTime().asMilliseconds()  >= sf::milliseconds(2).asMilliseconds())
 		{
 			scene.animate(clock);
-			
-			
 			clock.restart();
 		}
 		scene.renderScene();

@@ -24,7 +24,7 @@ void Scene::animate(sf::Clock elapsed)
 	glm::mat4 camPos = glm::lookAt(glm::vec3(0.0, 5.0, 2.0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
 	
 	float rotation = elapsed.getElapsedTime().asMilliseconds();
-	std::cout << rotation << std::endl;
+	//std::cout << rotation << std::endl;
 	glm::mat4 rot = glm::rotate(0.002f, glm::vec3(0, 0, 1));
 	glm::vec3 pos(-8.0f, -8.0f, 8.0f);
 	light.pos = rot * glm::vec4(light.pos, 1);//;glm::vec4(5,0, 3,1);
