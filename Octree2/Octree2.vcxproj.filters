@@ -1,173 +1,102 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Resource Files\shaders">
-      <UniqueIdentifier>{d15e73c2-8092-46ae-b093-3231c254123a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\obj">
-      <UniqueIdentifier>{7b8dd3f1-b2fa-4499-8de9-9f01bee12bfe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="references">
-      <UniqueIdentifier>{320e3c17-29cf-47f6-9a5a-884ca86b11d0}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Octree.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Solid.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Vec3.cpp" />
+    <ClCompile Include="waveFrontLoader.cpp" />
+    <ClCompile Include="WindowBuilder.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Cube.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Octree.h" />
+    <ClInclude Include="Polygon.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="Solid.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Vec3.h" />
+    <ClInclude Include="waveFrontLoader.h" />
+    <ClInclude Include="WindowBuilder.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Octree2.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="Dependencies\DLLs\glew32.dll">
+      <Filter>reference</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-audio-2.dll">
+      <Filter>reference</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-audio-d-2.dll">
+      <Filter>reference</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-graphics-2.dll">
+      <Filter>reference</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-graphics-d-2.dll">
+      <Filter>reference</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-system-2.dll">
+      <Filter>reference</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-system-d-2.dll">
+      <Filter>reference</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-window-2.dll">
+      <Filter>reference</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\sfml-window-d-2.dll">
+      <Filter>reference</Filter>
+    </None>
+    <None Include="Dependencies\DLLs\openal32.dll">
+      <Filter>reference</Filter>
+    </None>
+    <None Include="shaders\transform.ver">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shaders\col.frag">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Octree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vec3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Polygon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowBuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Solid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="waveFrontLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <Filter Include="reference">
+      <UniqueIdentifier>{0b0b9d7c-31c1-4758-8a84-74b4b32e8b1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{37d8621d-ad91-4a86-9241-6ebacfc3e7c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="obj">
+      <UniqueIdentifier>{f50fef8e-b6ed-45b2-877f-718b6b9f0566}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Octree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vec3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Polygon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowBuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Solid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="waveFrontLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Octree2.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Dependencies\DLLs\sfml-graphics-d-2.dll">
-      <Filter>references</Filter>
-    </None>
-    <None Include="Dependencies\DLLs\sfml-system-2.dll">
-      <Filter>references</Filter>
-    </None>
-    <None Include="Dependencies\DLLs\sfml-system-d-2.dll">
-      <Filter>references</Filter>
-    </None>
-    <None Include="Dependencies\DLLs\sfml-window-2.dll">
-      <Filter>references</Filter>
-    </None>
-    <None Include="Dependencies\DLLs\sfml-window-d-2.dll">
-      <Filter>references</Filter>
-    </None>
-    <None Include="Dependencies\DLLs\glew32.dll">
-      <Filter>references</Filter>
-    </None>
-    <None Include="Dependencies\DLLs\openal32.dll">
-      <Filter>references</Filter>
-    </None>
-    <None Include="Dependencies\DLLs\sfml-audio-2.dll">
-      <Filter>references</Filter>
-    </None>
-    <None Include="Dependencies\DLLs\sfml-audio-d-2.dll">
-      <Filter>references</Filter>
-    </None>
-    <None Include="Dependencies\DLLs\sfml-graphics-2.dll">
-      <Filter>references</Filter>
-    </None>
-    <None Include="ClassDiagram.cd" />
-    <None Include="shaders\transform.ver">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="shaders\col.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="obj\cube.obj" />
-    <Resource Include="obj\scene.obj" />
+    <Resource Include="obj\cube.obj">
+      <Filter>obj</Filter>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Media Include="obj\monkey.obj">
-      <Filter>Resource Files\obj</Filter>
+      <Filter>obj</Filter>
     </Media>
   </ItemGroup>
 </Project>
