@@ -120,7 +120,6 @@ void Shader::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<i
 	}
 	//we fill the buffer that contains the indexes.
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size()*sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
 	// Give our vertices to OpenGL.
 	glBufferData(GL_ARRAY_BUFFER,  flatVert.size() * sizeof(GLfloat), &flatVert[0], GL_STATIC_DRAW);
@@ -132,18 +131,21 @@ void Shader::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<i
 		glVertexAttribPointer(i, nbData[i], GL_FLOAT, GL_FALSE, 0, (void*)(offset));
 		//we enable the attrib array, meaning i is the number of attribute for one vertex
 		glEnableVertexAttribArray(i);
-		//std::cout << "offset :" << offset/sizeof(GLfloat);
+		//std::cout << "offset :" << offset/sizeof(GLfloat) <<" nbData "<< nbData[i];
 		offset += vertices[i].size() * sizeof(GLfloat);
 	}
-	// position attribute
 
-	// color attribute
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	//glEnableVertexAttribArray(1);
+}
+
+void Shader::setDiffuse(Texture tex)
+{
+	diffuse = tex;
 }
 
 void Shader::draw()
 {
+
+	diffuse.applyTexture(program, "diffuse");
 	//glDrawArrays(GL_TRIANGLES, 0, verticesNum); //drawing as many vertices as their are: 
 	//std::cout << "error :"<<glGetError()<<std::endl;
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);

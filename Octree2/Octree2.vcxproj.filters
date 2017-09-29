@@ -132,6 +132,15 @@
     <None Include="shaders\col.frag">
       <Filter>shader</Filter>
     </None>
+    <None Include="shaders\directionalLight.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shaders\texture.ver">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shaders\debug.frag">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -146,17 +155,26 @@
     <Filter Include="obj">
       <UniqueIdentifier>{f50fef8e-b6ed-45b2-877f-718b6b9f0566}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources">
-      <UniqueIdentifier>{6856e957-36af-4ac2-b637-f41f22f493ff}</UniqueIdentifier>
-      <Extensions>.cpp</Extensions>
-    </Filter>
     <Filter Include="headers">
       <UniqueIdentifier>{00f1f29d-e97f-4386-b14a-11612e11886e}</UniqueIdentifier>
       <Extensions>.h</Extensions>
     </Filter>
+    <Filter Include="sources">
+      <UniqueIdentifier>{6856e957-36af-4ac2-b637-f41f22f493ff}</UniqueIdentifier>
+      <Extensions>.cpp</Extensions>
+    </Filter>
+    <Filter Include="textures">
+      <UniqueIdentifier>{02846981-9e96-414b-82e4-a4e7adcd323e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="obj\scene.obj">
+      <Filter>obj</Filter>
+    </Resource>
+    <Resource Include="obj\CubeText.obj">
+      <Filter>obj</Filter>
+    </Resource>
+    <Resource Include="obj\cube.obj">
       <Filter>obj</Filter>
     </Resource>
   </ItemGroup>
@@ -166,11 +184,8 @@
     </Media>
   </ItemGroup>
   <ItemGroup>
-    <Object Include="obj\cube.obj">
-      <Filter>obj</Filter>
-    </Object>
-    <Object Include="obj\CubeText.obj">
-      <Filter>obj</Filter>
-    </Object>
+    <Image Include="texture\No-Mans-Sky-1.jpg">
+      <Filter>textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include <vector>
 #include "Polygon.h"
 #include "Shader.h"
+#include "Texture.h"
 #include "Camera.h"
 #include "Light.h"
 #include <glm\matrix.hpp>
@@ -16,6 +17,8 @@ public:
 	void setObjectSpace(glm::mat4 transfo);
 	void setNormals(std::vector<glm::vec3> normalIn);
 	void setUVs(std::vector<glm::vec3> UVin);
+	void setShader(Shader shade);
+	void setTexture(Texture tex);
 protected:
 
 	std::vector<glm::vec3> vertices;
@@ -25,5 +28,6 @@ protected:
 	glm::mat4 objectSpace;
 	bool triangulated;
 	Shader shader;
+
 };
 

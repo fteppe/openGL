@@ -11,7 +11,7 @@ Solid::Solid() : objectSpace(), triangulated(false)
 }
 
 
-Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn):objectSpace(glm::mat4()), shader("transform.ver", "col.frag")
+Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn):objectSpace(glm::mat4()), shader("transform.ver", "directionalLight.frag")
 {
 	vertices = verticesIn;
 	std::vector<std::vector<int>> triangles;
@@ -28,8 +28,6 @@ Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> in
 		{
 			index.push_back(indexIn[i]);
 		}
-
-
 	}
 }
 
@@ -42,10 +40,12 @@ void Solid::draw(Camera cam, Light light)
 {
 	std::vector<GLfloat> vertArray;
 	std::vector<GLfloat> normalArray;
+	std::vector<GLfloat> UVArray;
 	std::vector<GLfloat> vec;
 	std::vector<int> flatIndex;
 	std::vector<GLfloat> col = { 0.1f,0.2f,0.2f };
 	//We should be able to do that before instead of doing it every frame.
+	//We flatten all our arrays;
 	for (int i = 0; i < vertices.size(); i++)
 	{
 		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
@@ -56,6 +56,11 @@ void Solid::draw(Camera cam, Light light)
 			std::vector<GLfloat>normal({ normals[i].x,normals[i].y,normals[i].z });
 			normalArray.insert(normalArray.end(), normal.begin(), normal.end());
 		}
+		if (UVs.size())
+		{
+			std::vector<GLfloat>uv({ UVs[i].x,UVs[i].y});
+			UVArray.insert(UVArray.end(), uv.begin(), uv.end());
+		}
 	}
 	for (int i = 0; i < index.size(); i++)
 	{
@@ -65,15 +70,21 @@ void Solid::draw(Camera cam, Light light)
 			flatIndex.push_back(index[i][j]);
 		}
 	}
-	//std::cout << " vert size " << vertArray.size() << " " << colArray.size();
+	std::vector<int> attributeSize({ 3 });
 	std::vector<std::vector<GLfloat>> vertexData;
 	vertexData.push_back(vertArray);
 	if (normalArray.size())
 	{
 		vertexData.push_back(normalArray);
+		attributeSize.push_back(3);
 	}
-	
-	shader.setVertex({ vertArray, normalArray }, flatIndex, {3,3});
+	if (UVArray.size())
+	{
+		vertexData.push_back(UVArray);
+		attributeSize.push_back(2);
+	}
+
+	shader.setVertex(vertexData, flatIndex, attributeSize);
 	//We get the light data;
 	std::vector<float> lightData(light.getDataArray() );
 	unsigned int program = shader.getProgram();
@@ -124,4 +135,15 @@ void Solid::setNormals(std::vector<glm::vec3> normalIn)
 void Solid::setUVs(std::vector<glm::vec3> UVin)
 {
 	UVs = (UVin);
+}
+
+void Solid::setShader(Shader shade)
+{
+	shader = shade;
+
+}
+
+void Solid::setTexture(Texture tex)
+{
+	shader.setDiffuse(tex);
 }

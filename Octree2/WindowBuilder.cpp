@@ -42,9 +42,12 @@ WindowBuilder::WindowBuilder()
 	//}
 	
 	WaveFrontLoader loader;
-	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
-	
-
+	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/cubeText.obj"));
+	Texture tex;
+	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
+	Shader shade("texture.ver", "debug.frag");
+	elem[0].setShader(shade);
+	elem[0].setTexture(tex);
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
 	float rotation = 1.0f;

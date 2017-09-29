@@ -199,6 +199,9 @@
     <None Include="shaders\col.frag">
       <FileType>Document</FileType>
     </None>
+    <None Include="shaders\debug.frag" />
+    <None Include="shaders\directionalLight.frag" />
+    <None Include="shaders\texture.ver" />
     <None Include="shaders\transform.ver">
       <FileType>Document</FileType>
     </None>
@@ -228,6 +231,12 @@
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="texture\No-Mans-Sky-1.jpg">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Image>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

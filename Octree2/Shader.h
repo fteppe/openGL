@@ -1,4 +1,5 @@
 #pragma once
+#include "Texture.h"
 #include <string>
 #include <vector>
 #include <glew\glew.h>
@@ -11,6 +12,7 @@ public:
 	~Shader();
 	unsigned int getProgram();
 	void setVertex(std::vector<std::vector<GLfloat>> vertices,std::vector<int> index, std::vector<int> nbData);
+	void setDiffuse(Texture tex);
 	void draw();
 	GLuint getvertexBuffer();
 private:
@@ -27,5 +29,6 @@ private:
 	unsigned int program;
 	unsigned int vertexId;
 	unsigned int fragmentId;
+	Texture diffuse;
 };
 
