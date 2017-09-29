@@ -105,7 +105,8 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 			}
 			// this doesn't work to indicate the move to another file. The end of faces would be a better indicator.
 			//if the current line isn't a face when the previous was one, then we change file.
-			if (strOneLine.substr(0, 2) != "f " && prevLine.substr(0, 2) == "f ")
+			//no enough, sometimes "s " is used which designates a surface.
+			if ((strOneLine.substr(0, 2) != "f " && strOneLine.substr(0, 2) !="s ") && prevLine.substr(0, 2) == "f ")
 			{
 				//we have a new object
 				Solid result(makeSolidFromData());

@@ -16,7 +16,7 @@ Scene::Scene(std::vector<Solid> elem, Camera cam) : Scene(cam)
 	light.intensity = 1.0f;
 	light.col = glm::vec3(1, 1, 1);
 	light.pos = glm::vec3(3, 3, 0.5);
-	cam.setPosition(glm::vec3(5, 5, 5));
+	cam.setPosition(glm::vec3(-5, -5, 5));
 
 }
 

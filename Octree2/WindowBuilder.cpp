@@ -49,7 +49,7 @@ WindowBuilder::WindowBuilder()
 	sf::Clock clock;
 	float rotation = 1.0f;
 	Camera cam(600.0f, 800.0f, 0.75f);
-	cam.setPosition(glm::vec3(5, 5, 5));
+	cam.setPosition(glm::vec3(-5, -5, 5));
 	Scene scene(elem, cam);
 
 	while (window.isOpen())
