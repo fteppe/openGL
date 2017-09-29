@@ -42,7 +42,7 @@ WindowBuilder::WindowBuilder()
 	//}
 	
 	WaveFrontLoader loader;
-	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/mannequin.obj"));
+	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
 	
 
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);

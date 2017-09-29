@@ -97,7 +97,7 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 						finalIndex = vertexAndAttributeLink(index, UVindex, vertexToUV);
 					}
 					finalIndex = vertexAndAttributeLink(index, indexNormal, vertexToNormal);
-					face.push_back(index);
+					face.push_back(finalIndex);
 				}
 				polygons.push_back(face);
 
@@ -116,19 +116,12 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 	}
 
 	inFile.close();
-	//We build the vector of all the normals at the same index than the corresponding vertex. Using the map
+	//if there are some polygons left to make.
+	if (polygons.size() > 0)
+	{
+		returnValue.push_back(makeSolidFromData());
+	}
 
-	//for (int i = 0; i < vertices.size(); i++)
-	//{
-	//	int vertexIndex = i;
-	//	int normalIndex = vertexToNormal[i];
-	//	glm::vec3 normal = normalsObj[normalIndex];
-	//	normals.push_back(normal);
-	//}
-	//Solid result(vertices, polygons);
-	//result.setNormals(normals);
-	Solid result(makeSolidFromData());
-	returnValue.push_back(result);
 	//TODO: change that
 	std::cout << "done loading file" << std::endl;
 	return returnValue;
