@@ -42,13 +42,14 @@ WindowBuilder::WindowBuilder()
 	//}
 	
 	WaveFrontLoader loader;
-	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
+	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/mannequin.obj"));
 	
 
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
 	float rotation = 1.0f;
 	Camera cam(600.0f, 800.0f, 0.75f);
+	cam.setPosition(glm::vec3(5, 5, 5));
 	Scene scene(elem, cam);
 
 	while (window.isOpen())

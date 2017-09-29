@@ -28,6 +28,7 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 	std:: cout << "started loading file" << std::endl;
 	while (inFile)
 	{
+		std::string prevLine = "";
 		while (getline(inFile, strOneLine, '\n'))
 		{
 
@@ -57,11 +58,22 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 				fileToSolidVertexIndex[vertices.size() - 1] = solidVertices.size() - 1;
 				
 			}
+			//This indicates the coordinates of a UV attribute
+			if (strOneLine.substr(0, 2) == "vt")
+			{
+				std::istringstream s(strOneLine.substr(2));
+				glm::vec3 vertex;
+				//We put all the info in a new vertex
+
+				s >> vertex.x; s >> vertex.y; s >> vertex.z;
+				UVobj.push_back(vertex);
+			}
 			//this line designates a polygon
 			if (strOneLine.substr(0, 2) == "f ")
 			{
+				
 				std::string s(strOneLine.substr(2));
-				//std::string s;
+				//We use a regex to get the indexes of the vertex and it's attributes
 				std::regex r("([0-9]+)\\/([0-9]+)?\\/([0-9]+)?");
 				std::smatch match;
 				std::regex_search(s, match, r);
@@ -78,21 +90,28 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 					int index = strtol(vertIndex.c_str(), NULL, 10) - 1;
 					//We take the normal index.
 					int indexNormal = strtol(match[3].str().c_str(), NULL, 10) - 1;
-
-					index = addVertexToPolygon(index, indexNormal);
+					int UVindex = strtol(match[2].str().c_str(), NULL, 10) - 1;
+					int finalIndex = index;
+					if (UVindex != -1)
+					{
+						finalIndex = vertexAndAttributeLink(index, UVindex, vertexToUV);
+					}
+					finalIndex = vertexAndAttributeLink(index, indexNormal, vertexToNormal);
 					face.push_back(index);
 				}
 				polygons.push_back(face);
-				//std::cout << std::endl;
+
 
 			}
-			//std::cout << strOneLine << std::endl;
-			if (strOneLine.substr(0, 2) == "o " && vertices.size() > 0)
+			// this doesn't work to indicate the move to another file. The end of faces would be a better indicator.
+			//if the current line isn't a face when the previous was one, then we change file.
+			if (strOneLine.substr(0, 2) != "f " && prevLine.substr(0, 2) == "f ")
 			{
 				//we have a new object
 				Solid result(makeSolidFromData());
 				returnValue.push_back(result);
 			}
+			prevLine = strOneLine;
 		}
 	}
 
@@ -115,8 +134,9 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 	return returnValue;
 }
 
-//THis function is used to clone vertices when to different normals are associated to it.
-int WaveFrontLoader::addVertexToPolygon(unsigned int vertex, unsigned int normal)
+
+
+int WaveFrontLoader::vertexAndAttributeLink(unsigned int vertex, unsigned int attribute, std::map<int, int>& vertexToAttribute)
 {
 	bool vertexCloned = true;
 	unsigned int solidVertex = fileToSolidVertexIndex[vertex];
@@ -127,28 +147,31 @@ int WaveFrontLoader::addVertexToPolygon(unsigned int vertex, unsigned int normal
 		vertexSynonyme[vertex].push_back(solidVertex);
 	}
 	//If this vertex has no normal linked to it, no need to clone it. We just need to link the vertex to it.
-	if (vertexToNormal.find(solidVertex) == vertexToNormal.end())
+
+
+	//What we are trying to do here is figure out if a vertex needs to be cloned because 2 different normals are associated to it.
+	//So we look if the vertex (or one of it's clones/synonyme) was already created with this normal associated to it.
+	for (int i = 0; i < vertexSynonyme[vertex].size(); i++)
 	{
-		//then, since it should be done in order if we add a vertex it should be the right index.
-		vertexToNormal[solidVertex] = (normal);
-		vertexCloned = false;
-	}
-	else
-	{
-		//What we are trying to do here is figure out if a vertex needs to be cloned because 2 different normals are associated to it.
-		//So we look if the vertex (or one of it's clones) was already created with this normal associated to it.
-		for (int i = 0; i < vertexSynonyme[vertex].size(); i++)
+		unsigned int synonyme = vertexSynonyme[vertex][i];
+
+		//if one of the synonymes has no attribute linked to it, then we give it this attribute
+		if (vertexToAttribute.find(synonyme) == vertexToAttribute.end())
 		{
-			unsigned int synonyme = vertexSynonyme[vertex][i];
-			//if this vertex has a normal linked to it
-			if (vertexToNormal[synonyme] == normal)
-			{
-				//if the vertex or one of it's clones already has this normal associated to it, it means no need to clone it
-				vertexCloned = false;
-				//in th epolygon we will use this index of vertex. Because it is the one that has the right normal associated to it.
-				correspondingVertex = synonyme;
-			}
+			//then, since it should be done in order if we add a vertex it should be the right index.
+			vertexToAttribute[synonyme] = (attribute);
+			vertexCloned = false;
 		}
+
+		//if this vertex has the attribute linked to it.
+		if (vertexToAttribute[synonyme] == attribute)
+		{
+			//if the vertex or one of it's clones already has this attribute associated to it, it means no need to clone it
+			vertexCloned = false;
+			//in th epolygon we will use this index of vertex. Because it is the one that has the right normal associated to it.
+			correspondingVertex = synonyme;
+		}
+	
 	}
 
 	//if there is no existing vertex that has had this normal associated to it, we clone the vertex, add it as a synonyme, 
@@ -162,7 +185,7 @@ int WaveFrontLoader::addVertexToPolygon(unsigned int vertex, unsigned int normal
 		//We set this vertex's index as a clone of the orginial vertex
 		vertexSynonyme[vertex].push_back(correspondingVertex);
 		//Since the normal in input was never associated to this vertex, we associate the normal to this newly cloned vertex
-		vertexToNormal[correspondingVertex] = (normal);
+		vertexToAttribute[correspondingVertex] = (attribute);
 	}
 	//once we know what vertex needs to be added, we puhs it to the current polygon;
 	return correspondingVertex;
@@ -171,27 +194,35 @@ int WaveFrontLoader::addVertexToPolygon(unsigned int vertex, unsigned int normal
 Solid WaveFrontLoader::makeSolidFromData()
 {
 	std::cout << "making obj"<<std::endl;
+	std::vector<glm::vec3> UVs;
+	//the normals indexed as in the solid
+	std::vector<glm::vec3> normals;
 	for (int i = 0; i < solidVertices.size(); i++)
 	{
 		int vertexIndex = i;
-		int normalIndex = vertexToNormal[i];
+
+		int normalIndex = vertexToNormal[vertexIndex];
 		glm::vec3 normal = normalsObj[normalIndex];
 		normals.push_back(normal);
+		//we make sure there are UVs to add to our solid
+		if (UVobj.size() > 0)
+		{
+			int UVindex = vertexToUV[vertexIndex];
+			glm::vec3 UV = UVobj[UVindex];
+			UVs.push_back(UV);
+		}
+
 	}
 	Solid result(solidVertices, polygons);
 	result.setNormals(normals);
+	result.setUVs(UVs);
 
 	//We clear the info that are exclusive to a single solid
 	solidVertices.clear();
 	vertexSynonyme.clear();
 	polygons.clear();
-	normals.clear();
 	vertexToNormal.clear();
-	/*normals.clear();
-	polygons.clear();
-	vertices.clear();
-	normalsObj.clear();
-	vertexSynonyme.clear();
-	vertexToNormal.clear();*/
+	vertexToUV.clear();
+
 	return result;
 }

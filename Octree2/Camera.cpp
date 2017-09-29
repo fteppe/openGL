@@ -43,6 +43,11 @@ void Camera::setUp(glm::vec3 up)
 	makeLookatMat();
 }
 
+glm::vec3 Camera::getPos()
+{
+	return pos;
+}
+
 
 
 

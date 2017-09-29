@@ -1,37 +1,95 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Cube.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="Octree.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Polygon.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Solid.cpp" />
-    <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Vec3.cpp" />
-    <ClCompile Include="waveFrontLoader.cpp" />
-    <ClCompile Include="WindowBuilder.cpp" />
+    <ClCompile Include="Camera.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Octree.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Polygon.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Solid.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Vec3.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="waveFrontLoader.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowBuilder.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Cube.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="Octree.h" />
-    <ClInclude Include="Polygon.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="Solid.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="Vec3.h" />
-    <ClInclude Include="waveFrontLoader.h" />
-    <ClInclude Include="WindowBuilder.h" />
+    <ClInclude Include="Cube.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Solid.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec3.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="waveFrontLoader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowBuilder.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Octree2.rc" />
@@ -88,11 +146,16 @@
     <Filter Include="obj">
       <UniqueIdentifier>{f50fef8e-b6ed-45b2-877f-718b6b9f0566}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources">
+      <UniqueIdentifier>{6856e957-36af-4ac2-b637-f41f22f493ff}</UniqueIdentifier>
+      <Extensions>.cpp</Extensions>
+    </Filter>
+    <Filter Include="headers">
+      <UniqueIdentifier>{00f1f29d-e97f-4386-b14a-11612e11886e}</UniqueIdentifier>
+      <Extensions>.h</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="obj\cube.obj">
-      <Filter>obj</Filter>
-    </Resource>
     <Resource Include="obj\scene.obj">
       <Filter>obj</Filter>
     </Resource>
@@ -101,5 +164,13 @@
     <Media Include="obj\monkey.obj">
       <Filter>obj</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="obj\cube.obj">
+      <Filter>obj</Filter>
+    </Object>
+    <Object Include="obj\CubeText.obj">
+      <Filter>obj</Filter>
+    </Object>
   </ItemGroup>
 </Project>

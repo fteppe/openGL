@@ -41,7 +41,7 @@ Solid::~Solid()
 void Solid::draw(Camera cam, Light light)
 {
 	std::vector<GLfloat> vertArray;
-	std::vector<GLfloat> colArray;
+	std::vector<GLfloat> normalArray;
 	std::vector<GLfloat> vec;
 	std::vector<int> flatIndex;
 	std::vector<GLfloat> col = { 0.1f,0.2f,0.2f };
@@ -54,9 +54,7 @@ void Solid::draw(Camera cam, Light light)
 		if (normals.size())
 		{
 			std::vector<GLfloat>normal({ normals[i].x,normals[i].y,normals[i].z });
-			//This creates an error I'm not sure why yet
-			colArray.insert(colArray.end(), normal.begin(), normal.end());
-			//col[0] += 0.05f; col[1] += 0.1f; col[2] += 0.01f;
+			normalArray.insert(normalArray.end(), normal.begin(), normal.end());
 		}
 	}
 	for (int i = 0; i < index.size(); i++)
@@ -70,12 +68,12 @@ void Solid::draw(Camera cam, Light light)
 	//std::cout << " vert size " << vertArray.size() << " " << colArray.size();
 	std::vector<std::vector<GLfloat>> vertexData;
 	vertexData.push_back(vertArray);
-	if (colArray.size())
+	if (normalArray.size())
 	{
-		vertexData.push_back(colArray);
+		vertexData.push_back(normalArray);
 	}
 	
-	shader.setVertex({ vertArray, colArray }, flatIndex, {3,3});
+	shader.setVertex({ vertArray, normalArray }, flatIndex, {3,3});
 	//We get the light data;
 	std::vector<float> lightData(light.getDataArray() );
 	unsigned int program = shader.getProgram();
@@ -121,4 +119,9 @@ void Solid::setObjectSpace(glm::mat4 transfo)
 void Solid::setNormals(std::vector<glm::vec3> normalIn)
 {
 	normals = normalIn;
+}
+
+void Solid::setUVs(std::vector<glm::vec3> UVin)
+{
+	UVs = (UVin);
 }

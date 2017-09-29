@@ -12,6 +12,7 @@ public:
 	void setPosition(glm::vec3 pos);
 	void setTarget(glm::vec3 target);
 	void setUp(glm::vec3 up);
+	glm::vec3 getPos();
 
 	~Camera();
 private:
@@ -25,6 +26,7 @@ private:
 	glm::vec3 pos;
 	glm::vec3 target;
 	glm::vec3 up;
+
 
 };
 
