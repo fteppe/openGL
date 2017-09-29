@@ -1,23 +1,21 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
-out vec4 vertexColor;
+
+out vec3 vertexPos;
+out vec3 vertexColor;
+out vec3 normal;
 
 uniform mat4 mvp;
 uniform mat4 objectSpace;
-uniform float[7] light;
 
 void main()
 {
-	vec3 lightPos = vec3(light[0], light[1], light[2]);
-	vec3 lightCol = vec3(light[3],light[4],light[5]);
-	float intensity = light[6];
-	vec3 vertexPos = vec3(objectSpace * vec4(aPos,1));
-	vec3 lightDir = normalize(lightPos - vertexPos);
-	vec3 normal = normalize(aNormal);
-	intensity = dot(normal, lightDir) * intensity;
-	vec3 vertexCol = vec3(intensity, intensity, intensity);
-	vertexColor = vec4(vertexCol,1.0);
+	
+	normal = normalize(aNormal);
+	normal = vec3(objectSpace*vec4(normal,1));
+	vertexPos = vec3(objectSpace * vec4(aPos,1));
+	vertexColor = (normal);
 	gl_Position = mvp*vec4(aPos, 1.0);
     
 }
