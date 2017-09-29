@@ -60,14 +60,17 @@ WindowBuilder::WindowBuilder()
 		
 		
 
-		if (clock.getElapsedTime().asMilliseconds() % 300 >= sf::milliseconds(30).asMilliseconds())
+		if (clock.getElapsedTime().asMilliseconds()  >= sf::milliseconds(60).asMilliseconds())
 		{
 			scene.animate(clock);
-			//clock.restart();
+			
+			
+			clock.restart();
 		}
-		
 		scene.renderScene();
 		window.display();
+		
+		
 		while (window.pollEvent(event))
 		{
 			// "close requested" event: we close the window
