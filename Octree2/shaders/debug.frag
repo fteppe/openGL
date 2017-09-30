@@ -12,6 +12,7 @@ void main()
 {
 	
 	FragColor = vec4(texture(diffuse, UV));
+	//FragColor = vec4(abs(normal),1);
 	//FragColor = vec4(UV,0,0);
-	//FragColor = vec4(vertexColor,1);
+	//FragColor = vec4(vertexColor,1);// * vec4(texture(diffuse, UV));
 } 

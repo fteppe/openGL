@@ -11,7 +11,7 @@ Solid::Solid() : objectSpace(), triangulated(false)
 }
 
 
-Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn):objectSpace(glm::mat4()), shader("transform.ver", "directionalLight.frag")
+Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn):objectSpace(glm::mat4()), shader("transform.ver", "col.frag")
 {
 	vertices = verticesIn;
 	std::vector<std::vector<int>> triangles;

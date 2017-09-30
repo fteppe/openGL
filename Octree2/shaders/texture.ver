@@ -17,7 +17,7 @@ void main()
 	normal = normalize(aNormal);
 	normal = vec3(objectSpace*vec4(normal,1));
 	vertexPos = vec3(objectSpace * vec4(aPos,1));
-	vertexColor = vec3( abs(aUV.x), abs(aUV.y),0);
+	vertexColor = normal;
 	UV = aUV;
 	gl_Position = mvp*vec4(aPos, 1.0);
     

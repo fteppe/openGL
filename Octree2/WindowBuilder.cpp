@@ -42,17 +42,19 @@ WindowBuilder::WindowBuilder()
 	//}
 	
 	WaveFrontLoader loader;
-	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/cubeText.obj"));
+	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
 	Texture tex;
 	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
-	Shader shade("texture.ver", "debug.frag");
+	Shader shade("texture.ver", "texture.frag");
+	shade.setDiffuse(tex);
+	elem[2].setShader(shade);
+	elem[3].setShader(shade);
 	elem[0].setShader(shade);
-	elem[0].setTexture(tex);
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
 	float rotation = 1.0f;
 	Camera cam(600.0f, 800.0f, 0.75f);
-	cam.setPosition(glm::vec3(-5, -5, 5));
+	cam.setPosition(glm::vec3(-1, 1, 2));
 	Scene scene(elem, cam);
 
 	while (window.isOpen())
@@ -64,7 +66,7 @@ WindowBuilder::WindowBuilder()
 		
 		
 
-		if (clock.getElapsedTime().asMilliseconds()  >= sf::milliseconds(2).asMilliseconds())
+		if (clock.getElapsedTime().asMilliseconds()  >= sf::milliseconds(30).asMilliseconds())
 		{
 			scene.animate(clock);
 			clock.restart();

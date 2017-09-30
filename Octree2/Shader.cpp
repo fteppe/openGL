@@ -110,6 +110,8 @@ void Shader::compileFragment()
 */
 void Shader::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData)
 {
+	//We tel openGL that all these shader operation will be done one this shader's program.
+	glUseProgram(program);
 	indexSize = index.size();
 	int arraySize = 0;
 	std::vector<GLfloat> flatVert;

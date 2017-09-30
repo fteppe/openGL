@@ -201,6 +201,7 @@
     </None>
     <None Include="shaders\debug.frag" />
     <None Include="shaders\directionalLight.frag" />
+    <None Include="shaders\texture.frag" />
     <None Include="shaders\texture.ver" />
     <None Include="shaders\transform.ver">
       <FileType>Document</FileType>

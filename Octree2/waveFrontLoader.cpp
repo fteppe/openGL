@@ -91,12 +91,25 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 					//We take the normal index.
 					int indexNormal = strtol(match[3].str().c_str(), NULL, 10) - 1;
 					int UVindex = strtol(match[2].str().c_str(), NULL, 10) - 1;
-					int finalIndex = index;
+					int VertToUVindex = index;
 					if (UVindex != -1)
 					{
-						finalIndex = vertexAndAttributeLink(index, UVindex, vertexToUV);
+						VertToUVindex = vertexAndAttributeLink(index, UVindex, vertexToUV);
 					}
-					finalIndex = vertexAndAttributeLink(index, indexNormal, vertexToNormal);
+					int vertToNormalIndex = vertexAndAttributeLink(index, indexNormal, vertexToNormal);
+
+					//A problem arises when you don't need to clone UV but clone the normal. You need to give the cloned vertex it's UV attributes                                                                                                       bute. 
+					if (VertToUVindex > vertToNormalIndex)
+					{
+						//If the two vertices index are different, it means that one was cloned, but not the other. In that case the cloned vertex needs to get the informations of the original.
+						
+						vertexToNormal[VertToUVindex] = vertexToNormal[vertToNormalIndex];
+					}
+					else if (VertToUVindex < vertToNormalIndex)
+					{
+						vertexToUV[vertToNormalIndex] = vertexToUV[VertToUVindex];
+					}
+					int finalIndex = vertToNormalIndex;
 					face.push_back(finalIndex);
 				}
 				polygons.push_back(face);
@@ -153,7 +166,7 @@ int WaveFrontLoader::vertexAndAttributeLink(unsigned int vertex, unsigned int at
 		if (vertexToAttribute.find(synonyme) == vertexToAttribute.end())
 		{
 			//then, since it should be done in order if we add a vertex it should be the right index.
-			vertexToAttribute[synonyme] = (attribute);
+			correspondingVertex = synonyme;
 			vertexCloned = false;
 		}
 
@@ -179,9 +192,10 @@ int WaveFrontLoader::vertexAndAttributeLink(unsigned int vertex, unsigned int at
 		//We set this vertex's index as a clone of the orginial vertex
 		vertexSynonyme[vertex].push_back(correspondingVertex);
 		//Since the normal in input was never associated to this vertex, we associate the normal to this newly cloned vertex
-		vertexToAttribute[correspondingVertex] = (attribute);
+		
 	}
 	//once we know what vertex needs to be added, we puhs it to the current polygon;
+	vertexToAttribute[correspondingVertex] = (attribute);
 	return correspondingVertex;
 }
 
