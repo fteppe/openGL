@@ -7,26 +7,26 @@
 #include <glew/glew.h>
 
 
-Shader::Shader()
+Shader::Shader()// : diffuse()
 {
 }
 
-Shader::Shader(std::string vertex, std::string fragment)
+Shader::Shader(std::string vertex, std::string fragment) : Shader()
 {
 
 	vertex = "shaders/" + vertex;
 	fragment = "shaders/" + fragment;
 	std::ifstream vertexContent(vertex);
 	std::ifstream fragmentContent(fragment);
-	sourceVertex = std::string((std::istreambuf_iterator<char>(vertexContent)), std::istreambuf_iterator<char>());
-	sourceFragment = std::string((std::istreambuf_iterator<char>(fragmentContent)), std::istreambuf_iterator<char>());
+
 
 	vertexId = glCreateShader(GL_VERTEX_SHADER);
 	fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
 
 	//compiling both shaders
-
-	compile();
+	compileShader(vertexId, vertex);
+	compileShader(fragmentId, fragment);
+	//compile();
 	program = glCreateProgram();
 	glAttachShader(program, vertexId);
 	glAttachShader(program, fragmentId);
@@ -50,8 +50,9 @@ Shader::Shader(std::string vertex, std::string fragment)
 }
 
 
-Shader::~Shader()
+Shader::~Shader() 
 {
+	
 }
 
 unsigned int Shader::getProgram()
@@ -60,46 +61,25 @@ unsigned int Shader::getProgram()
 }
 
 
-//Compiling both shaders, vertex and shader;
-void Shader::compile()
-{
-	compileVertex();
-	compileFragment();
-}
 
-void Shader::compileVertex()
+void Shader::compileShader(GLuint shader, std::string shaderPath)
 {
-	const char* shadersource = sourceVertex.c_str();
+	std::ifstream shaderSource(shaderPath);
+	std::string source = std::string((std::istreambuf_iterator<char>(shaderSource)), std::istreambuf_iterator<char>());
 
-	glShaderSource(vertexId, 1, &shadersource, NULL);
-	glCompileShader(vertexId);
+	const char* shaderChar = source.c_str();
+	glShaderSource(shader, 1, &shaderChar, NULL);
+	glCompileShader(shader);
+
 	int  success;
 	char infoLog[512];
-	glGetShaderiv(vertexId, GL_COMPILE_STATUS, &success);
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
 	if (!success)
 	{
-		glGetShaderInfoLog(vertexId, 512, NULL, infoLog);
+		glGetShaderInfoLog(shader, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-		std::cout << shadersource;
-	}
-}
-
-void Shader::compileFragment()
-{
-	const char* shadersource = sourceFragment.c_str();
-
-	glShaderSource(fragmentId, 1, &shadersource, NULL);
-	glCompileShader(fragmentId);
-	int  success;
-	glGetShaderiv(fragmentId, GL_COMPILE_STATUS, &success);
-
-	char infoLog[512];
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentId, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-		std::cout << shadersource;
+		std::cout << source;
 	}
 }
 
@@ -146,8 +126,10 @@ void Shader::setDiffuse(Texture tex)
 
 void Shader::draw()
 {
-
-	diffuse.applyTexture(program, "diffuse");
+	if (diffuse.textureLoaded())
+	{
+		diffuse.applyTexture(program, "diffuse");
+	}
 	//glDrawArrays(GL_TRIANGLES, 0, verticesNum); //drawing as many vertices as their are: 
 	//std::cout << "error :"<<glGetError()<<std::endl;
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
@@ -156,6 +138,39 @@ void Shader::draw()
 	//glDeleteVertexArrays(1, &VertexArrayID);
 	//glDeleteBuffers(1, &vertexbuffer);
 
+}
+
+void Shader::draw(std::vector<GLfloat> attributes, std::vector<std::vector<unsigned long long int>> attributesData, std::vector<int> faces)
+{
+	glUseProgram(program);
+	//we fill the buffer that contains the indexes.
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, faces.size() * sizeof(unsigned int), &faces[0], GL_STATIC_DRAW);
+
+	// Give our vertices to OpenGL.
+	glBufferData(GL_ARRAY_BUFFER, attributes.size() * sizeof(GLfloat), &attributes[0], GL_STATIC_DRAW);
+	//We are going to set each vertex data
+	int offset = 0;
+	for (int i = 0; i < attributesData.size(); i++)
+	{
+		//all the argments are one after the other, so there is no stride, but we set the offset
+		glVertexAttribPointer(i, attributesData[i][1], GL_FLOAT, GL_FALSE, 0, (void*)(offset));
+		//we enable the attrib array, meaning i is the number of attribute for one vertex
+		glEnableVertexAttribArray(i);
+		//we offset by the number of attributes we added 
+		offset += attributesData[i][0] * sizeof(GLfloat);
+	}
+
+	if (diffuse.textureLoaded())
+	{
+		diffuse.applyTexture(program, "diffuse");
+	}
+	//glDrawArrays(GL_TRIANGLES, 0, verticesNum); //drawing as many vertices as their are: 
+	//std::cout << "error :"<<glGetError()<<std::endl;
+	glDrawElements(GL_TRIANGLES, faces.size(), GL_UNSIGNED_INT, (void*)0);
+	glDisableVertexAttribArray(0);
+
+	//glDeleteVertexArrays(1, &VertexArrayID);
+	//glDeleteBuffers(1, &vertexbuffer);
 }
 
 GLuint Shader::getvertexBuffer()

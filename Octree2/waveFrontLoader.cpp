@@ -122,8 +122,8 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 			if ((strOneLine.substr(0, 2) != "f " && strOneLine.substr(0, 2) !="s ") && prevLine.substr(0, 2) == "f ")
 			{
 				//we have a new object
-				Solid result(makeSolidFromData());
-				returnValue.push_back(result);
+				//Solid result();
+				returnValue.push_back(makeSolidFromData());
 			}
 			prevLine = strOneLine;
 		}

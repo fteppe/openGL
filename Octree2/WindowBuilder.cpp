@@ -35,16 +35,11 @@ WindowBuilder::WindowBuilder()
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-
-	//if(!success)
-	//{
-	//	std::cout << "Failure:::";
-	//}
 	
 	WaveFrontLoader loader;
 	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
 	Texture tex;
-	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
+	tex.loadTexture("textures/no-mans-sky-1.jpg");
 	Shader shade("texture.ver", "texture.frag");
 	shade.setDiffuse(tex);
 	elem[2].setShader(shade);
@@ -56,6 +51,10 @@ WindowBuilder::WindowBuilder()
 	Camera cam(600.0f, 800.0f, 0.75f);
 	cam.setPosition(glm::vec3(-1, 1, 2));
 	Scene scene(elem, cam);
+
+	int maxTexSize;
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTexSize);
+	std::cout << "size max" << maxTexSize << std::endl;
 
 	while (window.isOpen())
 	{

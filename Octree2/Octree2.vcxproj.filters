@@ -1,48 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Camera.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Octree.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Polygon.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="Solid.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Vec3.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="waveFrontLoader.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowBuilder.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
+    <ClCompile Include="Solid.cpp" />
+    <ClCompile Include="Vec3.cpp" />
+    <ClCompile Include="waveFrontLoader.cpp" />
+    <ClCompile Include="WindowBuilder.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Octree.cpp" />
+    <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h">
