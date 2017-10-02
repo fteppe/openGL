@@ -142,7 +142,7 @@ void Shader::draw()
 
 void Shader::draw(std::vector<GLfloat> attributes, std::vector<std::vector<unsigned long long int>> attributesData, std::vector<int> faces)
 {
-	glUseProgram(program);
+	
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 	//we fill the buffer that contains the indexes.
@@ -161,7 +161,7 @@ void Shader::draw(std::vector<GLfloat> attributes, std::vector<std::vector<unsig
 		//we offset by the number of attributes we added 
 		offset += attributesData[i][0] * sizeof(GLfloat);
 	}
-
+	glUseProgram(program);
 	if (diffuse.textureLoaded())
 	{
 		diffuse.applyTexture(program, "diffuse");
