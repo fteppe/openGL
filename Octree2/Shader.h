@@ -11,7 +11,7 @@ public:
 	Shader(std::string vertex, std::string fragment);
 	~Shader();
 	unsigned int getProgram();
-	void setVertex(std::vector<std::vector<GLfloat>> vertices,std::vector<int> index, std::vector<int> nbData);
+	void setVertex(std::vector<GLfloat> attributes, std::vector<std::vector<unsigned long long int>> attributesData, std::vector<int> faces);
 	void setDiffuse(Texture tex);
 	void draw();
 	void draw(std::vector<GLfloat> attributes, std::vector<std::vector<unsigned long long int>> attributesData, std::vector<int> faces);

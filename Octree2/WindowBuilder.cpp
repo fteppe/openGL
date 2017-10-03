@@ -7,6 +7,7 @@
 #include <glm\gtx\transform.hpp>
 #include <glm\vec3.hpp>
 #include <iostream>
+#include <iomanip>
 
 #include "Scene.h"
 #include "Polygon.h"
@@ -39,18 +40,17 @@ WindowBuilder::WindowBuilder()
 	WaveFrontLoader loader;
 	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
 	Texture tex;
-	tex.loadTexture("textures/no-mans-sky-1.jpg");
+	tex.loadTexture("textures/texture.jpg");
 	Shader shade("texture.ver", "texture.frag");
 	shade.setDiffuse(tex);
 	elem[2].setShader(shade);
-	elem[1].setShader(shade);
+	elem[4].setShader(shade);
 	elem[0].setShader(shade);
-	elem[3].setShader(shade);
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
 	float rotation = 1.0f;
 	Camera cam(600.0f, 800.0f, 0.75f);
-	cam.setPosition(glm::vec3(-10, 10, 2));
+	cam.setPosition(glm::vec3(-10, 10, 10));
 	Scene scene(elem, cam);
 
 	int maxTexSize;
@@ -69,7 +69,7 @@ WindowBuilder::WindowBuilder()
 		if (clock.getElapsedTime().asMilliseconds()  >= sf::milliseconds(3).asMilliseconds())
 		{
 			scene.animate(clock);
-			std::cout << clock.getElapsedTime().asMilliseconds() << std::endl;
+			std::cout <<'\r'<< std::setw(3) << std::setfill(' ')<<clock.getElapsedTime().asMilliseconds();
 			clock.restart();
 			scene.renderScene();
 			window.display();

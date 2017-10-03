@@ -125,6 +125,11 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 				//Solid result();
 				returnValue.push_back(makeSolidFromData());
 			}
+			//building new obj
+			if (strOneLine.substr(0, 2) == "o ")
+			{
+				std::cout << strOneLine << std::endl;
+			}
 			prevLine = strOneLine;
 		}
 	}

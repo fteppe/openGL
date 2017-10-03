@@ -155,4 +155,6 @@ void Solid::makeAttributesArray()
 		attributesData.push_back({ UVArray.size(), 2 });
 
 	}
+
+	shader.setVertex(attributesArray, attributesData, flatFaces);
 }
