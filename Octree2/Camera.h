@@ -13,6 +13,9 @@ public:
 	void setTarget(glm::vec3 target);
 	void setUp(glm::vec3 up);
 	glm::vec3 getPos();
+	glm::vec3 getTarget();
+	glm::vec3 getUp();
+	glm::vec2 getSize();
 
 	~Camera();
 private:
@@ -22,6 +25,7 @@ private:
 	//the matrix that has the informationson on it's position and orientation
 	glm::mat4 lookAt;
 	//The projection type of the camera.
+	glm::vec2 size;
 	glm::mat4 projection;
 	glm::vec3 pos;
 	glm::vec3 target;

@@ -112,27 +112,11 @@ void Shader::setDiffuse(Texture tex)
 	diffuse = tex;
 }
 
-void Shader::draw()
-{
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-	if (diffuse.textureLoaded())
-	{
-		diffuse.applyTexture(program, "diffuse");
-	}
-	//glDrawArrays(GL_TRIANGLES, 0, verticesNum); //drawing as many vertices as their are: 
-	//std::cout << "error :"<<glGetError()<<std::endl;
-	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
-	glDisableVertexAttribArray(0);
 
-	//glDeleteVertexArrays(1, &VertexArrayID);
-	//glDeleteBuffers(1, &vertexbuffer);
-
-}
 
 void Shader::draw(std::vector<GLfloat> attributes, std::vector<std::vector<unsigned long long int>> attributesData, std::vector<int> faces)
 {
-	
+	int errors = glGetError();
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 	//we fill the buffer that contains the indexes.
@@ -158,6 +142,7 @@ void Shader::draw(std::vector<GLfloat> attributes, std::vector<std::vector<unsig
 	}
 
 	glDrawElements(GL_TRIANGLES, faces.size(), GL_UNSIGNED_INT, (void*)0);
+	errors = glGetError();
 	//glDeleteVertexArrays(1, &VertexArrayID);
 	//glDeleteBuffers(1, &vertexbuffer);
 }

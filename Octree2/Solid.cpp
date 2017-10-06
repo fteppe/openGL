@@ -40,21 +40,28 @@ Solid::~Solid()
 void Solid::draw(Camera cam, Light light)
 {
 	
-
+	
 	//We get the light data;
 	std::vector<float> lightData(light.getDataArray() );
 	unsigned int program = shader.getProgram();
 	//we get the camera space and calulculate the projection that will be done to all the vertices
 	glm::mat4 cameraSpace = cam.getProjection();
 	glm::mat4 worldSpace = cameraSpace * objectSpace;
+	
 	//the projection matrix sent to the shader
+	//This is causing issues with the NVIDIA drivers for some reason.
 	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, false, glm::value_ptr(worldSpace));
+	int location = glGetUniformLocation(program, "mvp");
 	//the objectspace that can be used to calculate lights or the posiiton of a vertex to a point. We send it to the shader.
 	glUniformMatrix4fv(glGetUniformLocation(program, "objectSpace"), 1, false, glm::value_ptr(objectSpace));
+	int error = glGetError();
+	location = glGetUniformLocation(program, "objectSpace");
 	//we send the light data to the shader, for now we can handle only one light
 	glUniform1fv(glGetUniformLocation(program, "light"), lightData.size(), &lightData[0]);
+	location = glGetUniformLocation(program, "light");
+	error = glGetError();
 	shader.draw(attributesArray, attributesData, flatFaces);
-
+	
 }
 
 std::string Solid::description()

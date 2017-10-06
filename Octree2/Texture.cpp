@@ -33,10 +33,10 @@ void Texture::loadTexture(std::string textureName)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		//this is in case the number of pixel is odd.
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-		glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-		glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+		//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		//glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+		//glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+		//glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
 
 		if (textureData.size())
 		{
@@ -54,15 +54,18 @@ void Texture::loadTexture(std::string textureName)
 		isLoaded = 0;
 		std::cout << "loading error, Texture.cpp" << std::endl;
 	}
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture::applyTexture(GLuint program, std::string varName)
 {
-
-
+	//wrong for now it means we can have onnly one channel
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureID);
 	if (textureData.size())
 	{
-
+		
+		
 		glUniform1i(glGetUniformLocation(program, varName.c_str()), 0); // set it manually
 	}
 	else
