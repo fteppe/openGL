@@ -11,14 +11,15 @@ public:
 	Shader(std::string vertex, std::string fragment);
 	~Shader();
 	unsigned int getProgram();
-	void setVertex(std::vector<GLfloat> attributes, std::vector<std::vector<unsigned long long int>> attributesData, std::vector<int> faces);
+	void setVertex(std::vector<std::vector<GLfloat>> vertices,std::vector<int> index, std::vector<int> nbData);
 	void setDiffuse(Texture tex);
 	void draw();
-	void draw(std::vector<GLfloat> attributes, std::vector<std::vector<unsigned long long int>> attributesData, std::vector<int> faces);
 	GLuint getvertexBuffer();
 private:
 
-	void compileShader(GLuint shader, std::string shaderPath);
+
+	std::string getSource(std::string shaderPath);
+	void compileShader(std::string source, GLuint shaderId);
 
 
 	GLuint vertexbuffer;
@@ -26,8 +27,6 @@ private:
 	GLuint VertexArrayID;
 	unsigned int indexSize;
 	unsigned int program;
-	unsigned int vertexId;
-	unsigned int fragmentId;
 	Texture diffuse;
 };
 

@@ -118,6 +118,9 @@
     <None Include="shaders\texture.frag">
       <Filter>shader</Filter>
     </None>
+    <None Include="shaders\lightCalc.frag">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
