@@ -48,7 +48,7 @@ WindowBuilder::WindowBuilder()
 	Shader shade("texture.ver", "texture.frag");
 	shade.setDiffuse(tex);
 	elem[2].setShader(shade);
-	elem[3].setShader(shade);
+	elem[1].setShader(shade);
 	elem[0].setShader(shade);
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
@@ -66,9 +66,10 @@ WindowBuilder::WindowBuilder()
 		
 		
 
-		if (clock.getElapsedTime().asMilliseconds()  >= sf::milliseconds(30).asMilliseconds())
+		if (clock.getElapsedTime().asMilliseconds()  >= sf::milliseconds(2).asMilliseconds())
 		{
 			scene.animate(clock);
+			std::cout << clock.getElapsedTime().asMilliseconds() << std::endl;
 			clock.restart();
 		}
 		scene.renderScene();
