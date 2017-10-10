@@ -15,7 +15,9 @@ public:
 	void setDiffuse(Texture tex);
 	void draw();
 	GLuint getvertexBuffer();
+
 private:
+	void compileShader(GLuint shader, std::string shaderPath);
 	void compile();
 	void compileVertex();
 	void compileFragment();

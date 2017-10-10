@@ -25,8 +25,9 @@ Shader::Shader(std::string vertex, std::string fragment)
 	fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
 
 	//compiling both shaders
-
-	compile();
+	compileShader(vertexId, vertex);
+	compileShader(fragmentId, fragment);
+	//compile();
 	program = glCreateProgram();
 	glAttachShader(program, vertexId);
 	glAttachShader(program, fragmentId);
@@ -161,4 +162,25 @@ void Shader::draw()
 GLuint Shader::getvertexBuffer()
 {
 	return vertexbuffer;
+}
+
+void Shader::compileShader(GLuint shader, std::string shaderPath)
+{
+	std::ifstream shaderSource(shaderPath);
+	std::string source = std::string((std::istreambuf_iterator<char>(shaderSource)), std::istreambuf_iterator<char>());
+
+	const char* shaderChar = source.c_str();
+	glShaderSource(shader, 1, &shaderChar, NULL);
+	glCompileShader(shader);
+
+	int  success;
+	char infoLog[512];
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+
+	if (!success)
+	{
+		glGetShaderInfoLog(shader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << source;
+	}
 }
