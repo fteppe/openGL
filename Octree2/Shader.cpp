@@ -21,13 +21,13 @@ Shader::Shader(std::string vertex, std::string fragment)
 	sourceVertex = std::string((std::istreambuf_iterator<char>(vertexContent)), std::istreambuf_iterator<char>());
 	sourceFragment = std::string((std::istreambuf_iterator<char>(fragmentContent)), std::istreambuf_iterator<char>());
 
-	vertexId = glCreateShader(GL_VERTEX_SHADER);
-	fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
+	GLuint vertexId = glCreateShader(GL_VERTEX_SHADER);
+	GLuint fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
 
 	//compiling both shaders
 	compileShader(vertexId, vertex);
 	compileShader(fragmentId, fragment);
-	//compile();
+
 	program = glCreateProgram();
 	glAttachShader(program, vertexId);
 	glAttachShader(program, fragmentId);
@@ -61,48 +61,7 @@ unsigned int Shader::getProgram()
 }
 
 
-//Compiling both shaders, vertex and shader;
-void Shader::compile()
-{
-	compileVertex();
-	compileFragment();
-}
 
-void Shader::compileVertex()
-{
-	const char* shadersource = sourceVertex.c_str();
-
-	glShaderSource(vertexId, 1, &shadersource, NULL);
-	glCompileShader(vertexId);
-	int  success;
-	char infoLog[512];
-	glGetShaderiv(vertexId, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexId, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-		std::cout << shadersource;
-	}
-}
-
-void Shader::compileFragment()
-{
-	const char* shadersource = sourceFragment.c_str();
-
-	glShaderSource(fragmentId, 1, &shadersource, NULL);
-	glCompileShader(fragmentId);
-	int  success;
-	glGetShaderiv(fragmentId, GL_COMPILE_STATUS, &success);
-
-	char infoLog[512];
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentId, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-		std::cout << shadersource;
-	}
-}
 
 /*
 *@param vertices a 2D array of series of n doubles, each n double representing a vertex. 1st line vertex coord and other lines vertex attributes

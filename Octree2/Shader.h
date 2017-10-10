@@ -18,9 +18,7 @@ public:
 
 private:
 	void compileShader(GLuint shader, std::string shaderPath);
-	void compile();
-	void compileVertex();
-	void compileFragment();
+
 	std::string sourceVertex;
 	std::string sourceFragment;
 
@@ -29,8 +27,6 @@ private:
 	GLuint VertexArrayID;
 	unsigned int indexSize;
 	unsigned int program;
-	unsigned int vertexId;
-	unsigned int fragmentId;
 	Texture diffuse;
 };
 
