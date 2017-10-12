@@ -29,7 +29,6 @@ Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> in
 			index.push_back(indexIn[i]);
 		}
 	}
-	makeAttributesArray();
 }
 
 
@@ -39,29 +38,67 @@ Solid::~Solid()
 
 void Solid::draw(Camera cam, Light light)
 {
-	
-	
+	std::vector<GLfloat> vertArray;
+	std::vector<GLfloat> normalArray;
+	std::vector<GLfloat> UVArray;
+	std::vector<GLfloat> vec;
+	std::vector<int> flatIndex;
+	std::vector<GLfloat> col = { 0.1f,0.2f,0.2f };
+	//We should be able to do that before instead of doing it every frame.
+	//We flatten all our arrays;
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
+		vertArray.insert(vertArray.end(), vec.begin(), vec.end());
+
+		if (normals.size())
+		{
+			std::vector<GLfloat>normal({ normals[i].x,normals[i].y,normals[i].z });
+			normalArray.insert(normalArray.end(), normal.begin(), normal.end());
+		}
+		if (UVs.size())
+		{
+			std::vector<GLfloat>uv({ UVs[i].x,UVs[i].y});
+			UVArray.insert(UVArray.end(), uv.begin(), uv.end());
+		}
+	}
+	for (int i = 0; i < index.size(); i++)
+	{
+
+		for (int j = 0; j < index[i].size(); j++)
+		{
+			flatIndex.push_back(index[i][j]);
+		}
+	}
+	std::vector<int> attributeSize({ 3 });
+	std::vector<std::vector<GLfloat>> vertexData;
+	vertexData.push_back(vertArray);
+	if (normalArray.size())
+	{
+		vertexData.push_back(normalArray);
+		attributeSize.push_back(3);
+	}
+	if (UVArray.size())
+	{
+		vertexData.push_back(UVArray);
+		attributeSize.push_back(2);
+	}
+
+	shader.setVertex(vertexData, flatIndex, attributeSize);
 	//We get the light data;
 	std::vector<float> lightData(light.getDataArray() );
 	unsigned int program = shader.getProgram();
 	//we get the camera space and calulculate the projection that will be done to all the vertices
 	glm::mat4 cameraSpace = cam.getProjection();
 	glm::mat4 worldSpace = cameraSpace * objectSpace;
-	
 	//the projection matrix sent to the shader
-	//This is causing issues with the NVIDIA drivers for some reason.
 	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, false, glm::value_ptr(worldSpace));
-	int location = glGetUniformLocation(program, "mvp");
 	//the objectspace that can be used to calculate lights or the posiiton of a vertex to a point. We send it to the shader.
 	glUniformMatrix4fv(glGetUniformLocation(program, "objectSpace"), 1, false, glm::value_ptr(objectSpace));
-	int error = glGetError();
-	location = glGetUniformLocation(program, "objectSpace");
 	//we send the light data to the shader, for now we can handle only one light
 	glUniform1fv(glGetUniformLocation(program, "light"), lightData.size(), &lightData[0]);
-	location = glGetUniformLocation(program, "light");
-	error = glGetError();
-	shader.draw(attributesArray, attributesData, flatFaces);
-	
+
+	shader.draw();
 }
 
 std::string Solid::description()
@@ -93,13 +130,11 @@ void Solid::setObjectSpace(glm::mat4 transfo)
 void Solid::setNormals(std::vector<glm::vec3> normalIn)
 {
 	normals = normalIn;
-	makeAttributesArray();
 }
 
 void Solid::setUVs(std::vector<glm::vec3> UVin)
 {
 	UVs = (UVin);
-	makeAttributesArray();
 }
 
 void Solid::setShader(Shader shade)
@@ -111,57 +146,4 @@ void Solid::setShader(Shader shade)
 void Solid::setTexture(Texture tex)
 {
 	shader.setDiffuse(tex);
-}
-
-void Solid::makeAttributesArray()
-{
-	std::vector<GLfloat> vertArray;
-	std::vector<GLfloat> normalArray;
-	std::vector<GLfloat> UVArray;
-	std::vector<GLfloat> vec;
-	attributesArray.clear();
-	flatFaces.clear();
-	attributesData.clear();
-	//We should be able to do that before instead of doing it every frame.
-	//We flatten all our arrays;
-	for (int i = 0; i < vertices.size(); i++)
-	{
-		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
-		vertArray.insert(vertArray.end(), vec.begin(), vec.end());
-
-		if (normals.size())
-		{
-			std::vector<GLfloat>normal({ normals[i].x,normals[i].y,normals[i].z });
-			normalArray.insert(normalArray.end(), normal.begin(), normal.end());
-		}
-		if (UVs.size())
-		{
-			std::vector<GLfloat>uv({ UVs[i].x,UVs[i].y });
-			UVArray.insert(UVArray.end(), uv.begin(), uv.end());
-		}
-	}
-	for (int i = 0; i < index.size(); i++)
-	{
-
-		for (int j = 0; j < index[i].size(); j++)
-		{
-			flatFaces.push_back(index[i][j]);
-		}
-	}
-	//we give the number of vertices, and the size of the vector (3->x y z).
-	attributesData.push_back({ vertArray.size(), 3 });
-	attributesArray.insert(attributesArray.end(),vertArray.begin(),vertArray.end());
-	if (normalArray.size())
-	{
-		attributesArray.insert(attributesArray.end(), normalArray.begin(), normalArray.end());
-		attributesData.push_back({ normalArray.size(), 3 });
-	}
-	if (UVArray.size())
-	{
-		attributesArray.insert(attributesArray.end(), UVArray.begin(), UVArray.end());
-		attributesData.push_back({ UVArray.size(), 2 });
-
-	}
-
-	shader.setVertex(attributesArray, attributesData, flatFaces);
 }

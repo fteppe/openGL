@@ -16,26 +16,21 @@ Shader::Shader(std::string vertex, std::string fragment)
 
 	vertex = "shaders/" + vertex;
 	fragment = "shaders/" + fragment;
-	std::string lightCalc = "shaders/lightCalc.frag";
-
-	std::string sourceVertex = getSource(vertex);
-	std::string sourceFragment = getSource(fragment);
-	std::string sourcelight = getSource(lightCalc);
+	std::ifstream vertexContent(vertex);
+	std::ifstream fragmentContent(fragment);
+	sourceVertex = std::string((std::istreambuf_iterator<char>(vertexContent)), std::istreambuf_iterator<char>());
+	sourceFragment = std::string((std::istreambuf_iterator<char>(fragmentContent)), std::istreambuf_iterator<char>());
 
 	GLuint vertexId = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
-	GLuint lightCalcId = glCreateShader(GL_FRAGMENT_SHADER);
 
 	//compiling both shaders
-	compileShader(sourceFragment, fragmentId);
-	compileShader(sourceVertex, vertexId);
-	compileShader(sourcelight, lightCalcId);
+	compileShader(vertexId, vertex);
+	compileShader(fragmentId, fragment);
 
 	program = glCreateProgram();
 	glAttachShader(program, vertexId);
-	glAttachShader(program, lightCalcId);
 	glAttachShader(program, fragmentId);
-
 	//once they are linked to a program they are deleted
 	glDeleteShader(vertexId);
 	glDeleteShader(fragmentId);
@@ -48,10 +43,11 @@ Shader::Shader(std::string vertex, std::string fragment)
 
 	// Generate 1 buffer, put the resulting identifier in vertexbuffer
 	glGenBuffers(1, &vertexbuffer);
-
+	// The following commands will talk about our 'vertexbuffer' buffer
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	
 	glGenBuffers(1, &elementbuffer);
-
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 }
 
 
@@ -67,32 +63,6 @@ unsigned int Shader::getProgram()
 
 
 
-
-std::string Shader::getSource(std::string shaderPath)
-{
-	std::ifstream vertexContent(shaderPath);
-	std::string source = std::string((std::istreambuf_iterator<char>(vertexContent)), std::istreambuf_iterator<char>());
-	return source;
-}
-
-void Shader::compileShader(std::string source, GLuint shaderId)
-{
-	const char* shadersource = source.c_str();
-
-	glShaderSource(shaderId , 1, &shadersource, NULL);
-	glCompileShader(shaderId);
-	int  success;
-	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &success);
-
-	char infoLog[512];
-	if (!success)
-	{
-		glGetShaderInfoLog(shaderId, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-		std::cout << shadersource;
-	}
-}
-
 /*
 *@param vertices a 2D array of series of n doubles, each n double representing a vertex. 1st line vertex coord and other lines vertex attributes
 *@param index indexes of the vertices to build the triangles (read it in sets of 3). ex: 1 2 3 1 4 5 2 3 5...
@@ -100,11 +70,7 @@ void Shader::compileShader(std::string source, GLuint shaderId)
 */
 void Shader::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData)
 {
-	// The next actions on the array buffer will be done on this one.
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	//the next actions done on the element array buffer will be done on this one.
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-	//We tell openGL that all these shader operation will be done one this shader's program.
+	//We tel openGL that all these shader operation will be done one this shader's program.
 	glUseProgram(program);
 	indexSize = index.size();
 	int arraySize = 0;
@@ -155,4 +121,25 @@ void Shader::draw()
 GLuint Shader::getvertexBuffer()
 {
 	return vertexbuffer;
+}
+
+void Shader::compileShader(GLuint shader, std::string shaderPath)
+{
+	std::ifstream shaderSource(shaderPath);
+	std::string source = std::string((std::istreambuf_iterator<char>(shaderSource)), std::istreambuf_iterator<char>());
+
+	const char* shaderChar = source.c_str();
+	glShaderSource(shader, 1, &shaderChar, NULL);
+	glCompileShader(shader);
+
+	int  success;
+	char infoLog[512];
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+
+	if (!success)
+	{
+		glGetShaderInfoLog(shader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << source;
+	}
 }

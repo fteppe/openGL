@@ -15,12 +15,12 @@ public:
 	void setDiffuse(Texture tex);
 	void draw();
 	GLuint getvertexBuffer();
+
 private:
+	void compileShader(GLuint shader, std::string shaderPath);
 
-
-	std::string getSource(std::string shaderPath);
-	void compileShader(std::string source, GLuint shaderId);
-
+	std::string sourceVertex;
+	std::string sourceFragment;
 
 	GLuint vertexbuffer;
 	GLuint elementbuffer;

@@ -40,11 +40,11 @@ WindowBuilder::WindowBuilder()
 	WaveFrontLoader loader;
 	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
 	Texture tex;
-	tex.loadTexture("textures/texture2.jpg");
-	Shader shade("texture.ver", "debug.frag");
-	//shade.setDiffuse(tex);
-	//elem[2].setShader(shade);
-	//elem[4].setShader(shade);
+	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
+	Shader shade("texture.ver", "texture.frag");
+	shade.setDiffuse(tex);
+	elem[2].setShader(shade);
+	//elem[0].setShader(shade);
 	elem[0].setShader(shade);
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
