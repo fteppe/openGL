@@ -9,6 +9,7 @@ Camera::Camera()
 Camera::Camera(float height, float width, float fov)
 {
 	//begin and end, give how close and how far the camera renders.
+	this->size = glm::vec2(width, height);
 	float begin = 1.0f;
 	float end = 500.0f;
 	projection = glm::perspective(fov, width / height, begin, end);
@@ -46,6 +47,21 @@ void Camera::setUp(glm::vec3 up)
 glm::vec3 Camera::getPos()
 {
 	return pos;
+}
+
+glm::vec3 Camera::getTarget()
+{
+	return target;
+}
+
+glm::vec3 Camera::getUp()
+{
+	return up;
+}
+
+glm::vec2 Camera::getSize()
+{
+	return size;
 }
 
 

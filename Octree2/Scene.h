@@ -14,7 +14,7 @@ public:
 	Scene(std::vector<Solid> elem, Camera cam);
 	void animate(sf::Clock elapsed);
 	~Scene();
-
+	void eventHandler(sf::Event event);
 	void setCamera(Camera camera);
 	void renderScene();
 private:
