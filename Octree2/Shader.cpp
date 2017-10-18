@@ -120,7 +120,7 @@ void Shader::setDiffuse(Texture tex)
 	texChannels["diffuse"] = tex;
 }
 
-void Shader::setProgramInformation(Scene const scene, Solid const object)
+void Shader::setProgramInformation(Scene const& scene, Solid const& object)
 {
 	Camera cam = scene.getCam();
 	Light light = scene.getLight();

@@ -1,7 +1,6 @@
 #pragma once
 #include "Camera.h"
 #include "Light.h"
-class Solid;
 #include "Solid.h"
 #include <vector>
 #include <SFML/Window.hpp>

@@ -8,14 +8,14 @@
 
 #include <glm\matrix.hpp>
 
-class Scene;
+#include "Scene.h"
 class Solid
 {
 public:
 	Solid();
 	Solid(std::vector<glm::vec3> vertices, std::vector<std::vector<int>> index);
 	~Solid();
-	void draw(Scene const scene);
+	void draw(Scene const& scene);
 	std::string description();
 	void setObjectSpace(glm::mat4 transfo);
 	void setNormals(std::vector<glm::vec3> normalIn);

@@ -16,7 +16,7 @@ public:
 	unsigned int getProgram();
 	void setVertex(std::vector<std::vector<GLfloat>> vertices,std::vector<int> index, std::vector<int> nbData);
 	void setDiffuse(Texture tex);
-	void setProgramInformation(Scene const scene,Solid const object);
+	void setProgramInformation(Scene const& scene,Solid const& object);
 	void draw();
 	GLuint getvertexBuffer();
 protected:

@@ -38,7 +38,7 @@ Solid::~Solid()
 {
 }
 
-void Solid::draw(Scene const scene)
+void Solid::draw(Scene const& scene)
 {
 
 	std::vector<GLfloat> vertArray;
@@ -88,7 +88,7 @@ void Solid::draw(Scene const scene)
 	}
 
 	shader.setVertex(vertexData, flatIndex, attributeSize);
-	//shader.setProgramInformation(scene, *this);
+	shader.setProgramInformation(scene, *this);
 
 
 	shader.draw();
