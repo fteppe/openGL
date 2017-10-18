@@ -43,9 +43,9 @@ WindowBuilder::WindowBuilder()
 	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
 	Shader shade("texture.ver", "texture.frag");
 	shade.setDiffuse(tex);
-	elem[2].setShader(shade);
+	//elem[2].setShader(shade);
 	//elem[0].setShader(shade);
-	elem[0].setShader(shade);
+	elem[1].setShader(shade);
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
 	float rotation = 1.0f;

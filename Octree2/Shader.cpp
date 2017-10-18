@@ -16,21 +16,20 @@ Shader::Shader(std::string vertex, std::string fragment)
 
 	vertex = "shaders/" + vertex;
 	fragment = "shaders/" + fragment;
-	std::ifstream vertexContent(vertex);
-	std::ifstream fragmentContent(fragment);
-	sourceVertex = std::string((std::istreambuf_iterator<char>(vertexContent)), std::istreambuf_iterator<char>());
-	sourceFragment = std::string((std::istreambuf_iterator<char>(fragmentContent)), std::istreambuf_iterator<char>());
+	std::string lightCalc = "shaders/lightCalc.frag";
 
 	GLuint vertexId = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
-
+	GLuint lumDiffuseCalc = glCreateShader(GL_FRAGMENT_SHADER);
 	//compiling both shaders
 	compileShader(vertexId, vertex);
 	compileShader(fragmentId, fragment);
+	compileShader(lumDiffuseCalc, lightCalc);
 
 	program = glCreateProgram();
 	glAttachShader(program, vertexId);
 	glAttachShader(program, fragmentId);
+	glAttachShader(program, lumDiffuseCalc);
 	//once they are linked to a program they are deleted
 	glDeleteShader(vertexId);
 	glDeleteShader(fragmentId);

@@ -45,48 +45,82 @@ void Scene::eventHandler(sf::Event event)
 	glm::vec3 target = cam.getTarget();
 	glm::vec3 up = cam.getUp();
 	glm::vec3 dir = target - campPos;
+	glm::vec3 dirNorm = glm::normalize(dir);
 	float distance = glm::length(dir);
 	dir = glm::normalize(dir);
 	glm::vec3 perpendicular = glm::cross(dir, up);
 
-	if (event.type == sf::Event::MouseMoved)
-	{
-		sf::Mouse mouse;
-		glm::vec2 mousePos(mouse.getPosition().x, mouse.getPosition().y);
-		glm::vec2 center(cam.getSize());
-		mousePos = mousePos - center;
-		target = target + up * mousePos.y;
-		target += perpendicular * mousePos.x;
-		//cam.setTarget(target);
-		//we reset the mouse's position
-		//mouse.setPosition(sf::Vector2i(0, 0));
-	}
+	//this way the angle when rotating doesn't depend on the distance between the camera and the target.
+	perpendicular = perpendicular * (distance / 50);
+	up = up * (distance / 50);
+	//if (event.type == sf::Event::MouseMoved)
+	//{
+	//	sf::Mouse mouse;
+	//	glm::vec2 mousePos(mouse.getPosition().x, mouse.getPosition().y);
+	//	glm::vec2 center(cam.getSize());
+	//	mousePos = mousePos - center;
+	//	target = target + up * mousePos.y;
+	//	target += perpendicular * mousePos.x;
+	//	//cam.setTarget(target);
+	//	//we reset the mouse's position
+	//	//mouse.setPosition(sf::Vector2i(0, 0));
+	//}
 	if (event.type == sf::Event::KeyPressed)
 	{
-
+		//mouvements lat
 		sf::Keyboard keyboard;
 		if (keyboard.isKeyPressed(keyboard.Z))
 		{
-			cam.setTarget(target + dir);
-			cam.setPosition(campPos + dir);
+			target = (target + dirNorm);
+			campPos = (campPos + dirNorm);
 		}
 		if (keyboard.isKeyPressed(keyboard.S))
 		{
-			cam.setTarget(target - dir);
-			cam.setPosition(campPos +- dir);
+			target = (target - dirNorm);
+			campPos = (campPos +-dirNorm);
 		}
 		if (keyboard.isKeyPressed(keyboard.D))
 		{
 			
-			cam.setTarget(target + perpendicular);
-			cam.setPosition(campPos + perpendicular);
+			target = (target + perpendicular);
+			campPos = (campPos + perpendicular);
 		}
 		if (keyboard.isKeyPressed(keyboard.Q))
 		{
-			cam.setTarget(target - perpendicular);
-			cam.setPosition(campPos - perpendicular);
+			target = target - perpendicular;
+			campPos -= perpendicular;
+
+		}
+		if (keyboard.isKeyPressed(keyboard.Space))
+		{
+			target += up;
+			campPos += up;
+		}
+		if (keyboard.isKeyPressed(keyboard.LControl))
+		{
+			target -= up;
+			campPos -= up;
+		}
+		//mouv rot
+		if (keyboard.isKeyPressed(keyboard.Left))
+		{
+			target = target - perpendicular;
+		}
+		if (keyboard.isKeyPressed(keyboard.Right))
+		{
+			target = target + perpendicular;
+		}
+		if (keyboard.isKeyPressed(keyboard.Down))
+		{
+			target = target - up;
+		}
+		if (keyboard.isKeyPressed(keyboard.Up))
+		{
+			target = target + up;
 		}
 	}
+	cam.setTarget(target);
+	cam.setPosition(campPos);
 }
 
 void Scene::setCamera(Camera camera) 
