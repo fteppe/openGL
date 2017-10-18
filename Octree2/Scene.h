@@ -1,6 +1,7 @@
 #pragma once
 #include "Camera.h"
 #include "Light.h"
+class Solid;
 #include "Solid.h"
 #include <vector>
 #include <SFML/Window.hpp>
@@ -17,6 +18,9 @@ public:
 	void eventHandler(sf::Event event);
 	void setCamera(Camera camera);
 	void renderScene();
+
+	Camera getCam() const;
+	Light getLight() const;
 private:
 	Camera cam;
 	Light light;

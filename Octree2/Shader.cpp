@@ -1,10 +1,13 @@
 #include "stdafx.h"
 #include "Shader.h"
+#include "Scene.h"
+
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <string>
 #include <glew/glew.h>
+#include <glm\gtc\type_ptr.hpp>
 
 
 Shader::Shader()
@@ -33,18 +36,20 @@ Shader::Shader(std::string vertex, std::string fragment)
 	//once they are linked to a program they are deleted
 	glDeleteShader(vertexId);
 	glDeleteShader(fragmentId);
+	glDeleteShader(lumDiffuseCalc);
 	glLinkProgram(program);
 	glUseProgram(program);
 
-	GLuint* arrayAdress = &VertexArrayID;
-	glGenVertexArrays(1, arrayAdress);
+	//vertex array: used to make the vertex array attributions. To tell when each vertex data starts.
+	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
 	// Generate 1 buffer, put the resulting identifier in vertexbuffer
+	//Buffer that is used to send all the vertex data.
 	glGenBuffers(1, &vertexbuffer);
 	// The following commands will talk about our 'vertexbuffer' buffer
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	
+	//Buffer that is used to set all the indice of the triangles, from the array buffer.
 	glGenBuffers(1, &elementbuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 }
@@ -52,6 +57,12 @@ Shader::Shader(std::string vertex, std::string fragment)
 
 Shader::~Shader()
 {
+	//Creates problems if differents objects with different life expectancies have the same shader. This create a memory leak, but will keep it thatway for now.
+	//TODO: handle this memory leak. Might need to forbid shader sharing between objects.
+	/*glDeleteBuffers(1,&elementbuffer);
+	glDeleteBuffers(1, &vertexbuffer);
+	glDeleteVertexArrays(1, &VertexArrayID);
+	glDeleteProgram(program);*/
 }
 
 unsigned int Shader::getProgram()
@@ -69,6 +80,8 @@ unsigned int Shader::getProgram()
 */
 void Shader::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData)
 {
+	glBindVertexArray(VertexArrayID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 	//We tel openGL that all these shader operation will be done one this shader's program.
 	glUseProgram(program);
 	indexSize = index.size();
@@ -81,11 +94,14 @@ void Shader::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<i
 	}
 	//we fill the buffer that contains the indexes.
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size()*sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
-
+	//We specify which buffer we use.
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	// Give our vertices to OpenGL.
 	glBufferData(GL_ARRAY_BUFFER,  flatVert.size() * sizeof(GLfloat), &flatVert[0], GL_STATIC_DRAW);
 	//We are going to set each vertex data
 	int offset = 0;
+
+	glBindVertexArray(VertexArrayID);
 	for (int i = 0; i < vertices.size(); i++)
 	{
 		//all the argments are one after the other, so there is no stride, but we set the offset
@@ -100,20 +116,45 @@ void Shader::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<i
 
 void Shader::setDiffuse(Texture tex)
 {
-	diffuse = tex;
+	//if there is no diffuse texture, we extend the size of the array
+	texChannels["diffuse"] = tex;
+}
+
+void Shader::setProgramInformation(Scene const scene, Solid const object)
+{
+	Camera cam = scene.getCam();
+	Light light = scene.getLight();
+	//We get the light data;
+	std::vector<float> lightData(light.getDataArray());
+	//we get the camera space and calulculate the projection that will be done to all the vertices
+	glm::mat4 cameraSpace = cam.getProjection();
+	glm::mat4 objectSpace = object.getObjectSpace();
+	glm::mat4 worldSpace = cameraSpace * objectSpace;
+	//the projection matrix sent to the shader
+	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, false, glm::value_ptr(worldSpace));
+	//the objectspace that can be used to calculate lights or the posiiton of a vertex to a point. We send it to the shader.
+	glUniformMatrix4fv(glGetUniformLocation(program, "objectSpace"), 1, false, glm::value_ptr(objectSpace));
+	//we send the light data to the shader, for now we can handle only one light
+	glUniform1fv(glGetUniformLocation(program, "light"), lightData.size(), &lightData[0]);
+
+}
+
+void Shader::sendTexChannels()
+{
+	//iterating through the map of channels.
+	for (std::map<std::string, Texture>::iterator it = texChannels.begin(); it != texChannels.end(); it++)
+	{
+		//we send to the program the channel.
+		it->second.applyTexture(program, it->first);
+	}
 }
 
 void Shader::draw()
 {
 
-	diffuse.applyTexture(program, "diffuse");
-	//glDrawArrays(GL_TRIANGLES, 0, verticesNum); //drawing as many vertices as their are: 
-	//std::cout << "error :"<<glGetError()<<std::endl;
-	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
-	glDisableVertexAttribArray(0);
+	sendTexChannels();
 
-	//glDeleteVertexArrays(1, &VertexArrayID);
-	//glDeleteBuffers(1, &vertexbuffer);
+	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
 
 }
 

@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Solid.h"
+#include "Scene.h"
+
 #include <sstream>
 #include <glm\gtc\type_ptr.hpp>
 #include <glm\gtc\matrix_transform.hpp>
@@ -36,8 +38,9 @@ Solid::~Solid()
 {
 }
 
-void Solid::draw(Camera cam, Light light)
+void Solid::draw(Scene const scene)
 {
+
 	std::vector<GLfloat> vertArray;
 	std::vector<GLfloat> normalArray;
 	std::vector<GLfloat> UVArray;
@@ -85,18 +88,8 @@ void Solid::draw(Camera cam, Light light)
 	}
 
 	shader.setVertex(vertexData, flatIndex, attributeSize);
-	//We get the light data;
-	std::vector<float> lightData(light.getDataArray() );
-	unsigned int program = shader.getProgram();
-	//we get the camera space and calulculate the projection that will be done to all the vertices
-	glm::mat4 cameraSpace = cam.getProjection();
-	glm::mat4 worldSpace = cameraSpace * objectSpace;
-	//the projection matrix sent to the shader
-	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, false, glm::value_ptr(worldSpace));
-	//the objectspace that can be used to calculate lights or the posiiton of a vertex to a point. We send it to the shader.
-	glUniformMatrix4fv(glGetUniformLocation(program, "objectSpace"), 1, false, glm::value_ptr(objectSpace));
-	//we send the light data to the shader, for now we can handle only one light
-	glUniform1fv(glGetUniformLocation(program, "light"), lightData.size(), &lightData[0]);
+	//shader.setProgramInformation(scene, *this);
+
 
 	shader.draw();
 }
@@ -146,4 +139,9 @@ void Solid::setShader(Shader shade)
 void Solid::setTexture(Texture tex)
 {
 	shader.setDiffuse(tex);
+}
+
+glm::mat4 Solid::getObjectSpace() const
+{
+	return objectSpace;
 }

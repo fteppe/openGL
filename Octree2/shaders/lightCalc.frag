@@ -2,7 +2,7 @@
 
 vec3 fragLight(float light[7], vec3 normal, vec3 vertexPos)
 {
-		vec3 lightPos = vec3(light[0], light[1], light[2]);
+	vec3 lightPos = vec3(light[0], light[1], light[2]);
 	vec3 lightCol = vec3(light[3],light[4],light[5]);
 	float intensity = light[6];
 	float lightDistance = length(lightPos - vertexPos);

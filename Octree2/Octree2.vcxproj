@@ -152,6 +152,8 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderBasic.h" />
+    <ClInclude Include="ShaderSpecular.h" />
     <ClInclude Include="Solid.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -169,6 +171,8 @@
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderBasic.cpp" />
+    <ClCompile Include="ShaderSpecular.cpp" />
     <ClCompile Include="Solid.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -202,6 +206,8 @@
     <None Include="shaders\debug.frag" />
     <None Include="shaders\directionalLight.frag" />
     <None Include="shaders\lightCalc.frag" />
+    <None Include="shaders\specular.frag" />
+    <None Include="shaders\specularCalc.frag" />
     <None Include="shaders\texture.frag" />
     <None Include="shaders\texture.ver" />
     <None Include="shaders\transform.ver">

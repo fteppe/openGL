@@ -135,6 +135,16 @@ void Scene::renderScene()
 	for (int i = 0; i < elements.size(); i++)
 	{
 		//elements[i].setObjectSpace(rot);
-		elements[i].draw(cam, light);
+		elements[i].draw(*this);
 	}
+}
+
+Camera Scene::getCam() const
+{
+	return cam;
+}
+
+Light Scene::getLight() const
+{
+	return light;
 }

@@ -10,7 +10,7 @@
 #include <iomanip>
 
 #include "Scene.h"
-#include "Polygon.h"
+#include "ShaderBasic.h"
 #include "waveFrontLoader.h"
 #include "Solid.h"
 #include "Cube.h"
@@ -41,7 +41,7 @@ WindowBuilder::WindowBuilder()
 	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
 	Texture tex;
 	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
-	Shader shade("texture.ver", "texture.frag");
+	ShaderBasic shade;
 	shade.setDiffuse(tex);
 	//elem[2].setShader(shade);
 	//elem[0].setShader(shade);

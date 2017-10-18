@@ -17,6 +17,8 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="ShaderBasic.cpp" />
+    <ClCompile Include="ShaderSpecular.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h">
@@ -64,6 +66,8 @@
     <ClInclude Include="Camera.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderBasic.h" />
+    <ClInclude Include="ShaderSpecular.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Octree2.rc" />
@@ -119,6 +123,12 @@
       <Filter>shader</Filter>
     </None>
     <None Include="shaders\lightCalc.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shaders\specularCalc.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shaders\specular.frag">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>

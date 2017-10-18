@@ -5,22 +5,26 @@
 #include "Texture.h"
 #include "Camera.h"
 #include "Light.h"
+
 #include <glm\matrix.hpp>
+
+class Scene;
 class Solid
 {
 public:
 	Solid();
 	Solid(std::vector<glm::vec3> vertices, std::vector<std::vector<int>> index);
 	~Solid();
-	void draw(Camera cam, Light light);
+	void draw(Scene const scene);
 	std::string description();
 	void setObjectSpace(glm::mat4 transfo);
 	void setNormals(std::vector<glm::vec3> normalIn);
 	void setUVs(std::vector<glm::vec3> UVin);
 	void setShader(Shader shade);
 	void setTexture(Texture tex);
+	glm::mat4 getObjectSpace() const;
 protected:
-	void makeAttributesArray();
+
 
 	//All the attributes of our solid in a single 1D array.
 	std::vector<GLfloat> attributesArray;
