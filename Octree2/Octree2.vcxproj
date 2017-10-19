@@ -203,7 +203,10 @@
     <None Include="shaders\col.frag">
       <FileType>Document</FileType>
     </None>
-    <None Include="shaders\debug.frag" />
+    <None Include="shaders\debug.frag">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </None>
     <None Include="shaders\directionalLight.frag" />
     <None Include="shaders\lightCalc.frag" />
     <None Include="shaders\specular.frag" />

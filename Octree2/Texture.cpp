@@ -20,11 +20,15 @@ void Texture::loadTexture(std::string textureName)
 	texturePath = textureName;
 	data =  stbi_load(textureName.c_str(), &width, &height, &nrChannels, 0);
 	textureData = std::vector<unsigned char>(data, data+width* height* nrChannels);
+
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	//stbi_image_free(data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
@@ -35,10 +39,10 @@ void Texture::applyTexture(GLuint program, std::string varName)
 
 	//data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);
 	if (data)
-	{
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		
+	{		
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glUniform1i(glGetUniformLocation(program, varName.c_str()), 0); // set it manually
 	}
 	else

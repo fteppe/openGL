@@ -43,8 +43,8 @@ WindowBuilder::WindowBuilder()
 	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
 	ShaderBasic shade;
 	shade.setDiffuse(tex);
-	//elem[2].setShader(shade);
-	//elem[0].setShader(shade);
+	elem[2].setShader(shade);
+	elem[0].setShader(shade);
 	elem[1].setShader(shade);
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
@@ -66,11 +66,12 @@ WindowBuilder::WindowBuilder()
 		
 		
 
-		if (clock.getElapsedTime().asMilliseconds()  >= sf::milliseconds(3).asMilliseconds())
+		if (1)
 		{
 			scene.animate(clock);
 			//Render time.
-			std::cout <<'\r'<< std::setw(3) << std::setfill(' ')<<clock.getElapsedTime().asMilliseconds();
+			unsigned int time = clock.getElapsedTime().asMicroseconds();
+			std::cout <<'\r'<< std::setw(5) << std::setfill(' ')<<time;
 			clock.restart();
 			
 			scene.renderScene();
