@@ -34,20 +34,11 @@ Shader::Shader(std::string vertex, std::string fragment)
 	glAttachShader(program, fragmentId);
 	glAttachShader(program, lumDiffuseCalc);
 	//once they are linked to a program they are deleted
+	linkProgram();
 	glDeleteShader(vertexId);
 	glDeleteShader(fragmentId);
 	glDeleteShader(lumDiffuseCalc);
-	glLinkProgram(program);
-
-	int  success;
-	char infoLog[512];
-	glGetShaderiv(program, GL_LINK_STATUS, &success);
-
-	if (!success)
-	{
-		glGetProgramInfoLog(program, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
+	
 }
 
 
@@ -127,5 +118,20 @@ void Shader::compileShader(GLuint shader, std::string shaderPath)
 		glGetShaderInfoLog(shader, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::"<<shaderPath<<"::COMPILATION_FAILED\n" << infoLog << std::endl;
 		std::cout << source;
+	}
+}
+
+void Shader::linkProgram()
+{
+	glLinkProgram(program);
+
+	int  success = 0;
+	char infoLog[512];
+	glGetProgramiv(program, GL_LINK_STATUS, &success);
+
+	if (!success)
+	{
+		glGetProgramInfoLog(program, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAM::LINK FAILED\n" << infoLog << std::endl;
 	}
 }

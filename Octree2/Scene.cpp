@@ -13,7 +13,7 @@ Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
 {
 	light.intensity = 1.0f;
 	light.col = glm::vec3(1, 1, 1);
-	light.pos = glm::vec3(0.6, 0.6, 0.2);
+	light.pos = glm::vec3(1, 1, 0.5);
 	this->cam.setPosition(glm::vec3(-10, -10, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 0, 1));

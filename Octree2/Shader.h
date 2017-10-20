@@ -21,7 +21,7 @@ protected:
 	//send all the texture channels to the program.
 	void sendTexChannels();
 	void compileShader(GLuint shader, std::string shaderPath);
-
+	void linkProgram();
 	unsigned int program;
 	//a map of the different texture channels, the key is the name of the channel.
 	std::map<std::string, Texture> texChannels;

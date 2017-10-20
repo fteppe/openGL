@@ -17,7 +17,8 @@ Solid::Solid() : objectSpace(), triangulated(false)
 Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn): Solid()
 {
 	objectSpace = glm::mat4(); 
-	shader = Shader("transform.ver", "col.frag");
+	//shader = Shader("transform.ver", "col.frag");
+	shader_ptr = std::shared_ptr<Shader>(new Shader("transform.ver", "col.frag"));
 	vertices = verticesIn;
 	std::vector<std::vector<int>> triangles;
 	int offset = 0;
@@ -48,10 +49,11 @@ void Solid::draw(Scene const& scene)
 {
 
 	//updateVertexAttributes();
-	shader.setProgramInformation(scene, *this);
+	//shader.setProgramInformation(scene, *this);
+	shader_ptr->setProgramInformation(scene, *this);
 
-
-	VBO.sendVertexToShader(shader);
+	//VBO.sendVertexToShader(shader);
+	VBO.sendVertexToShader(*shader_ptr);
 }
 
 std::string Solid::description()
@@ -92,14 +94,15 @@ void Solid::setUVs(std::vector<glm::vec3> UVin)
 	updateVertexAttributes();
 }
 
-void Solid::setShader(Shader shade)
+void Solid::setShader(std::shared_ptr<Shader> shade)
 {
-	shader = shade;
+	shader_ptr = std::shared_ptr<Shader>(shade);
 }
 
 void Solid::setTexture(Texture tex)
 {
-	shader.setDiffuse(tex);
+	//shader.setDiffuse(tex);
+	shader_ptr->setDiffuse(tex);
 }
 
 glm::mat4 Solid::getObjectSpace() const

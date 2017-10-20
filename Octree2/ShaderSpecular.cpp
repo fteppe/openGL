@@ -8,10 +8,12 @@
 
 ShaderSpecular::ShaderSpecular() : Shader("texture.ver","specular.frag")
 {
+	//Link errors are expected since we first link without all the necessary files.
 	GLuint specCalc = glCreateShader(GL_FRAGMENT_SHADER);
 	compileShader(specCalc, "shaders/specularCalc.frag");
 	glAttachShader(program, specCalc);
 	glDeleteShader(specCalc);
+	linkProgram();
 }
 
 

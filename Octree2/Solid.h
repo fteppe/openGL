@@ -5,6 +5,7 @@
 #include "Texture.h"
 #include "VertexBufferObject.h"
 #include <glm\matrix.hpp>
+#include <memory>
 
 #include "Scene.h"
 class Solid
@@ -18,7 +19,7 @@ public:
 	void setObjectSpace(glm::mat4 transfo);
 	void setNormals(std::vector<glm::vec3> normalIn);
 	void setUVs(std::vector<glm::vec3> UVin);
-	void setShader(Shader shade);
+	void setShader(std::shared_ptr<Shader> shade);
 	void setTexture(Texture tex);
 	glm::mat4 getObjectSpace() const;
 protected:
@@ -36,7 +37,7 @@ protected:
 	std::vector<std::vector<int>> index;
 	glm::mat4 objectSpace;
 	bool triangulated;
-	Shader shader;
+	std::shared_ptr<Shader> shader_ptr;
 	VertexBufferObject VBO;
 
 

@@ -39,15 +39,16 @@ WindowBuilder::WindowBuilder()
 
 	
 	WaveFrontLoader loader;
-	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
+	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/plan.obj"));
 	Texture tex;
 	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
 	ShaderBasic shade;
-	ShaderSpecular spec;
-	shade.setDiffuse(tex);
-	//elem[2].setShader(shade);
+	std::shared_ptr<Shader> text(&shade);
+	std::shared_ptr<ShaderSpecular> spec(new ShaderSpecular);
+	text->setDiffuse(tex);
+	//elem[2].setShader(text);
 	//elem[0].setShader(shade);
-	elem[3].setShader(spec);
+	elem[0].setShader(spec);
 	//elem[1].setShader(shade);
 	sf::Clock clock;
 
