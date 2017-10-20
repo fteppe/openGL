@@ -14,7 +14,7 @@ public:
 	Shader(std::string vertex, std::string fragment);
 	//Shader(const Shader& shader);
 	~Shader();
-	unsigned int getProgram();
+	unsigned int getProgram() const;
 	//void setVertex(std::vector<std::vector<GLfloat>> vertices,std::vector<int> index, std::vector<int> nbData);
 	void setDiffuse(Texture tex);
 	void setProgramInformation(Scene const& scene,Solid const& object);

@@ -28,7 +28,8 @@ void Texture::loadTexture(std::string textureName)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-	//stbi_image_free(data);
+	//once the texture has been loaded we free it from the ram where it is no longer used.
+	stbi_image_free(data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
@@ -42,7 +43,6 @@ void Texture::applyTexture(GLuint program, std::string varName)
 	{		
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glUniform1i(glGetUniformLocation(program, varName.c_str()), 0); // set it manually
 	}
 	else

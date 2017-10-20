@@ -8,7 +8,7 @@ public:
 	VertexBufferObject();
 	~VertexBufferObject();
 	void setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData);
-	void sendVertexToShader(Shader shader);
+	void sendVertexToShader(const Shader& shader);
 
 private:
 

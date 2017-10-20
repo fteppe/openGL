@@ -77,7 +77,7 @@ Shader::~Shader()
 
 }
 
-unsigned int Shader::getProgram()
+unsigned int Shader::getProgram() const
 {
 	return program;
 }
@@ -134,6 +134,7 @@ void Shader::setDiffuse(Texture tex)
 
 void Shader::setProgramInformation(Scene const& scene, Solid const& object)
 {
+	glUseProgram(program);
 	Camera cam = scene.getCam();
 	Light light = scene.getLight();
 	//We get the light data;
@@ -153,6 +154,7 @@ void Shader::setProgramInformation(Scene const& scene, Solid const& object)
 
 void Shader::sendTexChannels()
 {
+	glUseProgram(program);
 	//iterating through the map of channels.
 	for (std::map<std::string, Texture>::iterator it = texChannels.begin(); it != texChannels.end(); it++)
 	{

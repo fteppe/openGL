@@ -61,17 +61,23 @@ void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, s
 	}
 }
 
-void VertexBufferObject::sendVertexToShader(Shader shader)
+void VertexBufferObject::sendVertexToShader(const Shader& shader)
 {
 	int error;
 	error = glGetError();
+	GLuint program = shader.getProgram();
 	const GLubyte* errorString = glewGetErrorString(error);
 	//We specify which program will use this VBO
-	glUseProgram(shader.getProgram());
+	glUseProgram(program);
+
 	glBindVertexArray(VertexArrayID);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);	
+
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
+	error = glGetError();
 	
 
 }

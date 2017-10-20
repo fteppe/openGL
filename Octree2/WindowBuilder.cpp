@@ -43,10 +43,10 @@ WindowBuilder::WindowBuilder()
 	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
 	ShaderBasic shade;
 	shade.setDiffuse(tex);
-	//elem[2].setShader(shade);
-	//elem[0].setShader(shade);
+	elem[2].setShader(shade);
+	elem[0].setShader(shade);
 	//elem[3].setShader(shade);
-	//elem[1].setShader(shade);
+	elem[1].setShader(shade);
 	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
 	sf::Clock clock;
 	float rotation = 1.0f;
@@ -54,9 +54,6 @@ WindowBuilder::WindowBuilder()
 	//cam.setPosition(glm::vec3(-10, 10, 10));
 	Scene scene(elem, cam);
 	std::cout << glGetString(GL_VERSION) << std::endl;
-	int maxTexSize;
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTexSize);
-	std::cout << "size max" << maxTexSize << std::endl;
 
 	while (window.isOpen())
 	{
@@ -68,7 +65,7 @@ WindowBuilder::WindowBuilder()
 		
 		
 		int time = clock.getElapsedTime().asMilliseconds();
-		int frameTime = sf::milliseconds(8).asMilliseconds();
+		int frameTime = sf::milliseconds(1).asMilliseconds();
 		
 		bool needNewFrame = time >= frameTime;
 		//It would seem that without this sync, there is a fall in performance. Not sure why yet. Also the application takes way more resources;
@@ -82,6 +79,7 @@ WindowBuilder::WindowBuilder()
 			clock.restart();
 			
 			scene.renderScene();
+			int error = glGetError();
 			window.display();
 		}
 
