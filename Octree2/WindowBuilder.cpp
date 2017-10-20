@@ -11,6 +11,7 @@
 
 #include "Scene.h"
 #include "ShaderBasic.h"
+#include "ShaderSpecular.h"
 #include "waveFrontLoader.h"
 #include "Solid.h"
 #include "Cube.h"
@@ -42,16 +43,15 @@ WindowBuilder::WindowBuilder()
 	Texture tex;
 	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
 	ShaderBasic shade;
+	ShaderSpecular spec;
 	shade.setDiffuse(tex);
-	elem[2].setShader(shade);
-	elem[0].setShader(shade);
-	//elem[3].setShader(shade);
-	elem[1].setShader(shade);
-	glm::mat4 projection = glm::perspective(0.75f, width/height, 0.1f, 200.0f);
+	//elem[2].setShader(shade);
+	//elem[0].setShader(shade);
+	elem[3].setShader(spec);
+	//elem[1].setShader(shade);
 	sf::Clock clock;
-	float rotation = 1.0f;
+
 	Camera cam(600.0f, 800.0f, 0.75f);
-	//cam.setPosition(glm::vec3(-10, 10, 10));
 	Scene scene(elem, cam);
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
@@ -61,12 +61,8 @@ WindowBuilder::WindowBuilder()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		sf::Event event;
-		
-		
-		
 		int time = clock.getElapsedTime().asMilliseconds();
 		int frameTime = sf::milliseconds(1).asMilliseconds();
-		
 		bool needNewFrame = time >= frameTime;
 		//It would seem that without this sync, there is a fall in performance. Not sure why yet. Also the application takes way more resources;
 		std::cout << '\r' << std::setw(4) << std::setfill(' ');

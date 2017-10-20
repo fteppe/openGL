@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "ShaderSpecular.h"
+#include "Camera.h"
+#include "Solid.h"
+#include <glm\gtc\type_ptr.hpp>
+
 
 
 ShaderSpecular::ShaderSpecular() : Shader("texture.ver","specular.frag")
@@ -14,5 +18,16 @@ ShaderSpecular::ShaderSpecular() : Shader("texture.ver","specular.frag")
 ShaderSpecular::~ShaderSpecular()
 {
 }
+
+void ShaderSpecular::setProgramInformation(const Scene & scene, const Solid & solid)
+{
+	Shader::setProgramInformation(scene, solid);
+	Camera cam = scene.getCam();
+	glm::vec3 camPos = cam.getPos();
+	//sending the camera position
+	glUniform3f(glGetUniformLocation(program, "camPos"), camPos.x,camPos.y,camPos.z);
+}
+
+
 
 

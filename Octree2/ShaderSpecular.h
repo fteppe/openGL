@@ -6,6 +6,7 @@ class ShaderSpecular :
 public:
 	ShaderSpecular();
 	~ShaderSpecular();
-	void setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData);
+	//void setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData);
+	void setProgramInformation(const Scene& scene, const Solid& solid);
 };
 

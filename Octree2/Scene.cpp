@@ -13,7 +13,7 @@ Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
 {
 	light.intensity = 1.0f;
 	light.col = glm::vec3(1, 1, 1);
-	light.pos = glm::vec3(1, 1, 0.2);
+	light.pos = glm::vec3(0.6, 0.6, 0.2);
 	this->cam.setPosition(glm::vec3(-10, -10, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 0, 1));
@@ -25,7 +25,7 @@ void Scene::animate(sf::Clock elapsed)
 	
 	float rotation = elapsed.getElapsedTime().asMilliseconds();
 	//std::cout << rotation << std::endl;
-	glm::mat4 rot = glm::rotate(0.02f, glm::vec3(0, 0, 1));
+	glm::mat4 rot = glm::rotate(0.002f, glm::vec3(0, 0, 1));
 	glm::vec3 pos = cam.getPos();
 	//pos = rot * glm::vec4(pos , 1);
 	light.pos = rot * glm::vec4(light.pos, 1);//;glm::vec4(5,0, 3,1);

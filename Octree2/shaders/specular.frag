@@ -14,13 +14,9 @@ vec3 specCalc(float light[7], vec3 normal, vec3 vertexPos, vec3 campPos, float s
 
 void main()
 {
-
-
 	//we add a constant value to the intensity, so it is never dark.
 	vec3 intensityVec = fragLight(light, normal, vertexPos) + vec3(0.1);
-	vec3 specVec = specCalc(light, normal, vertexPos, campPos, 32);
-	vec4 color = vec4(texture(diffuse, UV));
-    FragColor = vec4(intensityVec,1) * color ;
-
-
+	vec3 specVec = specCalc(light, normal, vertexPos, camPos, 256);
+	vec4 color = vec4(0.5);//vec4(texture(diffuse, UV));
+    FragColor = vec4(intensityVec * specVec,1) * color ;
 }
