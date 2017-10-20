@@ -44,20 +44,20 @@ WindowBuilder::WindowBuilder()
 	Texture stone;
 	stone.loadTexture("textures/texture2.jpg");
 	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
-	ShaderBasic shade;
-	std::shared_ptr<Shader> text(&shade);
+	
+	std::shared_ptr<Shader> text(new ShaderBasic);
 	std::shared_ptr<ShaderSpecular> spec(new ShaderSpecular);
 	spec->setDiffuse(stone);
 	text->setDiffuse(tex);
 	//elem[3].setShader(text);
 	//elem[0].setShader(shade);
-	//elem[2].setShader(spec);
+	elem[2].setShader(spec);
 	//elem[1].setShader(shade);
 	sf::Clock clock;
 
 	Camera cam(600.0f, 800.0f, 0.75f);
 	Scene scene(elem, cam);
-	std::cout << glGetString(GL_VERSION) << std::endl;
+	//std::cout << glGetString(GL_VERSION) << std::endl;
 
 	while (window.isOpen())
 	{

@@ -95,7 +95,7 @@ void Solid::setUVs(std::vector<glm::vec3> UVin)
 	updateVertexAttributes();
 }
 
-void Solid::setShader(std::shared_ptr<Shader> shade)
+void Solid::setShader(std::shared_ptr<Shader> const& shade)
 {
 	//shader_ptr.reset();
 	shader_ptr = (shade);

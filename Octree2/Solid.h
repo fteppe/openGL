@@ -19,7 +19,7 @@ public:
 	void setObjectSpace(glm::mat4 transfo);
 	void setNormals(std::vector<glm::vec3> normalIn);
 	void setUVs(std::vector<glm::vec3> UVin);
-	void setShader(std::shared_ptr<Shader> shade);
+	void setShader(std::shared_ptr<Shader> const& shade);
 	void setTexture(Texture tex);
 	glm::mat4 getObjectSpace() const;
 protected:

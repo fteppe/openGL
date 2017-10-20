@@ -46,12 +46,7 @@ Shader::Shader(std::string vertex, std::string fragment)
 
 Shader::~Shader()
 {
-	//Creates problems if differents objects with different life expectancies have the same shader. This create a memory leak, but will keep it thatway for now.
-	//TODO: handle this memory leak. Might need to forbid shader sharing between objects.
-	//glDeleteBuffers(1,&elementbuffer);
-	//glDeleteBuffers(1, &vertexbuffer);
-	//glDeleteVertexArrays(1, &VertexArrayID);
-
+	glDeleteProgram(program);
 }
 
 unsigned int Shader::getProgram() const
