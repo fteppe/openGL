@@ -19,6 +19,7 @@ Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> in
 	objectSpace = glm::mat4(); 
 	//shader = Shader("transform.ver", "col.frag");
 	shader_ptr = std::shared_ptr<Shader>(new Shader("transform.ver", "col.frag"));
+	VBO_ptr = std::shared_ptr<VertexBufferObject>(new VertexBufferObject);
 	vertices = verticesIn;
 	std::vector<std::vector<int>> triangles;
 	int offset = 0;
@@ -49,12 +50,11 @@ Solid::~Solid()
 void Solid::draw(Scene const& scene)
 {
 
-	//updateVertexAttributes();
-	//shader.setProgramInformation(scene, *this);
+
 	shader_ptr->setProgramInformation(scene, *this);
 
-	//VBO.sendVertexToShader(shader);
-	VBO.sendVertexToShader(*shader_ptr);
+	//VBO.sendVertexToShader(*shader_ptr);
+	VBO_ptr->sendVertexToShader(*shader_ptr);
 }
 
 std::string Solid::description()
@@ -159,5 +159,6 @@ void Solid::updateVertexAttributes()
 		attributeSize.push_back(2);
 	}
 
-	VBO.setVertex(vertexData, flatIndex, attributeSize);
+	//VBO.setVertex(vertexData, flatIndex, attributeSize);
+	VBO_ptr->setVertex(vertexData, flatIndex, attributeSize);
 }

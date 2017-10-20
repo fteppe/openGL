@@ -15,7 +15,7 @@ public:
 	//Shader(const Shader& shader);
 	~Shader();
 	unsigned int getProgram() const;
-	void setDiffuse(Texture tex);
+	void setDiffuse(Texture& tex);
 	virtual void setProgramInformation(Scene const& scene,Solid const& object);
 protected:
 	//send all the texture channels to the program.

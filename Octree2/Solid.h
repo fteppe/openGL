@@ -37,6 +37,7 @@ protected:
 	bool triangulated;
 	std::shared_ptr<Shader> shader_ptr;
 	VertexBufferObject VBO;
+	std::shared_ptr<VertexBufferObject> VBO_ptr;
 
 
 };

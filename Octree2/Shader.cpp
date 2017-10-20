@@ -55,7 +55,7 @@ unsigned int Shader::getProgram() const
 }
 
 
-void Shader::setDiffuse(Texture tex)
+void Shader::setDiffuse(Texture& tex)
 {
 	//if there is no diffuse texture, we extend the size of the array
 	texChannels["diffuse"] = tex;

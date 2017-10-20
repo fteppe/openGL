@@ -22,9 +22,9 @@ VertexBufferObject::VertexBufferObject()
 VertexBufferObject::~VertexBufferObject()
 {
 	//For now creates issues because during a copy it can be destroyed by the compiler. Which is not what I want. So will need some time to figure it out.
-	//glDeleteBuffers(1,&elementbuffer);
-	//glDeleteBuffers(1, &vertexbuffer);
-	//glDeleteVertexArrays(1, &VertexArrayID);
+	glDeleteBuffers(1,&elementbuffer);
+	glDeleteBuffers(1, &vertexbuffer);
+	glDeleteVertexArrays(1, &VertexArrayID);
 }
 
 void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData)

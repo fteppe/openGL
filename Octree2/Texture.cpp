@@ -13,6 +13,7 @@ Texture::Texture()
 
 Texture::~Texture()
 {
+	glDeleteTextures(1, &textureID);
 }
 
 void Texture::loadTexture(std::string textureName)
