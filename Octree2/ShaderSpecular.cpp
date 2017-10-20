@@ -15,9 +15,4 @@ ShaderSpecular::~ShaderSpecular()
 {
 }
 
-void ShaderSpecular::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData)
-{
-	//we call the father function
-	Shader::setVertex(vertices, index, nbData);
-	//we just send to the program our new value
-}
+

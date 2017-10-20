@@ -51,7 +51,7 @@ void Solid::draw(Scene const& scene)
 	shader.setProgramInformation(scene, *this);
 
 
-	shader.draw();
+	VBO.sendVertexToShader(shader);
 }
 
 std::string Solid::description()
@@ -95,9 +95,6 @@ void Solid::setUVs(std::vector<glm::vec3> UVin)
 void Solid::setShader(Shader shade)
 {
 	shader = shade;
-	shader.applyToNewObject();
-	updateVertexAttributes();
-
 }
 
 void Solid::setTexture(Texture tex)
@@ -157,5 +154,5 @@ void Solid::updateVertexAttributes()
 		attributeSize.push_back(2);
 	}
 
-	shader.setVertex(vertexData, flatIndex, attributeSize);
+	VBO.setVertex(vertexData, flatIndex, attributeSize);
 }

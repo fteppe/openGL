@@ -3,9 +3,7 @@
 #include "Polygon.h"
 #include "Shader.h"
 #include "Texture.h"
-#include "Camera.h"
-#include "Light.h"
-
+#include "VertexBufferObject.h"
 #include <glm\matrix.hpp>
 
 #include "Scene.h"
@@ -39,6 +37,7 @@ protected:
 	glm::mat4 objectSpace;
 	bool triangulated;
 	Shader shader;
+	VertexBufferObject VBO;
 
 
 };

@@ -15,11 +15,11 @@ public:
 	//Shader(const Shader& shader);
 	~Shader();
 	unsigned int getProgram();
-	void setVertex(std::vector<std::vector<GLfloat>> vertices,std::vector<int> index, std::vector<int> nbData);
+	//void setVertex(std::vector<std::vector<GLfloat>> vertices,std::vector<int> index, std::vector<int> nbData);
 	void setDiffuse(Texture tex);
 	void setProgramInformation(Scene const& scene,Solid const& object);
-	void draw();
-	GLuint getvertexBuffer();
+	//void draw();
+
 	//When the same shader is applied to different objects, it is necessary to create new VBAOs for it to work. In the future it is possible that a shader doesn't have the VBAos but the object does?
 	//it would make more sense.
 	void applyToNewObject();
@@ -28,10 +28,6 @@ protected:
 	void sendTexChannels();
 	void compileShader(GLuint shader, std::string shaderPath);
 
-	GLuint vertexbuffer;
-	GLuint elementbuffer;
-	GLuint VertexArrayID;
-	unsigned int indexSize;
 	unsigned int program;
 	//a map of the different texture channels, the key is the name of the channel.
 	std::map<std::string, Texture> texChannels;

@@ -38,7 +38,7 @@ WindowBuilder::WindowBuilder()
 
 	
 	WaveFrontLoader loader;
-	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/monkey.obj"));
+	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
 	Texture tex;
 	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
 	ShaderBasic shade;
