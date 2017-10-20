@@ -43,6 +43,7 @@ Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> in
 
 Solid::~Solid()
 {
+	//shader_ptr.reset();
 }
 
 void Solid::draw(Scene const& scene)
@@ -96,7 +97,8 @@ void Solid::setUVs(std::vector<glm::vec3> UVin)
 
 void Solid::setShader(std::shared_ptr<Shader> shade)
 {
-	shader_ptr = std::shared_ptr<Shader>(shade);
+	//shader_ptr.reset();
+	shader_ptr = (shade);
 }
 
 void Solid::setTexture(Texture tex)

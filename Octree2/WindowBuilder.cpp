@@ -49,9 +49,9 @@ WindowBuilder::WindowBuilder()
 	std::shared_ptr<ShaderSpecular> spec(new ShaderSpecular);
 	spec->setDiffuse(stone);
 	text->setDiffuse(tex);
-	elem[3].setShader(text);
+	//elem[3].setShader(text);
 	//elem[0].setShader(shade);
-	elem[2].setShader(spec);
+	//elem[2].setShader(spec);
 	//elem[1].setShader(shade);
 	sf::Clock clock;
 
