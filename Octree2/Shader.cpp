@@ -54,15 +54,31 @@ Shader::Shader(std::string vertex, std::string fragment)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 }
 
+//Shader::Shader(const Shader & shader) : program(shader.program), texChannels(shader.texChannels), indexSize(shader.indexSize)
+//{
+//	//vertex array: used to make the vertex array attributions. To tell when each vertex data starts.
+//	glGenVertexArrays(1, &VertexArrayID);
+//	glBindVertexArray(VertexArrayID);
+//
+//	// Generate 1 buffer, put the resulting identifier in vertexbuffer
+//	//Buffer that is used to send all the vertex data.
+//	glGenBuffers(1, &vertexbuffer);
+//	// The following commands will talk about our 'vertexbuffer' buffer
+//	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+//	//Buffer that is used to set all the indice of the triangles, from the array buffer.
+//	glGenBuffers(1, &elementbuffer);
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+//}
+
 
 Shader::~Shader()
 {
 	//Creates problems if differents objects with different life expectancies have the same shader. This create a memory leak, but will keep it thatway for now.
 	//TODO: handle this memory leak. Might need to forbid shader sharing between objects.
-	/*glDeleteBuffers(1,&elementbuffer);
-	glDeleteBuffers(1, &vertexbuffer);
-	glDeleteVertexArrays(1, &VertexArrayID);
-	glDeleteProgram(program);*/
+	//glDeleteBuffers(1,&elementbuffer);
+	//glDeleteBuffers(1, &vertexbuffer);
+	//glDeleteVertexArrays(1, &VertexArrayID);
+
 }
 
 unsigned int Shader::getProgram()
@@ -153,7 +169,10 @@ void Shader::draw()
 {
 
 	sendTexChannels();
-
+	glUseProgram(program);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glBindVertexArray(VertexArrayID);
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
 
 }
@@ -161,6 +180,22 @@ void Shader::draw()
 GLuint Shader::getvertexBuffer()
 {
 	return vertexbuffer;
+}
+
+void Shader::applyToNewObject()
+{
+	//	//vertex array: used to make the vertex array attributions. To tell when each vertex data starts.
+	//	glGenVertexArrays(1, &VertexArrayID);
+	//	glBindVertexArray(VertexArrayID);
+	//
+	//	// Generate 1 buffer, put the resulting identifier in vertexbuffer
+	//	//Buffer that is used to send all the vertex data.
+	//	glGenBuffers(1, &vertexbuffer);
+	//	// The following commands will talk about our 'vertexbuffer' buffer
+	//	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	//	//Buffer that is used to set all the indice of the triangles, from the array buffer.
+	//	glGenBuffers(1, &elementbuffer);
+	//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 }
 
 void Shader::compileShader(GLuint shader, std::string shaderPath)

@@ -10,11 +10,14 @@
 
 Solid::Solid() : objectSpace(), triangulated(false)
 {
+
 }
 
 
-Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn):objectSpace(glm::mat4()), shader("transform.ver", "col.frag")
+Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn): Solid()
 {
+	objectSpace = glm::mat4(); 
+	shader = Shader("transform.ver", "col.frag");
 	vertices = verticesIn;
 	std::vector<std::vector<int>> triangles;
 	int offset = 0;
@@ -31,6 +34,9 @@ Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> in
 			index.push_back(indexIn[i]);
 		}
 	}
+	triangulated = true;
+	updateVertexAttributes();
+
 }
 
 
@@ -41,53 +47,7 @@ Solid::~Solid()
 void Solid::draw(Scene const& scene)
 {
 
-	std::vector<GLfloat> vertArray;
-	std::vector<GLfloat> normalArray;
-	std::vector<GLfloat> UVArray;
-	std::vector<GLfloat> vec;
-	std::vector<int> flatIndex;
-	std::vector<GLfloat> col = { 0.1f,0.2f,0.2f };
-	//We should be able to do that before instead of doing it every frame.
-	//We flatten all our arrays;
-	for (int i = 0; i < vertices.size(); i++)
-	{
-		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
-		vertArray.insert(vertArray.end(), vec.begin(), vec.end());
-
-		if (normals.size())
-		{
-			std::vector<GLfloat>normal({ normals[i].x,normals[i].y,normals[i].z });
-			normalArray.insert(normalArray.end(), normal.begin(), normal.end());
-		}
-		if (UVs.size())
-		{
-			std::vector<GLfloat>uv({ UVs[i].x,UVs[i].y});
-			UVArray.insert(UVArray.end(), uv.begin(), uv.end());
-		}
-	}
-	for (int i = 0; i < index.size(); i++)
-	{
-
-		for (int j = 0; j < index[i].size(); j++)
-		{
-			flatIndex.push_back(index[i][j]);
-		}
-	}
-	std::vector<int> attributeSize({ 3 });
-	std::vector<std::vector<GLfloat>> vertexData;
-	vertexData.push_back(vertArray);
-	if (normalArray.size())
-	{
-		vertexData.push_back(normalArray);
-		attributeSize.push_back(3);
-	}
-	if (UVArray.size())
-	{
-		vertexData.push_back(UVArray);
-		attributeSize.push_back(2);
-	}
-
-	shader.setVertex(vertexData, flatIndex, attributeSize);
+	//updateVertexAttributes();
 	shader.setProgramInformation(scene, *this);
 
 
@@ -123,16 +83,20 @@ void Solid::setObjectSpace(glm::mat4 transfo)
 void Solid::setNormals(std::vector<glm::vec3> normalIn)
 {
 	normals = normalIn;
+	updateVertexAttributes();
 }
 
 void Solid::setUVs(std::vector<glm::vec3> UVin)
 {
 	UVs = (UVin);
+	updateVertexAttributes();
 }
 
 void Solid::setShader(Shader shade)
 {
 	shader = shade;
+	shader.applyToNewObject();
+	updateVertexAttributes();
 
 }
 
@@ -144,4 +108,54 @@ void Solid::setTexture(Texture tex)
 glm::mat4 Solid::getObjectSpace() const
 {
 	return objectSpace;
+}
+
+void Solid::updateVertexAttributes()
+{
+	std::vector<GLfloat> vertArray;
+	std::vector<GLfloat> normalArray;
+	std::vector<GLfloat> UVArray;
+	std::vector<GLfloat> vec;
+	std::vector<int> flatIndex;
+	//We should be able to do that before instead of doing it every frame.
+	//We flatten all our arrays;
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
+		vertArray.insert(vertArray.end(), vec.begin(), vec.end());
+
+		if (normals.size())
+		{
+			std::vector<GLfloat>normal({ normals[i].x,normals[i].y,normals[i].z });
+			normalArray.insert(normalArray.end(), normal.begin(), normal.end());
+		}
+		if (UVs.size())
+		{
+			std::vector<GLfloat>uv({ UVs[i].x,UVs[i].y });
+			UVArray.insert(UVArray.end(), uv.begin(), uv.end());
+		}
+	}
+	for (int i = 0; i < index.size(); i++)
+	{
+
+		for (int j = 0; j < index[i].size(); j++)
+		{
+			flatIndex.push_back(index[i][j]);
+		}
+	}
+	std::vector<int> attributeSize({ 3 });
+	std::vector<std::vector<GLfloat>> vertexData;
+	vertexData.push_back(vertArray);
+	if (normalArray.size())
+	{
+		vertexData.push_back(normalArray);
+		attributeSize.push_back(3);
+	}
+	if (UVArray.size())
+	{
+		vertexData.push_back(UVArray);
+		attributeSize.push_back(2);
+	}
+
+	shader.setVertex(vertexData, flatIndex, attributeSize);
 }

@@ -159,6 +159,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vec3.h" />
+    <ClInclude Include="VertexBufferObject.h" />
     <ClInclude Include="waveFrontLoader.h" />
     <ClInclude Include="WindowBuilder.h" />
   </ItemGroup>
@@ -182,6 +183,7 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vec3.cpp" />
+    <ClCompile Include="VertexBufferObject.cpp" />
     <ClCompile Include="waveFrontLoader.cpp" />
     <ClCompile Include="WindowBuilder.cpp" />
   </ItemGroup>

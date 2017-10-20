@@ -27,6 +27,7 @@ protected:
 
 
 	//All the attributes of our solid in a single 1D array.
+	void updateVertexAttributes();
 	std::vector<GLfloat> attributesArray;
 	std::vector<std::vector<unsigned long long int>> attributesData;
 	std::vector<glm::vec3> vertices;
@@ -38,6 +39,7 @@ protected:
 	glm::mat4 objectSpace;
 	bool triangulated;
 	Shader shader;
+
 
 };
 
