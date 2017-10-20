@@ -8,8 +8,7 @@ vec3 specCalcFull(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos)
 {
 	return vec3(0.0);
 }
-
-vec3 specCalc(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos, float specVal)
+vec3 specCalc(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos, float specPow, float specVal)
 {
 	vec3 eyeVec = normalize(camPos - vertexPos);
 	//we get the value of the light energy hitting the fragment
@@ -18,15 +17,10 @@ vec3 specCalc(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos, float sp
 	vec3 lightDir = normalize(vertexPos - lightPos);
 	normal = normalize(normal);
 	float lightDirZ = dot(-lightDir, normal);
-	vec3 lightReflection = lightDir + 2 * lightDirZ * normal;
-	//if the light comes from behind the normal the there is no reflection
-	if( dot(lightDir, normal) > 0)
-	{
-		lightReflection = vec3(0);
-	}
-	
-	float specularProp = 10;
-	float specIntensity = specularProp * pow(dot(eyeVec, lightReflection), specVal);
+	vec3 lightReflection = reflect(lightDir,normal);
+
+	float cosVal = max(dot(eyeVec, lightReflection),0);
+	float specIntensity = specVal * pow(cosVal, specPow);
 	vec3 returnVal = vec3( specIntensity  );
 	return returnVal;
 }

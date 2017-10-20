@@ -69,6 +69,7 @@ void Shader::setDiffuse(Texture tex)
 void Shader::setProgramInformation(Scene const& scene, Solid const& object)
 {
 	glUseProgram(program);
+	sendTexChannels();
 	Camera cam = scene.getCam();
 	Light light = scene.getLight();
 	//We get the light data;

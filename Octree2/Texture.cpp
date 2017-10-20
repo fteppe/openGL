@@ -37,9 +37,9 @@ void Texture::applyTexture(GLuint program, std::string varName)
 {
 	
 	// set the texture wrapping/filtering options (on the currently bound texture object)
-
+	glUseProgram(program);
 	//data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);
-	if (data)
+	if (1)
 	{		
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, textureID);

@@ -29,8 +29,8 @@ WindowBuilder::WindowBuilder()
 	settings.minorVersion = 2;
 	settings.attributeFlags = sf::ContextSettings::Core;
 
-	float width = 800;
-	float height = 600;
+	float width = 1024;
+	float height = 720;
 
 	window.create(sf::VideoMode(width, height), "openGL", sf::Style::Close, settings);
 	glEnable(GL_DEPTH_TEST);
@@ -39,16 +39,19 @@ WindowBuilder::WindowBuilder()
 
 	
 	WaveFrontLoader loader;
-	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/plan.obj"));
+	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
 	Texture tex;
+	Texture stone;
+	stone.loadTexture("textures/texture2.jpg");
 	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
 	ShaderBasic shade;
 	std::shared_ptr<Shader> text(&shade);
 	std::shared_ptr<ShaderSpecular> spec(new ShaderSpecular);
+	spec->setDiffuse(stone);
 	text->setDiffuse(tex);
-	//elem[2].setShader(text);
+	elem[3].setShader(text);
 	//elem[0].setShader(shade);
-	elem[0].setShader(spec);
+	elem[2].setShader(spec);
 	//elem[1].setShader(shade);
 	sf::Clock clock;
 

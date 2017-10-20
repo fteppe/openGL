@@ -10,14 +10,18 @@ uniform vec3 camPos;
 uniform sampler2D diffuse;
 
 vec3 fragLight(float light[7], vec3 normal, vec3 vertexPos);
-vec3 specCalc(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos, float specVal);
+vec3 specCalc(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos, float specPow, float specVal);
 
 void main()
 {
+	float specVal = 10;
+	float specPow = 128;
 	//we add a constant value to the intensity, so it is never dark.
-	vec3 intensityVec = fragLight(light, normal, vertexPos) + vec3(0.1);
-	vec3 specVec = specCalc(light, normal, vertexPos, camPos, 0);
+	vec3 ambiant = vec3(0.5);
+	
+	vec3 intensityVec = fragLight(light, normal, vertexPos);
+	vec3 specVec = specCalc(light, normal, vertexPos, camPos, specPow, specVal);
 	vec4 color = vec4(texture(diffuse, UV));
-    FragColor = vec4(specVec * intensityVec,1) * color;
-	//FragColor = vec4(1);
+    FragColor = vec4( specVec + intensityVec + ambiant,1) * color;
+	//FragColor = vec4(specVec,1);
 }
