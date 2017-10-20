@@ -23,8 +23,6 @@ public:
 	void setTexture(Texture tex);
 	glm::mat4 getObjectSpace() const;
 protected:
-
-
 	//All the attributes of our solid in a single 1D array.
 	void updateVertexAttributes();
 	std::vector<GLfloat> attributesArray;
