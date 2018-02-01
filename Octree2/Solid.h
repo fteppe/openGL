@@ -2,6 +2,7 @@
 #include <vector>
 #include "Polygon.h"
 #include "Shader.h"
+#include "Material.h"
 #include "Texture.h"
 #include "VertexBufferObject.h"
 #include <glm\matrix.hpp>
@@ -20,6 +21,7 @@ public:
 	void setNormals(std::vector<glm::vec3> normalIn);
 	void setUVs(std::vector<glm::vec3> UVin);
 	void setShader(std::shared_ptr<Shader> const& shade);
+	void setMaterial(std::shared_ptr<Material> const& mat);
 	void setTexture(Texture tex);
 	glm::mat4 getObjectSpace() const;
 protected:
@@ -39,6 +41,7 @@ protected:
 	glm::mat4 objectSpace;
 	bool triangulated;
 	std::shared_ptr<Shader> shader_ptr;
+	std::shared_ptr<Material> material_ptr;
 	VertexBufferObject VBO;
 	std::shared_ptr<VertexBufferObject> VBO_ptr;
 

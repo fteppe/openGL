@@ -40,25 +40,28 @@ WindowBuilder::WindowBuilder()
 	
 	WaveFrontLoader loader;
 	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
-	Texture tex;
-	Texture stone;
-	stone.loadTexture("textures/specular_maps_bricks_image.jpg");
-	tex.loadTexture("textures/texture2.jpg");
-	Texture bump;
-	bump.loadTexture("textures/4483-normal.jpg");
-	Texture nms;
-	nms.loadTexture("textures/No-Mans-Sky-1.jpg");
+	
+	
+	std::shared_ptr<Texture> stone(new Texture);
+	stone->loadTexture("textures/specular_maps_bricks_image.jpg");
+	std::shared_ptr<Texture> bump(new Texture);
+	bump->loadTexture("textures/4483-normal.jpg");
+	std::shared_ptr<Texture> nms(new Texture);
+	nms->loadTexture("textures/No-Mans-Sky-1.jpg");
 	
 	std::shared_ptr<Shader> text(new ShaderBasic);
 	std::shared_ptr<ShaderSpecular> spec(new ShaderSpecular);
-	spec->setDiffuse(tex);
-	text->setDiffuse(nms);
-	spec->setChannel(stone, "spec");
-	spec->setChannel(bump, "bump");
-	elem[3].setShader(spec);
-	elem[0].setShader(text);
-	elem[2].setShader(text);
-	elem[1].setShader(spec);
+	std::shared_ptr<Material> mat(new Material(spec));
+	mat->setChannel(stone, "spec");
+	mat->setChannel(bump, "bump");
+	mat->setChannel(nms, "diffuse");
+
+	//spec->setChannel(stone, "spec");
+	//spec->setChannel(bump, "bump");
+	elem[3].setMaterial(mat);
+	elem[0].setMaterial(mat);
+	elem[2].setMaterial(mat);
+	elem[1].setMaterial(mat);
 	sf::Clock clock;
 
 	Camera cam(600.0f, 800.0f, 0.75f);

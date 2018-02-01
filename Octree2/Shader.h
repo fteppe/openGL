@@ -23,6 +23,7 @@ public:
 	//We can set any texture channel for this program.
 	void setChannel(Texture& tex, std::string channelName);
 	virtual void setProgramInformation(Scene const& scene,Solid const& object);
+	void sendTexChannels(std::map<std::string,std::shared_ptr<Texture>> textures);
 protected:
 	//send all the texture channels to the program.
 	void sendTexChannels();

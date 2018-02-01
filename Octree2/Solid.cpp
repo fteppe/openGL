@@ -51,10 +51,12 @@ void Solid::draw(Scene const& scene)
 {
 
 
-	shader_ptr->setProgramInformation(scene, *this);
+	//shader_ptr->setProgramInformation(scene, *this);
 
 	//VBO.sendVertexToShader(*shader_ptr);
-	VBO_ptr->sendVertexToShader(*shader_ptr);
+	//VBO_ptr->sendVertexToShader(*shader_ptr);
+
+	material_ptr->apply(VBO_ptr, scene, *this);
 }
 
 std::string Solid::description()
@@ -99,6 +101,11 @@ void Solid::setShader(std::shared_ptr<Shader> const& shade)
 {
 	//shader_ptr.reset();
 	shader_ptr = (shade);
+}
+
+void Solid::setMaterial(std::shared_ptr<Material> const & mat)
+{
+	material_ptr = mat;
 }
 
 void Solid::setTexture(Texture tex)

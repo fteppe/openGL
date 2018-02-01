@@ -135,6 +135,19 @@ void Shader::setProgramInformation(Scene const& scene, Solid const& object)
 
 }
 
+void Shader::sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> textures)
+{
+	glUseProgram(program);
+	//iterating through the map of channels.
+	int i = 0;
+	for (std::map<std::string, std::shared_ptr<Texture>>::iterator it = textures.begin(); it != textures.end(); it++)
+	{
+		//we send to the program the channel, with it's name and the texture unit.
+		it->second->applyTexture(program, it->first, i);
+		i++;
+	}
+}
+
 void Shader::sendTexChannels()
 {
 	glUseProgram(program);
