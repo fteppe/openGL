@@ -20,6 +20,7 @@
     <ClCompile Include="ShaderBasic.cpp" />
     <ClCompile Include="ShaderSpecular.cpp" />
     <ClCompile Include="VertexBufferObject.cpp" />
+    <ClCompile Include="Material.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h">
@@ -70,6 +71,7 @@
     <ClInclude Include="ShaderBasic.h" />
     <ClInclude Include="ShaderSpecular.h" />
     <ClInclude Include="VertexBufferObject.h" />
+    <ClInclude Include="Material.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Octree2.rc" />

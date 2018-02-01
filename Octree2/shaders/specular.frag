@@ -14,8 +14,8 @@ vec3 specCalc(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos, float sp
 
 void main()
 {
-	float specVal = 10;
-	float specPow = 128;
+	float specVal = 3;
+	float specPow = 64;
 	//we add a constant value to the intensity, so it is never dark.
 	vec3 ambiant = vec3(0.5);
 	

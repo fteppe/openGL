@@ -50,9 +50,9 @@ WindowBuilder::WindowBuilder()
 	spec->setDiffuse(stone);
 	text->setDiffuse(tex);
 	elem[3].setShader(text);
-	//elem[0].setShader(shade);
-	elem[2].setShader(spec);
-	//elem[1].setShader(shade);
+	elem[0].setShader(spec);
+	elem[2].setShader(text);
+	elem[1].setShader(spec);
 	sf::Clock clock;
 
 	Camera cam(600.0f, 800.0f, 0.75f);
