@@ -5,7 +5,7 @@
 Material::Material()
 {
 }
-Material::Material(std::shared_ptr<Shader> shader)
+Material::Material(Shader* shader)
 {
 	shader_ptr = shader;
 }
@@ -14,7 +14,7 @@ Material::~Material()
 {
 }
 
-void Material::setChannel( std::shared_ptr<Texture> text, std::string channel )
+void Material::setChannel( Texture* text, std::string channel )
 {
 	textures[channel] = text;
 }

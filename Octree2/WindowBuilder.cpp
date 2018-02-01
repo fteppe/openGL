@@ -51,16 +51,19 @@ WindowBuilder::WindowBuilder()
 	
 	std::shared_ptr<Shader> text(new ShaderBasic);
 	std::shared_ptr<ShaderSpecular> spec(new ShaderSpecular);
-	std::shared_ptr<Material> mat(new Material(spec));
-	mat->setChannel(stone, "spec");
-	mat->setChannel(bump, "bump");
-	mat->setChannel(nms, "diffuse");
-
+	std::shared_ptr<Material> mat(new Material(spec.get()));
+	std::shared_ptr<Material> mat2(new Material(spec.get()));
+	mat->setChannel(stone.get(), "spec");
+	mat->setChannel(bump.get(), "bump");
+	mat->setChannel(nms.get(), "diffuse");
+	mat2->setChannel(stone.get(), "spec");
+	mat2->setChannel(bump.get(), "bump");
+	mat2->setChannel(nms.get(), "diffuse");
 	//spec->setChannel(stone, "spec");
 	//spec->setChannel(bump, "bump");
-	elem[3].setMaterial(mat);
+	elem[3].setMaterial(mat2);
 	elem[0].setMaterial(mat);
-	elem[2].setMaterial(mat);
+	elem[2].setMaterial(mat2);
 	elem[1].setMaterial(mat);
 	sf::Clock clock;
 

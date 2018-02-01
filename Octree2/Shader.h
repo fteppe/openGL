@@ -20,17 +20,17 @@ public:
 	~Shader();
 	unsigned int getProgram() const;
 	void setDiffuse(Texture& tex);
-	//We can set any texture channel for this program.
+	//We can set any texture channel for this program. DEPRACTED, now the textures should be in the material
 	void setChannel(Texture& tex, std::string channelName);
 	virtual void setProgramInformation(Scene const& scene,Solid const& object);
-	void sendTexChannels(std::map<std::string,std::shared_ptr<Texture>> textures);
+	void sendTexChannels(std::map<std::string, Texture*> textures);
 protected:
-	//send all the texture channels to the program.
+	//send all the texture channels to the program. DEPRACTED Shouldn't be used anymore
 	void sendTexChannels();
 	void compileShader(GLuint shader, std::string shaderPath);
 	void linkProgram();
 	unsigned int program;
-	//a map of the different texture channels, the key is the name of the channel.
+	//a map of the different texture channels, the key is the name of the channel. DEPRACTED Textures are in the material now
 	std::map<std::string, Texture> texChannels;
 
 
