@@ -8,13 +8,16 @@ out vec4 FragColor;
 uniform float[7] light;
 uniform vec3 camPos;
 uniform sampler2D diffuse;
+uniform sampler2D spec;
+
 
 vec3 fragLight(float light[7], vec3 normal, vec3 vertexPos);
 vec3 specCalc(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos, float specPow, float specVal);
 
 void main()
 {
-	float specVal = 3;
+	vec4 specularity = vec4(texture(spec, UV)) * 256;
+	float specVal = specularity.x;
 	float specPow = 64;
 	//we add a constant value to the intensity, so it is never dark.
 	vec3 ambiant = vec3(0.5);

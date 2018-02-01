@@ -61,6 +61,11 @@ void Shader::setDiffuse(Texture& tex)
 	texChannels["diffuse"] = tex;
 }
 
+void Shader::setChannel(Texture & tex, std::string channelName)
+{
+	texChannels[channelName] = tex;
+}
+
 void Shader::setProgramInformation(Scene const& scene, Solid const& object)
 {
 	glUseProgram(program);
@@ -86,10 +91,12 @@ void Shader::sendTexChannels()
 {
 	glUseProgram(program);
 	//iterating through the map of channels.
+	int i = 0;
 	for (std::map<std::string, Texture>::iterator it = texChannels.begin(); it != texChannels.end(); it++)
 	{
-		//we send to the program the channel.
-		it->second.applyTexture(program, it->first);
+		//we send to the program the channel, with it's name and the texture unit.
+		it->second.applyTexture(program, it->first, i);
+		i++;
 	}
 }
 

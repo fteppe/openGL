@@ -148,6 +148,7 @@
     <ClInclude Include="Cube.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="ObjectInstance.h" />
     <ClInclude Include="Octree.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="resource.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="ObjectInstance.cpp" />
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="Scene.cpp" />

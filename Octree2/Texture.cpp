@@ -34,7 +34,7 @@ void Texture::loadTexture(std::string textureName)
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
-void Texture::applyTexture(GLuint program, std::string varName)
+void Texture::applyTexture(GLuint program, std::string varName, int textureUnit)
 {
 	
 	// set the texture wrapping/filtering options (on the currently bound texture object)
@@ -42,9 +42,10 @@ void Texture::applyTexture(GLuint program, std::string varName)
 	//data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);
 	if (1)
 	{		
-		glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0 + textureUnit);
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		glUniform1i(glGetUniformLocation(program, varName.c_str()), 0); // set it manually
+		//We will need to change that to accomodate for several channels.
+		glUniform1i(glGetUniformLocation(program, varName.c_str()), textureUnit); // set it manually
 	}
 	else
 	{

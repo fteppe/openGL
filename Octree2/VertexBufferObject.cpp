@@ -29,13 +29,13 @@ VertexBufferObject::~VertexBufferObject()
 
 void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData)
 {
+	//We bind these buffers because they are the one we are gooing to do these operations on.
 	glBindVertexArray(VertexArrayID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-	//We tel openGL that all these shader operation will be done one this shader's program.
 	indexSize = index.size();
 	int arraySize = 0;
 	std::vector<GLfloat> flatVert;
-	//we flatten the 2D array -> 1D array. So we can have all the vertex and their attributes back to back VVVVVVAAAAAABBBBBBB etc...
+	//we flatten the 2D array -> 1D array. So we can have all the vertex and their attributes back to back AAAAAABBBBBBBBCCCCCC etc...
 	for (int i = 0; i < vertices.size(); i++)
 	{
 		flatVert.insert(flatVert.end(), vertices[i].begin(), vertices[i].end());
@@ -48,15 +48,19 @@ void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, s
 	glBufferData(GL_ARRAY_BUFFER, flatVert.size() * sizeof(GLfloat), &flatVert[0], GL_STATIC_DRAW);
 	//We are going to set each vertex data
 	int offset = 0;
-
 	glBindVertexArray(VertexArrayID);
+	//This allows us to tell openGL how to separate all of our datas.
 	for (int i = 0; i < vertices.size(); i++)
 	{
+		//we enable the attrib array, meaning i is the number of attribute for one vertex, if there is vertexPos + normal + uv 
+		//i=0 => vertex; i=1 => normal ... 
 		glEnableVertexAttribArray(i);
 		//all the argments are one after the other, so there is no stride, but we set the offset
+		//nbData[i] tells openGL the size of each type of data one (vertex = 3 doubles, UV = 2 doubles)
+		//the stride variable is set to 0 because each element is back to back VVVVVVVVVVVVVVVVNNNNNNNNNUUUUUUUU ....
 		glVertexAttribPointer(i, nbData[i], GL_FLOAT, GL_FALSE, 0, (void*)(offset));
-		//we enable the attrib array, meaning i is the number of attribute for one vertex
-		
+		//The offset is used to position openGL in the vertex buffer object array. It tells openGL when the vertexAttributes starts.
+		//since each attributes is packed together, the offset is each time all the attributes.
 		offset += vertices[i].size() * sizeof(GLfloat);
 	}
 }

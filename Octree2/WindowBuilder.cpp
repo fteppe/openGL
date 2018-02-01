@@ -47,8 +47,9 @@ WindowBuilder::WindowBuilder()
 	
 	std::shared_ptr<Shader> text(new ShaderBasic);
 	std::shared_ptr<ShaderSpecular> spec(new ShaderSpecular);
-	spec->setDiffuse(stone);
+	spec->setDiffuse(tex);
 	text->setDiffuse(tex);
+	spec->setChannel(stone, "spec");
 	elem[3].setShader(text);
 	elem[0].setShader(spec);
 	elem[2].setShader(text);
@@ -68,7 +69,7 @@ WindowBuilder::WindowBuilder()
 		int time = clock.getElapsedTime().asMilliseconds();
 		int frameTime = sf::milliseconds(1).asMilliseconds();
 		bool needNewFrame = time >= frameTime;
-		//It would seem that without this sync, there is a fall in performance. Not sure why yet. Also the application takes way more resources;
+		//It would seem that without this sync, there is a fall in performance. Not sure why yet. Also the application takes way more resources without it;
 		std::cout << '\r' << std::setw(4) << std::setfill(' ');
 		if (needNewFrame)
 		{

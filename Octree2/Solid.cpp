@@ -145,17 +145,24 @@ void Solid::updateVertexAttributes()
 			flatIndex.push_back(index[i][j]);
 		}
 	}
-	std::vector<int> attributeSize({ 3 });
+
 	std::vector<std::vector<GLfloat>> vertexData;
+	//We add the vertex coord to the vertex Data array.
 	vertexData.push_back(vertArray);
+	//The 3D vertex Coordinate has 2 components
+	std::vector<int> attributeSize({ 3 });
 	if (normalArray.size())
 	{
+		//We add the datas of the normals
 		vertexData.push_back(normalArray);
+		//Each normal has 3 components
 		attributeSize.push_back(3);
 	}
 	if (UVArray.size())
 	{
+		//We add the UVcoordinates data
 		vertexData.push_back(UVArray);
+		//a UV coordinate has 2 parts
 		attributeSize.push_back(2);
 	}
 
