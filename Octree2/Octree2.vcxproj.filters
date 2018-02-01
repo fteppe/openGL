@@ -186,5 +186,14 @@
     <Image Include="textures\texture2.jpg">
       <Filter>textures</Filter>
     </Image>
+    <Image Include="C:\Users\florent\AppData\Local\Temp\specular_maps_bricks_image.jpg">
+      <Filter>textures</Filter>
+    </Image>
+    <Image Include="textures\texture.jpg">
+      <Filter>textures</Filter>
+    </Image>
+    <Image Include="textures\4483-normal.jpg">
+      <Filter>shader</Filter>
+    </Image>
   </ItemGroup>
 </Project>

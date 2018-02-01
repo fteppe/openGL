@@ -17,8 +17,8 @@ Shader::Shader()
 Shader::Shader(std::string vertex, std::string fragment)
 {
 
-	vertex = "shaders/" + vertex;
-	fragment = "shaders/" + fragment;
+	vertex = shaderDir + vertex;
+	fragment = shaderDir + fragment;
 	std::string lightCalc = "shaders/lightCalc.frag";
 
 	GLuint vertexId = glCreateShader(GL_VERTEX_SHADER);
@@ -38,8 +38,56 @@ Shader::Shader(std::string vertex, std::string fragment)
 	glDeleteShader(vertexId);
 	glDeleteShader(fragmentId);
 	glDeleteShader(lumDiffuseCalc);
-	
 }
+
+Shader::Shader(std::vector<std::string> vertexShaders, std::vector<std::string> fragmentShaders)
+{
+	std::vector<GLuint> vertexs;
+	std::vector<GLuint> fragments;
+	//We create the shaders
+	for (int i = 0; i < vertexShaders.size(); i++)
+	{
+		vertexs.push_back(glCreateShader(GL_VERTEX_SHADER));
+	}
+	for (int i = 0; i < fragmentShaders.size(); i++)
+	{
+		fragments.push_back(glCreateShader(GL_FRAGMENT_SHADER));
+	}
+	//We compile them
+	for (int i = 0; i < vertexShaders.size(); i++)
+	{
+		compileShader(vertexs[i], shaderDir + vertexShaders[i]);
+	}
+	for (int i = 0; i < fragmentShaders.size(); i++)
+	{
+		compileShader(fragments[i], shaderDir + fragmentShaders[i]);
+	}
+	//we create a program
+	program = glCreateProgram();
+	//we attach each shader to the program
+	for (int i = 0; i < vertexShaders.size(); i++)
+	{
+		glAttachShader(program, vertexs[i]);
+	}
+	for (int i = 0; i < fragmentShaders.size(); i++)
+	{
+		glAttachShader(program, fragments[i]);
+	}
+	//linking
+	linkProgram();
+	//one this is done we delete the shaders
+	for (int i = 0; i < vertexShaders.size(); i++)
+	{
+		glDeleteShader(vertexs[i]);
+
+	}
+	for (int i = 0; i < fragmentShaders.size(); i++)
+	{
+		glDeleteShader(fragments[i]);
+	}
+
+}
+
 
 
 

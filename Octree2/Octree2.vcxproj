@@ -250,6 +250,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="C:\Users\florent\AppData\Local\Temp\specular_maps_bricks_image.jpg" />
+    <Image Include="textures\4483-normal.jpg" />
+    <Image Include="textures\texture.jpg" />
     <Image Include="textures\texture2.jpg" />
     <Image Include="texture\No-Mans-Sky-1.jpg">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

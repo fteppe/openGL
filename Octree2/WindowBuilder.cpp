@@ -42,16 +42,21 @@ WindowBuilder::WindowBuilder()
 	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
 	Texture tex;
 	Texture stone;
-	stone.loadTexture("textures/texture2.jpg");
-	tex.loadTexture("textures/No-Mans-Sky-1.jpg");
+	stone.loadTexture("textures/specular_maps_bricks_image.jpg");
+	tex.loadTexture("textures/texture2.jpg");
+	Texture bump;
+	bump.loadTexture("textures/4483-normal.jpg");
+	Texture nms;
+	nms.loadTexture("textures/No-Mans-Sky-1.jpg");
 	
 	std::shared_ptr<Shader> text(new ShaderBasic);
 	std::shared_ptr<ShaderSpecular> spec(new ShaderSpecular);
 	spec->setDiffuse(tex);
-	text->setDiffuse(tex);
+	text->setDiffuse(nms);
 	spec->setChannel(stone, "spec");
-	elem[3].setShader(text);
-	elem[0].setShader(spec);
+	spec->setChannel(bump, "bump");
+	elem[3].setShader(spec);
+	elem[0].setShader(text);
 	elem[2].setShader(text);
 	elem[1].setShader(spec);
 	sf::Clock clock;

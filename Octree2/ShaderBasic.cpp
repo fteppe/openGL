@@ -2,7 +2,7 @@
 #include "ShaderBasic.h"
 
 
-ShaderBasic::ShaderBasic() : Shader("texture.ver", "texture.frag")
+ShaderBasic::ShaderBasic() :Shader({ "texture.ver" }, std::vector<std::string>({ "specular.frag","lightCalc.frag"}))
 {
 }
 
