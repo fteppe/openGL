@@ -97,21 +97,10 @@ void Solid::setUVs(std::vector<glm::vec3> UVin)
 	updateVertexAttributes();
 }
 
-void Solid::setShader(std::shared_ptr<Shader> const& shade)
-{
-	//shader_ptr.reset();
-	shader_ptr = (shade);
-}
 
 void Solid::setMaterial(std::shared_ptr<Material> const & mat)
 {
 	material_ptr = mat;
-}
-
-void Solid::setTexture(Texture tex)
-{
-	//shader.setDiffuse(tex);
-	shader_ptr->setDiffuse(tex);
 }
 
 glm::mat4 Solid::getObjectSpace() const

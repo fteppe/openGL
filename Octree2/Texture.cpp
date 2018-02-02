@@ -60,8 +60,15 @@ void Texture::applyTexture(GLuint program, std::string varName, int textureUnit)
 	{		
 		glActiveTexture(GL_TEXTURE0 + textureUnit);
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		//We will need to change that to accomodate for several channels.
-		glUniform1i(glGetUniformLocation(program, varName.c_str()), textureUnit); // set it manually
+		GLuint pos = glGetUniformLocation(program, varName.c_str());
+		if (pos != -1)
+		{
+			glUniform1i(pos, textureUnit); // set it manually
+		}
+		else
+		{
+			std::cout <<  __FILE__ <<"::"<< __LINE__ << "::SHADER_ERROR :: No such channel" << std::endl;
+		}
 	}
 	else
 	{

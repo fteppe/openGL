@@ -103,21 +103,12 @@ unsigned int Shader::getProgram() const
 }
 
 
-void Shader::setDiffuse(Texture& tex)
-{
-	//if there is no diffuse texture, we extend the size of the array
-	texChannels["diffuse"] = tex;
-}
 
-void Shader::setChannel(Texture & tex, std::string channelName)
-{
-	texChannels[channelName] = tex;
-}
+
 
 void Shader::setProgramInformation(Scene const& scene, Solid const& object)
 {
 	glUseProgram(program);
-	sendTexChannels();
 	Camera cam = scene.getCam();
 	Light light = scene.getLight();
 	//We get the light data;
@@ -148,18 +139,6 @@ void Shader::sendTexChannels(std::map<std::string, Texture*> textures)
 	}
 }
 
-void Shader::sendTexChannels()
-{
-	glUseProgram(program);
-	//iterating through the map of channels.
-	int i = 0;
-	for (std::map<std::string, Texture>::iterator it = texChannels.begin(); it != texChannels.end(); it++)
-	{
-		//we send to the program the channel, with it's name and the texture unit.
-		it->second.applyTexture(program, it->first, i);
-		i++;
-	}
-}
 
 
 
