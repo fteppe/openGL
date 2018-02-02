@@ -19,13 +19,12 @@ public:
 	void draw(Scene const& scene);
 	std::string description();
 	void setObjectSpace(glm::mat4 transfo);
-	void setNormals(std::vector<glm::vec3> normalIn);
-	void setUVs(std::vector<glm::vec3> UVin);
+
 	void setMaterial(std::shared_ptr<Material> const& mat);
 	glm::mat4 getObjectSpace() const;
 protected:
 	//All the attributes of our solid in a single 1D array.
-	void updateVertexAttributes();
+
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec3> UVs;

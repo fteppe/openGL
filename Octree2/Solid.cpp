@@ -36,7 +36,6 @@ Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> in
 		}
 	}
 	triangulated = true;
-	updateVertexAttributes();
 
 }
 
@@ -90,17 +89,6 @@ void Solid::setObjectSpace(glm::mat4 transfo)
 	objectSpace = transfo;
 }
 
-void Solid::setNormals(std::vector<glm::vec3> normalIn)
-{
-	normals = normalIn;
-	updateVertexAttributes();
-}
-
-void Solid::setUVs(std::vector<glm::vec3> UVin)
-{
-	UVs = (UVin);
-	updateVertexAttributes();
-}
 
 
 void Solid::setMaterial(std::shared_ptr<Material> const & mat)
@@ -113,61 +101,3 @@ glm::mat4 Solid::getObjectSpace() const
 	return objectSpace;
 }
 
-void Solid::updateVertexAttributes()
-{
-	std::cout << "DEPRECATED";
-	std::vector<GLfloat> vertArray;
-	std::vector<GLfloat> normalArray;
-	std::vector<GLfloat> UVArray;
-	std::vector<GLfloat> vec;
-	std::vector<int> flatIndex;
-	//We should be able to do that before instead of doing it every frame.
-	//We flatten all our arrays;
-	for (int i = 0; i < vertices.size(); i++)
-	{
-		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
-		vertArray.insert(vertArray.end(), vec.begin(), vec.end());
-
-		if (normals.size())
-		{
-			std::vector<GLfloat>normal({ normals[i].x,normals[i].y,normals[i].z });
-			normalArray.insert(normalArray.end(), normal.begin(), normal.end());
-		}
-		if (UVs.size())
-		{
-			std::vector<GLfloat>uv({ UVs[i].x,UVs[i].y });
-			UVArray.insert(UVArray.end(), uv.begin(), uv.end());
-		}
-	}
-	for (int i = 0; i < index.size(); i++)
-	{
-
-		for (int j = 0; j < index[i].size(); j++)
-		{
-			flatIndex.push_back(index[i][j]);
-		}
-	}
-
-	std::vector<std::vector<GLfloat>> vertexData;
-	//We add the vertex coord to the vertex Data array.
-	vertexData.push_back(vertArray);
-	//The 3D vertex Coordinate has 2 components
-	std::vector<int> attributeSize({ 3 });
-	if (normalArray.size())
-	{
-		//We add the datas of the normals
-		vertexData.push_back(normalArray);
-		//Each normal has 3 components
-		attributeSize.push_back(3);
-	}
-	if (UVArray.size())
-	{
-		//We add the UVcoordinates data
-		vertexData.push_back(UVArray);
-		//a UV coordinate has 2 parts
-		attributeSize.push_back(2);
-	}
-
-	//VBO.setVertex(vertexData, flatIndex, attributeSize);
-	VBO_ptr.lock()->setVertex(vertexData, flatIndex, attributeSize);
-}
