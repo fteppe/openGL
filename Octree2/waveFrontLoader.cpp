@@ -18,8 +18,10 @@ WaveFrontLoader::WaveFrontLoader()
 
 WaveFrontLoader::~WaveFrontLoader()
 {
+
 }
 
+/*
 std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 {
 	std::ifstream inFile(fileName);
@@ -145,6 +147,132 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 	std::cout << "done loading file" << std::endl;
 	return returnValue;
 }
+*/
+void WaveFrontLoader::fillVertexObjectVectorFromFile(std::string fileName, std::vector<VertexBufferObject*> &vertexObjects)
+{
+	std::ifstream inFile(fileName);
+	std::string strOneLine;
+	std::cout << "started loading file" << std::endl;
+	while (inFile)
+	{
+		std::string prevLine = "";
+		while (getline(inFile, strOneLine, '\n'))
+		{
+
+			//for each line we try to know how it start
+			//This line will designate a normal
+			if (strOneLine.substr(0, 2) == "vn")
+			{
+				std::istringstream s(strOneLine.substr(2));
+				glm::vec3 vertex;
+				//We put all the info in a new vertex
+
+				s >> vertex.x; s >> vertex.y; s >> vertex.z;
+				normalsObj.push_back(vertex);
+			}
+			//this line designates a vertex
+			if (strOneLine.substr(0, 2) == "v ")
+			{
+				std::istringstream s(strOneLine.substr(2));
+				glm::vec3 vertex;
+				//We put all the info in a new vertex
+
+				s >> vertex.x; s >> vertex.y; s >> vertex.z;
+				vertices.push_back(vertex);
+				//We also put this vertex info in an array specific to this solid.
+				solidVertices.push_back(vertex);
+				//We map the two so we can know which idex is which vertex
+				fileToSolidVertexIndex[vertices.size() - 1] = solidVertices.size() - 1;
+
+			}
+			//This indicates the coordinates of a UV attribute
+			if (strOneLine.substr(0, 2) == "vt")
+			{
+				std::istringstream s(strOneLine.substr(2));
+				glm::vec3 vertex;
+				//We put all the info in a new vertex
+
+				s >> vertex.x; s >> vertex.y; s >> vertex.z;
+				UVobj.push_back(vertex);
+			}
+			//this line designates a polygon
+			if (strOneLine.substr(0, 2) == "f ")
+			{
+
+				std::string s(strOneLine.substr(2));
+				//We use a regex to get the indexes of the vertex and it's attributes
+				std::regex r("([0-9]+)\\/([0-9]+)?\\/([0-9]+)?");
+				std::smatch match;
+				std::regex_search(s, match, r);
+
+				std::vector<int> face;
+				for (std::sregex_iterator i = std::sregex_iterator(s.begin(), s.end(), r);
+					i != std::sregex_iterator();
+					++i)
+				{
+					std::smatch match = *i;
+					//std::cout << match[1] << match[2] << match[3];
+					std::string vertIndex = match[1].str();
+					//vertices in a obj file are indexed from 1, our index starts at one
+					int index = strtol(vertIndex.c_str(), NULL, 10) - 1;
+					//We take the normal index.
+					int indexNormal = strtol(match[3].str().c_str(), NULL, 10) - 1;
+					//the UV index
+					int UVindex = strtol(match[2].str().c_str(), NULL, 10) - 1;
+					//For now, we consider the UV to be on an unclonned vertex
+					int VertToUVindex = index;
+					if (UVindex != -1)
+					{
+						//We check if we need to clone the vertex, or if there is a vertex synonym without UV coordinate.
+						VertToUVindex = vertexAndAttributeLink(index, UVindex, vertexToUV);
+					}
+					int vertToNormalIndex = vertexAndAttributeLink(index, indexNormal, vertexToNormal);
+
+					//A problem arises when you don't need to clone UV but clone the normal. You need to give the cloned vertex it's UV attributes
+					//When we clone we set one of the two attributes, leaving one empty. Each vertex must have both the UV AND the normal attribute. If it doesn't the rendering will have bugs. 
+					if (VertToUVindex > vertToNormalIndex)
+					{
+						//If the two vertices index are different, it means that one was cloned, but not the other. In that case the cloned vertex needs to get the informations of the original.
+
+						vertexToNormal[VertToUVindex] = vertexToNormal[vertToNormalIndex];
+					}
+					else if (VertToUVindex < vertToNormalIndex)
+					{
+						vertexToUV[vertToNormalIndex] = vertexToUV[VertToUVindex];
+					}
+					int finalIndex = vertToNormalIndex;
+					face.push_back(finalIndex);
+				}
+				polygons.push_back(face);
+			}
+			// this doesn't work to indicate the move to another file. The end of faces would be a better indicator.
+			//if the current line isn't a face when the previous was one, then we change file.
+			//no enough, sometimes "s " is used which designates a surface.
+			if ((strOneLine.substr(0, 2) != "f " && strOneLine.substr(0, 2) != "s ") && prevLine.substr(0, 2) == "f ")
+			{
+				//we have a new object
+				//Solid result();
+				vertexObjects.push_back(makeVBOFromData());
+			}
+			//building new obj
+			if (strOneLine.substr(0, 2) == "o ")
+			{
+				std::cout << strOneLine << std::endl;
+			}
+			prevLine = strOneLine;
+		}
+	}
+
+	inFile.close();
+	//if there are some polygons left to make.
+	if (polygons.size() > 0)
+	{
+		vertexObjects.push_back(makeVBOFromData());
+	}
+
+	//TODO: change that
+	std::cout << "done loading file" << std::endl;
+}
 
 
 
@@ -204,6 +332,7 @@ int WaveFrontLoader::vertexAndAttributeLink(unsigned int vertex, unsigned int at
 	return correspondingVertex;
 }
 
+/*
 Solid WaveFrontLoader::makeSolidFromData()
 {
 	std::cout << "making obj"<<std::endl;
@@ -238,4 +367,41 @@ Solid WaveFrontLoader::makeSolidFromData()
 	vertexToUV.clear();
 
 	return result;
+}
+*/
+
+VertexBufferObject * WaveFrontLoader::makeVBOFromData()
+{
+	std::cout << "making obj" << std::endl;
+	std::vector<glm::vec3> UVs;
+	//the normals indexed as in the solid
+	std::vector<glm::vec3> normals;
+	for (int i = 0; i < solidVertices.size(); i++)
+	{
+		int vertexIndex = i;
+
+		int normalIndex = vertexToNormal[vertexIndex];
+		glm::vec3 normal = normalsObj[normalIndex];
+		normals.push_back(normal);
+		//we make sure there are UVs to add to our solid
+		if (UVobj.size() > 0)
+		{
+			int UVindex = vertexToUV[vertexIndex];
+			glm::vec3 UV = UVobj[UVindex];
+			UVs.push_back(UV);
+		}
+
+	}
+	//Solid result(solidVertices, polygons);
+	VertexBufferObject* vbo = new VertexBufferObject(solidVertices, polygons);
+	vbo->setNormals(normals);
+	vbo->setUVs(UVs);
+
+	//We clear the info that are exclusive to a single solid
+	solidVertices.clear();
+	vertexSynonyme.clear();
+	polygons.clear();
+	vertexToNormal.clear();
+	vertexToUV.clear();
+	return vbo;
 }

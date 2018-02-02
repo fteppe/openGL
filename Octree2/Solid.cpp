@@ -8,7 +8,7 @@
 #include <glm\gtx\transform.hpp>
 #include <glew\glew.h>
 
-Solid::Solid() : objectSpace(), triangulated(false)
+Solid::Solid() : objectSpace(), triangulated(false), shader_ptr(new Shader("transform.ver", "col.frag"))
 {
 
 }
@@ -16,10 +16,9 @@ Solid::Solid() : objectSpace(), triangulated(false)
 
 Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn): Solid()
 {
-	objectSpace = glm::mat4(); 
-	//shader = Shader("transform.ver", "col.frag");
-	shader_ptr = std::shared_ptr<Shader>(new Shader("transform.ver", "col.frag"));
-	VBO_ptr = std::shared_ptr<VertexBufferObject>(new VertexBufferObject);
+
+	//shader_ptr = std::shared_ptr<Shader>(new Shader("transform.ver", "col.frag"));
+	//VBO_ptr = std::shared_ptr<VertexBufferObject>(new VertexBufferObject);
 	vertices = verticesIn;
 	std::vector<std::vector<int>> triangles;
 	int offset = 0;
@@ -41,22 +40,28 @@ Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> in
 
 }
 
+Solid::Solid(std::weak_ptr<VertexBufferObject> vbo) : Solid()
+{
+	VBO_ptr = vbo;
+}
+
 
 Solid::~Solid()
 {
-	//shader_ptr.reset();
 }
 
 void Solid::draw(Scene const& scene)
 {
-
-
-	//shader_ptr->setProgramInformation(scene, *this);
-
-	//VBO.sendVertexToShader(*shader_ptr);
-	//VBO_ptr->sendVertexToShader(*shader_ptr);
-
-	material_ptr->apply(VBO_ptr, scene, *this);
+	//we make sure the object still exists, if it does we render it.
+	if (!VBO_ptr.expired())
+	{
+		material_ptr->apply(VBO_ptr.lock().get(), scene, *this);
+	}
+	else
+	{
+		//std::cout << __FILE__ << "::" << __LINE__ << "expired VBO, cannot render object"<<std::endl;
+	}
+	
 }
 
 std::string Solid::description()
@@ -110,6 +115,7 @@ glm::mat4 Solid::getObjectSpace() const
 
 void Solid::updateVertexAttributes()
 {
+	std::cout << "DEPRECATED";
 	std::vector<GLfloat> vertArray;
 	std::vector<GLfloat> normalArray;
 	std::vector<GLfloat> UVArray;
@@ -163,5 +169,5 @@ void Solid::updateVertexAttributes()
 	}
 
 	//VBO.setVertex(vertexData, flatIndex, attributeSize);
-	VBO_ptr->setVertex(vertexData, flatIndex, attributeSize);
+	VBO_ptr.lock()->setVertex(vertexData, flatIndex, attributeSize);
 }

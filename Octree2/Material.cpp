@@ -25,10 +25,10 @@ void Material::setProgramInformation(Scene const & scene, Solid const & object)
 	shader_ptr->sendTexChannels(textures);
 }
 
-void Material::apply(std::shared_ptr<VertexBufferObject> const& VBO, Scene const& scene, Solid const& solid)
+void Material::apply(VertexBufferObject* const& VBO, Scene const& scene, Solid const& solid)
 {
 	shader_ptr->setProgramInformation(scene, solid);
 	shader_ptr->sendTexChannels(textures);
-	VBO->sendVertexToShader(*shader_ptr);
+	VBO->drawObject(*shader_ptr);
 }
 

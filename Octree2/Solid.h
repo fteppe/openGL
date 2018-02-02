@@ -14,6 +14,7 @@ class Solid
 public:
 	Solid();
 	Solid(std::vector<glm::vec3> vertices, std::vector<std::vector<int>> index);
+	Solid(std::weak_ptr<VertexBufferObject> vbo);
 	~Solid();
 	void draw(Scene const& scene);
 	std::string description();
@@ -34,8 +35,7 @@ protected:
 	bool triangulated;
 	std::shared_ptr<Shader> shader_ptr;
 	std::shared_ptr<Material> material_ptr;
-	VertexBufferObject VBO;
-	std::shared_ptr<VertexBufferObject> VBO_ptr;
+	std::weak_ptr<VertexBufferObject> VBO_ptr;
 
 
 };

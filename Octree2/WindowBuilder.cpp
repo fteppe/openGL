@@ -19,6 +19,9 @@
 //This will build a window using open GL and stuff, this is a way to unclutter the main.
 WindowBuilder::WindowBuilder()
 {
+	/*
+	WINDOW OPENGL INIT
+	*/
 	const std::string title = "openGL";
 	sf::ContextSettings settings;
 	settings.depthBits = 24;
@@ -37,10 +40,31 @@ WindowBuilder::WindowBuilder()
 	glewExperimental = GL_TRUE;
 	glewInit();
 
+
+
 	
 	WaveFrontLoader loader;
-	std::vector<Solid> elem(loader.GetSolidsFromFile("obj/scene.obj"));
+	std::cout << "begin test" << std::endl;
+	/* TEST VBO*/
+
+	std::vector<VertexBufferObject*> vec;
+	loader.fillVertexObjectVectorFromFile("obj/scene.obj", vec);
+	//We want to control the destruction of our items and follow them with weak ptr
+	std::vector<std::shared_ptr<VertexBufferObject>> vec_shared;
+	for (int i = 0; i < vec.size(); i++)
+	{
+		vec_shared.push_back(std::shared_ptr<VertexBufferObject>(vec[i]));
+	}
 	
+	std::cout << "end test" << std::endl;
+
+	std::vector<Solid> elem;
+	elem.push_back(Solid(vec_shared[0]));
+	elem.push_back(Solid(vec_shared[1]));
+	elem.push_back(Solid(vec_shared[2]));
+	elem.push_back(Solid(vec_shared[3]));
+	
+	vec_shared.pop_back();
 	
 	std::shared_ptr<Texture> stone(new Texture);
 	stone->loadTexture("textures/specular_maps_bricks_image.jpg");

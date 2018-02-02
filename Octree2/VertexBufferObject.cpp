@@ -1,9 +1,12 @@
 #include "stdafx.h"
+#include <iostream>
 #include "VertexBufferObject.h"
+#include "Polygon.h"
 
 
 VertexBufferObject::VertexBufferObject()
 {
+	
 	//vertex array: used to make the vertex array attributions. To tell when each vertex data starts.
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
@@ -16,6 +19,28 @@ VertexBufferObject::VertexBufferObject()
 	//Buffer that is used to set all the indice of the triangles, from the array buffer.
 	glGenBuffers(1, &elementbuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	std::cout << "Construction VBO "<< vertexbuffer << std::endl;
+}
+
+VertexBufferObject::VertexBufferObject(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn) : VertexBufferObject()
+{
+	vertices = verticesIn;
+	std::vector<std::vector<int>> triangles;
+	int offset = 0;
+	for (int i = 0; i < indexIn.size(); i++)
+	{
+		if (indexIn[i].size() > 3)
+		{
+			//std::cout << __FILE__ << "::" << __LINE__ << "ERROR :: not a triangle" << std::endl;
+			triangles = perso::Polygon::triangleSplittingIndex(vertices, indexIn[i], offset);
+			index.insert(index.end(), triangles.begin(), triangles.end());
+		}
+		else
+		{
+			index.push_back(indexIn[i]);
+		}
+	}
+
 }
 
 
@@ -25,6 +50,13 @@ VertexBufferObject::~VertexBufferObject()
 	glDeleteBuffers(1,&elementbuffer);
 	glDeleteBuffers(1, &vertexbuffer);
 	glDeleteVertexArrays(1, &VertexArrayID);
+	std::cout << "destruction VBO "<< vertexbuffer << std::endl;
+}
+
+void VertexBufferObject::setUVs(std::vector<glm::vec3> UVin)
+{
+	UVs = UVin;
+	updateObjectAttributes();
 }
 
 void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData)
@@ -65,7 +97,7 @@ void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, s
 	}
 }
 
-void VertexBufferObject::sendVertexToShader(const Shader& shader)
+void VertexBufferObject::drawObject(const Shader& shader)
 {
 	int error;
 	error = glGetError();
@@ -84,4 +116,67 @@ void VertexBufferObject::sendVertexToShader(const Shader& shader)
 	error = glGetError();
 	
 
+}
+
+void VertexBufferObject::setNormals(std::vector<glm::vec3> normalIn)
+{
+	normals = normalIn;
+	updateObjectAttributes();
+}
+
+void VertexBufferObject::updateObjectAttributes()
+{
+	//if we add a new component to our object, we need to update the information on the GC
+	std::vector<GLfloat> vertArray;
+	std::vector<GLfloat> normalArray;
+	std::vector<GLfloat> UVArray;
+	std::vector<GLfloat> vec;
+	std::vector<int> flatIndex;
+	//We should be able to do that before instead of doing it every frame.
+	//We flatten all our arrays;
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
+		vertArray.insert(vertArray.end(), vec.begin(), vec.end());
+
+		if (normals.size())
+		{
+			std::vector<GLfloat>normal({ normals[i].x,normals[i].y,normals[i].z });
+			normalArray.insert(normalArray.end(), normal.begin(), normal.end());
+		}
+		if (UVs.size())
+		{
+			std::vector<GLfloat>uv({ UVs[i].x,UVs[i].y });
+			UVArray.insert(UVArray.end(), uv.begin(), uv.end());
+		}
+	}
+	for (int i = 0; i < index.size(); i++)
+	{
+
+		for (int j = 0; j < index[i].size(); j++)
+		{
+			flatIndex.push_back(index[i][j]);
+		}
+	}
+
+	std::vector<std::vector<GLfloat>> vertexData;
+	//We add the vertex coord to the vertex Data array.
+	vertexData.push_back(vertArray);
+	//The 3D vertex Coordinate has 2 components
+	std::vector<int> attributeSize({ 3 });
+	if (normalArray.size())
+	{
+		//We add the datas of the normals
+		vertexData.push_back(normalArray);
+		//Each normal has 3 components
+		attributeSize.push_back(3);
+	}
+	if (UVArray.size())
+	{
+		//We add the UVcoordinates data
+		vertexData.push_back(UVArray);
+		//a UV coordinate has 2 parts
+		attributeSize.push_back(2);
+	}
+	setVertex(vertexData, flatIndex, attributeSize);
 }
