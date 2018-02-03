@@ -9,13 +9,16 @@ EventHandler::EventHandler()
 EventHandler::EventHandler(std::weak_ptr<Scene> sceneIn)
 {
 	controlledScene = sceneIn;
+	controlledObject = (&controlledScene.lock().get()->elements)->begin();
 }
 
 
 void EventHandler::handle(sf::Event eventIn)
 {
 	controlledScene.lock().get()->cam = camMouvement(eventIn);
-	GameObject* obj = &controlledScene.lock().get()->elements[0];
+	controlledObject = changeControlledObject(eventIn, controlledObject);
+	//I get the pointer
+	GameObject* obj = &(*controlledObject);
 	moveGameObject(eventIn, obj);
 }
 
@@ -97,33 +100,7 @@ Camera EventHandler::camMouvement(sf::Event event)
 	return cam;
 }
 
-glm::vec3 EventHandler::lightMouvement(sf::Event event)
-{
-	float speed = 0.1;
-	glm::vec3 lightPos = controlledScene.lock().get()->elements[0].getPos();
-	if (event.type == sf::Event::KeyPressed)
-	{
-		//mouvements lat
-		sf::Keyboard keyboard;
-		if (keyboard.isKeyPressed(keyboard.Numpad8))
-		{
-			lightPos = lightPos + glm::vec3(speed, 0, 0);
-		}
-		if (keyboard.isKeyPressed(keyboard.Numpad2))
-		{
-			lightPos = lightPos + glm::vec3(-speed, 0, 0);
-		}
-		if (keyboard.isKeyPressed(keyboard.Numpad4))
-		{
-			lightPos = lightPos + glm::vec3(0, speed, 0);
-		}
-		if (keyboard.isKeyPressed(keyboard.Numpad6))
-		{
-			lightPos = lightPos + glm::vec3(0, -speed, 0);
-		}
-	}
-	return lightPos;
-}
+
 
 void EventHandler::moveGameObject(sf::Event event, GameObject * object)
 {
@@ -151,4 +128,39 @@ void EventHandler::moveGameObject(sf::Event event, GameObject * object)
 		}
 	}
 	object->setPos(pos);
+}
+
+std::vector<Solid>::iterator EventHandler::changeControlledObject(sf::Event event , std::vector<Solid>::iterator& it)
+{
+	if (event.type == sf::Event::KeyPressed)
+	{
+		std::vector<Solid>* elems = &controlledScene.lock().get()->elements;
+		//mouvements lat
+		sf::Keyboard keyboard;
+
+		if (keyboard.isKeyPressed(keyboard.PageDown))
+		{
+			if (it + 1 == elems->end())
+			{
+				it = elems->begin();
+			}
+			else
+			{
+				it++;
+			}
+		}
+		if (keyboard.isKeyPressed(keyboard.PageUp))
+		{
+			if (it == elems->begin())
+			{
+				it = elems->end() - 1;
+			}
+			else
+			{
+				it--;
+			}
+		}
+
+	}
+	return it;
 }
