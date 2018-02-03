@@ -115,7 +115,7 @@ void Shader::setProgramInformation(Scene const& scene, Solid const& object)
 	std::vector<float> lightData(light.getDataArray());
 	//we get the camera space and calulculate the projection that will be done to all the vertices
 	glm::mat4 cameraSpace = cam.getProjection();
-	glm::mat4 objectSpace = object.getObjectSpace();
+	glm::mat4 objectSpace = object.getmodelMatrix();
 	glm::mat4 worldSpace = cameraSpace * objectSpace;
 	//the projection matrix sent to the shader
 	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, false, glm::value_ptr(worldSpace));

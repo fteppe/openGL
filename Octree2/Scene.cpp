@@ -13,7 +13,7 @@ Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
 {
 	light.intensity = 1.0f;
 	light.col = glm::vec3(1, 1, 1);
-	light.pos = glm::vec3(1, 1, 0.5);
+	light.setPos( glm::vec3(1, 1, 0.5));
 	this->cam.setPosition(glm::vec3(-10, -10, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 0, 1));
@@ -28,7 +28,7 @@ void Scene::animate(sf::Clock elapsed)
 	glm::mat4 rot = glm::rotate(0.002f, glm::vec3(0, 0, 1));
 	glm::vec3 pos = cam.getPos();
 	//pos = rot * glm::vec4(pos , 1);
-	light.pos = rot * glm::vec4(light.pos, 1);//;glm::vec4(5,0, 3,1);
+	light.setPos( rot * glm::vec4(light.getPos(), 1));//;glm::vec4(5,0, 3,1);
 
 
 
@@ -53,18 +53,6 @@ void Scene::eventHandler(sf::Event event)
 	//this way the angle when rotating doesn't depend on the distance between the camera and the target.
 	perpendicular = perpendicular * (distance / 50);
 	up = up * (distance / 50);
-	//if (event.type == sf::Event::MouseMoved)
-	//{
-	//	sf::Mouse mouse;
-	//	glm::vec2 mousePos(mouse.getPosition().x, mouse.getPosition().y);
-	//	glm::vec2 center(cam.getSize());
-	//	mousePos = mousePos - center;
-	//	target = target + up * mousePos.y;
-	//	target += perpendicular * mousePos.x;
-	//	//cam.setTarget(target);
-	//	//we reset the mouse's position
-	//	//mouse.setPosition(sf::Vector2i(0, 0));
-	//}
 	if (event.type == sf::Event::KeyPressed)
 	{
 		//mouvements lat

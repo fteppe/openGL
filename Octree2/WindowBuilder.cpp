@@ -15,6 +15,7 @@
 #include "waveFrontLoader.h"
 #include "Solid.h"
 #include "Cube.h"
+#include "EventHandler.h"
 
 //This will build a window using open GL and stuff, this is a way to unclutter the main.
 WindowBuilder::WindowBuilder()
@@ -92,7 +93,8 @@ WindowBuilder::WindowBuilder()
 	sf::Clock clock;
 
 	Camera cam(600.0f, 800.0f, 0.75f);
-	Scene scene(elem, cam);
+	auto  scene = std::shared_ptr<Scene>(new Scene(elem, cam));
+	EventHandler handler(scene);
 	//std::cout << glGetString(GL_VERSION) << std::endl;
 
 	while (window.isOpen())
@@ -108,13 +110,13 @@ WindowBuilder::WindowBuilder()
 		std::cout << '\r' << std::setw(4) << std::setfill(' ');
 		if (needNewFrame)
 		{
-			scene.animate(clock);
+			//scene.animate(clock);
 			//Render time.
 			//std::cout << time << std::endl;
 			std::cout << '\r' << std::setw(4) << std::setfill(' ') << time;
 			clock.restart();
 			
-			scene.renderScene();
+			scene->renderScene();
 			int error = glGetError();
 			window.display();
 		}
@@ -123,7 +125,8 @@ WindowBuilder::WindowBuilder()
 		
 		while (window.pollEvent(event))
 		{
-			scene.eventHandler(event);
+			//scene->eventHandler(event);
+			handler.handle(event);
 			// "close requested" event: we close the window
 			if (event.type == sf::Event::Closed)
 				window.close();
