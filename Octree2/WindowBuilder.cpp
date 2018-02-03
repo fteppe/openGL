@@ -64,12 +64,12 @@ WindowBuilder::WindowBuilder()
 	elem.push_back(Solid(vec_shared[2]));
 	elem.push_back(Solid(vec_shared[3]));
 	
-	vec_shared.pop_back();
+	//vec_shared.pop_back();
 	
 	std::shared_ptr<Texture> stone(new Texture);
 	stone->loadTexture("textures/specular_maps_bricks_image.jpg");
 	std::shared_ptr<Texture> bump(new Texture);
-	bump->loadTexture("textures/4483-normal.jpg");
+	bump->loadTexture("textures/bricks_normal.jpg");
 	std::shared_ptr<Texture> nms(new Texture);
 	nms->loadTexture("textures/No-Mans-Sky-1.jpg");
 	
