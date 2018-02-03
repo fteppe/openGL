@@ -21,7 +21,11 @@ void ShaderSpecular::setProgramInformation(const Scene & scene, const Solid & so
 	Camera cam = scene.getCam();
 	glm::vec3 camPos = cam.getPos();
 	//sending the camera position
-	glUniform3f(glGetUniformLocation(program, "camPos"), camPos.x,camPos.y,camPos.z);
+	if (uniforms.find("camPos") == uniforms.end())
+	{
+		uniforms["camPos"] = glGetUniformLocation(program, "camPos");
+	}
+	glUniform3f(uniforms["camPos"], camPos.x,camPos.y,camPos.z);
 }
 
 

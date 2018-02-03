@@ -24,7 +24,9 @@ public:
 protected:
 	void compileShader(GLuint shader, std::string shaderPath);
 	void linkProgram();
+	virtual void getUniformLocations();
 	unsigned int program;
+	std::map<std::string,GLuint> uniforms;
 
 
 

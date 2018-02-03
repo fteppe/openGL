@@ -50,7 +50,7 @@ void Texture::loadTexture(std::string textureName)
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
-void Texture::applyTexture(GLuint program, std::string varName, int textureUnit)
+void Texture::applyTexture(GLuint program, GLuint texturePos, int textureUnit)
 {
 	
 	// set the texture wrapping/filtering options (on the currently bound texture object)
@@ -60,15 +60,9 @@ void Texture::applyTexture(GLuint program, std::string varName, int textureUnit)
 	{		
 		glActiveTexture(GL_TEXTURE0 + textureUnit);
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		GLuint pos = glGetUniformLocation(program, varName.c_str());
-		if (pos != -1)
-		{
-			glUniform1i(pos, textureUnit); // set it manually
-		}
-		else
-		{
-			std::cout <<  __FILE__ <<"::"<< __LINE__ << "::SHADER_ERROR :: No such channel" << std::endl;
-		}
+
+		glUniform1i(texturePos, textureUnit); // set it manually
+
 	}
 	else
 	{

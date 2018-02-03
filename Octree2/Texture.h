@@ -11,7 +11,7 @@ public:
 	Texture();
 	~Texture();
 	void loadTexture(std::string textureName);
-	void applyTexture(GLuint program, std::string varName, int textureUnit);
+	void applyTexture(GLuint program, GLuint texturePos, int textureUnit);
 
 private:
 	GLuint textureID;

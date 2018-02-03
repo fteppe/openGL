@@ -12,6 +12,7 @@
 
 Shader::Shader()
 {
+	
 }
 
 Shader::Shader(std::string vertex, std::string fragment)
@@ -38,6 +39,8 @@ Shader::Shader(std::string vertex, std::string fragment)
 	glDeleteShader(vertexId);
 	glDeleteShader(fragmentId);
 	glDeleteShader(lumDiffuseCalc);
+
+	getUniformLocations();
 }
 
 Shader::Shader(std::vector<std::string> vertexShaders, std::vector<std::string> fragmentShaders)
@@ -85,7 +88,7 @@ Shader::Shader(std::vector<std::string> vertexShaders, std::vector<std::string> 
 	{
 		glDeleteShader(fragments[i]);
 	}
-
+	getUniformLocations();
 }
 
 
@@ -118,11 +121,14 @@ void Shader::setProgramInformation(Scene const& scene, Solid const& object)
 	glm::mat4 objectSpace = object.getmodelMatrix();
 	glm::mat4 worldSpace = cameraSpace * objectSpace;
 	//the projection matrix sent to the shader
-	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, false, glm::value_ptr(worldSpace));
+	//TODO: ^performance to be fixed here.
+	glUniformMatrix4fv(uniforms["objectSpace"], 1, false, glm::value_ptr(objectSpace));
+	
+	glUniformMatrix4fv(uniforms["mvp"], 1, false, glm::value_ptr(worldSpace));
 	//the objectspace that can be used to calculate lights or the posiiton of a vertex to a point. We send it to the shader.
-	glUniformMatrix4fv(glGetUniformLocation(program, "objectSpace"), 1, false, glm::value_ptr(objectSpace));
+	
 	//we send the light data to the shader, for now we can handle only one light
-	glUniform1fv(glGetUniformLocation(program, "light"), lightData.size(), &lightData[0]);
+	glUniform1fv(uniforms["light"], lightData.size(), &lightData[0]);
 
 }
 
@@ -134,7 +140,11 @@ void Shader::sendTexChannels(std::map<std::string, Texture*> textures)
 	for (std::map<std::string, Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
 	{
 		//we send to the program the channel, with it's name and the texture unit.
-		it->second->applyTexture(program, it->first, i);
+		if (uniforms.find(it->first) == uniforms.end())
+		{
+			uniforms[it->first] = glGetUniformLocation(program, it->first.c_str());
+		}
+		it->second->applyTexture(program, uniforms[it->first], i);
 		i++;
 	}
 }
@@ -177,4 +187,12 @@ void Shader::linkProgram()
 		glGetProgramInfoLog(program, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::PROGRAM::LINK FAILED\n" << infoLog << std::endl;
 	}
+}
+
+void Shader::getUniformLocations()
+{
+	glUseProgram(program);
+	uniforms["mvp"] = glGetUniformLocation(program, "mvp");
+	uniforms["objectSpace"] = glGetUniformLocation(program, "objectSpace");
+	uniforms["light"] = glGetUniformLocation(program, "light");
 }

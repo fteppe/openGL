@@ -100,9 +100,9 @@ void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, s
 void VertexBufferObject::drawObject(const Shader& shader)
 {
 	int error;
-	error = glGetError();
+	//error = glGetError();
 	GLuint program = shader.getProgram();
-	const GLubyte* errorString = glewGetErrorString(error);
+	//const GLubyte* errorString = glewGetErrorString(error);
 	//We specify which program will use this VBO
 	glUseProgram(program);
 
@@ -113,7 +113,7 @@ void VertexBufferObject::drawObject(const Shader& shader)
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);	
 
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
-	error = glGetError();
+	//error = glGetError();
 	
 
 }

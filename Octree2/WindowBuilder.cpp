@@ -100,16 +100,17 @@ WindowBuilder::WindowBuilder()
 	while (window.isOpen())
 	{
 		// check all the window's events that were triggered since the last iteration of the loop
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
 		
 		sf::Event event;
 		int time = clock.getElapsedTime().asMilliseconds();
 		int frameTime = sf::milliseconds(1).asMilliseconds();
 		bool needNewFrame = time >= frameTime;
 		//It would seem that without this sync, there is a fall in performance. Not sure why yet. Also the application takes way more resources without it;
-		std::cout << '\r' << std::setw(4) << std::setfill(' ');
+		//std::cout << '\r' << std::setw(4) << std::setfill(' ');
 		if (needNewFrame)
 		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			//scene.animate(clock);
 			//Render time.
 			//std::cout << time << std::endl;
@@ -117,13 +118,11 @@ WindowBuilder::WindowBuilder()
 			clock.restart();
 			
 			scene->renderScene();
-			int error = glGetError();
+			//int error = glGetError();
 			window.display();
 		}
 
-		
-		
-		while (window.pollEvent(event))
+		if (window.pollEvent(event))
 		{
 			//scene->eventHandler(event);
 			handler.handle(event);
