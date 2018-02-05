@@ -49,7 +49,7 @@ void main()
 
 vec2 parralax(vec3 camTan, vec3 posTan)
 {
-	float heightScale = 0.05;
+	float heightScale = 0.1;
 	vec3 viewDir = normalize( posTan - camTan );
 	float height =  texture(spec, UV).r;    
     vec2 p = viewDir.xy / viewDir.z * (height * heightScale);
@@ -67,5 +67,9 @@ vec2 parralax(vec3 camTan, vec3 posTan)
 		currentHeight = currentHeight - stepSize;
 		height = texture(spec, UV + v).r;
 	}
-	return v.xy;
+	float previousHeight = texture(spec, UV + v - stepVector).r;
+	float delta1 = height - currentHeight;
+	float delta2 = currentHeight + stepSize - previousHeight;
+	//interpolation simple
+	return v.xy  - (0.5-(delta2 - delta1)/(delta1 + delta2)) * stepVector ;
 }
