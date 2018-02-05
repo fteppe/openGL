@@ -33,7 +33,7 @@ Camera EventHandler::camMouvement(sf::Event event)
 	glm::vec3 target = cam.getTarget();
 	glm::vec3 up = cam.getUp();
 	glm::vec3 dir = target - campPos;
-	glm::vec3 dirNorm = glm::normalize(dir);
+	glm::vec3 dirNorm = glm::normalize(dir) * glm::vec3(0.1, 0.1, 0.1);
 	float distance = glm::length(dir);
 	dir = glm::normalize(dir);
 	glm::vec3 perpendicular = glm::cross(dir, up);

@@ -3,10 +3,17 @@ in vec3 normal;
 in vec3 vertexColor;
 in vec3 vertexPos;
 in vec2 UV;
+in vec3 posTan;
+in vec3 camTan;
+in vec3 tang;
+ 
 out vec4 FragColor;
 
 uniform float[7] light;
-//uniform sampler2D diffuse;
+uniform vec3 camPos;
+uniform sampler2D diffuse;
+uniform sampler2D spec;
+uniform sampler2D bump;
 
 void main()
 {
@@ -19,6 +26,6 @@ void main()
 	//we add a constant value to the intensity, so it is never dark.
 	//intensityVec = intensityVec + vec3(0.1,0.1,0.1);
 	//vec3 color = vec3(0.5,0.5,0.5);//-normal.xy,normal.z);
-    FragColor = vec4(1.0);
+    FragColor = vec4(camTan,1.0);
 	//FragColor = vec4(vertexColor, 1);
 } 

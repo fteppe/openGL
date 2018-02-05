@@ -120,11 +120,11 @@ void Shader::setProgramInformation(Scene const& scene, Solid const& object)
 	glm::mat4 cameraSpace = cam.getProjection();
 	glm::mat4 objectSpace = object.getmodelMatrix();
 	glm::mat4 worldSpace = cameraSpace * objectSpace;
-	//the projection matrix sent to the shader
-	//TODO: ^performance to be fixed here.
-	glUniformMatrix4fv(uniforms["objectSpace"], 1, false, glm::value_ptr(objectSpace));
+	//the projection matrices sent to the shader
+	sendMatrix4("objectSpace", objectSpace);
+	sendMatrix4("mvp", worldSpace);
 	
-	glUniformMatrix4fv(uniforms["mvp"], 1, false, glm::value_ptr(worldSpace));
+	//glUniformMatrix4fv(uniforms["mvp"], 1, false, glm::value_ptr(worldSpace));
 	//the objectspace that can be used to calculate lights or the posiiton of a vertex to a point. We send it to the shader.
 	
 	//we send the light data to the shader, for now we can handle only one light
@@ -195,4 +195,13 @@ void Shader::getUniformLocations()
 	uniforms["mvp"] = glGetUniformLocation(program, "mvp");
 	uniforms["objectSpace"] = glGetUniformLocation(program, "objectSpace");
 	uniforms["light"] = glGetUniformLocation(program, "light");
+}
+
+void Shader::sendMatrix4(std::string name, glm::mat4 matrix)
+{
+	if (uniforms.find(name) == uniforms.end())
+	{
+		uniforms[name] = glGetUniformLocation(program, name.c_str());
+	}
+	glUniformMatrix4fv(uniforms[name], 1, false, glm::value_ptr(matrix));
 }

@@ -20,11 +20,14 @@ public:
 	void setUVs(std::vector<glm::vec3> UVin);
 	//This allows us to set the vertexAttributes of this object on the graphic card.
 	void setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData);
+	//THis function is used to find the tangent and bi-tangent that make the link between object coordinate 
+	//and the UV coordinate.
+	void findTangents();
 
 private:
 	//if we add a new component to our object, we need to update the information on the GC
 	void updateObjectAttributes();
-	
+	void computeTangent(unsigned int P0, unsigned int P1, unsigned int P2);
 
 	unsigned int indexSize;
 	GLuint vertexbuffer;
@@ -34,6 +37,9 @@ private:
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec3> UVs;
+
+	std::vector<glm::vec3> tangents;
+	std::vector<glm::vec3> biTangents;
 	//A vector of vector of indices. It defines each face of the solid.
 	std::vector<std::vector<int>> index;
 };

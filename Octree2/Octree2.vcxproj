@@ -157,6 +157,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderBasic.h" />
+    <ClInclude Include="ShaderPBR.h" />
     <ClInclude Include="ShaderSpecular.h" />
     <ClInclude Include="Solid.h" />
     <ClInclude Include="stdafx.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderBasic.cpp" />
+    <ClCompile Include="ShaderPBR.cpp" />
     <ClCompile Include="ShaderSpecular.cpp" />
     <ClCompile Include="Solid.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -218,6 +220,7 @@
     </None>
     <None Include="shaders\directionalLight.frag" />
     <None Include="shaders\lightCalc.frag" />
+    <None Include="shaders\PBR.frag" />
     <None Include="shaders\specular.frag" />
     <None Include="shaders\specularCalc.frag" />
     <None Include="shaders\texture.frag" />
@@ -254,7 +257,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="C:\Users\florent\AppData\Local\Temp\specular_maps_bricks_image.jpg" />
-    <Image Include="textures\4483-normal.jpg" />
     <Image Include="textures\bricks_normal.jpg" />
     <Image Include="textures\texture.jpg" />
     <Image Include="textures\texture2.jpg" />
@@ -262,6 +264,13 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="obj\plan.obj">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

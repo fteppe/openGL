@@ -10,8 +10,7 @@
 #include <iomanip>
 
 #include "Scene.h"
-#include "ShaderBasic.h"
-#include "ShaderSpecular.h"
+#include "shaderPBR.h"
 #include "waveFrontLoader.h"
 #include "Solid.h"
 #include "Cube.h"
@@ -49,7 +48,7 @@ WindowBuilder::WindowBuilder()
 	/* TEST VBO*/
 
 	std::vector<VertexBufferObject*> vec;
-	loader.fillVertexObjectVectorFromFile("obj/scene.obj", vec);
+	loader.fillVertexObjectVectorFromFile("obj/plan.obj", vec);
 	//We want to control the destruction of our items and follow them with weak ptr
 	std::vector<std::shared_ptr<VertexBufferObject>> vec_shared;
 	for (int i = 0; i < vec.size(); i++)
@@ -60,10 +59,11 @@ WindowBuilder::WindowBuilder()
 	std::cout << "end test" << std::endl;
 
 	std::vector<Solid> elem;
-	elem.push_back(Solid(vec_shared[0]));
-	elem.push_back(Solid(vec_shared[1]));
-	elem.push_back(Solid(vec_shared[2]));
-	elem.push_back(Solid(vec_shared[3]));
+
+	//elem.push_back(Solid(vec_shared[0]));
+	//elem.push_back(Solid(vec_shared[1]));
+	//elem.push_back(Solid(vec_shared[2]));
+	//elem.push_back(Solid(vec_shared[3]));
 	
 	//vec_shared.pop_back();
 	
@@ -74,8 +74,8 @@ WindowBuilder::WindowBuilder()
 	std::shared_ptr<Texture> nms(new Texture);
 	nms->loadTexture("textures/No-Mans-Sky-1.jpg");
 	
-	std::shared_ptr<Shader> text(new ShaderBasic);
-	std::shared_ptr<ShaderSpecular> spec(new ShaderSpecular);
+	//std::shared_ptr<Shader> text(new ShaderBasic);
+	std::shared_ptr<ShaderPBR> spec(new ShaderPBR({ "texture.ver" }, { "PBR.frag","specularCalc.frag","lightCalc.frag" }));
 	std::shared_ptr<Material> mat(new Material(spec.get()));
 	std::shared_ptr<Material> mat2(new Material(spec.get()));
 	mat->setChannel(stone.get(), "spec");
@@ -84,12 +84,15 @@ WindowBuilder::WindowBuilder()
 	mat2->setChannel(stone.get(), "spec");
 	mat2->setChannel(bump.get(), "bump");
 	mat2->setChannel(nms.get(), "diffuse");
-	//spec->setChannel(stone, "spec");
-	//spec->setChannel(bump, "bump");
-	elem[3].setMaterial(mat2);
-	elem[0].setMaterial(mat);
-	elem[2].setMaterial(mat2);
-	elem[1].setMaterial(mat);
+
+	//elem[0].setMaterial(mat);
+
+
+	for (auto vbo : vec_shared)
+	{
+		elem.push_back(Solid(vbo));
+		elem.back().setMaterial(mat);
+	}
 	sf::Clock clock;
 
 	Camera cam(600.0f, 800.0f, 0.75f);
@@ -104,12 +107,21 @@ WindowBuilder::WindowBuilder()
 		
 		sf::Event event;
 		int time = clock.getElapsedTime().asMilliseconds();
-		int frameTime = sf::milliseconds(1).asMilliseconds();
+		int frameTime = sf::milliseconds(16).asMilliseconds();
 		bool needNewFrame = time >= frameTime;
 		//It would seem that without this sync, there is a fall in performance. Not sure why yet. Also the application takes way more resources without it;
 		//std::cout << '\r' << std::setw(4) << std::setfill(' ');
 		if (needNewFrame)
 		{
+			if (window.pollEvent(event))
+			{
+				//scene->eventHandler(event);
+				handler.handle(event);
+				// "close requested" event: we close the window
+				if (event.type == sf::Event::Closed)
+					window.close();
+			}
+
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			//scene.animate(clock);
 			//Render time.
@@ -122,14 +134,7 @@ WindowBuilder::WindowBuilder()
 			window.display();
 		}
 
-		if (window.pollEvent(event))
-		{
-			//scene->eventHandler(event);
-			handler.handle(event);
-			// "close requested" event: we close the window
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
+
 	}
 }
 

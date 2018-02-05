@@ -24,7 +24,7 @@ VertexBufferObject::VertexBufferObject()
 
 VertexBufferObject::VertexBufferObject(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn) : VertexBufferObject()
 {
-	vertices = verticesIn;
+	 vertices = verticesIn;
 	std::vector<std::vector<int>> triangles;
 	int offset = 0;
 	for (int i = 0; i < indexIn.size(); i++)
@@ -97,6 +97,30 @@ void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, s
 	}
 }
 
+void VertexBufferObject::findTangents()
+{
+	//to find the tangent we need UV coordinates
+	if (UVs.size() > 0)
+	{
+		//there as many tangents as there are vertices;
+		tangents = std::vector<glm::vec3>(vertices.size());
+		biTangents = std::vector<glm::vec3>(vertices.size());
+
+		for (auto triange : index)
+		{
+			//we need to find the tangent for each point, and we need 
+			unsigned int P0 = triange[0];
+			unsigned int P1 = triange[1];
+			unsigned int P2 = triange[2];
+			//We need 3 point to find the tanfgent and bi-tangent, since we need to to it for each point 
+			//we call the same function but changin the "origin" point
+			computeTangent(P0, P1, P2);
+			computeTangent(P1, P2, P0);
+			computeTangent(P2, P1, P0);
+		}
+	}
+}
+
 void VertexBufferObject::drawObject(const Shader& shader)
 {
 	int error;
@@ -127,9 +151,13 @@ void VertexBufferObject::setNormals(std::vector<glm::vec3> normalIn)
 void VertexBufferObject::updateObjectAttributes()
 {
 	//if we add a new component to our object, we need to update the information on the GC
+	//We also look for the tangents;
+	findTangents();
 	std::vector<GLfloat> vertArray;
 	std::vector<GLfloat> normalArray;
 	std::vector<GLfloat> UVArray;
+	std::vector<GLfloat> tangentsArray;
+	std::vector<GLfloat> biTangentsArray;
 	std::vector<GLfloat> vec;
 	std::vector<int> flatIndex;
 	//We should be able to do that before instead of doing it every frame.
@@ -148,6 +176,16 @@ void VertexBufferObject::updateObjectAttributes()
 		{
 			std::vector<GLfloat>uv({ UVs[i].x,UVs[i].y });
 			UVArray.insert(UVArray.end(), uv.begin(), uv.end());
+		}
+		if (tangents.size())
+		{
+			std::vector<GLfloat>tan({ tangents[i].x,tangents[i].y, tangents[i].z });
+			tangentsArray.insert(tangentsArray.end(), tan.begin(), tan.end());
+		}
+		if (biTangents.size())
+		{
+			std::vector<GLfloat>tan({ biTangents[i].x,biTangents[i].y, biTangents[i].z });
+			biTangentsArray.insert(biTangentsArray.end(), tan.begin(), tan.end());
 		}
 	}
 	for (int i = 0; i < index.size(); i++)
@@ -178,5 +216,46 @@ void VertexBufferObject::updateObjectAttributes()
 		//a UV coordinate has 2 parts
 		attributeSize.push_back(2);
 	}
+	if (tangentsArray.size() > 0)
+	{
+		//if we have tangents we als ohave bitangents
+		vertexData.push_back(tangentsArray);
+		attributeSize.push_back(3);
+		vertexData.push_back(biTangentsArray);
+		attributeSize.push_back(3);
+	}
 	setVertex(vertexData, flatIndex, attributeSize);
+}
+
+void VertexBufferObject::computeTangent(unsigned int P0, unsigned int P1, unsigned int P2)
+{
+	glm::vec3 point0 = vertices[P0];
+	glm::vec3 point1 = vertices[P1];
+	glm::vec3 point2 = vertices[P2];
+	//First we check that the tangent and bitangent haven't been computed already
+	if (tangents[P0] == glm::vec3(0, 0, 0) && biTangents[P0] == glm::vec3(0, 0, 0))
+	{
+		//those points are in object space
+		glm::vec3 E1 = point1 - point0;
+		glm::vec3 E2 = point2 - point0;
+
+		glm::vec2 delta1 = UVs[P1] - UVs[P0];
+		glm::vec2 delta2 = UVs[P2] - UVs[P0];
+
+		float a = delta1.y * delta2.x - delta1.x*delta2.y;
+
+		glm::vec3 tangent = glm::vec3(
+			(-delta2.y * E1.x + delta1.y * E2.x) / a,
+			(-delta2.y * E1.y + delta1.y * E2.y) / a,
+			(-delta2.y * E1.z + delta1.y * E2.z) / a);
+
+		glm::vec3 biTangent = glm::vec3(
+			(delta2.x*E1.x - delta1.x*E2.x) / a,
+			(delta2.x*E1.y - delta1.x*E2.y) / a,
+			(delta2.x*E1.z - delta1.x*E2.z) / a
+		);
+
+		tangents[P0] = tangent;
+		biTangents[P0] = biTangent;
+	}
 }
