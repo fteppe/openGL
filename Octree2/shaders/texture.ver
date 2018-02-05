@@ -31,9 +31,8 @@ void main()
 	vertexColor = normal;
 	UV = aUV;
 	mat4 objToTan = basisChange(tangent, biTangent, normal);
-
-	posTan = vec3(objToTan * vec4(vertexPos,1));
-	camTan = vec3(world2obj * objToTan * vec4(camPos,1));
+	posTan = vec3(objToTan * vec4(aPos,1));
+	camTan = vec3( objToTan * vec4(camPos,1));
 	//camTan = objToTan[0].xyz;
 	//posTan = objToTan[1].xyz;
 	gl_Position = mvp*vec4(aPos, 1.0);
@@ -41,8 +40,8 @@ void main()
 }
 
 mat4 basisChange(vec3 u, vec3 v, vec3 w){
-	return inverse(mat4(u , 0,
-	v , 0,
-	w , 0,
+	return inverse(mat4(objectSpace * vec4(u,0),
+	objectSpace * vec4(v,0),
+	objectSpace * vec4(w,0),
 	0,0,0,1));
 }

@@ -180,6 +180,7 @@
     <Resource Include="obj\cube.obj">
       <Filter>obj</Filter>
     </Resource>
+    <Resource Include="obj\plan.obj" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="obj\monkey.obj">
@@ -202,10 +203,8 @@
     <Image Include="textures\bricks_normal.jpg">
       <Filter>textures</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="obj\plan.obj">
-      <Filter>obj</Filter>
-    </Object>
+    <Image Include="textures\parallax_mapping_height_map.png">
+      <Filter>textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -29,11 +29,12 @@ EventHandler::~EventHandler()
 Camera EventHandler::camMouvement(sf::Event event)
 {
 	Camera cam = controlledScene.lock().get()->cam;
+	float speed = 0.1;
 	glm::vec3 campPos = cam.getPos();
 	glm::vec3 target = cam.getTarget();
 	glm::vec3 up = cam.getUp();
 	glm::vec3 dir = target - campPos;
-	glm::vec3 dirNorm = glm::normalize(dir) * glm::vec3(0.1, 0.1, 0.1);
+	glm::vec3 dirNorm = glm::normalize(dir) * glm::vec3(speed);
 	float distance = glm::length(dir);
 	dir = glm::normalize(dir);
 	glm::vec3 perpendicular = glm::cross(dir, up);
@@ -58,24 +59,24 @@ Camera EventHandler::camMouvement(sf::Event event)
 		if (keyboard.isKeyPressed(keyboard.D))
 		{
 
-			target = (target + perpendicular);
-			campPos = (campPos + perpendicular);
+			target = (target + speed * perpendicular);
+			campPos = (campPos + speed * perpendicular);
 		}
 		if (keyboard.isKeyPressed(keyboard.Q))
 		{
-			target = target - perpendicular;
-			campPos -= perpendicular;
+			target = target - speed * perpendicular;
+			campPos -= speed * perpendicular;
 
 		}
 		if (keyboard.isKeyPressed(keyboard.Space))
 		{
-			target += up;
-			campPos += up;
+			target += speed * up;
+			campPos +=  speed * up;
 		}
 		if (keyboard.isKeyPressed(keyboard.LControl))
 		{
-			target -= up;
-			campPos -= up;
+			target -= speed * up;
+			campPos -= speed * up;
 		}
 		//mouv rot
 		if (keyboard.isKeyPressed(keyboard.Left))

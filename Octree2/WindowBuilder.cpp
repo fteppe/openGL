@@ -44,31 +44,22 @@ WindowBuilder::WindowBuilder()
 
 	
 	WaveFrontLoader loader;
-	std::cout << "begin test" << std::endl;
-	/* TEST VBO*/
 
 	std::vector<VertexBufferObject*> vec;
-	loader.fillVertexObjectVectorFromFile("obj/plan.obj", vec);
+	loader.fillVertexObjectVectorFromFile("obj/scene.obj", vec);
 	//We want to control the destruction of our items and follow them with weak ptr
 	std::vector<std::shared_ptr<VertexBufferObject>> vec_shared;
 	for (int i = 0; i < vec.size(); i++)
 	{
 		vec_shared.push_back(std::shared_ptr<VertexBufferObject>(vec[i]));
 	}
-	
-	std::cout << "end test" << std::endl;
+
 
 	std::vector<Solid> elem;
 
-	//elem.push_back(Solid(vec_shared[0]));
-	//elem.push_back(Solid(vec_shared[1]));
-	//elem.push_back(Solid(vec_shared[2]));
-	//elem.push_back(Solid(vec_shared[3]));
-	
-	//vec_shared.pop_back();
 	
 	std::shared_ptr<Texture> stone(new Texture);
-	stone->loadTexture("textures/specular_maps_bricks_image.jpg");
+	stone->loadTexture("textures/parallax_mapping_height_map.png");
 	std::shared_ptr<Texture> bump(new Texture);
 	bump->loadTexture("textures/bricks_normal.jpg");
 	std::shared_ptr<Texture> nms(new Texture);

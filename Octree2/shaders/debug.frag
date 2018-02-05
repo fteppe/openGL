@@ -26,6 +26,7 @@ void main()
 	//we add a constant value to the intensity, so it is never dark.
 	//intensityVec = intensityVec + vec3(0.1,0.1,0.1);
 	//vec3 color = vec3(0.5,0.5,0.5);//-normal.xy,normal.z);
-    FragColor = vec4(camTan,1.0);
+	vec3 dir = normalize(posTan - camTan);
+    FragColor = vec4(dir,0);
 	//FragColor = vec4(vertexColor, 1);
 } 
