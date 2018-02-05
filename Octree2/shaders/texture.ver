@@ -19,7 +19,7 @@ uniform mat4 objectSpace;
 uniform mat4 world2obj;
 
 //this function allows us to od transformations from tangent object space to tangent space;
-mat4 basisChange(vec3 u,vec3 v, vec3 w);
+mat3 basisChange(vec3 u,vec3 v, vec3 w);
 
 void main()
 {
@@ -30,18 +30,19 @@ void main()
 	vertexPos = vec3(objectSpace * vec4(aPos,1));
 	vertexColor = normal;
 	UV = aUV;
-	mat4 objToTan = basisChange(tangent, biTangent, normal);
-	posTan = vec3( objToTan * vec4(aPos,1));
-	camTan = vec3( world2obj * objToTan * vec4(camPos,1));
-	//camTan = objToTan[0].xyz;
+	//This matrix will take any vector from world coorinate and tranform it to tangent coordinate.
+	mat3 TBN = basisChange(tangent, biTangent, aNormal);
+	posTan = ( TBN * (aPos));
+	camTan = ( TBN * vec3(world2obj * vec4(camPos,1)));
+	//camTan = vec3(TBN[0].y, TBN[1].y, TBN[2].y);
 	//posTan = objToTan[1].xyz;
 	gl_Position = mvp*vec4(aPos, 1.0);
     
 }
 
-mat4 basisChange(vec3 u, vec3 v, vec3 w){
-	return inverse(mat4(vec4(u,0),
-	 vec4(v,0),
-	 vec4(w,0),
-	0,0,0,1));
+mat3 basisChange(vec3 u, vec3 v, vec3 w){
+	return inverse(mat3(
+	u,
+	v,
+	w));
 }

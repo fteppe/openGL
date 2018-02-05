@@ -229,6 +229,8 @@ void VertexBufferObject::updateObjectAttributes()
 
 void VertexBufferObject::computeTangent(unsigned int P0, unsigned int P1, unsigned int P2)
 {
+	//TODO : correct the use case where the normal is not normal to the face.
+	//We need to get a tangent in the right direction but that is also normal to the normal
 	glm::vec3 point0 = vertices[P0];
 	glm::vec3 point1 = vertices[P1];
 	glm::vec3 point2 = vertices[P2];
