@@ -102,6 +102,11 @@ void VertexBufferObject::setFilePath(std::pair<std::string, std::string> filePat
 	this->filePath = filePath;
 }
 
+std::pair<std::string, std::string> VertexBufferObject::getFilePath()
+{
+	return filePath;
+}
+
 void VertexBufferObject::findTangents()
 {
 	//to find the tangent we need UV coordinates

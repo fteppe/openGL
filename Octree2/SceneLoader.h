@@ -10,17 +10,23 @@
 #include "Material.h"
 #include "GameObject.h"
 
+
+#define VBO_CONTAINER std::map<std::string, std::map<std::string, std::shared_ptr<VertexBufferObject>>>
+#define MAT_CONTAINER std::map<std::string, std::shared_ptr<Material>>
+#define TEXTURE_CONTAINER std::map<std::string, std::shared_ptr<Texture>>
+#define SHADER_CONTAINER std::map<std::string, std::shared_ptr<Shader>>
+
 class SceneLoader
 {
 public:
 	SceneLoader();
 	~SceneLoader();
 	void setSceneToLoad(std::string file);
-	std::vector<VertexBufferObject*>  loadModels();
-	std::map<std::string,Texture*> loadTextures();
-	std::map<std::string, Shader*> loadShaders();
-	std::map<std::string, Material*> loadMaterials(std::map<std::string, Texture*> textures, std::map<std::string, Shader*> shaders);
-	std::vector<GameObject *> loadGameObjects(std::map<std::string, Material *> mats, std::map<std::string, std::map<std::string, VertexBufferObject*>> objects);
+	VBO_CONTAINER  loadModels();
+	TEXTURE_CONTAINER loadTextures();
+	SHADER_CONTAINER loadShaders();
+	MAT_CONTAINER loadMaterials(TEXTURE_CONTAINER textures, SHADER_CONTAINER shaders);
+	std::vector<GameObject *> loadGameObjects(MAT_CONTAINER mats, VBO_CONTAINER objects);
 
 private:
 	rapidjson::Document doc;

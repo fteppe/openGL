@@ -57,40 +57,12 @@ WindowBuilder::WindowBuilder()
 
 	SceneLoader sceneloader;
 	sceneloader.setSceneToLoad("obj/scene.json");
-	std::vector<Solid> elem;
 
-	
-	std::shared_ptr<Texture> stone(new Texture);
-	stone->loadTexture("textures/EyCkvNy.png");
-	std::shared_ptr<Texture> bump(new Texture);
-	bump->loadTexture("textures/EyCkvNyNormal.png");
-	std::shared_ptr<Texture> nms(new Texture);
-	nms->loadTexture("textures/No-Mans-Sky-1.jpg");
-	
-	//std::shared_ptr<Shader> text(new ShaderBasic);
-	std::shared_ptr<ShaderPBR> spec(new ShaderPBR({ "texture.ver" }, { "PBR.frag","specularCalc.frag","lightCalc.frag" }));
-	std::shared_ptr<Material> mat(new Material(spec.get()));
-	std::shared_ptr<Material> mat2(new Material(spec.get()));
-	mat->setChannel(stone.get(), "spec");
-	mat->setChannel(bump.get(), "bump");
-	mat->setChannel(nms.get(), "diffuse");
-	mat2->setChannel(stone.get(), "spec");
-	mat2->setChannel(bump.get(), "bump");
-	mat2->setChannel(nms.get(), "diffuse");
-
-	//elem[0].setMaterial(mat);
-
-
-	for (auto vbo : vec_shared)
-	{
-		elem.push_back(Solid(vbo));
-		elem.back().setMaterial(mat);
-	}
 	sf::Clock clock;
 
 	Camera cam(600.0f, 800.0f, 0.75f);
-	auto  scene = std::shared_ptr<Scene>(new Scene(elem, cam));
-	EventHandler handler(scene);
+	auto  scene = std::shared_ptr<Scene>(new Scene(cam));
+	//EventHandler handler(scene);
 	//std::cout << glGetString(GL_VERSION) << std::endl;
 
 	while (window.isOpen())
@@ -109,7 +81,7 @@ WindowBuilder::WindowBuilder()
 			if (window.pollEvent(event))
 			{
 				//scene->eventHandler(event);
-				handler.handle(event);
+				//handler.handle(event);
 				// "close requested" event: we close the window
 				if (event.type == sf::Event::Closed)
 					window.close();

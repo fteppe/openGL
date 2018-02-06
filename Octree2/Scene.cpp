@@ -9,7 +9,7 @@ Scene::Scene(Camera cam):cam(cam)
 {
 }
 
-Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
+/*Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
 {
 	light.intensity = 1.0f;
 	light.col = glm::vec3(1, 1, 1);
@@ -17,7 +17,7 @@ Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
 	this->cam.setPosition(glm::vec3(-10, -10, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 0, 1));
-}
+}*/
 
 void Scene::animate(sf::Clock elapsed)
 {
@@ -123,8 +123,17 @@ void Scene::renderScene()
 	for (int i = 0; i < elements.size(); i++)
 	{
 		//elements[i].setObjectSpace(rot);
-		elements[i].draw(*this);
+		elements[i]->draw(*this);
 	}
+}
+
+void Scene::load(std::string scene)
+{
+	loader.setSceneToLoad(scene);
+	models = loader.loadModels();
+	shaders = loader.loadShaders();
+	materials = loader.loadMaterials(textures, shaders);
+	elements = loader.loadGameObjects(materials, models);
 }
 
 Camera Scene::getCam() const

@@ -9,6 +9,10 @@
 #include <memory>
 
 #include "Scene.h"
+
+class GameObject;
+#include "GameObject.h"
+
 class Solid : public GameObject
 {
 public:
@@ -28,7 +32,5 @@ protected:
 	std::shared_ptr<Shader> shader_ptr;
 	std::shared_ptr<Material> material_ptr;
 	std::weak_ptr<VertexBufferObject> VBO_ptr;
-
-
 };
 

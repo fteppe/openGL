@@ -8,7 +8,7 @@
 #include <string>
 #include <glew/glew.h>
 #include <glm\gtc\type_ptr.hpp>
-
+#include "Solid.h"
 
 Shader::Shader()
 {

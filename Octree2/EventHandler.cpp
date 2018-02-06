@@ -9,7 +9,7 @@ EventHandler::EventHandler()
 EventHandler::EventHandler(std::weak_ptr<Scene> sceneIn)
 {
 	controlledScene = sceneIn;
-	controlledObject = (&controlledScene.lock().get()->elements)->begin();
+	controlledObject = (controlledScene.lock().get()->elements).begin();
 }
 
 
@@ -18,7 +18,7 @@ void EventHandler::handle(sf::Event eventIn)
 	controlledScene.lock().get()->cam = camMouvement(eventIn);
 	controlledObject = changeControlledObject(eventIn, controlledObject);
 	//I get the pointer
-	GameObject* obj = &(*controlledObject);
+	GameObject* obj = *controlledObject;
 	moveGameObject(eventIn, obj);
 }
 
@@ -131,11 +131,11 @@ void EventHandler::moveGameObject(sf::Event event, GameObject * object)
 	object->setPos(pos);
 }
 
-std::vector<Solid>::iterator EventHandler::changeControlledObject(sf::Event event , std::vector<Solid>::iterator& it)
+std::vector<GameObject*>::iterator EventHandler::changeControlledObject(sf::Event event , std::vector<GameObject*>::iterator& it)
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
-		std::vector<Solid>* elems = &controlledScene.lock().get()->elements;
+		std::vector<GameObject*>* elems = &controlledScene.lock().get()->elements;
 		//mouvements lat
 		sf::Keyboard keyboard;
 

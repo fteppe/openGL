@@ -2,6 +2,7 @@
 #include "ShaderPBR.h"
 #include "Camera.h"
 #include "Scene.h"
+#include "Solid.h"
 
 ShaderPBR::ShaderPBR() : Shader({"texture.ver"}, { "PBR.frag","specularCalc.frag","lightCalc.frag" })
 {

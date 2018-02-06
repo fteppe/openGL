@@ -1,10 +1,10 @@
 #pragma once
 #include "Camera.h"
 #include "Light.h"
-#include "Solid.h"
 #include "SceneLoader.h"
 #include <vector>
 #include <SFML/Window.hpp>
+//#include "GameObject.h"
 /*
 This class contains objects, a light and a camera. So we should be able to render a scene.
 */
@@ -19,13 +19,20 @@ public:
 	void eventHandler(sf::Event event);
 	void setCamera(Camera camera);
 	void renderScene();
+	void load(std::string scene);
 
 	Camera getCam() const;
 	Light getLight() const;
 private:
 	Camera cam;
 	Light light;
-	std::vector<Solid> elements;
+	std::vector<GameObject*> elements;
 	SceneLoader loader;
+
+	VBO_CONTAINER models;
+	MAT_CONTAINER materials;
+	SHADER_CONTAINER shaders;
+	TEXTURE_CONTAINER textures;
+
 };
 

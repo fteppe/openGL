@@ -30,32 +30,39 @@ void SceneLoader::setSceneToLoad(std::string file)
 	//
 
 	doc.Parse(json.c_str());
-	loadModels();
+	auto models = loadModels();
 	auto text = loadTextures();
 	auto shaders = loadShaders();
-	loadMaterials(text, shaders);
+	auto mats = loadMaterials(text, shaders);
+	loadGameObjects(mats, models);
 }
 
-std::vector<VertexBufferObject*> SceneLoader::loadModels()
+VBO_CONTAINER SceneLoader::loadModels()
 {
 	//rapidjson::Value& objects = d["models"];
-	std::vector<VertexBufferObject*> objects;
+	std::map<std::string, std::map<std::string, std::shared_ptr<VertexBufferObject>>> objects;
 	WaveFrontLoader loader;
 	rapidjson::Value::MemberIterator iterator = doc.FindMember("models");
 	//assert(iterator != d.End());
 	assert(iterator->value.IsArray());
 	assert(iterator->value[0].IsString());
 	rapidjson::Value& models = iterator->value;
+	std::vector<VertexBufferObject*> loaded;
 	for (auto i = models.Begin(); i != models.End(); i++)
 	{
-		loader.loadVertexObjectVectorFromFile(i->GetString(), objects);
+		loader.loadVertexObjectVectorFromFile(i->GetString(), loaded);
+	}
+	for (auto obj : loaded)
+	{
+		std::pair<std::string, std::string> path = obj->getFilePath();
+		objects[path.first][path.second] = std::shared_ptr<VertexBufferObject>(obj);
 	}
 	return objects;
 }
 
-std::map<std::string,Texture*> SceneLoader::loadTextures()
+TEXTURE_CONTAINER SceneLoader::loadTextures()
 {
-	std::map<std::string,Texture*> textures;
+	TEXTURE_CONTAINER textures;
 	rapidjson::Value::MemberIterator iterator = doc.FindMember("textures");
 	//assert(iterator != d.End());
 	assert(iterator->value.IsArray());
@@ -63,16 +70,16 @@ std::map<std::string,Texture*> SceneLoader::loadTextures()
 	rapidjson::Value& texs = iterator->value;
 	for (auto i = texs.Begin(); i != texs.End(); i++)
 	{
-		textures[i->GetString()] = new Texture();
+		textures[i->GetString()] = std::shared_ptr<Texture> (new Texture());
 		textures[i->GetString()]->loadTexture(i->GetString());
 	}
 	return textures;
 }
 
-std::map<std::string, Shader*> SceneLoader::loadShaders()
+SHADER_CONTAINER SceneLoader::loadShaders()
 {
 
-	std::map<std::string, Shader*> shaders;
+	SHADER_CONTAINER shaders;
 	rapidjson::Value& shadersArray = doc["shaders"];
 	assert(shadersArray.IsArray());
 	for (unsigned int i = 0; i < shadersArray.Size(); i++)
@@ -103,36 +110,64 @@ std::map<std::string, Shader*> SceneLoader::loadShaders()
 		//if we have a PBR shader
 		if (shaderType == "PBR")
 		{
-			shaders[shaderName] = new ShaderPBR(vertexShaderFiles, fragmentShaderFiles);
+			shaders[shaderName] = std::shared_ptr<Shader> (new ShaderPBR(vertexShaderFiles, fragmentShaderFiles));
 		}
 	}
 
 	return shaders;
 }
 
-std::map<std::string, Material*> SceneLoader::loadMaterials(std::map<std::string, Texture*> textures, std::map<std::string, Shader*> shaders)
+MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER textures, SHADER_CONTAINER shaders)
 {
-	std::map<std::string, Material*> materials;
+	MAT_CONTAINER materials;
 
 	rapidjson::Value& mats = doc["materials"];
 	assert(mats.IsArray());
 	for (unsigned int i = 0; i < mats.Size(); i++)
 	{
 		std::string matName = mats[i]["name"].GetString();
+		std::string shaderName = mats[i]["shader"].GetString();
 		std::map<std::string, std::string> channels;
 		//we iterate accross the channels to find them all
 		for (rapidjson::Value::MemberIterator j = mats[i]["channels"].MemberBegin(); j != mats[i]["channels"].MemberEnd(); j++)
 		{
 			channels[j->name.GetString()] = j->value.GetString();
 		}
+
+		materials[matName] = std::shared_ptr<Material>(new Material(shaders[shaderName].get()));
+		for (auto tex : channels)
+		{
+			materials[matName]->setChannel(textures[tex.second].get(), tex.first);
+		}
 	}
 
 	return materials;
 }
 
-std::vector<GameObject*> SceneLoader::loadGameObjects(std::map<std::string, Material*> mats, std::map<std::string, std::map<std::string, VertexBufferObject*>> objects)
+std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER mats, VBO_CONTAINER objects)
 {
+	std::vector<GameObject * > gameObjects;
+	rapidjson::Value& gos = doc["gameObjects"];
+	assert(gos.IsArray());
 
-	return std::vector<GameObject*>();
+	for (unsigned int i = 0; i < gos.Size(); i++)
+	{
+		std::string type = gos[i]["type"].GetString();
+		//we check what kind of gameObject this is
+		if (type == "solid")
+		{
+			std::string mat = gos[i]["material"].GetString();
+			std::pair<std::string, std::string> filePath;
+			filePath.first = gos[i]["model"][0].GetString();
+			filePath.second = gos[i]["model"][1].GetString();
+
+			gameObjects.push_back(new Solid(
+				objects[filePath.first][filePath.second]));
+			((Solid *)gameObjects.back())->setMaterial(
+				std::shared_ptr<Material>(mats[mat])
+			);
+		}
+	}
+	return gameObjects;
 }
 

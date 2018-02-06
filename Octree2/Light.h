@@ -3,7 +3,10 @@
 #include <glm\matrix.hpp>
 #include <vector>
 
+
+class GameObject;
 #include "GameObject.h"
+
 class Light : public GameObject
 {
 public:

@@ -13,8 +13,8 @@ public:
 private:
 	Camera camMouvement(sf::Event event);
 	void moveGameObject(sf::Event event, GameObject* object);
-	std::vector<Solid>::iterator changeControlledObject(sf::Event, std::vector<Solid>::iterator& it);
+	std::vector<GameObject *>::iterator changeControlledObject(sf::Event, std::vector<GameObject * >::iterator& it);
 	std::weak_ptr<Scene> controlledScene;
-	std::vector<Solid>::iterator controlledObject;
+	std::vector<GameObject *>::iterator controlledObject;
 };
 
