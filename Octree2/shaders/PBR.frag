@@ -70,6 +70,8 @@ vec2 parralax(vec3 camTan, vec3 posTan)
 	float previousHeight = texture(spec, UV + v - stepVector).r;
 	float delta1 = height - currentHeight;
 	float delta2 = currentHeight + stepSize - previousHeight;
-	//interpolation simple
-	return v.xy  - (0.5-(delta2 - delta1)/(delta1 + delta2)) * stepVector ;
+
+	float weight = delta1 / (delta1+delta2); 
+	//interpolation
+	return v.xy  - (weight) * stepVector ;
 }
