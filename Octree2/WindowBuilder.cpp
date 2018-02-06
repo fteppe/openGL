@@ -15,6 +15,7 @@
 #include "Solid.h"
 #include "Cube.h"
 #include "EventHandler.h"
+#include "SceneLoader.h"
 
 //This will build a window using open GL and stuff, this is a way to unclutter the main.
 WindowBuilder::WindowBuilder()
@@ -46,22 +47,23 @@ WindowBuilder::WindowBuilder()
 	WaveFrontLoader loader;
 
 	std::vector<VertexBufferObject*> vec;
-	loader.fillVertexObjectVectorFromFile("obj/scene.obj", vec);
+	//loader.loadVertexObjectVectorFromFile("obj/scene.obj", vec);
 	//We want to control the destruction of our items and follow them with weak ptr
 	std::vector<std::shared_ptr<VertexBufferObject>> vec_shared;
 	for (int i = 0; i < vec.size(); i++)
 	{
-		vec_shared.push_back(std::shared_ptr<VertexBufferObject>(vec[i]));
+		//vec_shared.push_back(std::shared_ptr<VertexBufferObject>(vec[i]));
 	}
 
-
+	SceneLoader sceneloader;
+	sceneloader.setSceneToLoad("obj/scene.json");
 	std::vector<Solid> elem;
 
 	
 	std::shared_ptr<Texture> stone(new Texture);
-	stone->loadTexture("textures/parallax_mapping_height_map.png");
+	stone->loadTexture("textures/EyCkvNy.png");
 	std::shared_ptr<Texture> bump(new Texture);
-	bump->loadTexture("textures/bricks_normal.jpg");
+	bump->loadTexture("textures/EyCkvNyNormal.png");
 	std::shared_ptr<Texture> nms(new Texture);
 	nms->loadTexture("textures/No-Mans-Sky-1.jpg");
 	

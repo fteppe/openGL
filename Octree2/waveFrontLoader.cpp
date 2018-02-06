@@ -22,11 +22,13 @@ WaveFrontLoader::~WaveFrontLoader()
 }
 
 
-void WaveFrontLoader::fillVertexObjectVectorFromFile(std::string fileName, std::vector<VertexBufferObject*> &vertexObjects)
+void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::vector<VertexBufferObject*> &vertexObjects)
 {
 	std::ifstream inFile(fileName);
 	std::string strOneLine;
 	std::cout << "started loading file" << std::endl;
+	file.first = fileName;
+	
 	while (inFile)
 	{
 		std::string prevLine = "";
@@ -132,6 +134,8 @@ void WaveFrontLoader::fillVertexObjectVectorFromFile(std::string fileName, std::
 			if (strOneLine.substr(0, 2) == "o ")
 			{
 				std::cout << strOneLine << std::endl;
+				std::istringstream s(strOneLine.substr(2));
+				s >> file.second;
 			}
 			prevLine = strOneLine;
 		}
@@ -234,6 +238,7 @@ VertexBufferObject * WaveFrontLoader::makeVBOFromData()
 	VertexBufferObject* vbo = new VertexBufferObject(solidVertices, polygons);
 	vbo->setNormals(normals);
 	vbo->setUVs(UVs);
+	vbo->setFilePath(file);
 
 	//We clear the info that are exclusive to a single solid
 	solidVertices.clear();

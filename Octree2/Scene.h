@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "Solid.h"
+#include "SceneLoader.h"
 #include <vector>
 #include <SFML/Window.hpp>
 /*
@@ -25,5 +26,6 @@ private:
 	Camera cam;
 	Light light;
 	std::vector<Solid> elements;
+	SceneLoader loader;
 };
 

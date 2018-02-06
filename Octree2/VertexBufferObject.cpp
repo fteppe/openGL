@@ -97,6 +97,11 @@ void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, s
 	}
 }
 
+void VertexBufferObject::setFilePath(std::pair<std::string, std::string> filePath)
+{
+	this->filePath = filePath;
+}
+
 void VertexBufferObject::findTangents()
 {
 	//to find the tangent we need UV coordinates

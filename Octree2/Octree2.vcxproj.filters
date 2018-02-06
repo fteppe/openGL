@@ -24,6 +24,7 @@
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="ShaderPBR.cpp" />
+    <ClCompile Include="SceneLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h">
@@ -78,6 +79,7 @@
     <ClInclude Include="EventHandler.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ShaderPBR.h" />
+    <ClInclude Include="SceneLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Octree2.rc" />
@@ -144,6 +146,9 @@
     <None Include="shaders\PBR.frag">
       <Filter>shader</Filter>
     </None>
+    <None Include="obj\scene.json">
+      <Filter>obj</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -204,6 +209,12 @@
       <Filter>textures</Filter>
     </Image>
     <Image Include="textures\parallax_mapping_height_map.png">
+      <Filter>textures</Filter>
+    </Image>
+    <Image Include="textures\EyCkvNy.png">
+      <Filter>textures</Filter>
+    </Image>
+    <Image Include="textures\EyCkvNyNormal.png">
       <Filter>textures</Filter>
     </Image>
   </ItemGroup>

@@ -155,6 +155,7 @@
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderBasic.h" />
     <ClInclude Include="ShaderPBR.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderBasic.cpp" />
     <ClCompile Include="ShaderPBR.cpp" />
@@ -211,6 +213,7 @@
     <None Include="Dependencies\DLLs\sfml-system-d-2.dll" />
     <None Include="Dependencies\DLLs\sfml-window-2.dll" />
     <None Include="Dependencies\DLLs\sfml-window-d-2.dll" />
+    <None Include="obj\scene.json" />
     <None Include="shaders\col.frag">
       <FileType>Document</FileType>
     </None>
@@ -258,6 +261,8 @@
   <ItemGroup>
     <Image Include="C:\Users\florent\AppData\Local\Temp\specular_maps_bricks_image.jpg" />
     <Image Include="textures\bricks_normal.jpg" />
+    <Image Include="textures\EyCkvNy.png" />
+    <Image Include="textures\EyCkvNyNormal.png" />
     <Image Include="textures\parallax_mapping_height_map.png" />
     <Image Include="textures\texture.jpg" />
     <Image Include="textures\texture2.jpg" />

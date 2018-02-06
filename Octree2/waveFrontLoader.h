@@ -8,7 +8,7 @@ class WaveFrontLoader
 public:
 	WaveFrontLoader();
 	~WaveFrontLoader();
-	void fillVertexObjectVectorFromFile(std::string filename, std::vector<VertexBufferObject*> &vertexObjects);
+	void loadVertexObjectVectorFromFile(std::string filename, std::vector<VertexBufferObject*> &vertexObjects);
 
 private:
 
@@ -39,5 +39,8 @@ private:
 	std::vector<glm::vec3> normalsObj;
 	//the UV coordinate indexed in the file
 	std::vector<glm::vec3> UVobj;
+	//Which file is beeing loaded and which geometry inside it.
+	std::pair<std::string, std::string> file;
+
 };
 

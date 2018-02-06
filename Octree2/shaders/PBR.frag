@@ -41,9 +41,9 @@ void main()
 	vec3 ambiant = vec3(0.5);
 	vec3 intensityVec = fragLight(light, normal_, pos);
 	vec3 specVec = specCalc(light, normal_, pos, camPos, specPow, specVal);
-	vec4 color = vec4(texture(spec, newUV));
+	vec4 color = vec4(texture(diffuse, newUV));
 	//vec4 color = vec4(vec3(1),1);
-    FragColor = vec4(  ambiant,1) * color;
+    FragColor = vec4(  intensityVec + specVec + ambiant,1) * color;
 	
 }
 
@@ -56,7 +56,7 @@ vec2 parralax(vec3 camTan, vec3 posTan)
    // return - p;
 
 	//lets try to make the real one.
-	float stepSize = 0.1;
+	float stepSize = 0.01;
 	float currentHeight = 1;
 	//this vector will go through the layers.
 	vec2 stepVector = stepSize * heightScale * viewDir.xy;
