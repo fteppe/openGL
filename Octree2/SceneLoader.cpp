@@ -27,14 +27,8 @@ void SceneLoader::setSceneToLoad(std::string file)
 	std::ifstream sceneSource(scene);
 	std::string json = std::string((std::istreambuf_iterator<char>(sceneSource)), std::istreambuf_iterator<char>());
 
-	//
-
 	doc.Parse(json.c_str());
-	auto models = loadModels();
-	auto text = loadTextures();
-	auto shaders = loadShaders();
-	auto mats = loadMaterials(text, shaders);
-	loadGameObjects(mats, models);
+
 }
 
 VBO_CONTAINER SceneLoader::loadModels()
@@ -100,15 +94,15 @@ SHADER_CONTAINER SceneLoader::loadShaders()
 
 		//fragment shader files
 		auto itfrag = shadersArray[i].FindMember("fragment");
-		assert(itvert->value.IsArray());
-		rapidjson::Value& framgentShaders = itvert->value;
-		for (unsigned int j = 0; j < vertexShaders.Size(); j++)
+		assert(itfrag->value.IsArray());
+		rapidjson::Value& framgentShaders = itfrag->value;
+		for (unsigned int j = 0; j < framgentShaders.Size(); j++)
 		{
 			fragmentShaderFiles.push_back(framgentShaders[i].GetString());
 		}
 
 		//if we have a PBR shader
-		if (shaderType == "PBR")
+		if (shaderType == "shaderPBR")
 		{
 			shaders[shaderName] = std::shared_ptr<Shader> (new ShaderPBR(vertexShaderFiles, fragmentShaderFiles));
 		}
@@ -161,8 +155,9 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER mats, VBO_CO
 			filePath.first = gos[i]["model"][0].GetString();
 			filePath.second = gos[i]["model"][1].GetString();
 
-			gameObjects.push_back(new Solid(
-				objects[filePath.first][filePath.second]));
+			std::shared_ptr<VertexBufferObject> VBO = objects[filePath.first][filePath.second];
+			gameObjects.push_back(new Solid(VBO));
+
 			((Solid *)gameObjects.back())->setMaterial(
 				std::shared_ptr<Material>(mats[mat])
 			);

@@ -43,26 +43,12 @@ WindowBuilder::WindowBuilder()
 
 
 
-	
-	WaveFrontLoader loader;
-
-	std::vector<VertexBufferObject*> vec;
-	//loader.loadVertexObjectVectorFromFile("obj/scene.obj", vec);
-	//We want to control the destruction of our items and follow them with weak ptr
-	std::vector<std::shared_ptr<VertexBufferObject>> vec_shared;
-	for (int i = 0; i < vec.size(); i++)
-	{
-		//vec_shared.push_back(std::shared_ptr<VertexBufferObject>(vec[i]));
-	}
-
-	SceneLoader sceneloader;
-	sceneloader.setSceneToLoad("obj/scene.json");
-
 	sf::Clock clock;
 
 	Camera cam(600.0f, 800.0f, 0.75f);
 	auto  scene = std::shared_ptr<Scene>(new Scene(cam));
-	//EventHandler handler(scene);
+	scene->load("obj/scene.json");
+	EventHandler handler(scene);
 	//std::cout << glGetString(GL_VERSION) << std::endl;
 
 	while (window.isOpen())
@@ -81,7 +67,7 @@ WindowBuilder::WindowBuilder()
 			if (window.pollEvent(event))
 			{
 				//scene->eventHandler(event);
-				//handler.handle(event);
+				handler.handle(event);
 				// "close requested" event: we close the window
 				if (event.type == sf::Event::Closed)
 					window.close();

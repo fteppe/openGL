@@ -28,7 +28,7 @@ protected:
 	void sendMatrix4(std::string name, glm::mat4);
 
 	unsigned int program;
-	std::map<std::string,GLuint> uniforms;
+	std::map<std::string,GLint> uniforms;
 
 
 

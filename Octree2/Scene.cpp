@@ -7,6 +7,12 @@
 
 Scene::Scene(Camera cam):cam(cam)
 {
+	light.intensity = 1.0f;
+	light.col = glm::vec3(1, 1, 1);
+	light.setPos(glm::vec3(1, 1, 0.5));
+	this->cam.setPosition(glm::vec3(-10, -10, 5));
+	this->cam.setTarget(glm::vec3(0, 0, 0));
+	this->cam.setUp(glm::vec3(0, 0, 1));
 }
 
 /*Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
@@ -131,6 +137,7 @@ void Scene::load(std::string scene)
 {
 	loader.setSceneToLoad(scene);
 	models = loader.loadModels();
+	textures = loader.loadTextures();
 	shaders = loader.loadShaders();
 	materials = loader.loadMaterials(textures, shaders);
 	elements = loader.loadGameObjects(materials, models);

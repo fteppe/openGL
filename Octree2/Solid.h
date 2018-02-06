@@ -9,8 +9,6 @@
 #include <memory>
 
 #include "Scene.h"
-
-class GameObject;
 #include "GameObject.h"
 
 class Solid : public GameObject
@@ -20,7 +18,7 @@ public:
 	Solid(std::vector<glm::vec3> vertices, std::vector<std::vector<int>> index);
 	Solid(std::weak_ptr<VertexBufferObject> vbo);
 	~Solid();
-	void draw(Scene const& scene);
+	void draw(Scene const& scene) const;
 	std::string description();
 	//void setObjectSpace(glm::mat4 transfo);
 
