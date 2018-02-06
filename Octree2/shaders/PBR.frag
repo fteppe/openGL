@@ -13,7 +13,8 @@ uniform float[7] light;
 uniform vec3 camPos;
 uniform sampler2D diffuse;
 uniform sampler2D spec;
-uniform sampler2D bump;
+uniform sampler2D normalMap;
+uniform sampler2D depthMap;
 
 
 vec3 fragLight(float light[7], vec3 normal, vec3 vertexPos);
@@ -30,7 +31,7 @@ void main()
 	{
 		discard;
 	}
-	vec3 bumpVal = texture(bump, newUV).rgb;
+	vec3 bumpVal = texture(normalMap, newUV).rgb;
 	normal_ = normalize(normal + bumpVal);
 	
 	vec4 specularity = vec4(texture(spec, newUV));
@@ -50,13 +51,16 @@ void main()
 vec2 parralax(vec3 camTan, vec3 posTan)
 {
 	float heightScale = 0.1;
+	float nbSample = 20;
+	float stepSize = 1/ nbSample;
+
 	vec3 viewDir = normalize( posTan - camTan );
-	float height =  texture(spec, UV).r;    
+	float height =  texture(depthMap, UV).r;    
     vec2 p = viewDir.xy / viewDir.z * (height * heightScale);
    // return - p;
 
 	//lets try to make the real one.
-	float stepSize = 0.01;
+	
 	float currentHeight = 1;
 	//this vector will go through the layers.
 	vec2 stepVector = stepSize * heightScale * viewDir.xy;
@@ -65,7 +69,7 @@ vec2 parralax(vec3 camTan, vec3 posTan)
 	{
 		v = v + stepVector;
 		currentHeight = currentHeight - stepSize;
-		height = texture(spec, UV + v).r;
+		height = texture(depthMap, UV + v).r;
 	}
 	float previousHeight = texture(spec, UV + v - stepVector).r;
 	float delta1 = height - currentHeight;

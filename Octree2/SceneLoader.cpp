@@ -58,14 +58,15 @@ TEXTURE_CONTAINER SceneLoader::loadTextures()
 {
 	TEXTURE_CONTAINER textures;
 	rapidjson::Value::MemberIterator iterator = doc.FindMember("textures");
+	rapidjson::Value& texs = doc["textures"];
 	//assert(iterator != d.End());
-	assert(iterator->value.IsArray());
-	assert(iterator->value[0].IsString());
-	rapidjson::Value& texs = iterator->value;
-	for (auto i = texs.Begin(); i != texs.End(); i++)
+	assert(texs.IsArray());
+
+	for (unsigned int i = 0; i < texs.Size(); i++)
 	{
-		textures[i->GetString()] = std::shared_ptr<Texture> (new Texture());
-		textures[i->GetString()]->loadTexture(i->GetString());
+		std::string texName = texs[i].GetString();
+		textures[texName] = std::shared_ptr<Texture> (new Texture());
+		textures[texName]->loadTexture(texName);
 	}
 	return textures;
 }
@@ -89,7 +90,7 @@ SHADER_CONTAINER SceneLoader::loadShaders()
 		rapidjson::Value& vertexShaders = itvert->value;
 		for (unsigned int j = 0; j < vertexShaders.Size(); j++)
 		{
-			vertexShaderFiles.push_back(vertexShaders[i].GetString());
+			vertexShaderFiles.push_back(vertexShaders[j].GetString());
 		}
 
 		//fragment shader files
@@ -98,7 +99,7 @@ SHADER_CONTAINER SceneLoader::loadShaders()
 		rapidjson::Value& framgentShaders = itfrag->value;
 		for (unsigned int j = 0; j < framgentShaders.Size(); j++)
 		{
-			fragmentShaderFiles.push_back(framgentShaders[i].GetString());
+			fragmentShaderFiles.push_back(framgentShaders[j].GetString());
 		}
 
 		//if we have a PBR shader
