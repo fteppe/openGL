@@ -121,11 +121,11 @@ void EventHandler::moveGameObject(sf::Event event, GameObject * object)
 		}
 		if (keyboard.isKeyPressed(keyboard.Numpad4))
 		{
-			pos = pos + glm::vec3(0, speed, 0);
+			pos = pos + glm::vec3(0, 0, speed);
 		}
 		if (keyboard.isKeyPressed(keyboard.Numpad6))
 		{
-			pos = pos + glm::vec3(0, -speed, 0);
+			pos = pos + glm::vec3(0, 0, -speed);
 		}
 	}
 	object->setPos(pos);

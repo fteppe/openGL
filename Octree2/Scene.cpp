@@ -12,7 +12,7 @@ Scene::Scene(Camera cam):cam(cam)
 	light.intensity = 1.0f;
 	light.col = glm::vec3(1, 1, 1);
 	light.setPos(glm::vec3(1, 1, 0.5));
-	this->cam.setPosition(glm::vec3(-5, 0, 5));
+	this->cam.setPosition(glm::vec3(-5, 1, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 1, 0));
 }

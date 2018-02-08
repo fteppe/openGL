@@ -38,7 +38,7 @@ void main()
 	
 	vec4 specularity = vec4(texture(depthMap, newUV));
 	float specVal = (specularity.r);
-	if(specVal > 0.01)
+	if(specVal > 0.1)
 	{
 		specVal = 0;
 	}
@@ -65,15 +65,15 @@ vec3 albedo(vec2 UVin)
 	vec3 col = vec3(texture(diffuse, UVin));
 	float height = vec3(texture(depthMap, UVin)).r;
 
-	if(height > 0.6)
+	if(height >0.1)
 	{
-		col = vec3(1,1,1);
+		col = vec3 (0.5,0.5,0) * (height) * 3;
+		if(int(height*100) % 5 < 0.002)
+		{
+			col = vec3(0.2,0.2,0.1);
+		}
 	}
-	else if(height >0.1)
-	{
-		col = vec3 (0.5,0.5,0);
-	}
-	else
+	else if (height < 0.1)
 	{
 		col = vec3(0.2,0.2,1);
 	}
