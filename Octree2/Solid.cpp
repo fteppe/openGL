@@ -8,7 +8,7 @@
 #include <glm\gtx\transform.hpp>
 #include <glew\glew.h>
 
-Solid::Solid() : GameObject(), triangulated(false), shader_ptr(new Shader("transform.ver", "col.frag"))
+Solid::Solid() : GameObject(), triangulated(false)
 {
 
 }

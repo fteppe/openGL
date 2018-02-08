@@ -1,4 +1,4 @@
-#version 330 core
+﻿#version 330 core
 in vec3 normal;
 in vec3 vertexColor;
 in vec3 vertexPos;
@@ -17,8 +17,7 @@ uniform sampler2D bump;
 
 void main()
 {
-	
-
+	sqdqsd
 	//vec3 lightCol = vec3(light[3],light[4],light[5]);
 	//vec3 nothing = lightCol;
 

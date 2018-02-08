@@ -24,9 +24,12 @@ public:
 	Camera getCam() const;
 	Light getLight() const;
 private:
+	void makeSkyBox();
+
 	Camera cam;
 	Light light;
 	std::vector<GameObject*> elements;
+	GameObject* skybox;
 	SceneLoader loader;
 
 	VBO_CONTAINER models;

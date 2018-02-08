@@ -56,6 +56,7 @@ Shader::Shader(std::vector<std::string> vertexShaders, std::vector<std::string> 
 	{
 		fragments.push_back(glCreateShader(GL_FRAGMENT_SHADER));
 	}
+	std::cout << "Compiling shaders" << std::endl;
 	//We compile them
 	for (int i = 0; i < vertexShaders.size(); i++)
 	{
@@ -77,6 +78,7 @@ Shader::Shader(std::vector<std::string> vertexShaders, std::vector<std::string> 
 		glAttachShader(program, fragments[i]);
 	}
 	//linking
+	std::cout << "Linking" << std::endl;
 	linkProgram();
 	//one this is done we delete the shaders
 	for (int i = 0; i < vertexShaders.size(); i++)
@@ -157,6 +159,10 @@ void Shader::compileShader(GLuint shader, std::string shaderPath)
 {
 	std::ifstream shaderSource(shaderPath);
 	std::string source = std::string((std::istreambuf_iterator<char>(shaderSource)), std::istreambuf_iterator<char>());
+	if (source.size() == 0)
+	{
+		std::cout << __FILE__ << " " << __LINE__ << "empty shader File" << std::endl;
+	}
 
 	const char* shaderChar = source.c_str();
 	glShaderSource(shader, 1, &shaderChar, NULL);
