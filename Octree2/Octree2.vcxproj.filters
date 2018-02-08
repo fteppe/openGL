@@ -20,6 +20,12 @@
     <ClCompile Include="ShaderBasic.cpp" />
     <ClCompile Include="ShaderSpecular.cpp" />
     <ClCompile Include="VertexBufferObject.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="EventHandler.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="ShaderPBR.cpp" />
+    <ClCompile Include="SceneLoader.cpp" />
+    <ClCompile Include="CubeMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h">
@@ -70,6 +76,12 @@
     <ClInclude Include="ShaderBasic.h" />
     <ClInclude Include="ShaderSpecular.h" />
     <ClInclude Include="VertexBufferObject.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="EventHandler.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ShaderPBR.h" />
+    <ClInclude Include="SceneLoader.h" />
+    <ClInclude Include="CubeMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Octree2.rc" />
@@ -133,6 +145,18 @@
     <None Include="shaders\specular.frag">
       <Filter>shader</Filter>
     </None>
+    <None Include="shaders\PBR.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="obj\scene.json">
+      <Filter>obj</Filter>
+    </None>
+    <None Include="shaders\cubeMap.ver">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shaders\cubeMap.frag">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -158,6 +182,9 @@
     <Filter Include="textures">
       <UniqueIdentifier>{02846981-9e96-414b-82e4-a4e7adcd323e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="textures\skybox">
+      <UniqueIdentifier>{fb9e7830-6cf5-40ef-8662-387ca5dd3e9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="obj\scene.obj">
@@ -169,6 +196,7 @@
     <Resource Include="obj\cube.obj">
       <Filter>obj</Filter>
     </Resource>
+    <Resource Include="obj\plan.obj" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="obj\monkey.obj">
@@ -181,6 +209,42 @@
     </Image>
     <Image Include="textures\texture2.jpg">
       <Filter>textures</Filter>
+    </Image>
+    <Image Include="C:\Users\florent\AppData\Local\Temp\specular_maps_bricks_image.jpg">
+      <Filter>textures</Filter>
+    </Image>
+    <Image Include="textures\texture.jpg">
+      <Filter>textures</Filter>
+    </Image>
+    <Image Include="textures\bricks_normal.jpg">
+      <Filter>textures</Filter>
+    </Image>
+    <Image Include="textures\parallax_mapping_height_map.png">
+      <Filter>textures</Filter>
+    </Image>
+    <Image Include="textures\EyCkvNy.png">
+      <Filter>textures</Filter>
+    </Image>
+    <Image Include="textures\EyCkvNyNormal.png">
+      <Filter>textures</Filter>
+    </Image>
+    <Image Include="textures\skybox\left.jpg">
+      <Filter>textures\skybox</Filter>
+    </Image>
+    <Image Include="textures\skybox\right.jpg">
+      <Filter>textures\skybox</Filter>
+    </Image>
+    <Image Include="textures\skybox\top.jpg">
+      <Filter>textures\skybox</Filter>
+    </Image>
+    <Image Include="textures\skybox\back.jpg">
+      <Filter>textures\skybox</Filter>
+    </Image>
+    <Image Include="textures\skybox\bottom.jpg">
+      <Filter>textures\skybox</Filter>
+    </Image>
+    <Image Include="textures\skybox\front.jpg">
+      <Filter>textures\skybox</Filter>
     </Image>
   </ItemGroup>
 </Project>

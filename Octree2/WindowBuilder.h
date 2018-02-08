@@ -11,7 +11,7 @@ public:
 	void draw();
 
 private:
-
+	//void initOpenGLContext();
 	sf::Window window;
 };
 

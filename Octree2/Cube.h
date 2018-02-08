@@ -3,7 +3,7 @@
 #include "Polygon.h"
 #include "Solid.h"
 #include <vector>
-class Cube : public Solid
+class Cube : public VertexBufferObject
 {
 public:
 	Cube(float side);

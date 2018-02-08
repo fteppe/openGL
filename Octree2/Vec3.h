@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include <glm\vec3.hpp>
+#include <glm/vec3.hpp>
 class Vec3 : public glm::vec3
 {
 public:

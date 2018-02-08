@@ -18,14 +18,17 @@ WaveFrontLoader::WaveFrontLoader()
 
 WaveFrontLoader::~WaveFrontLoader()
 {
+
 }
 
-std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
+
+void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::vector<VertexBufferObject*> &vertexObjects)
 {
 	std::ifstream inFile(fileName);
 	std::string strOneLine;
-	std::vector<Solid> returnValue;
-	std:: cout << "started loading file" << std::endl;
+	std::cout << "started loading file" << std::endl;
+	file.first = fileName;
+	
 	while (inFile)
 	{
 		std::string prevLine = "";
@@ -56,7 +59,7 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 				solidVertices.push_back(vertex);
 				//We map the two so we can know which idex is which vertex
 				fileToSolidVertexIndex[vertices.size() - 1] = solidVertices.size() - 1;
-				
+
 			}
 			//This indicates the coordinates of a UV attribute
 			if (strOneLine.substr(0, 2) == "vt")
@@ -71,7 +74,7 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 			//this line designates a polygon
 			if (strOneLine.substr(0, 2) == "f ")
 			{
-				
+
 				std::string s(strOneLine.substr(2));
 				//We use a regex to get the indexes of the vertex and it's attributes
 				std::regex r("([0-9]+)\\/([0-9]+)?\\/([0-9]+)?");
@@ -90,19 +93,23 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 					int index = strtol(vertIndex.c_str(), NULL, 10) - 1;
 					//We take the normal index.
 					int indexNormal = strtol(match[3].str().c_str(), NULL, 10) - 1;
+					//the UV index
 					int UVindex = strtol(match[2].str().c_str(), NULL, 10) - 1;
+					//For now, we consider the UV to be on an unclonned vertex
 					int VertToUVindex = index;
 					if (UVindex != -1)
 					{
+						//We check if we need to clone the vertex, or if there is a vertex synonym without UV coordinate.
 						VertToUVindex = vertexAndAttributeLink(index, UVindex, vertexToUV);
 					}
 					int vertToNormalIndex = vertexAndAttributeLink(index, indexNormal, vertexToNormal);
 
-					//A problem arises when you don't need to clone UV but clone the normal. You need to give the cloned vertex it's UV attributes                                                                                                       bute. 
+					//A problem arises when you don't need to clone UV but clone the normal. You need to give the cloned vertex it's UV attributes
+					//When we clone we set one of the two attributes, leaving one empty. Each vertex must have both the UV AND the normal attribute. If it doesn't the rendering will have bugs. 
 					if (VertToUVindex > vertToNormalIndex)
 					{
 						//If the two vertices index are different, it means that one was cloned, but not the other. In that case the cloned vertex needs to get the informations of the original.
-						
+
 						vertexToNormal[VertToUVindex] = vertexToNormal[vertToNormalIndex];
 					}
 					else if (VertToUVindex < vertToNormalIndex)
@@ -113,22 +120,22 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 					face.push_back(finalIndex);
 				}
 				polygons.push_back(face);
-
-
 			}
 			// this doesn't work to indicate the move to another file. The end of faces would be a better indicator.
 			//if the current line isn't a face when the previous was one, then we change file.
 			//no enough, sometimes "s " is used which designates a surface.
-			if ((strOneLine.substr(0, 2) != "f " && strOneLine.substr(0, 2) !="s ") && prevLine.substr(0, 2) == "f ")
+			if ((strOneLine.substr(0, 2) != "f " && strOneLine.substr(0, 2) != "s ") && prevLine.substr(0, 2) == "f ")
 			{
 				//we have a new object
 				//Solid result();
-				returnValue.push_back(makeSolidFromData());
+				vertexObjects.push_back(makeVBOFromData());
 			}
 			//building new obj
 			if (strOneLine.substr(0, 2) == "o ")
 			{
 				std::cout << strOneLine << std::endl;
+				std::istringstream s(strOneLine.substr(2));
+				s >> file.second;
 			}
 			prevLine = strOneLine;
 		}
@@ -138,12 +145,11 @@ std::vector<Solid> WaveFrontLoader::GetSolidsFromFile(std::string fileName)
 	//if there are some polygons left to make.
 	if (polygons.size() > 0)
 	{
-		returnValue.push_back(makeSolidFromData());
+		vertexObjects.push_back(makeVBOFromData());
 	}
 
 	//TODO: change that
 	std::cout << "done loading file" << std::endl;
-	return returnValue;
 }
 
 
@@ -204,9 +210,11 @@ int WaveFrontLoader::vertexAndAttributeLink(unsigned int vertex, unsigned int at
 	return correspondingVertex;
 }
 
-Solid WaveFrontLoader::makeSolidFromData()
+
+
+VertexBufferObject * WaveFrontLoader::makeVBOFromData()
 {
-	std::cout << "making obj"<<std::endl;
+	std::cout << "making obj" << std::endl;
 	std::vector<glm::vec3> UVs;
 	//the normals indexed as in the solid
 	std::vector<glm::vec3> normals;
@@ -226,9 +234,11 @@ Solid WaveFrontLoader::makeSolidFromData()
 		}
 
 	}
-	Solid result(solidVertices, polygons);
-	result.setNormals(normals);
-	result.setUVs(UVs);
+	//Solid result(solidVertices, polygons);
+	VertexBufferObject* vbo = new VertexBufferObject(solidVertices, polygons);
+	vbo->setNormals(normals);
+	vbo->setUVs(UVs);
+	vbo->setFilePath(file);
 
 	//We clear the info that are exclusive to a single solid
 	solidVertices.clear();
@@ -236,6 +246,5 @@ Solid WaveFrontLoader::makeSolidFromData()
 	polygons.clear();
 	vertexToNormal.clear();
 	vertexToUV.clear();
-
-	return result;
+	return vbo;
 }

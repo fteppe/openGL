@@ -6,8 +6,9 @@ Light::Light()
 {
 }
 
-Light::Light(glm::vec3 pos, float intensity) : pos(pos), intensity(intensity)
+Light::Light(glm::vec3 pos, float intensity) : intensity(intensity)
 {
+	this->pos = (pos);
 }
 
 std::vector<float> Light::getDataArray()

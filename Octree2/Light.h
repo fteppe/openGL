@@ -1,8 +1,13 @@
 #pragma once
-#include <glm\vec3.hpp>
-#include <glm\matrix.hpp>
+#include <glm/vec3.hpp>
+#include <glm/matrix.hpp>
 #include <vector>
-class Light
+
+
+class GameObject;
+#include "GameObject.h"
+
+class Light : public GameObject
 {
 public:
 	Light();
@@ -12,7 +17,6 @@ public:
 	std::vector<float> getDataArray();
 	~Light();
 
-	glm::vec3 pos;
 	glm::vec3 col;
 	float intensity;
 };

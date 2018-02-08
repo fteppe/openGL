@@ -1,23 +1,34 @@
 #include "stdafx.h"
 #include "Scene.h"
-#include <glm\gtx\transform.hpp>
+#include <glm/gtx/transform.hpp>
+#include "waveFrontLoader.h"
+#include <glm/matrix.hpp>
+#include "CubeMap.h"
 
-#include <glm\matrix.hpp>
+#include <memory>
 
-
+class CubeMap;
 Scene::Scene(Camera cam):cam(cam)
-{
-}
-
-Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
 {
 	light.intensity = 1.0f;
 	light.col = glm::vec3(1, 1, 1);
-	light.pos = glm::vec3(1, 1, 0.5);
+	light.setPos(glm::vec3(1, 1, 0.5));
+	this->cam.setPosition(glm::vec3(-5, 1, 5));
+	this->cam.setTarget(glm::vec3(0, 0, 0));
+	this->cam.setUp(glm::vec3(0, 1, 0));
+
+	clock.restart();
+}
+
+/*Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
+{
+	light.intensity = 1.0f;
+	light.col = glm::vec3(1, 1, 1);
+	light.setPos( glm::vec3(1, 1, 0.5));
 	this->cam.setPosition(glm::vec3(-10, -10, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 0, 1));
-}
+}*/
 
 void Scene::animate(sf::Clock elapsed)
 {
@@ -28,15 +39,16 @@ void Scene::animate(sf::Clock elapsed)
 	glm::mat4 rot = glm::rotate(0.002f, glm::vec3(0, 0, 1));
 	glm::vec3 pos = cam.getPos();
 	//pos = rot * glm::vec4(pos , 1);
-	light.pos = rot * glm::vec4(light.pos, 1);//;glm::vec4(5,0, 3,1);
-
-
-
+	light.setPos( rot * glm::vec4(light.getPos(), 1));//;glm::vec4(5,0, 3,1);
 }
 
 
 Scene::~Scene()
 {
+	for (GameObject* obj : elements)
+	{
+		delete obj;
+	}
 }
 
 void Scene::eventHandler(sf::Event event)
@@ -53,18 +65,6 @@ void Scene::eventHandler(sf::Event event)
 	//this way the angle when rotating doesn't depend on the distance between the camera and the target.
 	perpendicular = perpendicular * (distance / 50);
 	up = up * (distance / 50);
-	//if (event.type == sf::Event::MouseMoved)
-	//{
-	//	sf::Mouse mouse;
-	//	glm::vec2 mousePos(mouse.getPosition().x, mouse.getPosition().y);
-	//	glm::vec2 center(cam.getSize());
-	//	mousePos = mousePos - center;
-	//	target = target + up * mousePos.y;
-	//	target += perpendicular * mousePos.x;
-	//	//cam.setTarget(target);
-	//	//we reset the mouse's position
-	//	//mouse.setPosition(sf::Vector2i(0, 0));
-	//}
 	if (event.type == sf::Event::KeyPressed)
 	{
 		//mouvements lat
@@ -135,8 +135,19 @@ void Scene::renderScene()
 	for (int i = 0; i < elements.size(); i++)
 	{
 		//elements[i].setObjectSpace(rot);
-		elements[i].draw(*this);
+		elements[i]->draw(*this);
 	}
+}
+
+void Scene::load(std::string scene)
+{
+	loader.setSceneToLoad(scene);
+	models = loader.loadModels();
+	textures = loader.loadTextures();
+	shaders = loader.loadShaders();
+	materials = loader.loadMaterials(textures, shaders);
+	elements = loader.loadGameObjects(materials, models);
+	makeSkyBox();
 }
 
 Camera Scene::getCam() const
@@ -147,4 +158,42 @@ Camera Scene::getCam() const
 Light Scene::getLight() const
 {
 	return light;
+}
+
+float Scene::getElapsedTime() const
+{
+	sf::Time time= clock.getElapsedTime();
+	float elapsedTime = time.asSeconds();
+	return elapsedTime;
+}
+
+void Scene::makeSkyBox()
+{
+	//TODO: change this function because this is right now the dirtiest way to do it.
+	//to make a skybox we need a cube to draw the texture on
+	WaveFrontLoader objLoader;
+	std::vector<VertexBufferObject * > vec;
+	objLoader.loadVertexObjectVectorFromFile("obj/common.obj", vec);
+	for (VertexBufferObject * obj : vec)
+	{
+		
+		if (obj->getFilePath().second == "Cube")
+		{
+			this->models["obj/common.obj"]["Cube"] = std::shared_ptr<VertexBufferObject>(obj);
+		}
+	}
+
+	textures["skybox"] = std::shared_ptr<Texture>(new CubeMap);
+	std::string textureDir = "textures/skybox/";
+	std::vector<std::string> tex = { textureDir + "right.jpg", textureDir + "left.jpg", textureDir + "top.jpg", textureDir + "bottom.jpg",  textureDir + "front.jpg",textureDir + "back.jpg" };
+	textures["skybox"]->loadTextures(tex);
+	Shader* shaderSky = new Shader(std::vector<std::string>({ "cubeMap.ver" }), { "cubeMap.frag" });
+	//shaders["skybox"] = std::shared_ptr<Shader>(new Shader(std::vector<std::string>({ "cubeMap.ver" }), { "cubeMap.frag" }));
+	shaders["skybox"] = std::shared_ptr<Shader>(shaderSky);
+	materials["sky"] = std::shared_ptr<Material>(new Material(shaders["skybox"].get()));
+	materials["sky"]->setChannel(textures["skybox"].get(), "skybox");
+	Solid* sky = new Solid(models["obj/common.obj"]["Cube"]);
+	sky->setMaterial(materials["sky"]);
+	sky->setScale(glm::vec3(100, 100, 100));
+	elements.push_back(sky);
 }

@@ -1,8 +1,7 @@
-#include "stdafx.h"
 #include "Cube.h"
 
 
-Cube::Cube(float side) : Solid(makeVert(side),makeIndex())
+Cube::Cube(float side)
 {
 }
 

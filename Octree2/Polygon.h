@@ -2,8 +2,8 @@
 #include "Vec3.h"
 #include <vector>
 #include <string>
-#include <glm\vec3.hpp>
-#include <glew\glew.h>
+#include <glm/vec3.hpp>
+#include <glew/glew.h>
 
 namespace perso {
 	class Polygon

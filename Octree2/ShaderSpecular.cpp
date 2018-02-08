@@ -2,18 +2,12 @@
 #include "ShaderSpecular.h"
 #include "Camera.h"
 #include "Solid.h"
-#include <glm\gtc\type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 
-ShaderSpecular::ShaderSpecular() : Shader("texture.ver","specular.frag")
+ShaderSpecular::ShaderSpecular() : Shader({ "texture.ver" }, { "specular.frag","specularCalc.frag","lightCalc.frag" })
 {
-	//Link errors are expected since we first link without all the necessary files.
-	GLuint specCalc = glCreateShader(GL_FRAGMENT_SHADER);
-	compileShader(specCalc, "shaders/specularCalc.frag");
-	glAttachShader(program, specCalc);
-	glDeleteShader(specCalc);
-	linkProgram();
 }
 
 
@@ -27,7 +21,11 @@ void ShaderSpecular::setProgramInformation(const Scene & scene, const Solid & so
 	Camera cam = scene.getCam();
 	glm::vec3 camPos = cam.getPos();
 	//sending the camera position
-	glUniform3f(glGetUniformLocation(program, "camPos"), camPos.x,camPos.y,camPos.z);
+	if (uniforms.find("camPos") == uniforms.end())
+	{
+		uniforms["camPos"] = glGetUniformLocation(program, "camPos");
+	}
+	glUniform3f(uniforms["camPos"], camPos.x,camPos.y,camPos.z);
 }
 
 
