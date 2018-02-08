@@ -23,11 +23,13 @@ public:
 
 	Camera getCam() const;
 	Light getLight() const;
+	float getElapsedTime() const;
 private:
 	void makeSkyBox();
 
 	Camera cam;
 	Light light;
+	sf::Clock clock;
 	std::vector<GameObject*> elements;
 	GameObject* skybox;
 	SceneLoader loader;

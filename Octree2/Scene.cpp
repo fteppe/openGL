@@ -15,6 +15,8 @@ Scene::Scene(Camera cam):cam(cam)
 	this->cam.setPosition(glm::vec3(-5, 1, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 1, 0));
+
+	clock.restart();
 }
 
 /*Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
@@ -37,9 +39,6 @@ void Scene::animate(sf::Clock elapsed)
 	glm::vec3 pos = cam.getPos();
 	//pos = rot * glm::vec4(pos , 1);
 	light.setPos( rot * glm::vec4(light.getPos(), 1));//;glm::vec4(5,0, 3,1);
-
-
-
 }
 
 
@@ -158,6 +157,13 @@ Camera Scene::getCam() const
 Light Scene::getLight() const
 {
 	return light;
+}
+
+float Scene::getElapsedTime() const
+{
+	sf::Time time= clock.getElapsedTime();
+	float elapsedTime = time.asSeconds();
+	return elapsedTime;
 }
 
 void Scene::makeSkyBox()

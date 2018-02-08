@@ -34,4 +34,6 @@ void ShaderPBR::setProgramInformation(const Scene & scene, const Solid & solid)
 	}
 	//std::cout << camPos.x<<" "<< camPos.y<<" "<< camPos.z << std::endl;
 	glUniform3f(uniforms["camPos"], camPos.x, camPos.y, camPos.z);
+	float time = scene.getElapsedTime();
+	sendFloat("time", time);
 }

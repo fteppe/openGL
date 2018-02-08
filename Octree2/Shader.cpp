@@ -151,10 +151,6 @@ void Shader::sendTexChannels(std::map<std::string, Texture*> textures)
 	}
 }
 
-
-
-
-
 void Shader::compileShader(GLuint shader, std::string shaderPath)
 {
 	std::ifstream shaderSource(shaderPath);
@@ -210,4 +206,16 @@ void Shader::sendMatrix4(std::string name, glm::mat4 matrix)
 		uniforms[name] = glGetUniformLocation(program, name.c_str());
 	}
 	glUniformMatrix4fv(uniforms[name], 1, false, glm::value_ptr(matrix));
+}
+
+void Shader::sendFloat(std::string name, float floatIn)
+{
+	//floatIn = 0.5;
+	int error = glGetError();
+	if (uniforms.find(name) == uniforms.end())
+	{
+		uniforms[name] = glGetUniformLocation(program, name.c_str());
+	}
+	glUniform1f(uniforms["time"], floatIn);
+	error = glGetError();
 }

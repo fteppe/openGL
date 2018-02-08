@@ -26,6 +26,7 @@ protected:
 	void linkProgram();
 	virtual void getUniformLocations();
 	void sendMatrix4(std::string name, glm::mat4);
+	void sendFloat(std::string name, float floatIn);
 
 	unsigned int program;
 	std::map<std::string,GLint> uniforms;

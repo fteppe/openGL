@@ -10,6 +10,7 @@ in vec3 camTan;
 out vec4 FragColor;
 
 uniform float[7] light;
+uniform float time;
 uniform vec3 camPos;
 uniform sampler2D diffuse;
 uniform sampler2D spec;
@@ -21,6 +22,7 @@ vec3 fragLight(float light[7], vec3 normal, vec3 vertexPos);
 vec3 specCalc(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos, float specPow, float specVal);
 vec3 albedo(vec2 UV);
 vec2 parralax(vec3 camTan, vec3 posTan);
+float water();
 
 void main()
 {
@@ -70,19 +72,20 @@ vec3 albedo(vec2 UVin)
 		col = vec3 (0.5,0.5,0) * (height) * 3;
 		if(int(height*100) % 5 < 0.002)
 		{
-			col = vec3(0.2,0.2,0.1);
+			//col = vec3(0.2,0.2,0.1);
 		}
 	}
 	else if (height < 0.1)
 	{
 		col = vec3(0.2,0.2,1);
 	}
+	//col = vec3(abs((sin(time * 4 + vertexPos.x * 20) +  2 * sin( - time  + vertexPos.x*10 + 5) +  sin( - time  + vertexPos.z*10 + 5))/50 ));
 	return col;
 }
 
 vec2 parralax(vec3 camTan, vec3 posTan)
 {
-	float heightScale = 0.1;
+	float heightScale = water();
 	int nbSample = 200;
 
 	float nbSamplef = float(nbSample);
@@ -112,4 +115,9 @@ vec2 parralax(vec3 camTan, vec3 posTan)
 	float weight = delta1 / (delta1+delta2); 
 	//interpolation
 	return v.xy  - (weight) * stepVector ;
+}
+
+float water()
+{
+	return (abs((sin(time * 4 + vertexPos.x * 20) +  2 * sin( - time  + vertexPos.x*10 + 5) +  sin( - time  + vertexPos.z*10 + 5))/50 ));
 }
