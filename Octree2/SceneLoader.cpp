@@ -33,10 +33,11 @@ void SceneLoader::setSceneToLoad(std::string file)
 
 VBO_CONTAINER SceneLoader::loadModels()
 {
-	std::cout<<__FILE__<<" "<<__lINE__<<" loading models"<<std::endl;
+	std::cout<<__FILE__<<" "<<__LINE__<<" loading models"<<std::endl;
 	//rapidjson::Value& objects = d["models"];
 	std::map<std::string, std::map<std::string, std::shared_ptr<VertexBufferObject>>> objects;
 	WaveFrontLoader loader;
+	assert(doc.IsObject());
 	rapidjson::Value& models = doc["models"];
 	std::vector<VertexBufferObject*> loaded;
 	for (unsigned int  i = 0; i < models.Size(); i++)
@@ -53,7 +54,7 @@ VBO_CONTAINER SceneLoader::loadModels()
 
 TEXTURE_CONTAINER SceneLoader::loadTextures()
 {
-	std::cout<<__FILE__<<" "<<__lINE__<<" loading textures"<<std::endl;
+	std::cout<<__FILE__<<" "<<__LINE__<<" loading textures"<<std::endl;
 	TEXTURE_CONTAINER textures;
 	rapidjson::Value::MemberIterator iterator = doc.FindMember("textures");
 	rapidjson::Value& texs = doc["textures"];
@@ -71,7 +72,7 @@ TEXTURE_CONTAINER SceneLoader::loadTextures()
 
 SHADER_CONTAINER SceneLoader::loadShaders()
 {
-	std::cout<<__FILE__<<" "<<__lINE__<<" loading shaders"<<std::endl;
+	std::cout<<__FILE__<<" "<<__LINE__<<" loading shaders"<<std::endl;
 	SHADER_CONTAINER shaders;
 	rapidjson::Value& shadersArray = doc["shaders"];
 	assert(shadersArray.IsArray());

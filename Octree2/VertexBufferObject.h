@@ -2,6 +2,7 @@
 #include <glew/glew.h>
 #include <vector>
 #include "Shader.h"
+//
 //The vertex Buffer object contains all the geometry elements of an object.
 class VertexBufferObject
 {

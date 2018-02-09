@@ -4,6 +4,7 @@
 #include "SceneLoader.h"
 #include <vector>
 #include <SFML/Window.hpp>
+//lol stuffs
 //#include "GameObject.h"
 /*
 This class contains objects, a light and a camera. So we should be able to render a scene.
