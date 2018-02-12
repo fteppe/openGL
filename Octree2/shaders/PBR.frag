@@ -85,7 +85,7 @@ vec3 albedo(vec2 UVin)
 
 vec2 parralax(vec3 camTan, vec3 posTan)
 {
-	float heightScale = water();
+	float heightScale = 0.1;//water();
 	int nbSample = 200;
 
 	float nbSamplef = float(nbSample);
