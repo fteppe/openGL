@@ -38,9 +38,6 @@ WindowBuilder::WindowBuilder()
 
 	window.create(sf::VideoMode(width, height), "openGL", sf::Style::Close, settings);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_POLYGON_SMOOTH);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA_SATURATE, GL_ONE);
 	glewExperimental = GL_TRUE;
 	glewInit();
 

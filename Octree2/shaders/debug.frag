@@ -27,6 +27,6 @@ void main()
 	//intensityVec = intensityVec + vec3(0.1,0.1,0.1);
 	//vec3 color = vec3(0.5,0.5,0.5);//-normal.xy,normal.z);
 	vec2 dir = normalize(posTan.xy - camTan.xy);
-    FragColor = vec4(1);
+    FragColor = vec4(normal,1);
 	//FragColor = vec4(vertexColor, 1);
 } 
