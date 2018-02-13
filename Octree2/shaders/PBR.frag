@@ -80,12 +80,13 @@ vec3 albedo(vec2 UVin)
 		col = vec3(0.2,0.2,1);
 	}
 	//col = vec3(abs((sin(time * 4 + vertexPos.x * 20) +  2 * sin( - time  + vertexPos.x*10 + 5) +  sin( - time  + vertexPos.z*10 + 5))/50 ));
+	//col = vec3(texture(diffuse, UVin));
 	return col;
 }
 
 vec2 parralax(vec3 camTan, vec3 posTan)
 {
-	float heightScale = 0.1;//water();
+	float heightScale = 0.02;//water();
 	int nbSample = 200;
 
 	float nbSamplef = float(nbSample);

@@ -92,7 +92,7 @@ void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::
 					//vertices in a obj file are indexed from 1, our index starts at one
 					int index = strtol(vertIndex.c_str(), NULL, 10) - 1;
 					//We take the normal index.
-					int indexNormal = strtol(match[3].str().c_str(), NULL, 10) - 1;
+					int normalIndex = strtol(match[3].str().c_str(), NULL, 10) - 1;
 					//the UV index
 					int UVindex = strtol(match[2].str().c_str(), NULL, 10) - 1;
 					//For now, we consider the UV to be on an unclonned vertex
@@ -102,21 +102,38 @@ void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::
 						//We check if we need to clone the vertex, or if there is a vertex synonym without UV coordinate.
 						VertToUVindex = vertexAndAttributeLink(index, UVindex, vertexToUV);
 					}
-					int vertToNormalIndex = vertexAndAttributeLink(index, indexNormal, vertexToNormal);
+					int vertToNormalIndex = vertexAndAttributeLink(index, normalIndex, vertexToNormal);
 
 					//A problem arises when you don't need to clone UV but clone the normal. You need to give the cloned vertex it's UV attributes
 					//When we clone we set one of the two attributes, leaving one empty. Each vertex must have both the UV AND the normal attribute. If it doesn't the rendering will have bugs. 
 					if (VertToUVindex > vertToNormalIndex)
 					{
-						//If the two vertices index are different, it means that one was cloned, but not the other. In that case the cloned vertex needs to get the informations of the original.
-
-						vertexToNormal[VertToUVindex] = vertexToNormal[vertToNormalIndex];
+						//If the two vertices index are different, it means that one was cloned, but not the other. In that case the cloned vertex needs to get the informations of the original.					
+						if (vertexToNormal.find(VertToUVindex) == vertexToNormal.end())
+						{
+							vertexToNormal[VertToUVindex] = vertexToNormal[vertToNormalIndex];
+						}
 					}
 					else if (VertToUVindex < vertToNormalIndex)
 					{
-						vertexToUV[vertToNormalIndex] = vertexToUV[VertToUVindex];
+						//if it doesn't already have a value.
+						if (vertexToUV.find(vertToNormalIndex) == vertexToUV.end())
+						{
+							vertexToUV[vertToNormalIndex] = vertexToUV[VertToUVindex];
+						}
 					}
 					int finalIndex = vertToNormalIndex;
+					//We try to figure out which of our cloned vertex is the right one. It needs to give the right value for the UV vector and the normal vector
+					if (vertexToUV[VertToUVindex] == UVindex && vertexToNormal[VertToUVindex] == normalIndex)
+					{
+						finalIndex = VertToUVindex;
+					}
+					else if (vertexToUV[vertToNormalIndex] == UVindex && vertexToNormal[vertToNormalIndex] == normalIndex)
+					{
+						finalIndex = vertToNormalIndex;
+					}
+					
+					
 					face.push_back(finalIndex);
 				}
 				polygons.push_back(face);
