@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "SceneLoader.h"
+#include "FrameBuffer.h"
 #include <vector>
 #include <SFML/Window.hpp>
 //#include "GameObject.h"
@@ -13,7 +14,6 @@ class Scene
 	friend class EventHandler;
 public:
 	Scene(Camera cam);
-	Scene(std::vector<Solid> elem, Camera cam);
 	void animate(sf::Clock elapsed);
 	~Scene();
 	void eventHandler(sf::Event event);
@@ -23,6 +23,7 @@ public:
 
 	Camera getCam() const;
 	Light getLight() const;
+	std::shared_ptr<Texture> getTexture(std::string tex);
 	float getElapsedTime() const;
 private:
 	void makeSkyBox();
@@ -32,6 +33,7 @@ private:
 	sf::Clock clock;
 	std::vector<GameObject*> elements;
 	GameObject* skybox;
+	FrameBuffer* frame;
 	SceneLoader loader;
 
 	VBO_CONTAINER models;

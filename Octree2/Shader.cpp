@@ -132,6 +132,9 @@ void Shader::setProgramInformation(Scene const& scene, Solid const& object)
 	//we send the light data to the shader, for now we can handle only one light
 	glUniform1fv(uniforms["light"], lightData.size(), &lightData[0]);
 
+	uniforms["reflectionTex"] = glGetUniformLocation(program, "reflectionTex");
+	//scene.getTexture("reflection")->app
+
 }
 
 void Shader::sendTexChannels(std::map<std::string, Texture*> textures)

@@ -17,6 +17,11 @@ Texture::~Texture()
 	glDeleteTextures(1, &textureID);
 }
 
+void Texture::bind()
+{
+	glBindTexture(textureType, this->textureID);
+}
+
 void Texture::loadTexture(std::string textureName)
 {
 	int width, height, nrChannels;

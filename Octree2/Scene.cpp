@@ -17,6 +17,12 @@ Scene::Scene(Camera cam):cam(cam)
 	this->cam.setUp(glm::vec3(0, 1, 0));
 
 	clock.restart();
+
+	//frame = new FrameBuffer;
+	textures["reflection"] = std::shared_ptr<Texture>(new Texture);
+	//frame->attachOutputTexture(textures["reflection"]);
+	//frame->renderToScreen();
+
 }
 
 /*Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
@@ -48,78 +54,8 @@ Scene::~Scene()
 	{
 		delete obj;
 	}
-}
-
-void Scene::eventHandler(sf::Event event)
-{
-	glm::vec3 campPos = cam.getPos();
-	glm::vec3 target = cam.getTarget();
-	glm::vec3 up = cam.getUp();
-	glm::vec3 dir = target - campPos;
-	glm::vec3 dirNorm = glm::normalize(dir);
-	float distance = glm::length(dir);
-	dir = glm::normalize(dir);
-	glm::vec3 perpendicular = glm::cross(dir, up);
-
-	//this way the angle when rotating doesn't depend on the distance between the camera and the target.
-	perpendicular = perpendicular * (distance / 50);
-	up = up * (distance / 50);
-	if (event.type == sf::Event::KeyPressed)
-	{
-		//mouvements lat
-		sf::Keyboard keyboard;
-		if (keyboard.isKeyPressed(keyboard.Z))
-		{
-			target = (target + dirNorm);
-			campPos = (campPos + dirNorm);
-		}
-		if (keyboard.isKeyPressed(keyboard.S))
-		{
-			target = (target - dirNorm);
-			campPos = (campPos +-dirNorm);
-		}
-		if (keyboard.isKeyPressed(keyboard.D))
-		{
-			
-			target = (target + perpendicular);
-			campPos = (campPos + perpendicular);
-		}
-		if (keyboard.isKeyPressed(keyboard.Q))
-		{
-			target = target - perpendicular;
-			campPos -= perpendicular;
-
-		}
-		if (keyboard.isKeyPressed(keyboard.Space))
-		{
-			target += up;
-			campPos += up;
-		}
-		if (keyboard.isKeyPressed(keyboard.LControl))
-		{
-			target -= up;
-			campPos -= up;
-		}
-		//mouv rot
-		if (keyboard.isKeyPressed(keyboard.Left))
-		{
-			target = target - perpendicular;
-		}
-		if (keyboard.isKeyPressed(keyboard.Right))
-		{
-			target = target + perpendicular;
-		}
-		if (keyboard.isKeyPressed(keyboard.Down))
-		{
-			target = target - up;
-		}
-		if (keyboard.isKeyPressed(keyboard.Up))
-		{
-			target = target + up;
-		}
-	}
-	cam.setTarget(target);
-	cam.setPosition(campPos);
+	delete skybox;
+	delete frame;
 }
 
 void Scene::setCamera(Camera camera) 
@@ -129,8 +65,13 @@ void Scene::setCamera(Camera camera)
 
 void Scene::renderScene()
 {
-	glm::mat4 rot(glm::rotate(0.5f, glm::vec3(1.0, 0, 0)));
-
+	//frame->renderToThis();
+	for (int i = 0; i < elements.size(); i++)
+	{
+		//elements[i].setObjectSpace(rot);
+		elements[i]->draw(*this);
+	}
+	//frame->renderToScreen();
 	for (int i = 0; i < elements.size(); i++)
 	{
 		//elements[i].setObjectSpace(rot);
@@ -157,6 +98,11 @@ Camera Scene::getCam() const
 Light Scene::getLight() const
 {
 	return light;
+}
+
+std::shared_ptr<Texture> Scene::getTexture(std::string tex)
+{
+	return textures[tex];
 }
 
 float Scene::getElapsedTime() const
