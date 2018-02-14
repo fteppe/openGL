@@ -1,7 +1,7 @@
  #version 330 core
-in vec3 normal;
+in vec3 normalWorld;
 in vec3 vertexColor;
-in vec3 vertexPos;
+in vec3 fragPosWorld;
 in vec2 UV;
 in vec3 posTan;
 in vec3 camTan;
@@ -19,16 +19,16 @@ uniform sampler2D depthMap;
 uniform sampler2D reflectionTex;
 
 
-vec3 fragLight(float light[7], vec3 normal, vec3 vertexPos);
-vec3 specCalc(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos, float specPow, float specVal);
+vec3 fragLight(float light[7], vec3 normalWorld, vec3 fragPosWorld);
+vec3 specCalc(float light[7], vec3 normalWorld, vec3 fragPosWorld, vec3 camPos, float specPow, float specVal);
 vec3 albedo(vec2 UV);
 vec2 parralax(vec3 camTan, vec3 posTan);
 float water();
 
 void main()
 {
-	vec3 pos = vertexPos;
-	vec3 normal_ = normal;
+	vec3 pos = fragPosWorld;
+	vec3 normal_ = normalWorld;
 	vec2 translation = parralax(camTan, posTan);
 	vec2 newUV = UV + translation;
 
@@ -37,7 +37,7 @@ void main()
 		discard;
 	}
 	vec3 bumpVal = texture(normalMap, newUV).rgb;
-	normal_ = normalize(normal + bumpVal);
+	normal_ = normalize(normalWorld + bumpVal);
 	
 	vec4 specularity = vec4(texture(depthMap, newUV));
 	float specVal = (specularity.r);
@@ -80,7 +80,7 @@ vec3 albedo(vec2 UVin)
 	{
 		col = vec3(0.2,0.2,1);
 	}
-	col = vec3(texture(reflectionTex,UVin));
+	col = vec3(texture(reflectionTex,gl_FragCoord.xy));
 
 	return col;
 }
@@ -121,5 +121,5 @@ vec2 parralax(vec3 camTan, vec3 posTan)
 
 float water()
 {
-	return (abs((sin(time * 4 + vertexPos.x * 20) +  2 * sin( - time  + vertexPos.x*10 + 5) +  sin( - time  + vertexPos.z*10 + 5))/50 ));
+	return (abs((sin(time * 4 + fragPosWorld.x * 20) +  2 * sin( - time  + fragPosWorld.x*10 + 5) +  sin( - time  + fragPosWorld.z*10 + 5))/50 ));
 }

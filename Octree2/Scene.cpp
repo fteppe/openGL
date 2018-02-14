@@ -71,7 +71,9 @@ void Scene::renderScene()
 	error = glGetError();
 	renderPass = 1;
 	frame->renderToScreen();
+	elements[1]->draw(*this);
 	elements[0]->draw(*this);
+	
 	error = glGetError();
 }
 

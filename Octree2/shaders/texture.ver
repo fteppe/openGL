@@ -5,9 +5,9 @@ layout (location = 2) in vec2 aUV;
 layout (location = 3) in vec3 tangent;
 layout (location = 4) in vec3 biTangent;
 
-out vec3 vertexPos;
+out vec3 fragPosWorld;
 out vec3 vertexColor;
-out vec3 normal;
+out vec3 normalWorld;
 out vec2 UV;
 out vec3 posTan;
 out vec3 camTan;
@@ -25,10 +25,10 @@ void main()
 {
 
 	
-	normal = normalize(aNormal);
-	normal = vec3(objectSpace*vec4(normal,1));
-	vertexPos = vec3(objectSpace * vec4(aPos,1));
-	vertexColor = normal;
+	normalWorld = normalize(aNormal);
+	normalWorld = vec3(objectSpace*vec4(normalWorld,1));
+	fragPosWorld = vec3(objectSpace * vec4(aPos,1));
+	vertexColor = normalWorld;
 	UV = aUV;
 	//This matrix will take any vector from world coorinate and tranform it to tangent coordinate.
 	mat3 TBN = basisChange(tangent, biTangent, aNormal);
