@@ -15,8 +15,8 @@ public:
 	//Although it is the shader object that will handle sending this information, so a object inheriting form shader could redefine this.
 	void setChannel(Texture* text, std::string channel);
 	//We send all the relevent informations to the shader that will be necessary for the shader program
-	virtual void setProgramInformation(Scene const& scene, Solid const& object);
-	void apply(VertexBufferObject* const& VBO, Scene const& scene, Solid const& solid);
+	virtual void setProgramInformation(Scene& scene, Solid const& object);
+	void apply(VertexBufferObject* const& VBO, Scene & scene, Solid const& solid);
 private:
 	//We have a pointer on a shader because the same shader can be used with different textures.
 	//No ownership of the shader, is only an observer.

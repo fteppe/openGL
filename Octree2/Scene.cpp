@@ -17,23 +17,12 @@ Scene::Scene(Camera cam):cam(cam)
 	this->cam.setUp(glm::vec3(0, 1, 0));
 
 	clock.restart();
+	frame = new FrameBuffer;
 
-	//frame = new FrameBuffer;
-	textures["reflection"] = std::shared_ptr<Texture>(new Texture);
-	//frame->attachOutputTexture(textures["reflection"]);
-	//frame->renderToScreen();
+	frame->renderToScreen();
 
 }
 
-/*Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
-{
-	light.intensity = 1.0f;
-	light.col = glm::vec3(1, 1, 1);
-	light.setPos( glm::vec3(1, 1, 0.5));
-	this->cam.setPosition(glm::vec3(-10, -10, 5));
-	this->cam.setTarget(glm::vec3(0, 0, 0));
-	this->cam.setUp(glm::vec3(0, 0, 1));
-}*/
 
 void Scene::animate(sf::Clock elapsed)
 {
@@ -65,18 +54,25 @@ void Scene::setCamera(Camera camera)
 
 void Scene::renderScene()
 {
-	//frame->renderToThis();
+	int error = glGetError();
+	renderPass = 0;
+	frame->renderToThis();
+	/*
 	for (int i = 0; i < elements.size(); i++)
 	{
-		//elements[i].setObjectSpace(rot);
+
+		elements[i]->setPos(glm::vec3(0));
 		elements[i]->draw(*this);
 	}
-	//frame->renderToScreen();
-	for (int i = 0; i < elements.size(); i++)
-	{
-		//elements[i].setObjectSpace(rot);
-		elements[i]->draw(*this);
-	}
+	*/
+	elements[1]->draw(*this);
+	//textures["textures/EyCkvNyNormal.png"]->readData();
+	//textures["reflection"]->readData();
+	error = glGetError();
+	renderPass = 1;
+	frame->renderToScreen();
+	elements[0]->draw(*this);
+	error = glGetError();
 }
 
 void Scene::load(std::string scene)
@@ -88,6 +84,12 @@ void Scene::load(std::string scene)
 	materials = loader.loadMaterials(textures, shaders);
 	elements = loader.loadGameObjects(materials, models);
 	makeSkyBox();
+
+
+	textures["reflection"] = std::shared_ptr<Texture>(new Texture);
+	materials["mat1"]->setChannel(textures["reflection"].get(), "reflectionTex");
+	frame->attachOutputTexture(textures["reflection"]);
+
 }
 
 Camera Scene::getCam() const
@@ -100,9 +102,10 @@ Light Scene::getLight() const
 	return light;
 }
 
-std::shared_ptr<Texture> Scene::getTexture(std::string tex)
+std::shared_ptr<Texture> Scene::getTexture(std::string tex) 
 {
-	return textures[tex];
+	std::shared_ptr<Texture> texture =  textures[tex];
+	return texture;
 }
 
 float Scene::getElapsedTime() const

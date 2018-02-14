@@ -11,7 +11,7 @@ out vec3 normal;
 out vec2 UV;
 out vec3 posTan;
 out vec3 camTan;
-out vec3 tang;
+
 
 uniform vec3 camPos;
 uniform mat4 mvp;
@@ -24,7 +24,7 @@ mat3 basisChange(vec3 u,vec3 v, vec3 w);
 void main()
 {
 
-	tang = tangent;
+	
 	normal = normalize(aNormal);
 	normal = vec3(objectSpace*vec4(normal,1));
 	vertexPos = vec3(objectSpace * vec4(aPos,1));

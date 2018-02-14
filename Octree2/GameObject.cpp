@@ -56,7 +56,7 @@ glm::mat4 GameObject::getmodelMatrix() const
 	return modelMatrix;
 }
 
-void GameObject::draw(Scene const & scene) const
+void GameObject::draw(Scene & scene)
 {
 }
 

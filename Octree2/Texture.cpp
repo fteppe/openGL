@@ -24,7 +24,6 @@ void Texture::bind()
 
 void Texture::loadTexture(std::string textureName)
 {
-	int width, height, nrChannels;
 	unsigned char* data;
 
 	texturePath = textureName;
@@ -60,7 +59,6 @@ void Texture::applyTexture(GLuint program, GLuint texturePos, int textureUnit)
 	
 	// set the texture wrapping/filtering options (on the currently bound texture object)
 	glUseProgram(program);
-	int error = glGetError();
 	//data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);
 	if (1)
 	{		
@@ -68,7 +66,6 @@ void Texture::applyTexture(GLuint program, GLuint texturePos, int textureUnit)
 		glBindTexture(textureType, textureID);
 
 		glUniform1i(texturePos, textureUnit); // set it manually
-		error = glGetError();
 	}
 	else
 	{
@@ -77,8 +74,24 @@ void Texture::applyTexture(GLuint program, GLuint texturePos, int textureUnit)
 
 }
 
+void Texture::readData()
+{
+	glBindTexture(textureType, textureID);
+	unsigned char* data = new unsigned char[width * height * nrChannels];
+	glGetTexImage(textureType, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	delete data;
+}
+
+GLuint Texture::getId()
+{
+	return textureID;
+}
+
 void Texture::loadImage(GLuint texType, int width, int height, int nrChannels, unsigned char * data)
 {
+	this->width = width;
+	this->height = height;
+	this->nrChannels = nrChannels;
 	if (nrChannels == 1)
 	{
 		glTexImage2D(texType, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);

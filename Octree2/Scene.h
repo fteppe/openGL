@@ -16,15 +16,18 @@ public:
 	Scene(Camera cam);
 	void animate(sf::Clock elapsed);
 	~Scene();
-	void eventHandler(sf::Event event);
 	void setCamera(Camera camera);
 	void renderScene();
 	void load(std::string scene);
 
 	Camera getCam() const;
 	Light getLight() const;
-	std::shared_ptr<Texture> getTexture(std::string tex);
+	std::shared_ptr<Texture> getTexture(std::string tex) ; 
 	float getElapsedTime() const;
+
+	//TODO: remove it and replace by proper renderPass object
+	unsigned renderPass;
+
 private:
 	void makeSkyBox();
 

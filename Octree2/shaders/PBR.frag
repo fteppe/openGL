@@ -7,7 +7,7 @@ in vec3 posTan;
 in vec3 camTan;
 //in vec3 tang;
  
-out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
 
 uniform float[7] light;
 uniform float time;
@@ -16,6 +16,7 @@ uniform sampler2D diffuse;
 uniform sampler2D spec;
 uniform sampler2D normalMap;
 uniform sampler2D depthMap;
+uniform sampler2D reflectionTex;
 
 
 vec3 fragLight(float light[7], vec3 normal, vec3 vertexPos);
@@ -36,7 +37,7 @@ void main()
 		discard;
 	}
 	vec3 bumpVal = texture(normalMap, newUV).rgb;
-	normal_ = normalize(normal + bumpVal * 100);
+	normal_ = normalize(normal + bumpVal);
 	
 	vec4 specularity = vec4(texture(depthMap, newUV));
 	float specVal = (specularity.r);
@@ -79,8 +80,8 @@ vec3 albedo(vec2 UVin)
 	{
 		col = vec3(0.2,0.2,1);
 	}
-	//col = vec3(abs((sin(time * 4 + vertexPos.x * 20) +  2 * sin( - time  + vertexPos.x*10 + 5) +  sin( - time  + vertexPos.z*10 + 5))/50 ));
-	//col = vec3(texture(diffuse, UVin));
+	col = vec3(texture(reflectionTex,UVin));
+
 	return col;
 }
 

@@ -40,6 +40,8 @@ WindowBuilder::WindowBuilder()
 	glEnable(GL_DEPTH_TEST);
 	glewExperimental = GL_TRUE;
 	glewInit();
+	//apparently an old implementation bug tends to raise an error on startup. We call geterror to remove it.
+	glGetError();
 
 
 
@@ -81,7 +83,6 @@ WindowBuilder::WindowBuilder()
 			clock.restart();
 			
 			scene->renderScene();
-			//int error = glGetError();
 			window.display();
 		}
 

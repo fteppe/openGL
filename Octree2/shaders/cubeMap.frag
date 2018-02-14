@@ -2,7 +2,7 @@
 
 in vec3 vertexPos;
 
-out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
 
 uniform samplerCube skybox;
 

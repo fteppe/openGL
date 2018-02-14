@@ -19,7 +19,7 @@ public:
 	//Shader(const Shader& shader);
 	~Shader();
 	unsigned int getProgram() const;
-	virtual void setProgramInformation(Scene const& scene,Solid const& object);
+	virtual void setProgramInformation(Scene & scene,Solid const& object);
 	void sendTexChannels(std::map<std::string, Texture*> textures);
 protected:
 	void compileShader(GLuint shader, std::string shaderPath);
