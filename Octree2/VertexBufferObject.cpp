@@ -68,7 +68,7 @@ void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, s
 	int arraySize = 0;
 	std::vector<GLfloat> flatVert;
 	//we flatten the 2D array -> 1D array. So we can have all the vertex and their attributes back to back AAAAAABBBBBBBBCCCCCC etc...
-	for (int i = 0; i < vertices.size(); i++)
+	for (unsigned i = 0; i < vertices.size(); i++)
 	{
 		flatVert.insert(flatVert.end(), vertices[i].begin(), vertices[i].end());
 	}
@@ -82,7 +82,7 @@ void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, s
 	int offset = 0;
 	glBindVertexArray(VertexArrayID);
 	//This allows us to tell openGL how to separate all of our datas.
-	for (int i = 0; i < vertices.size(); i++)
+	for (unsigned i = 0; i < vertices.size(); i++)
 	{
 		//we enable the attrib array, meaning i is the number of attribute for one vertex, if there is vertexPos + normal + uv 
 		//i=0 => vertex; i=1 => normal ... 
@@ -172,7 +172,7 @@ void VertexBufferObject::updateObjectAttributes()
 	std::vector<int> flatIndex;
 	//We should be able to do that before instead of doing it every frame.
 	//We flatten all our arrays;
-	for (int i = 0; i < vertices.size(); i++)
+	for (unsigned i = 0; i < vertices.size(); i++)
 	{
 		vec = std::vector<GLfloat>({ vertices[i].x, vertices[i].y, vertices[i].z });
 		vertArray.insert(vertArray.end(), vec.begin(), vec.end());
@@ -229,6 +229,7 @@ void VertexBufferObject::updateObjectAttributes()
 	if (tangentsArray.size() > 0)
 	{
 		//if we have tangents we als ohave bitangents
+		
 		vertexData.push_back(tangentsArray);
 		attributeSize.push_back(3);
 		vertexData.push_back(biTangentsArray);

@@ -66,14 +66,7 @@ WindowBuilder::WindowBuilder()
 		//std::cout << '\r' << std::setw(4) << std::setfill(' ');
 		if (needNewFrame)
 		{
-			if (window.pollEvent(event))
-			{
-				//scene->eventHandler(event);
-				handler.handle(event);
-				// "close requested" event: we close the window
-				if (event.type == sf::Event::Closed)
-					window.close();
-			}
+
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			//scene.animate(clock);
@@ -84,6 +77,14 @@ WindowBuilder::WindowBuilder()
 			
 			scene->renderScene();
 			window.display();
+		}
+		if (window.pollEvent(event))
+		{
+			//scene->eventHandler(event);
+			handler.handle(event);
+			// "close requested" event: we close the window
+			if (event.type == sf::Event::Closed)
+				window.close();
 		}
 
 
