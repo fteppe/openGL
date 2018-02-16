@@ -111,7 +111,7 @@ unsigned int Shader::getProgram() const
 
 
 
-void Shader::setProgramInformation(Scene const& scene, Solid const& object)
+void Shader::setProgramInformation(Scene& scene, Solid const& object)
 {
 	glUseProgram(program);
 	Camera cam = scene.getCam();
@@ -132,6 +132,7 @@ void Shader::setProgramInformation(Scene const& scene, Solid const& object)
 	//we send the light data to the shader, for now we can handle only one light
 	glUniform1fv(uniforms["light"], lightData.size(), &lightData[0]);
 
+	uniforms["reflectionTex"] = glGetUniformLocation(program, "reflectionTex");
 }
 
 void Shader::sendTexChannels(std::map<std::string, Texture*> textures)
@@ -146,7 +147,9 @@ void Shader::sendTexChannels(std::map<std::string, Texture*> textures)
 		{
 			uniforms[it->first] = glGetUniformLocation(program, it->first.c_str());
 		}
+
 		it->second->applyTexture(program, uniforms[it->first], i);
+
 		i++;
 	}
 }
@@ -211,11 +214,11 @@ void Shader::sendMatrix4(std::string name, glm::mat4 matrix)
 void Shader::sendFloat(std::string name, float floatIn)
 {
 	//floatIn = 0.5;
-	int error = glGetError();
+
 	if (uniforms.find(name) == uniforms.end())
 	{
 		uniforms[name] = glGetUniformLocation(program, name.c_str());
 	}
 	glUniform1f(uniforms["time"], floatIn);
-	error = glGetError();
+
 }

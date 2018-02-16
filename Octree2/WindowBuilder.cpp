@@ -38,11 +38,10 @@ WindowBuilder::WindowBuilder()
 
 	window.create(sf::VideoMode(width, height), "openGL", sf::Style::Close, settings);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_POLYGON_SMOOTH);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA_SATURATE, GL_ONE);
 	glewExperimental = GL_TRUE;
 	glewInit();
+	//apparently an old implementation bug tends to raise an error on startup. We call geterror to remove it.
+	glGetError();
 
 
 
@@ -67,14 +66,7 @@ WindowBuilder::WindowBuilder()
 		//std::cout << '\r' << std::setw(4) << std::setfill(' ');
 		if (needNewFrame)
 		{
-			if (window.pollEvent(event))
-			{
-				//scene->eventHandler(event);
-				handler.handle(event);
-				// "close requested" event: we close the window
-				if (event.type == sf::Event::Closed)
-					window.close();
-			}
+
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			//scene.animate(clock);
@@ -84,8 +76,15 @@ WindowBuilder::WindowBuilder()
 			clock.restart();
 			
 			scene->renderScene();
-			//int error = glGetError();
 			window.display();
+		}
+		if (window.pollEvent(event))
+		{
+			//scene->eventHandler(event);
+			handler.handle(event);
+			// "close requested" event: we close the window
+			if (event.type == sf::Event::Closed)
+				window.close();
 		}
 
 

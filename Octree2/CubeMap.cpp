@@ -9,7 +9,7 @@ CubeMap::CubeMap() : Texture()
 
 void CubeMap::loadTextures(std::vector<std::string > cubeMapElements)
 {
-	GLint error = glGetError();
+
 	int width, height, nrChannels;
 	unsigned char* data;
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
@@ -36,7 +36,7 @@ void CubeMap::loadTextures(std::vector<std::string > cubeMapElements)
 	//once the texture has been loaded we free it from the ram where it is no longer used.
 	
 	glGenerateMipmap(textureType);
-	error = glGetError();
+
 
 	
 }

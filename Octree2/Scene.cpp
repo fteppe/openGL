@@ -18,17 +18,12 @@ Scene::Scene(Camera cam):cam(cam)
 	this->cam.setUp(glm::vec3(0, 1, 0));
 
 	clock.restart();
+	frame = new FrameBuffer;
+
+	frame->renderToScreen();
+
 }
 
-/*Scene::Scene(std::vector<Solid> elem, Camera cam) : elements(elem), cam(cam)
-{
-	light.intensity = 1.0f;
-	light.col = glm::vec3(1, 1, 1);
-	light.setPos( glm::vec3(1, 1, 0.5));
-	this->cam.setPosition(glm::vec3(-10, -10, 5));
-	this->cam.setTarget(glm::vec3(0, 0, 0));
-	this->cam.setUp(glm::vec3(0, 0, 1));
-}*/
 
 void Scene::animate(sf::Clock elapsed)
 {
@@ -49,78 +44,8 @@ Scene::~Scene()
 	{
 		delete obj;
 	}
-}
-
-void Scene::eventHandler(sf::Event event)
-{
-	glm::vec3 campPos = cam.getPos();
-	glm::vec3 target = cam.getTarget();
-	glm::vec3 up = cam.getUp();
-	glm::vec3 dir = target - campPos;
-	glm::vec3 dirNorm = glm::normalize(dir);
-	float distance = glm::length(dir);
-	dir = glm::normalize(dir);
-	glm::vec3 perpendicular = glm::cross(dir, up);
-
-	//this way the angle when rotating doesn't depend on the distance between the camera and the target.
-	perpendicular = perpendicular * (distance / 50);
-	up = up * (distance / 50);
-	if (event.type == sf::Event::KeyPressed)
-	{
-		//mouvements lat
-		sf::Keyboard keyboard;
-		if (keyboard.isKeyPressed(keyboard.Z))
-		{
-			target = (target + dirNorm);
-			campPos = (campPos + dirNorm);
-		}
-		if (keyboard.isKeyPressed(keyboard.S))
-		{
-			target = (target - dirNorm);
-			campPos = (campPos +-dirNorm);
-		}
-		if (keyboard.isKeyPressed(keyboard.D))
-		{
-			
-			target = (target + perpendicular);
-			campPos = (campPos + perpendicular);
-		}
-		if (keyboard.isKeyPressed(keyboard.Q))
-		{
-			target = target - perpendicular;
-			campPos -= perpendicular;
-
-		}
-		if (keyboard.isKeyPressed(keyboard.Space))
-		{
-			target += up;
-			campPos += up;
-		}
-		if (keyboard.isKeyPressed(keyboard.LControl))
-		{
-			target -= up;
-			campPos -= up;
-		}
-		//mouv rot
-		if (keyboard.isKeyPressed(keyboard.Left))
-		{
-			target = target - perpendicular;
-		}
-		if (keyboard.isKeyPressed(keyboard.Right))
-		{
-			target = target + perpendicular;
-		}
-		if (keyboard.isKeyPressed(keyboard.Down))
-		{
-			target = target - up;
-		}
-		if (keyboard.isKeyPressed(keyboard.Up))
-		{
-			target = target + up;
-		}
-	}
-	cam.setTarget(target);
-	cam.setPosition(campPos);
+	delete skybox;
+	delete frame;
 }
 
 void Scene::setCamera(Camera camera) 
@@ -130,13 +55,27 @@ void Scene::setCamera(Camera camera)
 
 void Scene::renderScene()
 {
-	glm::mat4 rot(glm::rotate(0.5f, glm::vec3(1.0, 0, 0)));
-
+	int error = glGetError();
+	renderPass = 0;
+	frame->renderToThis();
+	/*
 	for (int i = 0; i < elements.size(); i++)
 	{
-		//elements[i].setObjectSpace(rot);
+
+		elements[i]->setPos(glm::vec3(0));
 		elements[i]->draw(*this);
 	}
+	*/
+	elements[1]->draw(*this);
+	//textures["textures/EyCkvNyNormal.png"]->readData();
+	//textures["reflection"]->readData();
+	error = glGetError();
+	renderPass = 1;
+	frame->renderToScreen();
+	elements[1]->draw(*this);
+	elements[0]->draw(*this);
+	
+	error = glGetError();
 }
 
 void Scene::load(std::string scene)
@@ -148,6 +87,12 @@ void Scene::load(std::string scene)
 	materials = loader.loadMaterials(textures, shaders);
 	elements = loader.loadGameObjects(materials, models);
 	makeSkyBox();
+
+
+	textures["reflection"] = std::shared_ptr<Texture>(new Texture);
+	materials["mat1"]->setChannel(textures["reflection"].get(), "reflectionTex");
+	frame->attachOutputTexture(textures["reflection"]);
+
 }
 
 Camera Scene::getCam() const
@@ -158,6 +103,12 @@ Camera Scene::getCam() const
 Light Scene::getLight() const
 {
 	return light;
+}
+
+std::shared_ptr<Texture> Scene::getTexture(std::string tex) 
+{
+	std::shared_ptr<Texture> texture =  textures[tex];
+	return texture;
 }
 
 float Scene::getElapsedTime() const

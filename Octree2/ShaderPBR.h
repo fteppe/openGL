@@ -10,6 +10,6 @@ public:
 	ShaderPBR(std::vector<std::string> vertexShaders, std::vector<std::string> fragmentShaders);
 	~ShaderPBR();
 
-	void setProgramInformation(const Scene& scene, const Solid& solid);
+	void setProgramInformation( Scene& scene, const Solid& solid);
 };
 

@@ -11,10 +11,12 @@ EXE = app
 
 
 
-all: $(EXE)
+all: $(EXE) 
 	echo "building app"
 #echo $(OBJ)
 #echo $(DEPENDFILES)
+$(BUILDDIR) : 
+	mkdir $(BUILDDIR)
 
 $(EXE) : $(OBJ) $(DEPENDFILE)
 	$(CXX)  -g   $(OBJ) $(LIB) -o $(EXE)
@@ -22,13 +24,13 @@ $(EXE) : $(OBJ) $(DEPENDFILE)
 $(BUILDDIR)%.o:
 	$(CXX) -g -c $< $(FLAGS) $(INCLUDES) -o $@
 
-$(BUILDDIR)%.dep : %.cpp %.h
+$(BUILDDIR)%.dep : %.cpp %.h $(BUILDDIR)
 	g++ -MM -MT $(<:%.cpp=$(BUILDDIR)%.o) $< > $@
 
 $PHONY test:
 	echo $(OBJ)
 
 $PHONY clean:
-	rm $(BUILDDIR)*.o
+	rm $(BUILDDIR)*
 
 -include $(DEPENDFILES)

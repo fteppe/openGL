@@ -1,7 +1,9 @@
  #version 330 core
-in vec3 normal;
+in vec3 normalWorld;
+in vec3 tangentWorld;
+in vec3 biTangentWorld;
 in vec3 vertexColor;
-in vec3 vertexPos;
+in vec3 fragPosWorld;
 in vec2 UV;
 in vec3 posTan;
 in vec3 camTan;
@@ -16,27 +18,26 @@ uniform sampler2D diffuse;
 uniform sampler2D spec;
 uniform sampler2D normalMap;
 uniform sampler2D depthMap;
+//uniform sampler2D reflectionTex;
 
 
-vec3 fragLight(float light[7], vec3 normal, vec3 vertexPos);
-vec3 specCalc(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos, float specPow, float specVal);
+vec3 fragLight(float light[7], vec3 normalWorld, vec3 fragPosWorld);
+vec3 specCalc(float light[7], vec3 normalWorld, vec3 fragPosWorld, vec3 camPos, float specPow, float specVal);
 vec3 albedo(vec2 UV);
+vec3 normalValue(vec3 normal, vec3 tangent, vec3 bitTangent,vec2 UVin);
 vec2 parralax(vec3 camTan, vec3 posTan);
 float water();
 
 void main()
 {
-	vec3 pos = vertexPos;
-	vec3 normal_ = normal;
+	vec3 pos = fragPosWorld;
+	vec3 normal_ = vec3(0,1,0);//normalWorld;
 	vec2 translation = parralax(camTan, posTan);
 	vec2 newUV = UV + translation;
 
-	if(newUV.x > 1 ||newUV.x <0 ||newUV.y>1 || newUV.y<0)
-	{
-		discard;
-	}
-	vec3 bumpVal = texture(normalMap, newUV).rgb;
-	normal_ = normalize(normal + bumpVal * 100);
+
+	vec3 bumpVal = texture(normalMap, UV).rgb;
+	normal_ = normalValue(normalWorld, tangentWorld, biTangentWorld, newUV);
 	
 	vec4 specularity = vec4(texture(depthMap, newUV));
 	float specVal = (specularity.r);
@@ -46,7 +47,7 @@ void main()
 	}
 	else
 	{
-		specVal = 1;
+		specVal = 0;
 	}
 
 	float specPow = 32;
@@ -56,9 +57,11 @@ void main()
 	vec3 intensityVec = fragLight(light, normal_, pos);
 	vec3 specVec = specCalc(light, normal_, pos, camPos, specPow, specVal);
 	vec4 color = vec4(albedo(newUV),1);
-	//vec4 color = vec4(vec3(1),1);
+	//vec4 color = vec4(normal_,1);
     FragColor = vec4(  intensityVec + specVec + ambiant,1) * color;
-	//FragColor = vec4(1);
+	//FragColor = vec4(normal_,1);
+	//FragColor = texture(normalMap, newUV);
+
 	
 }
 
@@ -79,13 +82,14 @@ vec3 albedo(vec2 UVin)
 	{
 		col = vec3(0.2,0.2,1);
 	}
-	//col = vec3(abs((sin(time * 4 + vertexPos.x * 20) +  2 * sin( - time  + vertexPos.x*10 + 5) +  sin( - time  + vertexPos.z*10 + 5))/50 ));
+	//col = vec3(texture(reflectionTex,gl_FragCoord.xy));
+	col = vec3(1);
 	return col;
 }
 
 vec2 parralax(vec3 camTan, vec3 posTan)
 {
-	float heightScale = water();
+	float heightScale = 0.1;
 	int nbSample = 200;
 
 	float nbSamplef = float(nbSample);
@@ -119,5 +123,14 @@ vec2 parralax(vec3 camTan, vec3 posTan)
 
 float water()
 {
-	return (abs((sin(time * 4 + vertexPos.x * 20) +  2 * sin( - time  + vertexPos.x*10 + 5) +  sin( - time  + vertexPos.z*10 + 5))/50 ));
+	return (abs((sin(time * 4 + fragPosWorld.x * 20) +  2 * sin( - time  + fragPosWorld.x*10 + 5) +  sin( - time  + fragPosWorld.z*10 + 5))/50 ));
+}
+
+vec3 normalValue(vec3 normal, vec3 tangent, vec3 biTangent,vec2 UVin)
+{
+	vec3 normalMapVal = vec3(texture(normalMap, UVin));
+	vec3 baseLine = vec3(0.5); //since colors go from 0-1. a vector that is null has for value 0.5.
+	normalMapVal = normalMapVal - baseLine;
+	//We substract the Y value of the normal map because it seems that my map has the +y vector in the -y direction of the UV vector.
+	return normalize(normalMapVal.z*normalize(normal) + normalMapVal.x*normalize(tangent) - normalMapVal.y*normalize(biTangent));
 }

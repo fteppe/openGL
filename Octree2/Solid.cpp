@@ -33,7 +33,7 @@ Solid::~Solid()
 {
 }
 
-void Solid::draw(Scene const& scene) const
+void Solid::draw(Scene& scene)
 {
 	//we make sure the object still exists, if it does we render it.
 	if (!VBO_ptr.expired())

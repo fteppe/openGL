@@ -18,7 +18,7 @@ public:
 	glm::vec3 getScale();
 	glm::vec4 getRotation();
 	glm::mat4 getmodelMatrix() const;
-	virtual void draw(Scene const& scene) const;
+	virtual void draw(Scene& scene);
 protected:
 	void updateModelMatrix();
 	glm::vec3 pos;

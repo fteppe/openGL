@@ -17,8 +17,6 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="ShaderBasic.cpp" />
-    <ClCompile Include="ShaderSpecular.cpp" />
     <ClCompile Include="VertexBufferObject.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="EventHandler.cpp" />
@@ -26,6 +24,7 @@
     <ClCompile Include="ShaderPBR.cpp" />
     <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="CubeMap.cpp" />
+    <ClCompile Include="FrameBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h">
@@ -73,8 +72,6 @@
     <ClInclude Include="Camera.h">
       <Filter>headers</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderBasic.h" />
-    <ClInclude Include="ShaderSpecular.h" />
     <ClInclude Include="VertexBufferObject.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="EventHandler.h" />
@@ -82,6 +79,7 @@
     <ClInclude Include="ShaderPBR.h" />
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="CubeMap.h" />
+    <ClInclude Include="FrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Octree2.rc" />

@@ -18,7 +18,7 @@ public:
 	Solid(std::vector<glm::vec3> vertices, std::vector<std::vector<int>> index);
 	Solid(std::weak_ptr<VertexBufferObject> vbo);
 	~Solid();
-	void draw(Scene const& scene) const;
+	void draw(Scene& scene);
 	std::string description();
 	//void setObjectSpace(glm::mat4 transfo);
 

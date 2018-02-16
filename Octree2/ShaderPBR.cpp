@@ -17,7 +17,7 @@ ShaderPBR::~ShaderPBR()
 {
 }
 
-void ShaderPBR::setProgramInformation(const Scene & scene, const Solid & solid)
+void ShaderPBR::setProgramInformation( Scene & scene, const Solid & solid)
 {
 	//We first send all the information that any shader has to send
 	Shader::setProgramInformation(scene, solid);
