@@ -20,7 +20,7 @@ Scene::Scene(Camera cam):cam(cam)
 	frame = new FrameBuffer;
 
 	frame->renderToScreen();
-
+	
 }
 
 
@@ -43,7 +43,7 @@ Scene::~Scene()
 	{
 		delete obj;
 	}
-	delete skybox;
+	//delete skybox;
 	delete frame;
 }
 
@@ -71,9 +71,9 @@ void Scene::renderScene()
 	error = glGetError();
 	renderPass = 1;
 	frame->renderToScreen();
-	elements[1]->draw(*this);
+	//elements[1]->draw(*this);
 	elements[0]->draw(*this);
-	
+	elements[2]->draw(*this);
 	error = glGetError();
 }
 
@@ -90,7 +90,9 @@ void Scene::load(std::string scene)
 
 	textures["reflection"] = std::shared_ptr<Texture>(new Texture);
 	materials["mat1"]->setChannel(textures["reflection"].get(), "reflectionTex");
-	frame->attachOutputTexture(textures["reflection"]);
+	frame->addColorOutputTexture(textures["reflection"]);
+	setupPostProcessing();
+
 
 }
 
@@ -146,4 +148,32 @@ void Scene::makeSkyBox()
 	sky->setMaterial(materials["sky"]);
 	sky->setScale(glm::vec3(100, 100, 100));
 	elements.push_back(sky);
+}
+
+void Scene::setupPostProcessing()
+{
+	//for the post processing we need a flat triangle
+	std::vector<std::vector<int>> faces = { {0,1,2} };
+	std::vector<glm::vec3> points = { glm::vec3(-1,-1,0), glm::vec3(2,0,0),glm::vec3(-1,2,0) };
+	VertexBufferObject * screen = new VertexBufferObject(points, faces);
+	//the UVs of our screen, the way it is set up we should have the sides of the screen aligned with the side of the square in the triangle.
+	std::vector<glm::vec3> uvs = { glm::vec3(0,0,0), glm::vec3(2,0,0), glm::vec3(0,2,0) };
+	screen->setUVs(uvs);
+	std::shared_ptr<VertexBufferObject> vbo_ptr(screen);
+	Solid* screenObj = new Solid(vbo_ptr);
+
+	//this triangle has a different shader than usual.
+	Shader* shader = new Shader("postProcess.ver", "postProcess.frag");
+	std::shared_ptr<Shader> shader_ptr(shader);
+	Material* mat = new Material(shader);
+	std::shared_ptr<Material> mat_ptr(mat);
+	screenObj->setMaterial(mat_ptr);
+	screenObj->addTag(POST_PROCESS);
+	//We add all these newly created elements to the scene;
+	shaders["postProcess"] = shader_ptr;
+	materials["postProcess"] = mat_ptr;
+	elements.push_back(screenObj);
+
+
+	
 }

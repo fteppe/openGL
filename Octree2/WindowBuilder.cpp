@@ -33,8 +33,8 @@ WindowBuilder::WindowBuilder()
 	settings.minorVersion = 2;
 	settings.attributeFlags = sf::ContextSettings::Core;
 
-	float width = 1024;
-	float height = 720;
+	unsigned width = 1024;
+	unsigned height = 720;
 
 	window.create(sf::VideoMode(width, height), "openGL", sf::Style::Close, settings);
 	glEnable(GL_DEPTH_TEST);

@@ -19,10 +19,21 @@ public:
 	*set the rendering target to the screen.
 	*/
 	void renderToScreen();
+	//We add another output color.
+	void addColorOutputTexture(std::shared_ptr<Texture> texture);
 private:
 	unsigned int height, width;
 	GLuint frameBufferId;
 	GLuint renderBufferId;
+	//the color textures of this frameBuffer
+	std::vector< std::shared_ptr<Texture>> colorTextures;
+	//when we add a texture for a color output, we need to say what kind it is.
+	//for no it will be GL_COLOR_ATTACHMENTn
+	std::vector< GLenum> colorLayout;
+	//if there is a texture attached to it, this is where the frame buffer will be.
+	std::shared_ptr<Texture> depthBufferTexture;
+
+	//To be deprecated.
 	std::shared_ptr<Texture> outputTexture;
 };
 

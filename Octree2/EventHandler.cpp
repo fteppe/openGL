@@ -29,7 +29,7 @@ EventHandler::~EventHandler()
 Camera EventHandler::camMouvement(sf::Event event)
 {
 	Camera cam = controlledScene.lock().get()->cam;
-	float speed = 0.1;
+	float speed = 0.1f;
 	glm::vec3 campPos = cam.getPos();
 	glm::vec3 target = cam.getTarget();
 	glm::vec3 up = cam.getUp();
@@ -105,7 +105,7 @@ Camera EventHandler::camMouvement(sf::Event event)
 
 void EventHandler::moveGameObject(sf::Event event, GameObject * object)
 {
-	float speed = 0.1;
+	float speed = 0.1f;
 	glm::vec3 pos = object->getPos();
 	if (event.type == sf::Event::KeyPressed)
 	{

@@ -1,6 +1,8 @@
 #pragma once
 #include <glm\glm.hpp>
 #include <glm\gtx\transform.hpp>
+#include <vector>
+#include "Common.h"
 
 class Scene;
 
@@ -14,6 +16,8 @@ public:
 	void setPos(glm::vec3 pos);
 	void setScale(glm::vec3 scale);
 	void setRotation(float rotation, glm::vec3 rotationAngle);
+	void addTag(RenderTag tag);
+	std::vector<RenderTag> getRenderTags();
 	glm::vec3 getPos();
 	glm::vec3 getScale();
 	glm::vec4 getRotation();
@@ -26,5 +30,8 @@ protected:
 	glm::vec3 rotationAngle;
 	float rotation;
 	glm::mat4 modelMatrix;
+
+	//These tags are an indication for the renderer.
+	std::vector<RenderTag> renderTags;
 };
 

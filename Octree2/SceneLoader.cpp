@@ -158,10 +158,10 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER mats, VBO_CO
 
 			std::shared_ptr<VertexBufferObject> VBO = objects[filePath.first][filePath.second];
 			gameObjects.push_back(new Solid(VBO));
-
-			((Solid *)gameObjects.back())->setMaterial(
-				std::shared_ptr<Material>(mats[mat])
-			);
+			Solid* loadedItem = ((Solid *)gameObjects.back());
+			loadedItem->setMaterial(std::shared_ptr<Material>(mats[mat]));
+			//Since it was loaded as a game object we give it the tag.
+			loadedItem->addTag(WORLD_OBJECT);
 		}
 	}
 	return gameObjects;

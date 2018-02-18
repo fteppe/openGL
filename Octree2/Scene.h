@@ -30,6 +30,7 @@ public:
 
 private:
 	void makeSkyBox();
+	void setupPostProcessing();
 
 	Camera cam;
 	Light light;

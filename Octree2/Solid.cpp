@@ -10,7 +10,6 @@
 
 Solid::Solid() : GameObject(), triangulated(false)
 {
-
 }
 
 
