@@ -14,7 +14,7 @@ Material::~Material()
 {
 }
 
-void Material::setChannel( Texture* text, std::string channel )
+void Material::setChannel( std::shared_ptr<Texture> text, std::string channel )
 {
 	textures[channel] = text;
 }

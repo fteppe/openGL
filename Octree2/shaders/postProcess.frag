@@ -5,7 +5,10 @@ in vec2 UV;
 
 out vec4 FragColor;
 
+uniform sampler2D color;
+uniform sampler2D normals;
+
 void main()
 {
-    FragColor = vec4(vertexPos,1);
+    FragColor = texture(normals, UV);
 }

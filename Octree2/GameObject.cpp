@@ -37,10 +37,10 @@ void GameObject::setRotation(float rotation, glm::vec3 rotationAngle)
 
 void GameObject::addTag(RenderTag tag)
 {
-	renderTags.push_back(tag);
+	renderTags.insert(tag);
 }
 
-std::vector<RenderTag> GameObject::getRenderTags()
+std::set<RenderTag> GameObject::getRenderTags()
 {
 	return renderTags;
 }

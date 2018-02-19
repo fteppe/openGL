@@ -58,7 +58,15 @@ void FrameBuffer::renderToThis()
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//glDisable(GL_DEPTH_TEST);
-	glClearColor(0.5, 1, 1,1);
+
+	//We tell here which color buffers we want to render. if we have no texture we always render one buffer.
+	unsigned colorBuffersNumber = colorLayout.size();
+	std::vector<GLenum> buffers = colorLayout;
+	if (colorBuffersNumber == 0)
+	{
+		buffers = { GL_COLOR_ATTACHMENT0 };
+	}
+	glDrawBuffers(buffers.size(), &buffers[0]);
 }
 
 void FrameBuffer::renderToScreen()
@@ -72,8 +80,8 @@ void FrameBuffer::renderToScreen()
 
 void FrameBuffer::addColorOutputTexture(std::shared_ptr<Texture> texture)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
-	glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
+	//we bind the frame buffer.
+	renderToThis();
 	//outputTexture = texture;
 	texture->bind();
 	//We associate a 2D texture to the one we bound.
@@ -86,8 +94,9 @@ void FrameBuffer::addColorOutputTexture(std::shared_ptr<Texture> texture)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	//the color attachment determines the layout in the fragment shader of the outputs.
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + this->colorTextures.size(), GL_TEXTURE_2D, texture->getId(), 0);
-
-
+	//We add this type of texture to the layout.
+	this->colorLayout.push_back(GL_COLOR_ATTACHMENT0 + this->colorTextures.size());
+	colorTextures.push_back(texture);
 
 	GLenum error = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
