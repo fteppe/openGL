@@ -5,7 +5,7 @@
 Material::Material()
 {
 }
-Material::Material(Shader* shader)
+Material::Material(std::shared_ptr<Shader> shader)
 {
 	shader_ptr = shader;
 }
@@ -30,5 +30,10 @@ void Material::apply(VertexBufferObject* const& VBO, Scene & scene, Solid const&
 	shader_ptr->setProgramInformation(scene, solid);
 	shader_ptr->sendTexChannels(textures);
 	VBO->drawObject(*shader_ptr);
+}
+
+std::shared_ptr<Shader> Material::getShaderProgram()
+{
+	return shader_ptr;
 }
 

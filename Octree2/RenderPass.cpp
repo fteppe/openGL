@@ -37,7 +37,7 @@ void RenderPass::renderScene(Scene & scene)
 	renderOutput->renderToThis();
 	//TODO: we must be able to go further than that in the future.
 	std::vector<GameObject*> objects = scene.getGameObjects();
-
+	Shader * shader_ptr;
 	//we iterate through all our objects, and we see which one we render.
 	for (GameObject* go : objects)
 	{
@@ -45,9 +45,15 @@ void RenderPass::renderScene(Scene & scene)
 		if (!isIntersectionEmpty(this->renderTagsIncluded, go->getRenderTags()))
 		{
 			go->draw(scene);
+			//shader_ptr = go->getMaterial()->getShaderProgram().get();
 		}
 	}
 	//renderOutput->renderToScreen();
+}
+
+void RenderPass::setTextures(std::map<std::string, std::shared_ptr<Texture>> texturesIn)
+{
+	textures = texturesIn;
 }
 
 bool RenderPass::isIntersectionEmpty(std::vector<RenderTag> renderPassTags, std::set<RenderTag> elementTags)

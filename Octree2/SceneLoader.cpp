@@ -129,7 +129,7 @@ MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER textures, SHADER_CONT
 			channels[j->name.GetString()] = j->value.GetString();
 		}
 
-		materials[matName] = std::shared_ptr<Material>(new Material(shaders[shaderName].get()));
+		materials[matName] = std::shared_ptr<Material>(new Material(shaders[shaderName]));
 		for (auto tex : channels)
 		{
 			materials[matName]->setChannel(textures[tex.second], tex.first);

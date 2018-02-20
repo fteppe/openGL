@@ -2,6 +2,8 @@
 #include <glm\glm.hpp>
 #include <glm\gtx\transform.hpp>
 #include <set>
+#include <memory>
+#include "Material.h"
 #include "Common.h"
 
 class Scene;
@@ -22,6 +24,7 @@ public:
 	glm::vec3 getScale();
 	glm::vec4 getRotation();
 	glm::mat4 getmodelMatrix() const;
+	std::shared_ptr<Material> getMaterial();
 	virtual void draw(Scene& scene);
 protected:
 	void updateModelMatrix();
@@ -33,5 +36,7 @@ protected:
 
 	//These tags are an indication for the renderer. This mus always be sorted.
 	std::set<RenderTag> renderTags;
+
+	std::shared_ptr<Material> material_ptr;
 };
 

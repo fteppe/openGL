@@ -159,7 +159,7 @@ void Scene::makeSkyBox()
 	Shader* shaderSky = new Shader(std::vector<std::string>({ "cubeMap.ver" }), { "cubeMap.frag" });
 	//shaders["skybox"] = std::shared_ptr<Shader>(new Shader(std::vector<std::string>({ "cubeMap.ver" }), { "cubeMap.frag" }));
 	shaders["skybox"] = std::shared_ptr<Shader>(shaderSky);
-	materials["sky"] = std::shared_ptr<Material>(new Material(shaders["skybox"].get()));
+	materials["sky"] = std::shared_ptr<Material>(new Material(shaders["skybox"]));
 	materials["sky"]->setChannel(textures["skybox"], "skybox");
 	Solid* sky = new Solid(models["obj/common.obj"]["Cube"]);
 	sky->setMaterial(materials["sky"]);
@@ -188,7 +188,7 @@ void Scene::setupPostProcessing()
 
 	Shader* shader = new Shader("postProcess.ver", "postProcess.frag");
 	std::shared_ptr<Shader> shader_ptr(shader);
-	Material* mat = new Material(shader);
+	Material* mat = new Material(shader_ptr);
 	std::shared_ptr<Material> mat_ptr(mat);
 	mat_ptr->setChannel(textures["color"], "color");
 	mat_ptr->setChannel(textures["normals"], "normals");

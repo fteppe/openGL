@@ -66,6 +66,11 @@ glm::mat4 GameObject::getmodelMatrix() const
 	return modelMatrix;
 }
 
+std::shared_ptr<Material> GameObject::getMaterial()
+{
+	return material_ptr;
+}
+
 void GameObject::draw(Scene & scene)
 {
 }

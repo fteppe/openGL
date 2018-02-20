@@ -21,6 +21,7 @@ public:
 	void setRenderTagsIncluded(std::vector<RenderTag> tags);
 	void setRenderTagsExcluded(std::vector<RenderTag> tags);
 	void renderScene(Scene & scene);
+	void setTextures(std::map < std::string, std::shared_ptr<Texture>> texturesIn);
 
 private:
 
