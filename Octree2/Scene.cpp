@@ -72,14 +72,6 @@ void Scene::setCamera(Camera camera)
 
 void Scene::renderScene()
 {
-	//TODO: change this completly to be more volatile using renderPasses.
-
-	//frame->renderToThis();	
-	//gameObjects[0]->draw(*this);
-	//gameObjects[1]->draw(*this);
-	//FrameBuffer screenFrame(SCREEN_FRAMEBUFFER);
-	//screenFrame.renderToThis();
-	//gameObjects[2]->draw(*this);
 
 	for (auto pass : renderPasses)
 	{
@@ -172,6 +164,7 @@ void Scene::makeSkyBox()
 	Solid* sky = new Solid(models["obj/common.obj"]["Cube"]);
 	sky->setMaterial(materials["sky"]);
 	sky->setScale(glm::vec3(100, 100, 100));
+	sky->addTag(WORLD_OBJECT);
 	gameObjects.push_back(sky);
 }
 
