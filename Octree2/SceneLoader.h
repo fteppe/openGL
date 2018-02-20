@@ -25,10 +25,10 @@ public:
 	VBO_CONTAINER  loadModels();
 	TEXTURE_CONTAINER loadTextures();
 	SHADER_CONTAINER loadShaders();
-	MAT_CONTAINER loadMaterials(TEXTURE_CONTAINER textures, SHADER_CONTAINER shaders);
-	std::vector<GameObject *> loadGameObjects(MAT_CONTAINER mats, VBO_CONTAINER objects);
-
+	MAT_CONTAINER loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CONTAINER& shaders);
+	std::vector<GameObject *> loadGameObjects(MAT_CONTAINER& mats, VBO_CONTAINER& objects);
 private:
+	Texture * loadTexture(std::string texturePath);
 	rapidjson::Document doc;
 
 };

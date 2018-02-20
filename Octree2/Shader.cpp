@@ -12,10 +12,10 @@
 
 Shader::Shader()
 {
-	
+	highestTextureUnitUsed = 0;
 }
 
-Shader::Shader(std::string vertex, std::string fragment)
+Shader::Shader(std::string vertex, std::string fragment) : Shader()
 {
 
 	vertex = shaderDir + vertex;
@@ -43,7 +43,7 @@ Shader::Shader(std::string vertex, std::string fragment)
 	getUniformLocations();
 }
 
-Shader::Shader(std::vector<std::string> vertexShaders, std::vector<std::string> fragmentShaders)
+Shader::Shader(std::vector<std::string> vertexShaders, std::vector<std::string> fragmentShaders) : Shader() 
 {
 	std::vector<GLuint> vertexs;
 	std::vector<GLuint> fragments;
@@ -149,9 +149,24 @@ void Shader::sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> tex
 		}
 
 		it->second->applyTexture(program, uniforms[it->first], i);
-
 		i++;
 	}
+	//If we have used more textures units than before we update the number of used texture units
+	//if (i > this->highestTextureUnitUsed)
+	//{
+	//	highestTextureUnitUsed = i;
+	//}
+	////if we have used less texture units than before, we unbind the unsued ones, and update the numberOf texture units used.
+	//else
+	//{
+	//	while (i <= highestTextureUnitUsed)
+	//	{
+	//		//we unbind the texture
+	//		glActiveTexture(GL_TEXTURE0 + i);
+	//		glBindTexture(GL_TEXTURE_2D, 0);
+	//		i++;
+	//	}
+	//}
 }
 
 void Shader::compileShader(GLuint shader, std::string shaderPath)

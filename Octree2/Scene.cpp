@@ -82,13 +82,8 @@ void Scene::renderScene()
 
 void Scene::load(std::string scene)
 {
-	//We add the loaded elements to the ones already existing in the scene.
+
 	loader.setSceneToLoad(scene);
-	auto loadedModels = loader.loadModels();
-	models.insert(loadedModels.begin(), loadedModels.end());
-	
-	auto texturesLoaded = loader.loadTextures();
-	textures.insert(texturesLoaded.begin(), texturesLoaded.end());
 
 	auto shadersLoaded = loader.loadShaders();
 	shaders.insert(shadersLoaded.begin(), shadersLoaded.end());

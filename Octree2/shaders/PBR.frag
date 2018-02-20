@@ -81,14 +81,20 @@ vec3 albedo(vec2 UVin)
 	{
 		col = vec3(0.2,0.2,1);
 	}
-	//col = vec3(texture(reflectionTex, vec2(gl_FragCoord.x/1024,gl_FragCoord.y/720)));
-	//col = vec3(gl_FragCoord.xy,0);
+	col = vec3(texture(diffuse, UVin));
+	//col = vec3(textureSize(depthMap,0).xy/2,0);
 	return col;
 }
 
 vec2 parralax(vec3 camTan, vec3 posTan)
 {
 	float heightScale = 0.1;
+	//If there is no bound map we get out of the function without trying to give a valid result.
+	if(textureSize(depthMap,0).x < 2)
+	{
+		return vec2(0);
+	}
+	
 	int nbSample = 200;
 
 	float nbSamplef = float(nbSample);
@@ -96,10 +102,6 @@ vec2 parralax(vec3 camTan, vec3 posTan)
 
 	vec3 viewDir = normalize( posTan - camTan );
 	float height =  texture(depthMap, UV).r;    
-    vec2 p = viewDir.xy / viewDir.z * (height * heightScale);
-   // return - p;
-
-	//lets try to make the real one.
 	
 	float currentHeight = 1;
 	//this vector will go through the layers.

@@ -31,6 +31,9 @@ protected:
 	unsigned int program;
 	std::map<std::string,GLint> uniforms;
 
+	//This is in the case we use the same program for different materials that don't use the same number of samplers.
+	//In this case to make sure those samplers are unbound when they need to, we keep track of that.
+	GLuint highestTextureUnitUsed;
 
 
 };

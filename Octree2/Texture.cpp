@@ -9,6 +9,9 @@ Texture::Texture()
 {
 	glGenTextures(1, &textureID);
 	textureType = GL_TEXTURE_2D;
+	width = 0;
+	height = 0;
+	nrChannels = 0;
 }
 
 
@@ -24,27 +27,37 @@ void Texture::bind()
 
 void Texture::loadTexture(std::string textureName)
 {
-	unsigned char* data;
-
-	texturePath = textureName;
-	std::cout << "loading " << textureName << std::endl;
-	data =  stbi_load(textureName.c_str(), &width, &height, &nrChannels, 0);
-	//textureData = std::vector<unsigned char>(data, data+width* height* nrChannels);
-	glBindTexture(textureType, textureID);
-	setTextureParameters();
-	//Depending on the number of channels the texture is loaded differently.
-	if (data)
+	//If we have no name for our texture we create an empty one
+	if (textureName.size() == 0)
 	{
-		loadImage(textureType, width, height, nrChannels, data);
+		glBindTexture(textureType, textureID);
+		glTexImage2D(textureType, 0, GL_RED, 0, 0, 0, GL_RED, GL_UNSIGNED_BYTE, NULL);
 	}
 	else
 	{
-		std::cout << "no texture" << std::endl;
+		unsigned char* data;
+
+		texturePath = textureName;
+		std::cout << "loading " << textureName << std::endl;
+		data = stbi_load(textureName.c_str(), &width, &height, &nrChannels, 0);
+		//textureData = std::vector<unsigned char>(data, data+width* height* nrChannels);
+		glBindTexture(textureType, textureID);
+		setTextureParameters();
+		//Depending on the number of channels the texture is loaded differently.
+		if (data)
+		{
+			loadImage(textureType, width, height, nrChannels, data);
+		}
+		else
+		{
+			std::cout << "no texture" << std::endl;
+		}
+
+		//once the texture has been loaded we free it from the ram where it is no longer used.
+		stbi_image_free(data);
+		glGenerateMipmap(textureType);
 	}
-	
-	//once the texture has been loaded we free it from the ram where it is no longer used.
-	stbi_image_free(data);
-	glGenerateMipmap(textureType);
+
 	
 	
 	std::cout << "done loading " << textureName << std::endl;
