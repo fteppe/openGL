@@ -1,9 +1,11 @@
 #pragma once
+#include <set>
 #include "Common.h"
 #include "FrameBuffer.h"
 #include "Material.h"
 #include "Camera.h"
 #include "Texture.h"
+#include "Scene.h"
 /*
 *This class aims at having all the informations to render a scene.
 *It contains uniforms specific to this redner pass.
@@ -21,9 +23,13 @@ public:
 	void renderScene(Scene & scene);
 
 private:
+
+	bool isIntersectionEmpty(std::vector<RenderTag> renderPassTags, std::set<RenderTag> elementTags);
+
 	//A render pass always needs a view point, in the case the renderPass is to get shadows the camera will be the shadow's viewpoint
 	Camera camera;
 	//This determines where a RenderPass renders.
+	//The renderPass is the sole owner of the frameBuffer is in in charge of deleting it.
 	FrameBuffer* renderOutput;
 	//This render pass will render only the game objects that have these tags 
 	std::vector<RenderTag> renderTagsIncluded;

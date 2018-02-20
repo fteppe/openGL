@@ -17,10 +17,26 @@ Scene::Scene(Camera cam):cam(cam)
 	this->cam.setUp(glm::vec3(0, 1, 0));
 
 	clock.restart();
-	frame = new FrameBuffer;
+	FrameBuffer * frame = new FrameBuffer;
 
 	frame->renderToScreen();
 	
+	std::shared_ptr<Texture> output2(new Texture);
+	textures["color"] = std::shared_ptr<Texture>(new Texture);
+	textures["normals"] = output2;
+	frame->addColorOutputTexture(textures["color"]);
+	frame->addColorOutputTexture(output2);
+
+	//We set the frame as the renderPass we want.
+	renderPasses.push_back(new RenderPass());
+	RenderPass * pass = renderPasses.back();
+	pass->setRenderOutput(frame);
+	pass->setRenderTagsIncluded({ WORLD_OBJECT });
+	
+	//the second render pass we don't set a frameBuffer so it will render to the screen.
+	renderPasses.push_back(new RenderPass());
+	pass = renderPasses.back();
+	pass->setRenderTagsIncluded({ POST_PROCESS });
 }
 
 
@@ -39,12 +55,14 @@ void Scene::animate(sf::Clock elapsed)
 
 Scene::~Scene()
 {
-	for (GameObject* obj : elements)
+	for (GameObject* obj : gameObjects)
 	{
 		delete obj;
 	}
-	//delete skybox;
-	delete frame;
+	for (RenderPass* pass : renderPasses)
+	{
+		delete pass;
+	}
 }
 
 void Scene::setCamera(Camera camera) 
@@ -54,15 +72,20 @@ void Scene::setCamera(Camera camera)
 
 void Scene::renderScene()
 {
-	int error = glGetError();
-	renderPass = 0;
-	frame->renderToThis();	
-	//frame->renderToScreen();
-	elements[0]->draw(*this);
-	elements[1]->draw(*this);
-	frame->renderToScreen();
-	elements[2]->draw(*this);
-	//error = glGetError();
+	//TODO: change this completly to be more volatile using renderPasses.
+
+	//frame->renderToThis();	
+	//gameObjects[0]->draw(*this);
+	//gameObjects[1]->draw(*this);
+	//FrameBuffer screenFrame(SCREEN_FRAMEBUFFER);
+	//screenFrame.renderToThis();
+	//gameObjects[2]->draw(*this);
+
+	for (auto pass : renderPasses)
+	{
+		pass->renderScene(*this);
+	}
+
 }
 
 void Scene::load(std::string scene)
@@ -82,18 +105,12 @@ void Scene::load(std::string scene)
 	materials.insert(materialsLoaded.begin(), materialsLoaded.end());
 
 	auto elementsLoaded = loader.loadGameObjects(materials, models);
-	elements.insert(elements.end(), elementsLoaded.begin(), elementsLoaded.end());
+	gameObjects.insert(gameObjects.end(), elementsLoaded.begin(), elementsLoaded.end());
 
 	makeSkyBox();
 
 	//Testing puposes.
-	std::shared_ptr<Texture> output2(new Texture);
-	textures["color"] = std::shared_ptr<Texture>(new Texture);
-	textures["normals"] = output2;
-	materials["mat1"]->setChannel(textures["color"], "reflectionTex");
-	materials["mat1"]->setChannel(output2, "normals");
-	frame->addColorOutputTexture(textures["color"]);
-	frame->addColorOutputTexture(output2);
+
 	setupPostProcessing();
 
 
@@ -120,6 +137,11 @@ float Scene::getElapsedTime() const
 	sf::Time time= clock.getElapsedTime();
 	float elapsedTime = time.asSeconds();
 	return elapsedTime;
+}
+
+std::vector<GameObject*> Scene::getGameObjects()
+{
+	return gameObjects;
 }
 
 void Scene::makeSkyBox()
@@ -150,7 +172,7 @@ void Scene::makeSkyBox()
 	Solid* sky = new Solid(models["obj/common.obj"]["Cube"]);
 	sky->setMaterial(materials["sky"]);
 	sky->setScale(glm::vec3(100, 100, 100));
-	elements.push_back(sky);
+	gameObjects.push_back(sky);
 }
 
 void Scene::setupPostProcessing()
@@ -182,5 +204,5 @@ void Scene::setupPostProcessing()
 	//We add all these newly created elements to the scene;
 	shaders["postProcess"] = shader_ptr;
 	materials["postProcess"] = mat_ptr;
-	elements.push_back(screenObj);	
+	gameObjects.push_back(screenObj);	
 }

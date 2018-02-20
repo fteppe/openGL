@@ -10,5 +10,5 @@ uniform sampler2D normals;
 
 void main()
 {
-    FragColor = texture(normals, UV);
+    FragColor = texture(color, UV);
 }

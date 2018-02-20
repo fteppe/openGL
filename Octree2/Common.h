@@ -12,3 +12,12 @@ enum RenderTag {
 	WORLD_OBJECT ,
 	POST_PROCESS
 };
+
+//General enums that can be used accross the engine.
+enum EngineEnum {
+	SCREEN_FRAMEBUFFER //This enum is used to build a frameBuffer that will render to the screen as a primary output.
+};
+
+//This will be a constant for our program. Shared accross the entire program.
+#define WIDTH 1024
+#define HEIGHT 720

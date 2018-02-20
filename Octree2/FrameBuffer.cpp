@@ -4,13 +4,10 @@
 
 FrameBuffer::FrameBuffer()
 {
-	width = 1024;
-	height = 720;
+	//TODO: not have these has hard coded values.
+	width = WIDTH;
+	height = HEIGHT;
 	glGenFramebuffers(1, &frameBufferId);
-
-	//glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-
 
 	glGenRenderbuffers(1, &renderBufferId);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
@@ -21,11 +18,23 @@ FrameBuffer::FrameBuffer()
 	renderToScreen();
 }
 
+FrameBuffer::FrameBuffer(EngineEnum frameType)
+{
+	width = WIDTH;
+	height = HEIGHT;
+	frameBufferId = 0;
+	renderBufferId = 0;
+}
+
 
 FrameBuffer::~FrameBuffer()
 {
-	glDeleteFramebuffers(1, &frameBufferId);
-	glDeleteRenderbuffers(1, &renderBufferId);
+	//In case we have a buffer that writes to the screen we don't want to delete it, I'm not sure of the behavior deleting the screen frame buffer accross plateforms.
+	if (frameBufferId != 0)
+	{
+		glDeleteFramebuffers(1, &frameBufferId);
+		glDeleteRenderbuffers(1, &renderBufferId);
+	}
 }
 
 void FrameBuffer::attachOutputTexture(std::shared_ptr<Texture> texture)

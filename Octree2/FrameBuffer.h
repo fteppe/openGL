@@ -1,10 +1,12 @@
 #pragma once
 #include <memory>
 #include "Texture.h"
+#include "Common.h"
 class FrameBuffer
 {
 public:
 	FrameBuffer();
+	FrameBuffer(EngineEnum frameType);
 	~FrameBuffer();
 	/*
 	*This function attach a texture to this frame buffer so colors are rendered here. 

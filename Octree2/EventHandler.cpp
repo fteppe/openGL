@@ -9,7 +9,7 @@ EventHandler::EventHandler()
 EventHandler::EventHandler(std::weak_ptr<Scene> sceneIn)
 {
 	controlledScene = sceneIn;
-	controlledObject = (controlledScene.lock().get()->elements).begin();
+	controlledObject = (controlledScene.lock().get()->gameObjects).begin();
 }
 
 
@@ -135,7 +135,7 @@ std::vector<GameObject*>::iterator EventHandler::changeControlledObject(sf::Even
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
-		std::vector<GameObject*>* elems = &controlledScene.lock().get()->elements;
+		std::vector<GameObject*>* elems = &controlledScene.lock().get()->gameObjects;
 		//mouvements lat
 		sf::Keyboard keyboard;
 
