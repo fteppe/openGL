@@ -1,4 +1,4 @@
- #version 330 core
+ #version 450 core
 in vec3 normalWorld;
 in vec3 tangentWorld;
 in vec3 biTangentWorld;

@@ -29,8 +29,8 @@ WindowBuilder::WindowBuilder()
 	settings.stencilBits = 8;
 	settings.antialiasingLevel = 2; // Optional
 									// Request OpenGL version 3.2 (optional but recommended)
-	settings.majorVersion = 3;
-	settings.minorVersion = 2;
+	settings.majorVersion = 4;
+	settings.minorVersion = 5;
 	settings.attributeFlags = sf::ContextSettings::Core;
 
 	unsigned width = 1024;
