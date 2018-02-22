@@ -16,6 +16,7 @@ public:
 	glm::vec3 getTarget();
 	glm::vec3 getUp();
 	glm::vec2 getSize();
+	glm::vec2 getNearFarPlanes();
 
 	~Camera();
 private:
@@ -30,6 +31,9 @@ private:
 	glm::vec3 pos;
 	glm::vec3 target;
 	glm::vec3 up;
+
+	float nearPlane;
+	float farPlane;
 
 
 };

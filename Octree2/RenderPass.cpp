@@ -34,7 +34,8 @@ void RenderPass::setRenderTagsIncluded(std::vector<RenderTag> tags)
 
 void RenderPass::renderScene(Scene & scene)
 {
-	renderOutput->renderToThis();
+	renderOutput->bind();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//TODO: we must be able to go further than that in the future.
 	std::vector<GameObject*> objects = scene.getGameObjects();
 	Shader * shader_ptr;

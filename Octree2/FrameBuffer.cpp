@@ -14,8 +14,8 @@ FrameBuffer::FrameBuffer()
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBufferId);
-
-	renderToScreen();
+	glEnable(GL_DEPTH_TEST);
+	unbind();
 }
 
 FrameBuffer::FrameBuffer(EngineEnum frameType)
@@ -66,16 +66,10 @@ void FrameBuffer::renderToThis()
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glDisable(GL_DEPTH_TEST);
 
 	//We tell here which color buffers we want to render. if we have no texture we always render one buffer.
-	unsigned colorBuffersNumber = colorLayout.size();
-	std::vector<GLenum> buffers = colorLayout;
-	if (colorBuffersNumber == 0)
-	{
-		buffers = { GL_COLOR_ATTACHMENT0 };
-	}
-	glDrawBuffers(buffers.size(), &buffers[0]);
+
+	
 }
 
 void FrameBuffer::renderToScreen()
@@ -90,7 +84,7 @@ void FrameBuffer::renderToScreen()
 void FrameBuffer::addColorOutputTexture(std::shared_ptr<Texture> texture)
 {
 	//we bind the frame buffer.
-	renderToThis();
+	bind();
 	//outputTexture = texture;
 	texture->bind();
 	//We associate a 2D texture to the one we bound.
@@ -111,5 +105,55 @@ void FrameBuffer::addColorOutputTexture(std::shared_ptr<Texture> texture)
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 	//we set the frame buffer back to the screen
-	renderToScreen();
+
+	glDrawBuffers(colorLayout.size(), &colorLayout[0]);
+
+	unbind();
+}
+
+void FrameBuffer::setDepthTexture(std::shared_ptr<Texture> texture)
+{
+	GLuint error = glGetError();
+	//we bind the frame buffer.
+	bind();
+	//outputTexture = texture;
+	texture->bind();
+	//We associate a 2D texture to the one we bound.
+	//We don't send any data to this texture since the data will come from the rendering.
+	texture->setDimensions(width, height);
+	texture->setDataType(GL_UNSIGNED_INT_24_8);
+	texture->setFormat(GL_DEPTH_STENCIL);
+	//I had a really hard time geting this working since I couldn't find information on the fact that you cannot get this texture working if you don't use this specific type of data on my hardware.
+	//It was a definite pain.
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_STENCIL, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+	//we send the image to the graphic card
+	error = glGetError();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	//glBindTexture(GL_TEXTURE_2D, 0);
+	this->depthBufferTexture = texture;
+	
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT , GL_TEXTURE_2D, texture->getId(), 0);
+	GLenum myerror = GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
+	error = glGetError();
+	GLenum errorFBO = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+	
+	unbind();
+}
+
+void FrameBuffer::bind()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+	glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
+}
+
+void FrameBuffer::unbind()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }

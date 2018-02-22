@@ -125,7 +125,8 @@ void Shader::setProgramInformation(Scene& scene, Solid const& object)
 	//the projection matrices sent to the shader
 	sendMatrix4("objectSpace", objectSpace);
 	sendMatrix4("mvp", worldSpace);
-	
+	sendFloat("near", cam.getNearFarPlanes().x);
+	sendFloat("far", cam.getNearFarPlanes().y);
 	//glUniformMatrix4fv(uniforms["mvp"], 1, false, glm::value_ptr(worldSpace));
 	//the objectspace that can be used to calculate lights or the posiiton of a vertex to a point. We send it to the shader.
 	

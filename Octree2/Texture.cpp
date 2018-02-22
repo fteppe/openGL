@@ -87,11 +87,33 @@ void Texture::applyTexture(GLuint program, GLuint texturePos, int textureUnit)
 
 }
 
+void Texture::setDataType(GLenum dataType)
+{
+	this->dataType = dataType;
+}
+
+void Texture::setFormat(GLenum format)
+{
+	internalFormat = format;
+	if (format == GL_DEPTH_STENCIL)
+	{
+		nrChannels = 4;
+	}
+}
+
+void Texture::setDimensions(int width, int height)
+{
+	this->width = width;
+	this->height = height;
+}
+
 void Texture::readData()
 {
 	glBindTexture(textureType, textureID);
 	unsigned char* data = new unsigned char[width * height * nrChannels];
-	glGetTexImage(textureType, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	GLenum err = glGetError();
+	glGetTexImage(textureType, 0, this->internalFormat, this->dataType, data);
+	err = glGetError();
 	delete data;
 }
 

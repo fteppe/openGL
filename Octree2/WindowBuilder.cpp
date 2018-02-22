@@ -20,6 +20,7 @@
 //This will build a window using open GL and stuff, this is a way to unclutter the main.
 WindowBuilder::WindowBuilder()
 {
+	std::cout << "starting application" << std::endl;
 	/*
 	WINDOW OPENGL INIT
 	*/
@@ -36,7 +37,7 @@ WindowBuilder::WindowBuilder()
 	unsigned width = 1024;
 	unsigned height = 720;
 
-	window.create(sf::VideoMode(width, height), "openGL", sf::Style::Close, settings);
+	window.create(sf::VideoMode(width, height), "Tetra Engine", sf::Style::Close, settings);
 	glEnable(GL_DEPTH_TEST);
 	glewExperimental = GL_TRUE;
 	glewInit();
@@ -68,10 +69,8 @@ WindowBuilder::WindowBuilder()
 		{
 
 
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			//scene.animate(clock);
 			//Render time.
-			//std::cout << time << std::endl;
+
 			std::cout << '\r' << std::setw(4) << std::setfill(' ') << time;
 			clock.restart();
 			

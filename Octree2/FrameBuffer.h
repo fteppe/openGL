@@ -23,6 +23,10 @@ public:
 	void renderToScreen();
 	//We add another output color.
 	void addColorOutputTexture(std::shared_ptr<Texture> texture);
+	void setDepthTexture(std::shared_ptr<Texture> texture);
+
+	void bind();
+	void unbind();
 private:
 	unsigned int height, width;
 	GLuint frameBufferId;

@@ -19,13 +19,18 @@ Scene::Scene(Camera cam):cam(cam)
 	clock.restart();
 	FrameBuffer * frame = new FrameBuffer;
 
-	frame->renderToScreen();
+	//frame->renderToScreen();
 	
 	std::shared_ptr<Texture> output2(new Texture);
+	std::shared_ptr<Texture> depthBuffer(new Texture);
 	textures["color"] = std::shared_ptr<Texture>(new Texture);
 	textures["normals"] = output2;
+	textures["depth"] = depthBuffer;
+	
 	frame->addColorOutputTexture(textures["color"]);
+	frame->setDepthTexture(depthBuffer);
 	frame->addColorOutputTexture(output2);
+	
 
 	//We set the frame as the renderPass we want.
 	renderPasses.push_back(new RenderPass());
@@ -75,8 +80,11 @@ void Scene::renderScene()
 
 	for (auto pass : renderPasses)
 	{
-		pass->renderScene(*this);
+ 		pass->renderScene(*this);
+		//textures["depth"]->readData();
 	}
+	//renderPasses[0]->renderScene(*this);
+	//renderPasses[1]->renderScene(*this);
 
 }
 
@@ -187,6 +195,7 @@ void Scene::setupPostProcessing()
 	std::shared_ptr<Material> mat_ptr(mat);
 	mat_ptr->setChannel(textures["color"], "color");
 	mat_ptr->setChannel(textures["normals"], "normals");
+	mat_ptr->setChannel(textures["depth"], "depth");
 	screenObj->setMaterial(mat_ptr);
 	screenObj->addTag(POST_PROCESS);
 	//We add all these newly created elements to the scene;
