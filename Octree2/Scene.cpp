@@ -147,13 +147,24 @@ void Scene::makeSkyBox()
 	WaveFrontLoader objLoader;
 	std::vector<VertexBufferObject * > vec;
 	objLoader.loadVertexObjectVectorFromFile("obj/common.obj", vec);
+	bool found = false;
 	for (VertexBufferObject * obj : vec)
 	{
 		
 		if (obj->getFilePath().second == "Cube")
 		{
+			found = true;
 			this->models["obj/common.obj"]["Cube"] = std::shared_ptr<VertexBufferObject>(obj);
 		}
+		else
+		{
+			//if this isn't the cube we delete it.
+			delete obj;
+		}
+	}
+	if(found == false)
+	{
+		std::cout<<__FILE__<<"::"<<__LINE__<<"ERROR: element not found"<<std::endl;
 	}
 
 	textures["skybox"] = std::shared_ptr<Texture>(new CubeMap);

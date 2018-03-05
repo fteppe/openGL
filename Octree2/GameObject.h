@@ -1,6 +1,6 @@
 #pragma once
-#include <glm\glm.hpp>
-#include <glm\gtx\transform.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 #include <set>
 #include <memory>
 #include "Material.h"

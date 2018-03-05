@@ -1,4 +1,4 @@
-SRC = Camera.cpp Cube.cpp CubeMap.cpp EventHandler.cpp FrameBuffer.cpp GameObject.cpp Light.cpp main.cpp Material.cpp Octree.cpp Polygon.cpp Scene.cpp SceneLoader.cpp Shader.cpp ShaderPBR.cpp Solid.cpp stdafx.cpp Texture.cpp Vec3.cpp VertexBufferObject.cpp waveFrontLoader.cpp WindowBuilder.cpp
+SRC = Camera.cpp Cube.cpp CubeMap.cpp EventHandler.cpp FrameBuffer.cpp GameObject.cpp Light.cpp main.cpp Material.cpp Octree.cpp Polygon.cpp RenderPass.cpp Scene.cpp SceneLoader.cpp Shader.cpp ShaderPBR.cpp Solid.cpp stdafx.cpp Texture.cpp Vec3.cpp VertexBufferObject.cpp waveFrontLoader.cpp WindowBuilder.cpp
 BUILDDIR = ./linuxBuild/
 #OBJ = $(SRC:.cpp=.o)
 OBJ = $(SRC:%.cpp=$(BUILDDIR)%.o)
@@ -19,10 +19,10 @@ $(BUILDDIR) :
 	mkdir $(BUILDDIR)
 
 $(EXE) : $(OBJ) $(DEPENDFILE)
-	$(CXX)  -g   $(OBJ) $(LIB) -o $(EXE)
+	$(CXX)  $(OBJ) $(LIB) -o $(EXE)
 
 $(BUILDDIR)%.o:
-	$(CXX) -g -c $< $(FLAGS) $(INCLUDES) -o $@
+	$(CXX) -c $< $(FLAGS) $(INCLUDES) -o $@
 
 $(BUILDDIR)%.dep : %.cpp %.h $(BUILDDIR)
 	g++ -MM -MT $(<:%.cpp=$(BUILDDIR)%.o) $< > $@
