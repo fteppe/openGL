@@ -35,7 +35,7 @@ VBO_CONTAINER SceneLoader::loadModels()
 {
 	std::cout<<__FILE__<<" "<<__LINE__<<" loading models"<<std::endl;
 	//rapidjson::Value& objects = d["models"];
-	std::map<std::string, std::map<std::string, std::shared_ptr<VertexBufferObject>>> objects;
+	VBO_CONTAINER objects;
 	WaveFrontLoader loader;
 	assert(doc.IsObject());
 	rapidjson::Value& models = doc["models"];
@@ -63,9 +63,8 @@ TEXTURE_CONTAINER SceneLoader::loadTextures()
 
 	for (unsigned int i = 0; i < texs.Size(); i++)
 	{
-		std::string texName = texs[i].GetString();
-		textures[texName] = std::shared_ptr<Texture> (new Texture());
-		textures[texName]->loadTexture(texName);
+		std::string texPath = texs[i].GetString();
+		textures[texPath] = std::shared_ptr<Texture>(loadTexture(texPath));
 	}
 	return textures;
 }
@@ -111,7 +110,7 @@ SHADER_CONTAINER SceneLoader::loadShaders()
 	return shaders;
 }
 
-MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER textures, SHADER_CONTAINER shaders)
+MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CONTAINER& shaders)
 {
 	MAT_CONTAINER materials;
 
@@ -128,17 +127,24 @@ MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER textures, SHADER_CONT
 			channels[j->name.GetString()] = j->value.GetString();
 		}
 
-		materials[matName] = std::shared_ptr<Material>(new Material(shaders[shaderName].get()));
+		materials[matName] = std::shared_ptr<Material>(new Material(shaders[shaderName]));
 		for (auto tex : channels)
 		{
-			materials[matName]->setChannel(textures[tex.second].get(), tex.first);
+			std::string texPath = tex.second;
+			//In the case the texture wasn't loaded. We load it.
+			if (textures.find(texPath) == textures.end())
+			{
+				textures[texPath] = std::shared_ptr<Texture>(loadTexture(texPath));
+				
+			}
+			materials[matName]->setChannel(textures[texPath], tex.first);
 		}
 	}
 
 	return materials;
 }
 
-std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER mats, VBO_CONTAINER objects)
+std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER& mats, VBO_CONTAINER& objects)
 {
 	std::vector<GameObject * > gameObjects;
 	rapidjson::Value& gos = doc["gameObjects"];
@@ -155,14 +161,51 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER mats, VBO_CO
 			filePath.first = gos[i]["model"][0].GetString();
 			filePath.second = gos[i]["model"][1].GetString();
 
-			std::shared_ptr<VertexBufferObject> VBO = objects[filePath.first][filePath.second];
-			gameObjects.push_back(new Solid(VBO));
+			std::shared_ptr<VertexBufferObject> VBO;// = objects[filePath.first][filePath.second];
+			//In the case the object doesn't seem to exist.
+			if (objects.find(filePath.first) == objects.end())
+			{
+				WaveFrontLoader loader;
+				std::vector<VertexBufferObject*> objectsToLoad;
+				loader.loadVertexObjectVectorFromFile(filePath.first, objectsToLoad);
 
-			((Solid *)gameObjects.back())->setMaterial(
-				std::shared_ptr<Material>(mats[mat])
-			);
+				for (auto vbo : objectsToLoad)
+				{
+					if (vbo->getFilePath().second == filePath.second)
+					{
+						VBO = std::shared_ptr<VertexBufferObject>(vbo);
+						objects[filePath.first][filePath.second] = VBO;
+					}
+				}
+				
+			}
+			else
+			{
+				VBO = objects[filePath.first][filePath.second];
+			}
+			if (VBO != NULL)
+			{
+				
+				gameObjects.push_back(new Solid(VBO));
+				Solid* loadedItem = ((Solid *)gameObjects.back());
+				loadedItem->setMaterial(std::shared_ptr<Material>(mats[mat]));
+				//Since it was loaded as a game object we give it the tag.
+				loadedItem->addTag(WORLD_OBJECT);
+			}
+			else
+			{
+				std::cout << "ERROR " + filePath.first + " " + filePath.second + " doesn't seem to exist" << std::endl;
+			}
 		}
 	}
 	return gameObjects;
+}
+
+Texture * SceneLoader::loadTexture(std::string texturePath)
+{
+	std::string texName = texturePath;
+	Texture *tex = (new Texture());
+	tex->loadTexture(texName);
+	return tex;
 }
 

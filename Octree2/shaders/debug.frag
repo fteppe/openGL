@@ -1,4 +1,4 @@
- #version 330 core
+ #version 450 core
 in vec3 normalWorld;
 in vec3 tangentWorld;
 in vec3 biTangentWorld;
@@ -18,14 +18,16 @@ uniform sampler2D diffuse;
 uniform sampler2D spec;
 uniform sampler2D normalMap;
 uniform sampler2D depthMap;
-//uniform sampler2D reflectionTex;
+uniform sampler2D reflectionTex;
+uniform sampler2D output2;
 
 vec3 normalValue(vec3 normal, vec3 tangent, vec3 biTangent,vec2 UVin);
 void main()
 {
 	vec3 normalMapVal = vec3(texture(normalMap, UV));
 	vec3 normalVal = normalValue(normalWorld, tangentWorld, biTangentWorld, UV);
-	FragColor = vec4(normalVal, 1);
+	FragColor = vec4(texture(output2,  vec2(gl_FragCoord.x/1024,gl_FragCoord.y/720))/2);
+	//FragColor = vec4(texture(reflectionTex, vec2(gl_FragCoord.x/1024,gl_FragCoord.y/720))/2);
 } 
 
 vec3 normalValue(vec3 normal, vec3 tangent, vec3 biTangent,vec2 UVin)

@@ -10,7 +10,6 @@
 
 Solid::Solid() : GameObject(), triangulated(false)
 {
-
 }
 
 
@@ -23,7 +22,7 @@ Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> in
 
 }
 
-Solid::Solid(std::weak_ptr<VertexBufferObject> vbo) : Solid()
+Solid::Solid(std::shared_ptr<VertexBufferObject> vbo) : Solid()
 {
 	VBO_ptr = vbo;
 }
@@ -36,15 +35,7 @@ Solid::~Solid()
 void Solid::draw(Scene& scene)
 {
 	//we make sure the object still exists, if it does we render it.
-	if (!VBO_ptr.expired())
-	{
-		material_ptr->apply(VBO_ptr.lock().get(), scene, *this);
-	}
-	else
-	{
-		//std::cout << __FILE__ << "::" << __LINE__ << "expired VBO, cannot render object"<<std::endl;
-	}
-	
+	material_ptr->apply(VBO_ptr.get(), scene, *this);
 }
 
 std::string Solid::description()

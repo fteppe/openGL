@@ -12,10 +12,10 @@
 
 Shader::Shader()
 {
-	
+	highestTextureUnitUsed = 0;
 }
 
-Shader::Shader(std::string vertex, std::string fragment)
+Shader::Shader(std::string vertex, std::string fragment) : Shader()
 {
 
 	vertex = shaderDir + vertex;
@@ -43,7 +43,7 @@ Shader::Shader(std::string vertex, std::string fragment)
 	getUniformLocations();
 }
 
-Shader::Shader(std::vector<std::string> vertexShaders, std::vector<std::string> fragmentShaders)
+Shader::Shader(std::vector<std::string> vertexShaders, std::vector<std::string> fragmentShaders) : Shader() 
 {
 	std::vector<GLuint> vertexs;
 	std::vector<GLuint> fragments;
@@ -125,7 +125,8 @@ void Shader::setProgramInformation(Scene& scene, Solid const& object)
 	//the projection matrices sent to the shader
 	sendMatrix4("objectSpace", objectSpace);
 	sendMatrix4("mvp", worldSpace);
-	
+	sendFloat("near", cam.getNearFarPlanes().x);
+	sendFloat("far", cam.getNearFarPlanes().y);
 	//glUniformMatrix4fv(uniforms["mvp"], 1, false, glm::value_ptr(worldSpace));
 	//the objectspace that can be used to calculate lights or the posiiton of a vertex to a point. We send it to the shader.
 	
@@ -135,12 +136,12 @@ void Shader::setProgramInformation(Scene& scene, Solid const& object)
 	uniforms["reflectionTex"] = glGetUniformLocation(program, "reflectionTex");
 }
 
-void Shader::sendTexChannels(std::map<std::string, Texture*> textures)
+void Shader::sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> textures)
 {
 	glUseProgram(program);
 	//iterating through the map of channels.
 	int i = 0;
-	for (std::map<std::string, Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
+	for (auto it = textures.begin(); it != textures.end(); it++)
 	{
 		//we send to the program the channel, with it's name and the texture unit.
 		if (uniforms.find(it->first) == uniforms.end())
@@ -149,9 +150,24 @@ void Shader::sendTexChannels(std::map<std::string, Texture*> textures)
 		}
 
 		it->second->applyTexture(program, uniforms[it->first], i);
-
 		i++;
 	}
+	//If we have used more textures units than before we update the number of used texture units
+	//if (i > this->highestTextureUnitUsed)
+	//{
+	//	highestTextureUnitUsed = i;
+	//}
+	////if we have used less texture units than before, we unbind the unsued ones, and update the numberOf texture units used.
+	//else
+	//{
+	//	while (i <= highestTextureUnitUsed)
+	//	{
+	//		//we unbind the texture
+	//		glActiveTexture(GL_TEXTURE0 + i);
+	//		glBindTexture(GL_TEXTURE_2D, 0);
+	//		i++;
+	//	}
+	//}
 }
 
 void Shader::compileShader(GLuint shader, std::string shaderPath)

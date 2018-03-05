@@ -1,4 +1,4 @@
- #version 330 core
+ #version 450 core
 in vec3 normalWorld;
 in vec3 tangentWorld;
 in vec3 biTangentWorld;
@@ -9,7 +9,8 @@ in vec3 posTan;
 in vec3 camTan;
 //in vec3 tang;
  
-out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
+layout(location = 1) out vec3 normalOut;
 
 uniform float[7] light;
 uniform float time;
@@ -18,7 +19,7 @@ uniform sampler2D diffuse;
 uniform sampler2D spec;
 uniform sampler2D normalMap;
 uniform sampler2D depthMap;
-//uniform sampler2D reflectionTex;
+
 
 
 vec3 fragLight(float light[7], vec3 normalWorld, vec3 fragPosWorld);
@@ -57,12 +58,10 @@ void main()
 	vec3 intensityVec = fragLight(light, normal_, pos);
 	vec3 specVec = specCalc(light, normal_, pos, camPos, specPow, specVal);
 	vec4 color = vec4(albedo(newUV),1);
-	//vec4 color = vec4(normal_,1);
-    FragColor = vec4(  intensityVec + specVec + ambiant,1) * color;
-	//FragColor = vec4(normal_,1);
-	//FragColor = texture(normalMap, newUV);
 
-	
+    FragColor = vec4(  intensityVec + specVec + ambiant,1) * color;
+	//the output of the normal vector must fit in [0,1]
+	normalOut = normal_/2 + vec3(0.5);
 }
 
 vec3 albedo(vec2 UVin)
@@ -82,14 +81,20 @@ vec3 albedo(vec2 UVin)
 	{
 		col = vec3(0.2,0.2,1);
 	}
-	//col = vec3(texture(reflectionTex,gl_FragCoord.xy));
-	col = vec3(1);
+	col = vec3(texture(diffuse, UVin));
+	//col = vec3(textureSize(depthMap,0).xy/2,0);
 	return col;
 }
 
 vec2 parralax(vec3 camTan, vec3 posTan)
 {
 	float heightScale = 0.1;
+	//If there is no bound map we get out of the function without trying to give a valid result.
+	if(textureSize(depthMap,0).x < 2)
+	{
+		return vec2(0);
+	}
+	
 	int nbSample = 200;
 
 	float nbSamplef = float(nbSample);
@@ -97,10 +102,6 @@ vec2 parralax(vec3 camTan, vec3 posTan)
 
 	vec3 viewDir = normalize( posTan - camTan );
 	float height =  texture(depthMap, UV).r;    
-    vec2 p = viewDir.xy / viewDir.z * (height * heightScale);
-   // return - p;
-
-	//lets try to make the real one.
 	
 	float currentHeight = 1;
 	//this vector will go through the layers.

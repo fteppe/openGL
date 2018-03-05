@@ -1,4 +1,4 @@
-#version 330 core
+#version 450 core
 
 vec3 fragLight(float light[7], vec3 normal, vec3 vertexPos)
 {

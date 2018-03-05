@@ -18,10 +18,31 @@ Scene::Scene(Camera cam):cam(cam)
 	this->cam.setUp(glm::vec3(0, 1, 0));
 
 	clock.restart();
-	frame = new FrameBuffer;
+	FrameBuffer * frame = new FrameBuffer;
 
-	frame->renderToScreen();
+	//frame->renderToScreen();
+	
+	std::shared_ptr<Texture> output2(new Texture);
+	std::shared_ptr<Texture> depthBuffer(new Texture);
+	textures["color"] = std::shared_ptr<Texture>(new Texture);
+	textures["normals"] = output2;
+	textures["depth"] = depthBuffer;
+	
+	frame->addColorOutputTexture(textures["color"]);
+	frame->setDepthTexture(depthBuffer);
+	frame->addColorOutputTexture(output2);
+	
 
+	//We set the frame as the renderPass we want.
+	renderPasses.push_back(new RenderPass());
+	RenderPass * pass = renderPasses.back();
+	pass->setRenderOutput(frame);
+	pass->setRenderTagsIncluded({ WORLD_OBJECT });
+	
+	//the second render pass we don't set a frameBuffer so it will render to the screen.
+	renderPasses.push_back(new RenderPass());
+	pass = renderPasses.back();
+	pass->setRenderTagsIncluded({ POST_PROCESS });
 }
 
 
@@ -40,12 +61,14 @@ void Scene::animate(sf::Clock elapsed)
 
 Scene::~Scene()
 {
-	for (GameObject* obj : elements)
+	for (GameObject* obj : gameObjects)
 	{
 		delete obj;
 	}
-	delete skybox;
-	delete frame;
+	for (RenderPass* pass : renderPasses)
+	{
+		delete pass;
+	}
 }
 
 void Scene::setCamera(Camera camera) 
@@ -55,43 +78,37 @@ void Scene::setCamera(Camera camera)
 
 void Scene::renderScene()
 {
-	int error = glGetError();
-	renderPass = 0;
-	frame->renderToThis();
-	/*
-	for (int i = 0; i < elements.size(); i++)
-	{
 
-		elements[i]->setPos(glm::vec3(0));
-		elements[i]->draw(*this);
+	for (auto pass : renderPasses)
+	{
+ 		pass->renderScene(*this);
+		//textures["depth"]->readData();
 	}
-	*/
-	elements[1]->draw(*this);
-	//textures["textures/EyCkvNyNormal.png"]->readData();
-	//textures["reflection"]->readData();
-	error = glGetError();
-	renderPass = 1;
-	frame->renderToScreen();
-	elements[1]->draw(*this);
-	elements[0]->draw(*this);
-	
-	error = glGetError();
+	//renderPasses[0]->renderScene(*this);
+	//renderPasses[1]->renderScene(*this);
+
 }
 
 void Scene::load(std::string scene)
 {
+
 	loader.setSceneToLoad(scene);
-	models = loader.loadModels();
-	textures = loader.loadTextures();
-	shaders = loader.loadShaders();
-	materials = loader.loadMaterials(textures, shaders);
-	elements = loader.loadGameObjects(materials, models);
+
+	auto shadersLoaded = loader.loadShaders();
+	shaders.insert(shadersLoaded.begin(), shadersLoaded.end());
+
+	auto materialsLoaded = loader.loadMaterials(textures, shaders);
+	materials.insert(materialsLoaded.begin(), materialsLoaded.end());
+
+	auto elementsLoaded = loader.loadGameObjects(materials, models);
+	gameObjects.insert(gameObjects.end(), elementsLoaded.begin(), elementsLoaded.end());
+
 	makeSkyBox();
 
+	//Testing puposes.
 
-	textures["reflection"] = std::shared_ptr<Texture>(new Texture);
-	materials["mat1"]->setChannel(textures["reflection"].get(), "reflectionTex");
-	frame->attachOutputTexture(textures["reflection"]);
+	setupPostProcessing();
+
 
 }
 
@@ -118,6 +135,11 @@ float Scene::getElapsedTime() const
 	return elapsedTime;
 }
 
+std::vector<GameObject*> Scene::getGameObjects()
+{
+	return gameObjects;
+}
+
 void Scene::makeSkyBox()
 {
 	//TODO: change this function because this is right now the dirtiest way to do it.
@@ -141,10 +163,44 @@ void Scene::makeSkyBox()
 	Shader* shaderSky = new Shader(std::vector<std::string>({ "cubeMap.ver" }), { "cubeMap.frag" });
 	//shaders["skybox"] = std::shared_ptr<Shader>(new Shader(std::vector<std::string>({ "cubeMap.ver" }), { "cubeMap.frag" }));
 	shaders["skybox"] = std::shared_ptr<Shader>(shaderSky);
-	materials["sky"] = std::shared_ptr<Material>(new Material(shaders["skybox"].get()));
-	materials["sky"]->setChannel(textures["skybox"].get(), "skybox");
+	materials["sky"] = std::shared_ptr<Material>(new Material(shaders["skybox"]));
+	materials["sky"]->setChannel(textures["skybox"], "skybox");
 	Solid* sky = new Solid(models["obj/common.obj"]["Cube"]);
 	sky->setMaterial(materials["sky"]);
 	sky->setScale(glm::vec3(100, 100, 100));
-	elements.push_back(sky);
+	sky->addTag(WORLD_OBJECT);
+	gameObjects.push_back(sky);
+}
+
+void Scene::setupPostProcessing()
+{
+	//All this part is very exeprimental and hard coded weirdly which I would like to change in the future.
+
+	//for the post processing we need a flat triangle
+	std::vector<std::vector<int>> faces = { {0,1,2} };
+	std::vector<glm::vec3> points = { glm::vec3(-1,-1,0), glm::vec3(3,-1,0),glm::vec3(-1,3,0) };
+	VertexBufferObject * screen = new VertexBufferObject(points, faces);
+	//the UVs of our screen, the way it is set up we should have the sides of the screen aligned with the side of the square in the triangle.
+	std::vector<glm::vec3> uvs = { glm::vec3(0,0,0), glm::vec3(2,0,0), glm::vec3(0,2,0) };
+	screen->setUVs(uvs);
+	//we give it a name so we can more easely follow it.
+	screen->setFilePath(std::pair<std::string, std::string>("hard", "screen"));
+	std::shared_ptr<VertexBufferObject> vbo_ptr(screen);
+	Solid* screenObj = new Solid(vbo_ptr);
+	//models["hard"]["screen"] = vbo_ptr;
+	//this triangle has a different shader than usual.
+
+	Shader* shader = new Shader("postProcess.ver", "postProcess.frag");
+	std::shared_ptr<Shader> shader_ptr(shader);
+	Material* mat = new Material(shader_ptr);
+	std::shared_ptr<Material> mat_ptr(mat);
+	mat_ptr->setChannel(textures["color"], "color");
+	mat_ptr->setChannel(textures["normals"], "normals");
+	mat_ptr->setChannel(textures["depth"], "depth");
+	screenObj->setMaterial(mat_ptr);
+	screenObj->addTag(POST_PROCESS);
+	//We add all these newly created elements to the scene;
+	shaders["postProcess"] = shader_ptr;
+	materials["postProcess"] = mat_ptr;
+	gameObjects.push_back(screenObj);	
 }

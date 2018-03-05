@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Common.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeMap.h" />
     <ClInclude Include="EventHandler.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Octree.h" />
     <ClInclude Include="Polygon.h" />
+    <ClInclude Include="RenderPass.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneLoader.h" />
@@ -181,6 +183,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -226,6 +229,8 @@
     <None Include="shaders\directionalLight.frag" />
     <None Include="shaders\lightCalc.frag" />
     <None Include="shaders\PBR.frag" />
+    <None Include="shaders\postProcess.frag" />
+    <None Include="shaders\postProcess.ver" />
     <None Include="shaders\specular.frag" />
     <None Include="shaders\specularCalc.frag" />
     <None Include="shaders\texture.frag" />

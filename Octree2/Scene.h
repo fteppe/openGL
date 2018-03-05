@@ -3,10 +3,12 @@
 #include "Light.h"
 #include "SceneLoader.h"
 #include "FrameBuffer.h"
+#include "RenderPass.h"
 #include <vector>
 #include <SFML/Window.hpp>
-//lol stuffs
-//#include "GameObject.h"
+
+class RenderPass;
+
 /*
 This class contains objects, a light and a camera. So we should be able to render a scene.
 */
@@ -25,20 +27,22 @@ public:
 	Light getLight() const;
 	std::shared_ptr<Texture> getTexture(std::string tex) ; 
 	float getElapsedTime() const;
+	std::vector<GameObject *> getGameObjects();
 
-	//TODO: remove it and replace by proper renderPass object
-	unsigned renderPass;
 
 private:
 	void makeSkyBox();
+	void setupPostProcessing();
 
 	Camera cam;
 	Light light;
 	sf::Clock clock;
-	std::vector<GameObject*> elements;
+	std::vector<GameObject*> gameObjects;
 	GameObject* skybox;
-	FrameBuffer* frame;
 	SceneLoader loader;
+
+	//These are stored in the order in which they must be done.
+	std::vector<RenderPass*> renderPasses;
 
 	VBO_CONTAINER models;
 	MAT_CONTAINER materials;

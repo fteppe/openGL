@@ -10,9 +10,9 @@ Camera::Camera(float height, float width, float fov)
 {
 	//begin and end, give how close and how far the camera renders.
 	this->size = glm::vec2(width, height);
-	float begin = 0.1f;
-	float end = 200;
-	projection = glm::perspective(fov, width / height, begin, end);
+	nearPlane = 0.1f;
+	farPlane = 200;
+	projection = glm::perspective(fov, width / height, nearPlane, farPlane);
 }
 
 //this give the projection matrix to see through the camera.
@@ -62,6 +62,11 @@ glm::vec3 Camera::getUp()
 glm::vec2 Camera::getSize()
 {
 	return size;
+}
+
+glm::vec2 Camera::getNearFarPlanes()
+{
+	return glm::vec2(nearPlane, farPlane);
 }
 
 

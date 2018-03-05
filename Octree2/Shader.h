@@ -20,7 +20,7 @@ public:
 	~Shader();
 	unsigned int getProgram() const;
 	virtual void setProgramInformation(Scene & scene,Solid const& object);
-	void sendTexChannels(std::map<std::string, Texture*> textures);
+	void sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> textures);
 protected:
 	void compileShader(GLuint shader, std::string shaderPath);
 	void linkProgram();
@@ -31,6 +31,9 @@ protected:
 	unsigned int program;
 	std::map<std::string,GLint> uniforms;
 
+	//This is in the case we use the same program for different materials that don't use the same number of samplers.
+	//In this case to make sure those samplers are unbound when they need to, we keep track of that.
+	GLuint highestTextureUnitUsed;
 
 
 };

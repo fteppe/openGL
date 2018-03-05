@@ -35,6 +35,16 @@ void GameObject::setRotation(float rotation, glm::vec3 rotationAngle)
 	updateModelMatrix();
 }
 
+void GameObject::addTag(RenderTag tag)
+{
+	renderTags.insert(tag);
+}
+
+std::set<RenderTag> GameObject::getRenderTags()
+{
+	return renderTags;
+}
+
 glm::vec3 GameObject::getPos()
 {
 	return pos;
@@ -54,6 +64,11 @@ glm::vec4 GameObject::getRotation()
 glm::mat4 GameObject::getmodelMatrix() const
 {
 	return modelMatrix;
+}
+
+std::shared_ptr<Material> GameObject::getMaterial()
+{
+	return material_ptr;
 }
 
 void GameObject::draw(Scene & scene)

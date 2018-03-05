@@ -1,4 +1,4 @@
-SRC = Camera.cpp Cube.cpp CubeMap.cpp EventHandler.cpp GameObject.cpp Light.cpp main.cpp Material.cpp Octree.cpp Polygon.cpp Scene.cpp SceneLoader.cpp ShaderBasic.cpp Shader.cpp ShaderPBR.cpp ShaderSpecular.cpp Solid.cpp stdafx.cpp Texture.cpp Vec3.cpp VertexBufferObject.cpp waveFrontLoader.cpp WindowBuilder.cpp
+SRC = Camera.cpp Cube.cpp CubeMap.cpp EventHandler.cpp FrameBuffer.cpp GameObject.cpp Light.cpp main.cpp Material.cpp Octree.cpp Polygon.cpp Scene.cpp SceneLoader.cpp Shader.cpp ShaderPBR.cpp Solid.cpp stdafx.cpp Texture.cpp Vec3.cpp VertexBufferObject.cpp waveFrontLoader.cpp WindowBuilder.cpp
 BUILDDIR = ./linuxBuild/
 #OBJ = $(SRC:.cpp=.o)
 OBJ = $(SRC:%.cpp=$(BUILDDIR)%.o)
