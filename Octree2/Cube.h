@@ -1,8 +1,9 @@
 #pragma once
-#include "Vec3.h"
-#include "Polygon.h"
+//#include "Vec3.h"
+//#include "Polygon.h"
 #include "Solid.h"
 #include <vector>
+
 class Cube : public VertexBufferObject
 {
 public:

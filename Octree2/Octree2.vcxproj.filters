@@ -9,7 +9,6 @@
     <ClCompile Include="waveFrontLoader.cpp" />
     <ClCompile Include="WindowBuilder.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Octree.cpp" />

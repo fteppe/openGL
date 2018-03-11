@@ -173,7 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="CubeMap.cpp" />
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
