@@ -11,25 +11,29 @@
 #include "GameObject.h"
 
 
+namespace tetraRender
+{
 #define VBO_CONTAINER std::map<std::string, std::map<std::string, std::shared_ptr<VertexBufferObject>>>
 #define MAT_CONTAINER std::map<std::string, std::shared_ptr<Material>>
 #define TEXTURE_CONTAINER std::map<std::string, std::shared_ptr<Texture>>
 #define SHADER_CONTAINER std::map<std::string, std::shared_ptr<Shader>>
 
-class SceneLoader
-{
-public:
-	SceneLoader();
-	~SceneLoader();
-	void setSceneToLoad(std::string file);
-	VBO_CONTAINER  loadModels();
-	TEXTURE_CONTAINER loadTextures();
-	SHADER_CONTAINER loadShaders();
-	MAT_CONTAINER loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CONTAINER& shaders);
-	std::vector<GameObject *> loadGameObjects(MAT_CONTAINER& mats, VBO_CONTAINER& objects);
-private:
-	Texture * loadTexture(std::string texturePath);
-	rapidjson::Document doc;
+	class SceneLoader
+	{
+	public:
+		SceneLoader();
+		~SceneLoader();
+		void setSceneToLoad(std::string file);
+		VBO_CONTAINER  loadModels();
+		TEXTURE_CONTAINER loadTextures();
+		SHADER_CONTAINER loadShaders();
+		MAT_CONTAINER loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CONTAINER& shaders);
+		std::vector<GameObject *> loadGameObjects(MAT_CONTAINER& mats, VBO_CONTAINER& objects);
+	private:
+		Texture * loadTexture(std::string texturePath);
+		rapidjson::Document doc;
 
-};
+	};
 
+
+}

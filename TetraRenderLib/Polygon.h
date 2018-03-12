@@ -24,7 +24,7 @@ namespace perso {
 		unsigned int getVertArraySize();
 	private:
 		std::vector<Polygon> earSplitting();
-		bool isInPolygon(std::vector<Vec3> triangle);
+		bool isInPolygon(std::vector<tetraRender::Vec3> triangle);
 
 		std::vector<glm::vec3> points;
 	};
