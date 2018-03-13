@@ -1,0 +1,29 @@
+{
+    "models" : ["obj/scene.obj"],
+    "textures" : ["textures/EyCkvNy.png","textures/EyCkvNyNormal.png"],
+    "shaders" :[
+            {
+            "name":"generic",
+            "type":"shaderPBR",
+            "vertex":["texture.ver"],
+            "fragment":["PBR.frag","specularCalc.frag","lightCalc.frag"]
+        }
+    ],
+    "materials":[
+        {
+            "name":"PBR",
+            "shader":"generic",
+            "channels":{
+                "normalMap":"textures/EyCkvNyNormal.png",
+                "depthMap":"textures/EyCkvNy.png"
+            }
+        }
+    ],
+    "gameObjects":[
+        {
+            "type":"solid",
+            "material":"PBR",
+            "model":["obj/scene.obj","Grid"]
+        }
+    ]
+}
