@@ -107,7 +107,12 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>Dependencies\rapidjson;Dependencies\glm;Dependencies\glew;Dependencies\SFML;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -139,6 +144,9 @@
     <Lib>
       <AdditionalLibraryDirectories>Dependencies\rapidjson;Dependencies\glm;Dependencies\glew;Dependencies\SFML;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
