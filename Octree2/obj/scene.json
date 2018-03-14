@@ -19,11 +19,16 @@
             }
         }
     ],
-    "gameObjects":[
-        {
-            "type":"solid",
-            "material":"PBR",
-            "model":["obj/scene.obj","Grid"]
-        }
-    ]
+  "gameObjects": [
+    {
+      "type": "solid",
+      "material": "PBR",
+      "model": [ "obj/scene.obj", "Grid" ]
+    },
+    {
+      "type": "solid",
+      "material": "PBR",
+      "model": [ "obj/scene.obj", "Suzanne" ]
+    }
+  ]
 }

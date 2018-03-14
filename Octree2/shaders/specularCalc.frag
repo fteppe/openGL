@@ -1,4 +1,4 @@
-#version 450 core
+#version 430 core
 
 uniform sampler2D specularMap;
 

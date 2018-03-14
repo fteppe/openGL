@@ -39,6 +39,7 @@ WindowBuilder::WindowBuilder()
 
 	window.create(sf::VideoMode(width, height), "Tetra Engine", sf::Style::Close, settings);
 	glEnable(GL_DEPTH_TEST);
+	glCullFace(GL_BACK);
 	glewExperimental = GL_TRUE;
 	glewInit();
 	//apparently an old implementation bug tends to raise an error on startup. We call geterror to remove it.
