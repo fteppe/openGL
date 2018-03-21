@@ -14,13 +14,11 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QScrollBar>
+#include <QtWidgets/QOpenGLWidget>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
-#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -29,10 +27,7 @@ class Ui_TetraEngineClass
 {
 public:
     QWidget *centralWidget;
-    QWidget *verticalLayoutWidget;
-    QVBoxLayout *verticalLayout;
-    QScrollBar *horizontalScrollBar;
-    QLabel *label;
+    QOpenGLWidget *openGLWidget;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -45,25 +40,9 @@ public:
         TetraEngineClass->resize(600, 400);
         centralWidget = new QWidget(TetraEngineClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        verticalLayoutWidget = new QWidget(centralWidget);
-        verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(0, 0, 201, 201));
-        verticalLayout = new QVBoxLayout(verticalLayoutWidget);
-        verticalLayout->setSpacing(6);
-        verticalLayout->setContentsMargins(11, 11, 11, 11);
-        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        horizontalScrollBar = new QScrollBar(verticalLayoutWidget);
-        horizontalScrollBar->setObjectName(QStringLiteral("horizontalScrollBar"));
-        horizontalScrollBar->setOrientation(Qt::Horizontal);
-
-        verticalLayout->addWidget(horizontalScrollBar);
-
-        label = new QLabel(verticalLayoutWidget);
-        label->setObjectName(QStringLiteral("label"));
-
-        verticalLayout->addWidget(label);
-
+        openGLWidget = new QOpenGLWidget(centralWidget);
+        openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
+        openGLWidget->setGeometry(QRect(0, 0, 300, 200));
         TetraEngineClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(TetraEngineClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -89,7 +68,6 @@ public:
     void retranslateUi(QMainWindow *TetraEngineClass)
     {
         TetraEngineClass->setWindowTitle(QApplication::translate("TetraEngineClass", "TetraEngine", nullptr));
-        label->setText(QApplication::translate("TetraEngineClass", "TextLabel", nullptr));
         toolBar->setWindowTitle(QApplication::translate("TetraEngineClass", "toolBar", nullptr));
     } // retranslateUi
 
