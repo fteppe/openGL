@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Window.hpp>
-#include "Shader.h"
 //
 class WindowBuilder
 {

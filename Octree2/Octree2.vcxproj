@@ -75,7 +75,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);Dependencies</IncludePath>
+    <IncludePath>d:\Profiles\fteppe\Documents\programation\tetraEngine\TetraRenderLib;$(VC_IncludePath);$(WindowsSDK_IncludePath);Dependencies</IncludePath>
     <OutDir>$(SolutionDir)\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -83,7 +83,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);Dependencies</IncludePath>
+    <IncludePath>d:\Profiles\fteppe\Documents\programation\tetraEngine\TetraRenderLib;$(VC_IncludePath);$(WindowsSDK_IncludePath);Dependencies</IncludePath>
     <OutDir>$(SolutionDir)\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -106,8 +106,8 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>Dependencies\glew;Dependencies;Dependencies\SFML\lib;Dependencies</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;%(AdditionalDependencies);sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib;Dependencies\glew;Dependencies;Dependencies\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>TetraRenderLib-d.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies);sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,8 +139,8 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>Dependencies\glew;Dependencies;Dependencies\SFML\lib;Dependencies</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;sfml-window.lib;sfml-system.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib;Dependencies\glew;Dependencies;Dependencies\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>TetraRenderLib.lib;opengl32.lib;glew32.lib;sfml-window.lib;sfml-system.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -174,32 +174,14 @@
     <ClInclude Include="WindowBuilder.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CubeMap.cpp" />
-    <ClCompile Include="EventHandler.cpp" />
-    <ClCompile Include="FrameBuffer.cpp" />
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Octree.cpp" />
-    <ClCompile Include="Polygon.cpp" />
-    <ClCompile Include="RenderPass.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneLoader.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="ShaderPBR.cpp" />
-    <ClCompile Include="Solid.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vec3.cpp" />
-    <ClCompile Include="VertexBufferObject.cpp" />
-    <ClCompile Include="waveFrontLoader.cpp" />
     <ClCompile Include="WindowBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>

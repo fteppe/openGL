@@ -84,6 +84,7 @@
     <OutDir>..\lib</OutDir>
     <IntDir>..\lib</IntDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);Dependencies</IncludePath>
+    <TargetName>$(ProjectName)-d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
