@@ -14,6 +14,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TetraRenderLib", "TetraRend
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "folder", "folder", "{E32AC566-0CF1-48A1-94D2-B16A60EC7F4D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TetraVisu", "TetraVisu\TetraVisu.vcxproj", "{9E22EF76-C54F-4BE0-88F1-B08E95455701}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -44,13 +46,21 @@ Global
 		{FCBCDB85-039C-49E7-A594-7380F15A3083}.Release|x64.Build.0 = Release|x64
 		{FCBCDB85-039C-49E7-A594-7380F15A3083}.Release|x86.ActiveCfg = Release|Win32
 		{FCBCDB85-039C-49E7-A594-7380F15A3083}.Release|x86.Build.0 = Release|Win32
+		{9E22EF76-C54F-4BE0-88F1-B08E95455701}.Debug|x64.ActiveCfg = Debug|x64
+		{9E22EF76-C54F-4BE0-88F1-B08E95455701}.Debug|x64.Build.0 = Debug|x64
+		{9E22EF76-C54F-4BE0-88F1-B08E95455701}.Debug|x86.ActiveCfg = Debug|Win32
+		{9E22EF76-C54F-4BE0-88F1-B08E95455701}.Debug|x86.Build.0 = Debug|Win32
+		{9E22EF76-C54F-4BE0-88F1-B08E95455701}.Release|x64.ActiveCfg = Release|x64
+		{9E22EF76-C54F-4BE0-88F1-B08E95455701}.Release|x64.Build.0 = Release|x64
+		{9E22EF76-C54F-4BE0-88F1-B08E95455701}.Release|x86.ActiveCfg = Release|Win32
+		{9E22EF76-C54F-4BE0-88F1-B08E95455701}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Qt5Version = 10.1
 		SolutionGuid = {39BABE6F-64FF-43C3-8F19-8EDDFF05CEE5}
+		Qt5Version = 10.1
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

@@ -75,7 +75,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>d:\Profiles\fteppe\Documents\programation\tetraEngine\TetraRenderLib;$(VC_IncludePath);$(WindowsSDK_IncludePath);Dependencies</IncludePath>
+    <IncludePath>$(SolutionDir)\TetraRenderLib;$(VC_IncludePath);$(WindowsSDK_IncludePath);Dependencies</IncludePath>
     <OutDir>$(SolutionDir)\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
