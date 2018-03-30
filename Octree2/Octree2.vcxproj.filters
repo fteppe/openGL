@@ -7,6 +7,24 @@
     <ClCompile Include="Vec3.cpp" />
     <ClCompile Include="WindowBuilder.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CubeMap.cpp" />
+    <ClCompile Include="EventHandler.cpp" />
+    <ClCompile Include="FrameBuffer.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Octree.cpp" />
+    <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="RenderPass.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneLoader.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderPBR.cpp" />
+    <ClCompile Include="Solid.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="VertexBufferObject.cpp" />
+    <ClCompile Include="waveFrontLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h">

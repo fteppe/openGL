@@ -9,9 +9,9 @@
 #include <iostream>
 #include <iomanip>
 
-#include <Camera.h>
-#include <Scene.h>
-#include <EventHandler.h>
+#include "Camera.h"
+#include "Scene.h"
+#include "EventHandler.h"
 
 
 //This will build a window using open GL and stuff, this is a way to unclutter the main.
@@ -46,10 +46,10 @@ WindowBuilder::WindowBuilder()
 
 	sf::Clock clock;
 
-	tetraRender::Camera cam(600.0f, 800.0f, 0.75f);
-	auto  scene = std::shared_ptr<tetraRender:: Scene>(new tetraRender::Scene(cam));
+	Camera cam(600.0f, 800.0f, 0.75f);
+	auto  scene = std::shared_ptr<Scene>(new Scene(cam));
 	scene->load("obj/scene.json");
-	tetraRender:: EventHandler handler(scene);
+	EventHandler handler(scene);
 	//std::cout << glGetString(GL_VERSION) << std::endl;
 
 	while (window.isOpen())

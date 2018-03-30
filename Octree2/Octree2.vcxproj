@@ -174,14 +174,32 @@
     <ClInclude Include="WindowBuilder.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CubeMap.cpp" />
+    <ClCompile Include="EventHandler.cpp" />
+    <ClCompile Include="FrameBuffer.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Octree.cpp" />
+    <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="RenderPass.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneLoader.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderPBR.cpp" />
+    <ClCompile Include="Solid.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vec3.cpp" />
+    <ClCompile Include="VertexBufferObject.cpp" />
+    <ClCompile Include="waveFrontLoader.cpp" />
     <ClCompile Include="WindowBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>

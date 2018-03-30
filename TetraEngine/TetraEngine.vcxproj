@@ -38,7 +38,7 @@
     <Link>
       <SubSystem Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Windows</SubSystem>
       <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\lib\glew;$(SolutionDir)\lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\lib;$(SolutionDir)\Dependencies\SFML\lib;$(SolutionDir)\Dependencies\glew;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateDebugInformation>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">sfml-system.lib;tetraRenderLib-d.lib;glew32.lib;qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5OpenGLd.lib;opengl32.lib;glu32.lib;Qt5OpenGLExtensionsd.lib;Qt5Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -97,7 +97,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib\glew;$(SolutionDir)\lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib;$(SolutionDir)\Dependencies\SFML\lib;$(SolutionDir)\Dependencies\glew;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalDependencies>sfml-system.lib;tetraRenderLib.lib;glew32.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5OpenGL.lib;opengl32.lib;glu32.lib;Qt5OpenGLExtensions.lib;Qt5Widgets.lib;%(AdditionalDependencies);</AdditionalDependencies>
     </Link>

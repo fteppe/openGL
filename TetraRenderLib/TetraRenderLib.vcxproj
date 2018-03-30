@@ -73,7 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\lib</OutDir>
-    <IntDir>..\lib</IntDir>
+    <IntDir>..\lib\$(Configuration)</IntDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);Dependencies</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -82,7 +82,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\lib</OutDir>
-    <IntDir>..\lib</IntDir>
+    <IntDir>..\lib\$(Configuration)</IntDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);Dependencies</IncludePath>
     <TargetName>$(ProjectName)-d</TargetName>
   </PropertyGroup>
@@ -146,7 +146,7 @@
       <AdditionalLibraryDirectories>Dependencies\rapidjson;Dependencies\glm;Dependencies\glew;Dependencies\SFML;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <ProjectReference>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

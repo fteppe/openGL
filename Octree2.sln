@@ -15,6 +15,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "folder", "folder", "{E32AC566-0CF1-48A1-94D2-B16A60EC7F4D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TetraVisu", "TetraVisu\TetraVisu.vcxproj", "{9E22EF76-C54F-4BE0-88F1-B08E95455701}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FCBCDB85-039C-49E7-A594-7380F15A3083} = {FCBCDB85-039C-49E7-A594-7380F15A3083}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

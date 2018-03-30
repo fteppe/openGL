@@ -9,9 +9,9 @@
 #include <iostream>
 #include <iomanip>
 
-#include <Camera.h>
-#include <Scene.h>
-#include <EventHandler.h>
+#include <tetraRender\Camera.h>
+#include <tetraRender\Scene.h>
+#include <tetraRender\EventHandler.h>
 
 
 //This will build a window using open GL and stuff, this is a way to unclutter the main.
@@ -51,6 +51,7 @@ WindowBuilder::WindowBuilder()
 	scene->load("obj/scene.json");
 	tetraRender:: EventHandler handler(scene);
 	//std::cout << glGetString(GL_VERSION) << std::endl;
+	
 
 	while (window.isOpen())
 	{
