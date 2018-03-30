@@ -9,6 +9,7 @@ FrameBuffer::FrameBuffer()
 	//TODO: not have these has hard coded values.
 	width = WIDTH;
 	height = HEIGHT;
+	isHDR = false;
 	glGenFramebuffers(1, &frameBufferId);
 
 	glGenRenderbuffers(1, &renderBufferId);
@@ -39,28 +40,6 @@ FrameBuffer::~FrameBuffer()
 	}
 }
 
-void FrameBuffer::attachOutputTexture(std::shared_ptr<Texture> texture)
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
-	glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
-	outputTexture = texture;
-	outputTexture->bind();
-	//We don't send any data to this texture sinec the data will come from the rendering.
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	outputTexture->loadImage(GL_TEXTURE_2D, width, height, 3, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, outputTexture->getId(), 0);
-
-
-
-	GLenum error  = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
-	//we set the frame buffer back to the screen
-	renderToScreen();
-}
 
 void FrameBuffer::renderToThis()
 {
@@ -91,9 +70,15 @@ void FrameBuffer::addColorOutputTexture(std::shared_ptr<Texture> texture)
 	texture->bind();
 	//We associate a 2D texture to the one we bound.
 	//We don't send any data to this texture sinec the data will come from the rendering.
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+	GLenum textureColorSize = GL_RGB;
+	if (isHDR)
+	{
+		textureColorSize = GL_RGB16F;
+	}
+	glTexImage2D(GL_TEXTURE_2D, 0, textureColorSize, width, height, 0, GL_RGB, GL_FLOAT, NULL);
 	//we send the image to the graphic card
-	texture->loadImage(GL_TEXTURE_2D, width, height, 3, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, textureColorSize, width, height, 0, GL_RGB, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -110,6 +95,8 @@ void FrameBuffer::addColorOutputTexture(std::shared_ptr<Texture> texture)
 
 	glDrawBuffers(colorLayout.size(), &colorLayout[0]);
 
+	//We unbind everything
+	glBindTexture(GL_TEXTURE_2D, 0);
 	unbind();
 }
 
@@ -146,6 +133,16 @@ void FrameBuffer::setDepthTexture(std::shared_ptr<Texture> texture)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 	
 	unbind();
+}
+
+void tetraRender::FrameBuffer::setHDR(bool hdrVal)
+{
+	//TODO : update all textures
+	if (isHDR != hdrVal)
+	{
+
+	}
+	isHDR = hdrVal;
 }
 
 void FrameBuffer::bind()

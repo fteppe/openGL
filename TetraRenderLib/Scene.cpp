@@ -21,18 +21,21 @@ tetraRender::Scene::Scene(Camera cam):cam(cam)
 
 	clock.restart();
 	FrameBuffer * frame = new FrameBuffer;
-
+	frame->setHDR(true);
 	//frame->renderToScreen();
 	
-	std::shared_ptr<Texture> output2(new Texture);
+	std::shared_ptr<Texture> normalsBuffer(new Texture);
 	std::shared_ptr<Texture> depthBuffer(new Texture);
+	std::shared_ptr<Texture> lights(new Texture);
 	textures["color"] = std::shared_ptr<Texture>(new Texture);
-	textures["normals"] = output2;
+	textures["normals"] = normalsBuffer;
 	textures["depth"] = depthBuffer;
+	textures["lights"] = lights;
 	
 	frame->addColorOutputTexture(textures["color"]);
 	frame->setDepthTexture(depthBuffer);
-	frame->addColorOutputTexture(output2);
+	frame->addColorOutputTexture(normalsBuffer);
+	frame->addColorOutputTexture(lights);
 	
 
 	//We set the frame as the renderPass we want.
@@ -206,14 +209,15 @@ void tetraRender::Scene::setupPostProcessing()
 	Shader* shader = new Shader("postProcess.ver", "postProcess.frag");
 	std::shared_ptr<Shader> shader_ptr(shader);
 	Material* mat = new Material(shader_ptr);
-	std::shared_ptr<Material> mat_ptr(mat);
-	mat_ptr->setChannel(textures["color"], "color");
-	mat_ptr->setChannel(textures["normals"], "normals");
-	mat_ptr->setChannel(textures["depth"], "depth");
-	screenObj->setMaterial(mat_ptr);
+	std::shared_ptr<Material> postProcessMat(mat);
+	postProcessMat->setChannel(textures["color"], "color");
+	postProcessMat->setChannel(textures["normals"], "normals");
+	postProcessMat->setChannel(textures["depth"], "depth");
+	postProcessMat->setChannel(textures["lights"], "lights");
+	screenObj->setMaterial(postProcessMat);
 	screenObj->addTag(POST_PROCESS);
 	//We add all these newly created elements to the scene;
 	shaders["postProcess"] = shader_ptr;
-	materials["postProcess"] = mat_ptr;
+	materials["postProcess"] = postProcessMat;
 	gameObjects.push_back(screenObj);	
 }
