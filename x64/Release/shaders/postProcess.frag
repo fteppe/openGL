@@ -22,8 +22,44 @@ void main()
 	
     //FragColor = vec4(fogColor,1);
 	vec4 lightDim = texture(lights, UV);
-	vec4 color = texture(color, UV);
-	vec4 HDR = lightDim * color;
-	//HDR = HDR/(HDR + vec4(1));
+	vec4 colorSample = texture(color, UV);
+	vec4 HDR = lightDim * colorSample;
+	HDR = HDR/(HDR + vec4(1));
 	ColorOutput = HDR;
+
+	//We are going to go for a blurry image post processing.
+	// Building the offset matrix 
+	float offset = 0.005f;
+
+	if(depthVal < 0.7)
+	{
+		offset = 0;
+	}
+	vec2 offsetMat[9] = {vec2(-offset, offset), //top left
+	vec2(0, offset),							//top middle
+	vec2(offset, offset),						// top right
+	vec2(-offset, 0),							// middle right
+	vec2(0,0),									//middle
+	vec2(offset, 0),							//middle right
+	vec2(-offset, -offset),						//bottom left
+	vec2(0, -offset),							//bottom middle
+	vec2(offset, -offset)						//bottom left
+	};
+
+	//This is a blur kernel;
+	
+	float kernel[9] = {
+	1.0/16 ,1.0/8, 1.0/16,
+	1.0/8, 4.0/16, 1.0/8,
+	1.0/16,1.0/8,1.0/16,};
+
+	ColorOutput = vec4(0);
+	//We then apply the kernel
+	for(int i = 0; i < 9; i++)
+	{
+		vec2 offsetUV = vec2 (UV + offsetMat[i]);
+		ColorOutput += (texture(color, offsetUV) * kernel[i]);
+	}
+	//ColorOutput = texture(lights, UV);
+
 }

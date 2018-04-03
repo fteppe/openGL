@@ -173,11 +173,11 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER& mats, VBO_C
 
 				for (auto vbo : objectsToLoad)
 				{
-					if (vbo->getFilePath().second == filePath.second)
-					{
+					//if (vbo->getFilePath().second == filePath.second)
+					//{
 						VBO = std::shared_ptr<VertexBufferObject>(vbo);
-						objects[filePath.first][filePath.second] = VBO;
-					}
+						objects[filePath.first][vbo->getFilePath().second] = VBO;
+					//}
 				}
 				
 			}

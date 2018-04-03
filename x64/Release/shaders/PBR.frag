@@ -20,7 +20,7 @@ uniform sampler2D diffuse;
 uniform sampler2D spec;
 uniform sampler2D normalMap;
 uniform sampler2D depthMap;
-
+uniform samplerCube skybox;
 
 
 vec3 fragLight(float light[7], vec3 normalWorld, vec3 fragPosWorld);
@@ -29,6 +29,7 @@ vec3 albedo(vec2 UV);
 vec3 normalValue(vec3 normal, vec3 tangent, vec3 bitTangent,vec2 UVin);
 vec2 parralax(vec3 camTan, vec3 posTan);
 float water();
+vec4 cubeMapReflection(vec3 normalWorld, vec3 fragPosWorld, vec3 camPos);
 
 void main()
 {
@@ -60,8 +61,11 @@ void main()
 	vec3 specVec = specCalc(light, normal_, pos, camPos, specPow, specVal);
 	vec4 color = vec4(albedo(newUV),1);
 
-    FragColor = color;
-	lightOut = vec3(  intensityVec + specVec + ambiant);
+
+	vec4 reflectionVal = cubeMapReflection(normalWorld, fragPosWorld, camPos);
+    //FragColor = color;
+	FragColor = reflectionVal;
+	lightOut = vec3(  intensityVec + specVec + ambiant) * vec3(color);
 	//the output of the normal vector must fit in [0,1]
 	normalOut = normal_/2 + vec3(0.5);
 }
@@ -136,4 +140,11 @@ vec3 normalValue(vec3 normal, vec3 tangent, vec3 biTangent,vec2 UVin)
 	normalMapVal = normalMapVal - baseLine;
 	//We substract the Y value of the normal map because it seems that my map has the +y vector in the -y direction of the UV vector.
 	return normalize(normalMapVal.z*normalize(normal) + normalMapVal.x*normalize(tangent) - normalMapVal.y*normalize(biTangent));
+}
+
+vec4 cubeMapReflection(vec3 normalWorld, vec3 fragPosWorld, vec3 camPos)
+{
+	vec3 camDir = normalize(fragPosWorld - camPos);
+	//return vec4(reflect( camDir, normalWorld), 0);
+	return texture(skybox, reflect( camDir, normalWorld));
 }

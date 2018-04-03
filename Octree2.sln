@@ -37,6 +37,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shader", "shader", "{07F9E6
 		x64\Release\shaders\transform.ver = x64\Release\shaders\transform.ver
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "obj", "obj", "{3DECBD49-B112-4504-92A5-7F781A899379}"
+	ProjectSection(SolutionItems) = preProject
+		x64\Release\obj\scene.json = x64\Release\obj\scene.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,10 +86,11 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{07F9E6C2-15D8-414F-B0CD-1BA6BB44B81E} = {E32AC566-0CF1-48A1-94D2-B16A60EC7F4D}
+		{3DECBD49-B112-4504-92A5-7F781A899379} = {E32AC566-0CF1-48A1-94D2-B16A60EC7F4D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Qt5Version = 10.1
 		SolutionGuid = {39BABE6F-64FF-43C3-8F19-8EDDFF05CEE5}
+		Qt5Version = 10.1
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
