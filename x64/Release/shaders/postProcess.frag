@@ -31,10 +31,9 @@ void main()
 	// Building the offset matrix 
 	float offset = 0.005f;
 
-	if(depthVal < 0.7)
-	{
-		offset = 0;
-	}
+	
+	offset = depthVal/100;
+	clamp(offset, 0, 0.05);
 	vec2 offsetMat[9] = {vec2(-offset, offset), //top left
 	vec2(0, offset),							//top middle
 	vec2(offset, offset),						// top right

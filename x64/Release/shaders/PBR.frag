@@ -17,7 +17,7 @@ uniform float[7] light;
 uniform float time;
 uniform vec3 camPos;
 uniform sampler2D diffuse;
-uniform sampler2D spec;
+uniform sampler2D specularityMap;
 uniform sampler2D normalMap;
 uniform sampler2D depthMap;
 uniform samplerCube skybox;
@@ -42,16 +42,9 @@ void main()
 	vec3 bumpVal = texture(normalMap, UV).rgb;
 	normal_ = normalValue(normalWorld, tangentWorld, biTangentWorld, newUV);
 	
-	vec4 specularity = vec4(texture(depthMap, newUV));
+	vec4 specularity = vec4(texture(specularityMap, newUV));
 	float specVal = (specularity.r);
-	if(specVal > 0.1)
-	{
-		specVal = 0;
-	}
-	else
-	{
-		specVal = 0;
-	}
+	specVal = 1  -specVal;
 
 	float specPow = 32;
 	//We use the spec map as a bump map as well, to make it look a bit better
@@ -60,35 +53,21 @@ void main()
 	vec3 intensityVec = fragLight(light, normal_, pos);
 	vec3 specVec = specCalc(light, normal_, pos, camPos, specPow, specVal);
 	vec4 color = vec4(albedo(newUV),1);
-
-
-	vec4 reflectionVal = cubeMapReflection(normalWorld, fragPosWorld, camPos);
+	//color *=  + specVec + ambiant;
+	color = color * vec4(intensityVec + specVec + ambiant,0);
+	
     //FragColor = color;
-	FragColor = reflectionVal;
+	
 	lightOut = vec3(  intensityVec + specVec + ambiant) * vec3(color);
 	//the output of the normal vector must fit in [0,1]
 	normalOut = normal_/2 + vec3(0.5);
+	vec4 reflectionVal = cubeMapReflection(normal_, fragPosWorld, camPos);
+	FragColor = reflectionVal * reflectionVal.a*specVal + color  *(1-reflectionVal.a*specVal);
 }
 
 vec3 albedo(vec2 UVin)
 {
 	vec3 col = vec3(texture(diffuse, UVin));
-	float height = vec3(texture(depthMap, UVin)).r;
-
-	if(height >0.1)
-	{
-		col = vec3 (0.5,0.5,0) * (height) * 3;
-		if(int(height*100) % 5 < 0.002)
-		{
-			//col = vec3(0.2,0.2,0.1);
-		}
-	}
-	else if (height < 0.1)
-	{
-		col = vec3(0.2,0.2,1);
-	}
-	col = vec3(texture(diffuse, UVin));
-	//col = vec3(textureSize(depthMap,0).xy/2,0);
 	return col;
 }
 
@@ -119,7 +98,7 @@ vec2 parralax(vec3 camTan, vec3 posTan)
 		currentHeight = currentHeight - stepSize;
 		height = texture(depthMap, UV + v).r;
 	}
-	float previousHeight = texture(spec, UV + v - stepVector).r;
+	float previousHeight = texture(depthMap, UV + v - stepVector).r;
 	float delta1 = height - currentHeight;
 	float delta2 = currentHeight + stepSize - previousHeight;
 
@@ -142,9 +121,13 @@ vec3 normalValue(vec3 normal, vec3 tangent, vec3 biTangent,vec2 UVin)
 	return normalize(normalMapVal.z*normalize(normal) + normalMapVal.x*normalize(tangent) - normalMapVal.y*normalize(biTangent));
 }
 
+//we put the cos value in the last part of the vec4.
 vec4 cubeMapReflection(vec3 normalWorld, vec3 fragPosWorld, vec3 camPos)
 {
+	
 	vec3 camDir = normalize(fragPosWorld - camPos);
+	vec3 lightReflection = reflect( camDir, normalWorld);
+	float cosVal = max(dot(camDir, lightReflection),0);
 	//return vec4(reflect( camDir, normalWorld), 0);
-	return texture(skybox, reflect( camDir, normalWorld));
+	return vec4(vec3(texture(skybox, lightReflection)), cosVal);
 }
