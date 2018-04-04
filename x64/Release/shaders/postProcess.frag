@@ -35,42 +35,14 @@ void main()
 	float offset = 0.5f;
 
 	
-	offset = depthVal/50;
-	clamp(offset, 0, 0.5);
-	/*
-	vec2 offsetMat[9] = {vec2(-offset, offset), //top left
-	vec2(0, offset),							//top middle
-	vec2(offset, offset),						// top right
-	vec2(-offset, 0),							// middle right
-	vec2(0,0),									//middle
-	vec2(offset, 0),							//middle right
-	vec2(-offset, -offset),						//bottom left
-	vec2(0, -offset),							//bottom middle
-	vec2(offset, -offset)						//bottom left
-	};
-	*/
+	offset = depthVal/100;
+	clamp(offset, 0, 0.1);
 
 	//This is a blur kernel;
-	
-	float kernel[9] = {
-	1.0/16 ,1.0/8, 1.0/16,
-	1.0/8, 4.0/16, 1.0/8,
-	1.0/16,1.0/8,1.0/16,};
 
-	ColorOutput = vec4(0);
-	//We then apply the kernel
-	/*
-	for(int i = 0; i < 9; i++)
-	{
-		vec2 offsetUV = vec2 (UV + offsetMat[i]);
-		ColorOutput += (texture(color, offsetUV) * kernel[i]);
-	}
-	*/
 
-	vec2 offsetMat[9];
-	//makeOffsetMat(offset, offsetMat);
-	//ColorOutput = vec4(offsetMat[0],0,0);
-	ColorOutput = blur(color, offset, 10);
+
+	ColorOutput = blur(color, offset, 5);
 
 }
 
@@ -78,9 +50,16 @@ vec4 blur(sampler2D map, float initialOffset, int quality)
 {
 	
 	float kernel[9] = {
-	1.0/(16*quality) ,1.0/(8*quality), 1.0/(16*quality),
-	1.0/(8*quality), 4.0/(16*quality), 1.0/(8*quality),
-	1.0/(16*quality),1.0/(8*quality),1.0/(16*quality),};
+	2, 2, 2,
+	2,0,2,
+	2,2,2};
+
+	float totalKernel = 0;
+	for(int  i=0 ; i < kernel.length(); i++)
+	{
+		totalKernel += kernel[i];
+	}
+
 
 	vec4 outputVal = vec4(0);
 	float offset = initialOffset;
@@ -92,7 +71,7 @@ vec4 blur(sampler2D map, float initialOffset, int quality)
 		for(int i = 0; i < 9; i++)
 		{
 			vec2 offsetUV = vec2 (UV + offsetMat[i]);
-			outputVal += (texture(map, offsetUV) * kernel[i]);
+			outputVal += (texture(map, offsetUV) * (kernel[i]/(quality * totalKernel)));
 		}
 		offset = offset - offset/quality;
 	}
