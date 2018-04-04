@@ -182,6 +182,7 @@
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderPBR.h" />
+    <ClInclude Include="ShaderPostProcess.h" />
     <ClInclude Include="Solid.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderPBR.cpp" />
+    <ClCompile Include="ShaderPostProcess.cpp" />
     <ClCompile Include="Solid.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

@@ -135,7 +135,6 @@ void Shader::setProgramInformation(tetraRender::Scene& scene, Solid const& objec
 	//we send the light data to the shader, for now we can handle only one light
 	glUniform1fv(uniforms["light"], lightData.size(), &lightData[0]);
 
-	uniforms["reflectionTex"] = glGetUniformLocation(program, "reflectionTex");
 }
 
 void Shader::sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> textures)

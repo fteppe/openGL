@@ -12,14 +12,20 @@ uniform sampler2D lights;
 
 uniform float near;
 uniform float far;
+uniform mat4 inverseCam;
 
 vec4 blur(sampler2D map, float initialOffset, int quality);
 void makeOffsetMat(float offset, inout vec2[9] offsetMat);
+float linearizeDepth(float depth, float near, float far);
+vec3 getPositionFromDepth(sampler2D map, vec2 screenPos, mat4 inverseCam);
 
 void main()
 {
     float depthVal = (texture(depth, UV).r);
-    depthVal = clamp((depthVal - 0.90)*10, 0,1);
+    depthVal = linearizeDepth(depthVal, 0.1, 200);
+
+	float centerDepth = texture(depth, vec2(0.5, 0.5)).r;
+	centerDepth = linearizeDepth(centerDepth, 0.1, 200);
     //FragColor = vec4(depthVal);
     vec3 fogColor = vec3((depthVal)*vec4(1) + (1-depthVal)*texture(color,UV));
 	
@@ -35,15 +41,20 @@ void main()
 	float offset = 0.5f;
 
 	
-	offset = depthVal/100;
-	clamp(offset, 0, 0.1);
+	float faroffset = (depthVal - pow(2, 10*centerDepth));
+	//faroffset = clamp(faroffset, 0, 2000);
+	float closeOffset = (0.02+centerDepth/100  - depthVal);
+	//closeOffset = clamp(closeOffset, 0, 2000);
 
+	offset = max(closeOffset, faroffset)/100;
+	
+	offset = clamp (offset, 0, 0.1);
 	//This is a blur kernel;
 
 
-
-	ColorOutput = blur(color, offset, 5);
-
+	//ColorOutput = vec4(offset);
+	//ColorOutput = blur(color, offset, 5);
+	ColorOutput = vec4(getPositionFromDepth(depth , UV, inverseCam), 0);
 }
 
 vec4 blur(sampler2D map, float initialOffset, int quality)
@@ -89,4 +100,22 @@ void makeOffsetMat(float offset, inout vec2[9] offsetMat)
 	offsetMat[6] =	vec2(-offset, -offset);						//bottom left
 	offsetMat[7] =	vec2(0, -offset);							//bottom middle
 	offsetMat[8] =	vec2(offset, -offset);						//bottom left
+}
+
+float linearizeDepth(float depth, float near, float far)
+{
+	float z = depth;
+	return (depth)/ (far + near -depth *(far - near));
+
+}
+
+vec3 getPositionFromDepth(sampler2D map, vec2 screenPos, mat4 inverseCam)
+{
+	float depth = texture(map, screenPos).r * 2.0 - 1.0;
+	//this is because the UV is from the corner and we want the position with the origin in the center.
+	vec2 adjustedScreenPos = screenPos * 2.0 - 1.0;
+	vec4 pos = vec4(adjustedScreenPos , depth, 1.0);
+
+	pos /= pos.w;
+	return vec3(inverseCam * pos);
 }

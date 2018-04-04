@@ -4,6 +4,7 @@
 #include "waveFrontLoader.h"
 #include <glm/matrix.hpp>
 #include "CubeMap.h"
+#include "ShaderPostProcess.h"
 
 #include <memory>
 
@@ -206,7 +207,7 @@ void tetraRender::Scene::setupPostProcessing()
 	//models["hard"]["screen"] = vbo_ptr;
 	//this triangle has a different shader than usual.
 
-	Shader* shader = new Shader("postProcess.ver", "postProcess.frag");
+	Shader* shader = new ShaderPostProcess({ "postProcess.ver" },  { "postProcess.frag" });
 	std::shared_ptr<Shader> shader_ptr(shader);
 	Material* mat = new Material(shader_ptr);
 	std::shared_ptr<Material> postProcessMat(mat);
