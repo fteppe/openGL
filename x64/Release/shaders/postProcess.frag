@@ -50,8 +50,8 @@ vec4 blur(sampler2D map, float initialOffset, int quality)
 {
 	
 	float kernel[9] = {
-	2, 2, 2,
-	2,0,2,
+	2,2,2,
+	2,2,2,
 	2,2,2};
 
 	float totalKernel = 0;
