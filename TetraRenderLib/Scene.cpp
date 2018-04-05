@@ -159,6 +159,7 @@ void tetraRender::Scene::makeSkyBox()
 	std::vector<VertexBufferObject * > vec;
 	objLoader.loadVertexObjectVectorFromFile("obj/common.obj", vec);
 	bool found = false;
+	
 	for (VertexBufferObject * obj : vec)
 	{
 		

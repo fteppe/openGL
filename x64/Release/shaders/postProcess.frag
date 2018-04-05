@@ -22,7 +22,7 @@ vec3 getPositionFromDepth(sampler2D map, vec2 screenPos, mat4 inverseCam);
 
 void main()
 {
-    float depthVal = (texture(depth, UV).r);
+    float depthVal = (texture(depth, UV)).r;
     depthVal = linearizeDepth(depthVal, 0.1, 200);
 
 	float centerDepth = texture(depth, vec2(0.5, 0.5)).r;
@@ -53,9 +53,9 @@ void main()
 	//This is a blur kernel;
 
 
-	//ColorOutput = vec4(offset);
+	ColorOutput = vec4(depthVal);
 	//ColorOutput = blur(color, offset, 5);
-	ColorOutput = texture(color, UV);
+	//ColorOutput = texture(color, UV);
 }
 
 vec4 blur(sampler2D map, float initialOffset, int quality)

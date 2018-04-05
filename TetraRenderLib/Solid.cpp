@@ -29,6 +29,10 @@ Solid::Solid(std::shared_ptr<VertexBufferObject> vbo) : Solid()
 	VBO_ptr = vbo;
 }
 
+tetraRender::Solid::Solid(std::pair<std::string, std::string> objFile)
+{
+}
+
 
 Solid::~Solid()
 {

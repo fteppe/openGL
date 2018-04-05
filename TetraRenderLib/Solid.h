@@ -19,6 +19,8 @@ namespace tetraRender
 		Solid();
 		Solid(std::vector<glm::vec3> vertices, std::vector<std::vector<int>> index);
 		Solid(std::shared_ptr<VertexBufferObject> vbo);
+		//directly loads the VBO from an obj file.
+		Solid(std::pair <std::string, std::string> objFile);
 		~Solid();
 		void draw(tetraRender::Scene& scene);
 		std::string description();

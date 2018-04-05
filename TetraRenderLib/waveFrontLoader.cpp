@@ -12,7 +12,7 @@ using namespace tetraRender;
 
 WaveFrontLoader::WaveFrontLoader()
 {
-
+	nbVerticesFile = 0;
 
 }
 
@@ -35,119 +35,6 @@ void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::
 		std::string prevLine = "";
 		while (getline(inFile, strOneLine, '\n'))
 		{
-
-			//for each line we try to know how it start
-			//This line will designate a normal
-			if (strOneLine.substr(0, 2) == "vn")
-			{
-				std::istringstream s(strOneLine.substr(2));
-				glm::vec3 vertex;
-				//We put all the info in a new vertex
-
-				s >> vertex.x; s >> vertex.y; s >> vertex.z;
-				normalsObj.push_back(vertex);
-			}
-			//this line designates a vertex
-			if (strOneLine.substr(0, 2) == "v ")
-			{
-				std::istringstream s(strOneLine.substr(2));
-				glm::vec3 vertex;
-				//We put all the info in a new vertex
-
-				s >> vertex.x; s >> vertex.y; s >> vertex.z;
-				vertices.push_back(vertex);
-				//We also put this vertex info in an array specific to this solid.
-				solidVertices.push_back(vertex);
-				//We map the two so we can know which idex is which vertex
-				fileToSolidVertexIndex[vertices.size() - 1] = solidVertices.size() - 1;
-
-			}
-			//This indicates the coordinates of a UV attribute
-			if (strOneLine.substr(0, 2) == "vt")
-			{
-				std::istringstream s(strOneLine.substr(2));
-				glm::vec3 vertex;
-				//We put all the info in a new vertex
-
-				s >> vertex.x; s >> vertex.y; s >> vertex.z;
-				UVobj.push_back(vertex);
-			}
-			//this line designates a polygon
-			if (strOneLine.substr(0, 2) == "f ")
-			{
-
-				std::string s(strOneLine.substr(2));
-				//We use a regex to get the indexes of the vertex and it's attributes
-				std::regex r("([0-9]+)\\/([0-9]+)?\\/([0-9]+)?");
-				std::smatch match;
-				std::regex_search(s, match, r);
-
-				std::vector<int> face;
-				for (std::sregex_iterator i = std::sregex_iterator(s.begin(), s.end(), r);
-					i != std::sregex_iterator();
-					++i)
-				{
-					std::smatch match = *i;
-					//std::cout << match[1] << match[2] << match[3];
-					std::string vertIndex = match[1].str();
-					//vertices in a obj file are indexed from 1, our index starts at one
-					int index = strtol(vertIndex.c_str(), NULL, 10) - 1;
-					//We take the normal index.
-					int normalIndex = strtol(match[3].str().c_str(), NULL, 10) - 1;
-					//the UV index
-					int UVindex = strtol(match[2].str().c_str(), NULL, 10) - 1;
-					//For now, we consider the UV to be on an unclonned vertex
-					int VertToUVindex = index;
-					if (UVindex != -1)
-					{
-						//We check if we need to clone the vertex, or if there is a vertex synonym without UV coordinate.
-						VertToUVindex = vertexAndAttributeLink(index, UVindex, vertexToUV);
-					}
-					int vertToNormalIndex = vertexAndAttributeLink(index, normalIndex, vertexToNormal);
-
-					//A problem arises when you don't need to clone UV but clone the normal. You need to give the cloned vertex it's UV attributes
-					//When we clone we set one of the two attributes, leaving one empty. Each vertex must have both the UV AND the normal attribute. If it doesn't the rendering will have bugs. 
-					if (VertToUVindex > vertToNormalIndex)
-					{
-						//If the two vertices index are different, it means that one was cloned, but not the other. In that case the cloned vertex needs to get the informations of the original.					
-						if (vertexToNormal.find(VertToUVindex) == vertexToNormal.end())
-						{
-							vertexToNormal[VertToUVindex] = vertexToNormal[vertToNormalIndex];
-						}
-					}
-					else if (VertToUVindex < vertToNormalIndex)
-					{
-						//if it doesn't already have a value.
-						if (vertexToUV.find(vertToNormalIndex) == vertexToUV.end())
-						{
-							vertexToUV[vertToNormalIndex] = vertexToUV[VertToUVindex];
-						}
-					}
-					int finalIndex = vertToNormalIndex;
-					//We try to figure out which of our cloned vertex is the right one. It needs to give the right value for the UV vector and the normal vector
-					if (vertexToUV[VertToUVindex] == UVindex && vertexToNormal[VertToUVindex] == normalIndex)
-					{
-						finalIndex = VertToUVindex;
-					}
-					else if (vertexToUV[vertToNormalIndex] == UVindex && vertexToNormal[vertToNormalIndex] == normalIndex)
-					{
-						finalIndex = vertToNormalIndex;
-					}
-					
-					
-					face.push_back(finalIndex);
-				}
-				polygons.push_back(face);
-			}
-			// this doesn't work to indicate the move to another file. The end of faces would be a better indicator.
-			//if the current line isn't a face when the previous was one, then we change file.
-			//no enough, sometimes "s " is used which designates a surface.
-			if ((strOneLine.substr(0, 2) != "f " && strOneLine.substr(0, 2) != "s ") && prevLine.substr(0, 2) == "f ")
-			{
-				//we have a new object
-				//Solid result();
-				vertexObjects.push_back(makeVBOFromData());
-			}
 			//building new obj
 			if (strOneLine.substr(0, 2) == "o ")
 			{
@@ -155,6 +42,123 @@ void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::
 				std::istringstream s(strOneLine.substr(2));
 				s >> file.second;
 			}
+			else
+			{
+				//for each line we try to know how it start
+				//This line will designate a normal
+				if (strOneLine.substr(0, 2) == "vn")
+				{
+					std::istringstream s(strOneLine.substr(2));
+					glm::vec3 vertex;
+					//We put all the info in a new vertex
+
+					s >> vertex.x; s >> vertex.y; s >> vertex.z;
+					normalsObj.push_back(vertex);
+				}
+				//this line designates a vertex
+				if (strOneLine.substr(0, 2) == "v ")
+				{
+					std::istringstream s(strOneLine.substr(2));
+					glm::vec3 vertex;
+					//We put all the info in a new vertex
+
+					s >> vertex.x; s >> vertex.y; s >> vertex.z;
+					vertices.push_back(vertex);
+					//We also put this vertex info in an array specific to this solid.
+					solidVertices.push_back(vertex);
+					//We map the two so we can know which idex is which vertex
+					fileToSolidVertexIndex[vertices.size() - 1] = solidVertices.size() - 1;
+
+				}
+				//This indicates the coordinates of a UV attribute
+				if (strOneLine.substr(0, 2) == "vt")
+				{
+					std::istringstream s(strOneLine.substr(2));
+					glm::vec3 vertex;
+					//We put all the info in a new vertex
+
+					s >> vertex.x; s >> vertex.y; s >> vertex.z;
+					UVobj.push_back(vertex);
+				}
+				//this line designates a polygon
+				if (strOneLine.substr(0, 2) == "f ")
+				{
+
+					std::string s(strOneLine.substr(2));
+					//We use a regex to get the indexes of the vertex and it's attributes
+					std::regex r("([0-9]+)\\/([0-9]+)?\\/([0-9]+)?");
+					std::smatch match;
+					std::regex_search(s, match, r);
+
+					std::vector<int> face;
+					for (std::sregex_iterator i = std::sregex_iterator(s.begin(), s.end(), r);
+						i != std::sregex_iterator();
+						++i)
+					{
+						std::smatch match = *i;
+						//std::cout << match[1] << match[2] << match[3];
+						std::string vertIndex = match[1].str();
+						//vertices in a obj file are indexed from 1, our index starts at one
+						int index = strtol(vertIndex.c_str(), NULL, 10) - 1;
+						index = fileToSolidVertexIndex[index];
+						//We take the normal index.
+						int normalIndex = strtol(match[3].str().c_str(), NULL, 10) - 1;
+						//the UV index
+						int UVindex = strtol(match[2].str().c_str(), NULL, 10) - 1;
+						//For now, we consider the UV to be on an unclonned vertex
+						int VertToUVindex = index;
+						if (UVindex != -1)
+						{
+							//We check if we need to clone the vertex, or if there is a vertex synonym without UV coordinate.
+							VertToUVindex = vertexAndAttributeLink(index, UVindex, vertexToUV);
+						}
+						int vertToNormalIndex = vertexAndAttributeLink(index, normalIndex, vertexToNormal);
+
+						//A problem arises when you don't need to clone UV but clone the normal. You need to give the cloned vertex it's UV attributes
+						//When we clone we set one of the two attributes, leaving one empty. Each vertex must have both the UV AND the normal attribute. If it doesn't the rendering will have bugs. 
+						if (VertToUVindex > vertToNormalIndex)
+						{
+							//If the two vertices index are different, it means that one was cloned, but not the other. In that case the cloned vertex needs to get the informations of the original.					
+							if (vertexToNormal.find(VertToUVindex) == vertexToNormal.end())
+							{
+								vertexToNormal[VertToUVindex] = vertexToNormal[vertToNormalIndex];
+							}
+						}
+						else if (VertToUVindex < vertToNormalIndex)
+						{
+							//if it doesn't already have a value.
+							if (vertexToUV.find(vertToNormalIndex) == vertexToUV.end())
+							{
+								vertexToUV[vertToNormalIndex] = vertexToUV[VertToUVindex];
+							}
+						}
+						int finalIndex = vertToNormalIndex;
+						//We try to figure out which of our cloned vertex is the right one. It needs to give the right value for the UV vector and the normal vector
+						if (vertexToUV[VertToUVindex] == UVindex && vertexToNormal[VertToUVindex] == normalIndex)
+						{
+							finalIndex = VertToUVindex;
+						}
+						else if (vertexToUV[vertToNormalIndex] == UVindex && vertexToNormal[vertToNormalIndex] == normalIndex)
+						{
+							finalIndex = vertToNormalIndex;
+						}
+
+
+						face.push_back(finalIndex);
+					}
+					polygons.push_back(face);
+				}
+				// this doesn't work to indicate the move to another obj. The end of faces would be a better indicator.
+				//if the current line isn't a face when the previous was one, then we change file.
+				if ((strOneLine.substr(0, 2) != "f " && strOneLine.substr(0, 2) != "s ") && prevLine.substr(0, 2) == "f ")
+				{
+					//we have a new object
+					//Solid result();
+					vertexObjects.push_back(makeVBOFromData());
+				}
+			}
+			
+
 			prevLine = strOneLine;
 		}
 	}
@@ -170,12 +174,27 @@ void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::
 	std::cout << "done loading file" << std::endl;
 }
 
+VertexBufferObject * WaveFrontLoader::loadSpecificVBO(std::string fileName, std::string objectName)
+{
+	std::vector<VertexBufferObject*> obj;
+	loadVertexObjectVectorFromFile(fileName, obj);
+
+	for (auto elem : obj)
+	{
+		if (elem->getFilePath().second == objectName)
+		{
+			return elem;
+		}
+	}
+	std::cout << __FILE__ << "::" << __LINE__ << " " << fileName << " not found \n";
+}
+
 
 
 int WaveFrontLoader::vertexAndAttributeLink(unsigned int vertex, unsigned int attribute, std::map<int, int>& vertexToAttribute)
 {
 	bool vertexCloned = true;
-	unsigned int solidVertex = fileToSolidVertexIndex[vertex];
+	unsigned int solidVertex = vertex;
 	unsigned int correspondingVertex = solidVertex;
 	//if a vertex has no synonyme, we add the corresponding solid vertex index as his on synonyme.
 	if (vertexSynonyme.find(vertex) == vertexSynonyme.end())
