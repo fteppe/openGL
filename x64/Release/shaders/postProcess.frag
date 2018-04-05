@@ -8,7 +8,8 @@ out vec4 ColorOutput;
 uniform sampler2D color;
 uniform sampler2D normals;
 uniform sampler2D depth;
-uniform sampler2D lights;
+uniform sampler2D specularity;
+uniform sampler2D fragPos;
 
 uniform float near;
 uniform float far;
@@ -30,7 +31,7 @@ void main()
     vec3 fogColor = vec3((depthVal)*vec4(1) + (1-depthVal)*texture(color,UV));
 	
     //FragColor = vec4(fogColor,1);
-	vec4 lightDim = texture(lights, UV);
+	vec4 lightDim = texture(specularity, UV);
 	vec4 colorSample = texture(color, UV);
 	vec4 HDR = lightDim * colorSample;
 	HDR = HDR/(HDR + vec4(1));
@@ -54,7 +55,7 @@ void main()
 
 	//ColorOutput = vec4(offset);
 	//ColorOutput = blur(color, offset, 5);
-	ColorOutput = vec4(getPositionFromDepth(depth , UV, inverseCam), 0);
+	ColorOutput = texture(color, UV);
 }
 
 vec4 blur(sampler2D map, float initialOffset, int quality)

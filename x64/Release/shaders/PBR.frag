@@ -11,7 +11,8 @@ in vec3 camTan;
  
 layout(location = 0) out vec4 FragColor;
 layout(location = 1) out vec3 normalOut;
-layout(location = 2) out vec3 lightOut;
+layout(location = 2) out vec3 specOut;
+layout(location = 3) out vec3 fragPos;
 
 uniform float[7] light;
 uniform float time;
@@ -37,7 +38,7 @@ void main()
 	vec3 normal_ = vec3(0,1,0);//normalWorld;
 	vec2 translation = parralax(camTan, posTan);
 	vec2 newUV = UV + translation;
-
+	fragPos = pos;
 
 	vec3 bumpVal = texture(normalMap, UV).rgb;
 	normal_ = normalValue(normalWorld, tangentWorld, biTangentWorld, newUV);
@@ -54,11 +55,11 @@ void main()
 	vec3 specVec = specCalc(light, normal_, pos, camPos, specPow, specVal);
 	vec4 color = vec4(albedo(newUV),1);
 	//color *=  + specVec + ambiant;
-	color = color * vec4(intensityVec + specVec + ambiant,0);
+	color = color;
 	
     //FragColor = color;
 	
-	lightOut = vec3(  intensityVec + specVec + ambiant) * vec3(color);
+	specOut = vec3(specVal,0,0);
 	//the output of the normal vector must fit in [0,1]
 	normalOut = normal_/2 + vec3(0.5);
 	vec4 reflectionVal = cubeMapReflection(normal_, fragPosWorld, camPos);

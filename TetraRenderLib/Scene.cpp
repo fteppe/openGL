@@ -27,16 +27,21 @@ tetraRender::Scene::Scene(Camera cam):cam(cam)
 	
 	std::shared_ptr<Texture> normalsBuffer(new Texture);
 	std::shared_ptr<Texture> depthBuffer(new Texture);
-	std::shared_ptr<Texture> lights(new Texture);
+	std::shared_ptr<Texture> spec(new Texture);
+	std::shared_ptr<Texture> fragPos(new Texture);
 	textures["color"] = std::shared_ptr<Texture>(new Texture);
 	textures["normals"] = normalsBuffer;
 	textures["depth"] = depthBuffer;
-	textures["lights"] = lights;
+	textures["specularity"] = spec;
+	textures["fragPos"] = fragPos;
+
 	
 	frame->addColorOutputTexture(textures["color"]);
 	frame->setDepthTexture(depthBuffer);
 	frame->addColorOutputTexture(normalsBuffer);
-	frame->addColorOutputTexture(lights);
+	frame->addColorOutputTexture(spec);
+	frame->addColorOutputTexture(fragPos);
+
 	
 
 	//We set the frame as the renderPass we want.
@@ -214,7 +219,9 @@ void tetraRender::Scene::setupPostProcessing()
 	postProcessMat->setChannel(textures["color"], "color");
 	postProcessMat->setChannel(textures["normals"], "normals");
 	postProcessMat->setChannel(textures["depth"], "depth");
-	postProcessMat->setChannel(textures["lights"], "lights");
+	postProcessMat->setChannel(textures["specularity"], "specularity");
+	postProcessMat->setChannel(textures["fragPos"], "fragPos");
+
 	screenObj->setMaterial(postProcessMat);
 	screenObj->addTag(POST_PROCESS);
 	//We add all these newly created elements to the scene;
