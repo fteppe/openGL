@@ -39,7 +39,7 @@ VBO_CONTAINER SceneLoader::loadModels()
 	//rapidjson::Value& objects = d["models"];
 	VBO_CONTAINER objects;
 	WaveFrontLoader loader;
-	assert(doc.IsObject());
+	//assert(doc.IsObject());
 	rapidjson::Value& models = doc["models"];
 	std::vector<VertexBufferObject*> loaded;
 	for (unsigned int  i = 0; i < models.Size(); i++)
@@ -75,8 +75,9 @@ SHADER_CONTAINER SceneLoader::loadShaders()
 {
 	std::cout<<__FILE__<<" "<<__LINE__<<" loading shaders"<<std::endl;
 	SHADER_CONTAINER shaders;
+	assert(doc.IsObject());
 	rapidjson::Value& shadersArray = doc["shaders"];
-	assert(shadersArray.IsArray());
+	//assert(shadersArray.IsArray());
 	for (unsigned int i = 0; i < shadersArray.Size(); i++)
 	{
 		std::vector < std::string > vertexShaderFiles;
@@ -86,7 +87,7 @@ SHADER_CONTAINER SceneLoader::loadShaders()
 
 		//We get the vertex shader files from here
 		auto itvert = shadersArray[i].FindMember("vertex");
-		assert(itvert->value.IsArray());
+		//assert(itvert->value.IsArray());
 		rapidjson::Value& vertexShaders = itvert->value;
 		for (unsigned int j = 0; j < vertexShaders.Size(); j++)
 		{
@@ -95,7 +96,7 @@ SHADER_CONTAINER SceneLoader::loadShaders()
 
 		//fragment shader files
 		auto itfrag = shadersArray[i].FindMember("fragment");
-		assert(itfrag->value.IsArray());
+		//assert(itfrag->value.IsArray());
 		rapidjson::Value& framgentShaders = itfrag->value;
 		for (unsigned int j = 0; j < framgentShaders.Size(); j++)
 		{
