@@ -49,7 +49,7 @@ void main()
 
 	offset = max(closeOffset, faroffset)/100;
 	
-	offset = clamp (offset, 0, 0.1);
+	offset = clamp (offset, 0.0, 0.1);
 	//This is a blur kernel;
 
 
