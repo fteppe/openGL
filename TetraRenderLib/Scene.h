@@ -37,6 +37,7 @@ namespace tetraRender
 		void setupPostProcessing();
 
 		Camera cam;
+		Camera shadowProjection;
 		Light light;
 		sf::Clock clock;
 		std::vector<GameObject*> gameObjects;
