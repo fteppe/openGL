@@ -41,6 +41,7 @@ tetraRender::Scene::Scene(Camera cam):cam(cam)
 	frame->addColorOutputTexture(normalsBuffer);
 	frame->addColorOutputTexture(spec);
 	frame->addColorOutputTexture(fragPos);
+	
 
 	
 
@@ -49,11 +50,13 @@ tetraRender::Scene::Scene(Camera cam):cam(cam)
 	RenderPass * pass = renderPasses.back();
 	pass->setRenderOutput(frame);
 	pass->setRenderTagsIncluded({ WORLD_OBJECT });
+	pass->setCamera(&this->cam);
 	
 	//the second render pass we don't set a frameBuffer so it will render to the screen.
 	renderPasses.push_back(new RenderPass());
 	pass = renderPasses.back();
 	pass->setRenderTagsIncluded({ POST_PROCESS });
+	pass->setCamera(&this->cam);
 }
 
 

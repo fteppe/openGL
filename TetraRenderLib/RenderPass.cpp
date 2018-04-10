@@ -24,9 +24,9 @@ void RenderPass::setRenderOutput(FrameBuffer * output)
 	renderOutput = output;
 }
 
-void RenderPass::setCamera(Camera camera)
+void RenderPass::setCamera(Camera* camera)
 {
-	this->camera = camera;
+	this->camera_ptr = camera;
 }
 
 void RenderPass::setRenderTagsIncluded(std::vector<RenderTag> tags)
@@ -36,6 +36,9 @@ void RenderPass::setRenderTagsIncluded(std::vector<RenderTag> tags)
 
 void RenderPass::renderScene(tetraRender::Scene & scene)
 {
+	//since this renderpass has a different camera from the scene's main camera we change it.
+	Camera tempCamera = scene.getCam();
+	scene.setCamera(*camera_ptr);
 	renderOutput->bind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//TODO: we must be able to go further than that in the future.
@@ -51,6 +54,7 @@ void RenderPass::renderScene(tetraRender::Scene & scene)
 			//shader_ptr = go->getMaterial()->getShaderProgram().get();
 		}
 	}
+	scene.setCamera(tempCamera);
 	//renderOutput->renderToScreen();
 }
 
