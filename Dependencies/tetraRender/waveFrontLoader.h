@@ -35,6 +35,7 @@ namespace tetraRender
 		std::vector<std::vector<int>> polygons;
 		//the vertices of all the objets
 		std::vector<glm::vec3> vertices;
+		unsigned int nbVerticesFile;
 		//the vertices but only for one solid;
 		std::vector<glm::vec3> solidVertices;
 

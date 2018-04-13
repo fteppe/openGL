@@ -9,6 +9,8 @@
 #include <iostream>
 #include <iomanip>
 
+#include <crtdbg.h>
+
 #include <tetraRender\Camera.h>
 #include <tetraRender\Scene.h>
 #include <tetraRender\EventHandler.h>
@@ -33,8 +35,7 @@ WindowBuilder::WindowBuilder()
 
 	unsigned width = 1024;
 	unsigned height = 720;
-	sf::Context context;
-	
+
 	
 	window.create(sf::VideoMode(width, height), "Tetra Engine", sf::Style::Close, settings);
 	glEnable(GL_DEPTH_TEST);
@@ -42,18 +43,24 @@ WindowBuilder::WindowBuilder()
 	glewExperimental = GL_TRUE;
 	auto contextSetting = window.getSettings();
 	glewInit();
-	const GLubyte* vers = glGetString(GL_VERSION);
-
-	vers = glGetString(GL_VERSION);
+	
+	_ASSERT(_CrtCheckMemory());
 	//apparently an old implementation bug tends to raise an error on startup. We call geterror to remove it.
 	glGetError();
-
-
+	_ASSERT(_CrtCheckMemory());
+	tetraRender::Camera cam(600.0f, 800.0f, 0.75f);
+	{
+		tetraRender::Camera cam2(cam);
+	}
+	tetraRender::Camera cam3(cam);
+	cam.setUp(glm::vec3(0, 0, 0));
+	tetraRender::Light light;
+	_ASSERT(_CrtCheckMemory());
+	//new tetraRender::Scene(cam);
 
 	sf::Clock clock;
-
-	tetraRender::Camera cam(600.0f, 800.0f, 0.75f);
-	auto  scene = std::shared_ptr<tetraRender:: Scene>(new tetraRender::Scene(cam));
+	_ASSERT(_CrtCheckMemory());
+	std::shared_ptr<tetraRender::Scene>  scene(new tetraRender::Scene(cam));
 	scene->load("obj/scene.json");
 	tetraRender:: EventHandler handler(scene);
 	//std::cout << glGetString(GL_VERSION) << std::endl;

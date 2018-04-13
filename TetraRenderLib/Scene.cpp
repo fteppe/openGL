@@ -7,12 +7,14 @@
 #include "ShaderPostProcess.h"
 
 #include <memory>
+#include <crtdbg.h>
 
 using namespace tetraRender;
 
 class CubeMap;
 tetraRender::Scene::Scene(Camera cam)
 {
+	_ASSERT(_CrtCheckMemory());
 	setCamera(cam);
 	light.intensity = 1.0f;
 	light.col = glm::vec3(1, 1, 1);
@@ -125,6 +127,7 @@ void tetraRender::Scene::renderScene()
 void tetraRender::Scene::load(std::string scene)
 {
 
+	SceneLoader loader;
 	loader.setSceneToLoad(scene);
 
 	auto shadersLoaded = loader.loadShaders();

@@ -4,6 +4,7 @@
 #include "SceneLoader.h"
 #include "FrameBuffer.h"
 #include "RenderPass.h"
+#include "Common.h"
 #include <vector>
 #include <SFML/Window.hpp>
 
@@ -37,12 +38,12 @@ namespace tetraRender
 		void setupPostProcessing();
 
 		Camera cam;
-		//Camera shadowProjection;
+		Camera shadowProjection;
 		Light light;
 		sf::Clock clock;
 		std::vector<GameObject*> gameObjects;
 		GameObject* skybox;
-		SceneLoader loader;
+		//SceneLoader loader;
 
 		//These are stored in the order in which they must be done.
 		std::vector<RenderPass*> renderPasses;

@@ -111,12 +111,13 @@ void Texture::setDimensions(int width, int height)
 
 void Texture::readData()
 {
-	glBindTexture(textureType, textureID);
+	/*glBindTexture(textureType, textureID);
 	unsigned char* data = new unsigned char[width * height * nrChannels];
 	GLenum err = glGetError();
 	glGetTexImage(textureType, 0, this->internalFormat, this->dataType, data);
 	err = glGetError();
 	delete data;
+	*/
 }
 
 GLuint Texture::getId()

@@ -4,11 +4,14 @@ using namespace tetraRender;
 
 Light::Light()
 {
+	_ASSERT(_CrtCheckMemory());
 }
 
-Light::Light(glm::vec3 pos, float intensity) : intensity(intensity)
+Light::Light(glm::vec3 pos, float intensity) : Light()
 {
+	this->intensity = intensity;
 	this->pos = (pos);
+	_ASSERT(_CrtCheckMemory());
 }
 
 std::vector<float> Light::getDataArray()

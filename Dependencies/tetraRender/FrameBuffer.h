@@ -10,11 +10,7 @@ namespace tetraRender
 		FrameBuffer();
 		FrameBuffer(EngineEnum frameType);
 		~FrameBuffer();
-		/*
-		*This function attach a texture to this frame buffer so colors are rendered here.
-		*The texture can then be used later in the program as a regular texture.
-		*/
-		void attachOutputTexture(std::shared_ptr<Texture> texture);
+
 		/*
 		*sets the render target to this framebuffer
 		*/
@@ -27,10 +23,14 @@ namespace tetraRender
 		void addColorOutputTexture(std::shared_ptr<Texture> texture);
 		void setDepthTexture(std::shared_ptr<Texture> texture);
 
+		//If we want our framebuffer to have HDR values we set it to true, by doing so all color output textures must be HDR as well.
+		void setHDR(bool hdrVal);
+
 		void bind();
 		void unbind();
 	private:
 		unsigned int height, width;
+		bool isHDR;
 		GLuint frameBufferId;
 		GLuint renderBufferId;
 		//the color textures of this frameBuffer

@@ -9,14 +9,12 @@
 #include "Shader.h"
 #include "Material.h"
 #include "GameObject.h"
+#include "Common.h"
 
 
 namespace tetraRender
 {
-#define VBO_CONTAINER std::map<std::string, std::map<std::string, std::shared_ptr<VertexBufferObject>>>
-#define MAT_CONTAINER std::map<std::string, std::shared_ptr<Material>>
-#define TEXTURE_CONTAINER std::map<std::string, std::shared_ptr<Texture>>
-#define SHADER_CONTAINER std::map<std::string, std::shared_ptr<Shader>>
+
 
 	class SceneLoader
 	{
