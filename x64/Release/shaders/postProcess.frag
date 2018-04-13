@@ -92,7 +92,7 @@ vec4 blur(sampler2D map, float initialOffset, int quality)
 
 void makeOffsetMat(float offset, inout vec2[9] offsetMat)
 {
-	offsetMat[0] = vec2(-offset, offset); //top left
+	offsetMat[0] = vec2(-offset, offset);						//top left
 	offsetMat[1] =	vec2(0, offset);							//top middle
 	offsetMat[2] =	vec2(offset, offset);						// top right
 	offsetMat[3] =	vec2(-offset, 0);							// middle right
