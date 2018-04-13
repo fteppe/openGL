@@ -41,7 +41,6 @@ WindowBuilder::WindowBuilder()
 	glEnable(GL_DEPTH_TEST);
 	glCullFace(GL_BACK);
 	glewExperimental = GL_TRUE;
-	auto contextSetting = window.getSettings();
 	glewInit();
 	
 	_ASSERT(_CrtCheckMemory());

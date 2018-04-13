@@ -15,11 +15,13 @@ out vec2 UV;
 out vec3 posTan;
 out vec3 camTan;
 
+out vec4 fragDepthShadow;
 
 uniform vec3 camPos;
 uniform mat4 mvp;
 uniform mat4 objectSpace;
 uniform mat4 world2obj;
+uniform mat4 shadowProj;
 
 //this function allows us to od transformations from tangent object space to tangent space;
 mat3 basisChange(vec3 u,vec3 v, vec3 w);
@@ -43,6 +45,8 @@ void main()
 	//camTan = vec3(TBN[0].y, TBN[1].y, TBN[2].y);
 	//posTan = objToTan[1].xyz;
 	gl_Position = mvp*vec4(aPos, 1.0);
+
+    fragDepthShadow = (shadowProj * vec4(fragPosWorld, 1));
     
 }
 

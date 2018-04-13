@@ -38,4 +38,9 @@ void ShaderPBR::setProgramInformation(tetraRender::Scene & scene, const Solid & 
 	glUniform3f(uniforms["camPos"], camPos.x, camPos.y, camPos.z);
 	float time = scene.getElapsedTime();
 	sendFloat("time", time);
+
+	//We send the shadowMap depthBuffer and camera.
+	glm::mat4 shadowProj = scene.getShadowProj().getProjection();
+	sendMatrix4("shadowProj", shadowProj);
+	scene.getTexture("shadowMap")->applyTexture(this->program, glGetUniformLocation(program, "shadowMap"), highestTextureUnitUsed);
 }

@@ -10,6 +10,8 @@ uniform sampler2D normals;
 uniform sampler2D depth;
 uniform sampler2D specularity;
 uniform sampler2D fragPos;
+uniform sampler2D shadowDistance;
+
 
 uniform float near;
 uniform float far;
@@ -51,11 +53,9 @@ void main()
 	
 	offset = clamp (offset, 0.0, 0.1);
 	//This is a blur kernel;
-
-
 	//ColorOutput = vec4(depthVal);
 	//ColorOutput = blur(color, offset, 5);
-	ColorOutput = texture(color, UV);
+    ColorOutput = texture(shadowDistance, UV);// + texture(color, UV);
 }
 
 vec4 blur(sampler2D map, float initialOffset, int quality)

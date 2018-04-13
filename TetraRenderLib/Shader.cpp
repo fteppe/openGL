@@ -153,22 +153,10 @@ void Shader::sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> tex
 		it->second->applyTexture(program, uniforms[it->first], i);
 		i++;
 	}
-	//If we have used more textures units than before we update the number of used texture units
-	//if (i > this->highestTextureUnitUsed)
-	//{
-	//	highestTextureUnitUsed = i;
-	//}
-	////if we have used less texture units than before, we unbind the unsued ones, and update the numberOf texture units used.
-	//else
-	//{
-	//	while (i <= highestTextureUnitUsed)
-	//	{
-	//		//we unbind the texture
-	//		glActiveTexture(GL_TEXTURE0 + i);
-	//		glBindTexture(GL_TEXTURE_2D, 0);
-	//		i++;
-	//	}
-	//}
+	if (i > highestTextureUnitUsed)
+	{
+		highestTextureUnitUsed = i;
+	}
 }
 
 void Shader::compileShader(GLuint shader, std::string shaderPath)

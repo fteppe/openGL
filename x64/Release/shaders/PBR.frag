@@ -9,10 +9,13 @@ in vec3 posTan;
 in vec3 camTan;
 //in vec3 tang;
  
+in vec4 fragDepthShadow;
+
 layout(location = 0) out vec4 FragColor;
 layout(location = 1) out vec3 normalOut;
 layout(location = 2) out vec3 specOut;
 layout(location = 3) out vec3 fragPos;
+layout(location = 4) out float fragDepthShadowOut;
 
 uniform float[7] light;
 uniform float time;
@@ -23,6 +26,7 @@ uniform sampler2D normalMap;
 uniform sampler2D depthMap;
 uniform samplerCube skybox;
 
+uniform sampler2D shadowMap;
 
 vec3 fragLight(float light[7], vec3 normalWorld, vec3 fragPosWorld);
 vec3 specCalc(float light[7], vec3 normalWorld, vec3 fragPosWorld, vec3 camPos, float specPow, float specVal);
@@ -34,6 +38,12 @@ vec4 cubeMapReflection(vec3 normalWorld, vec3 fragPosWorld, vec3 camPos);
 
 void main()
 {
+    vec4 shadowPos = vec4(fragDepthShadow.xyz/fragDepthShadow.w,1);
+    float shadowTex =  texture(shadowMap, shadowPos.xy).r ;
+    float currentDepth = (shadowPos.z) * 0.5 + 0.5;
+    
+    fragDepthShadowOut = currentDepth;
+    fragDepthShadowOut = currentDepth > shadowTex  ? 1.0 : 0.0;
 	vec3 pos = fragPosWorld;
 	vec3 normal_ = vec3(0,1,0);//normalWorld;
 	vec2 translation = parralax(camTan, posTan);

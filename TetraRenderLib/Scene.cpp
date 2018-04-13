@@ -22,19 +22,11 @@ tetraRender::Scene::Scene(Camera cam)
 	this->cam.setPosition(glm::vec3(5, 1, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 1, 0));
-	Texture tex;
-	Texture *tex2 = new Texture;
-	delete tex2;
-	std::shared_ptr<Texture> tex3(new Texture);
-	//The shadows of this scene
-	//this->shadowProjection = this->cam;
-	//shadowProjection.setPosition(glm::vec3(-5, 1, 5));
 
-	clock.restart();
-	FrameBuffer * frame = new FrameBuffer;
-	frame->setHDR(true);
-	//frame->renderToScreen();
-	
+	//The shadows of this scene
+	this->shadowProjection = this->cam;
+	shadowProjection.setPosition(glm::vec3(-5, 1, 5));
+
 	std::shared_ptr<Texture> normalsBuffer(new Texture);
 	std::shared_ptr<Texture> depthBuffer(new Texture);
 	std::shared_ptr<Texture> spec(new Texture);
@@ -44,20 +36,35 @@ tetraRender::Scene::Scene(Camera cam)
 	textures["depth"] = depthBuffer;
 	textures["specularity"] = spec;
 	textures["fragPos"] = fragPos;
+	textures["shadowDistance"] = std::shared_ptr<Texture>(new Texture);
 
+	clock.restart();
+	FrameBuffer * frame = new FrameBuffer;
+	frame->setHDR(true);
+	//frame->renderToScreen();
+
+	//ShadowMap frameBuffer
+	textures["shadowMap"] = std::shared_ptr<Texture>(new Texture);
+	frame->setDepthTexture(textures["shadowMap"]);
+	//shadow Passes
+	renderPasses.push_back(new RenderPass());
+	RenderPass * pass = renderPasses.back();
+	pass->setRenderOutput(frame);
+	pass->setRenderTagsIncluded({ WORLD_OBJECT });
+	pass->setCamera(&this->shadowProjection);
 	
+	//Colors renderPass.
+	frame = new FrameBuffer;
 	frame->addColorOutputTexture(textures["color"]);
 	frame->setDepthTexture(depthBuffer);
 	frame->addColorOutputTexture(normalsBuffer);
 	frame->addColorOutputTexture(spec);
 	frame->addColorOutputTexture(fragPos);
-	
+	frame->addColorOutputTexture(textures["shadowDistance"]);
 
-	
-
-	//We set the frame as the renderPass we want.
+	//We set the frame as the renderPass we want for the colors.
 	renderPasses.push_back(new RenderPass());
-	RenderPass * pass = renderPasses.back();
+	pass = renderPasses.back();
 	pass->setRenderOutput(frame);
 	pass->setRenderTagsIncluded({ WORLD_OBJECT });
 	pass->setCamera(&this->cam);
@@ -71,7 +78,7 @@ tetraRender::Scene::Scene(Camera cam)
 	pass = renderPasses.back();
 	pass->setRenderOutput(frame);
 	pass->setRenderTagsIncluded({ WORLD_OBJECT });
-	pass->setCamera(&this->cam);
+	pass->setCamera(&this->shadowProjection);
 	
 	//the second render pass we don't set a frameBuffer so it will render to the screen.
 	renderPasses.push_back(new RenderPass());
@@ -151,6 +158,11 @@ void tetraRender::Scene::load(std::string scene)
 Camera tetraRender::Scene::getCam() const
 {
 	return cam;
+}
+
+Camera tetraRender::Scene::getShadowProj() const
+{
+	return shadowProjection;
 }
 
 Light tetraRender::Scene::getLight() const
@@ -247,6 +259,8 @@ void tetraRender::Scene::setupPostProcessing()
 	postProcessMat->setChannel(textures["depth"], "depth");
 	postProcessMat->setChannel(textures["specularity"], "specularity");
 	postProcessMat->setChannel(textures["fragPos"], "fragPos");
+	postProcessMat->setChannel(textures["shadowDistance"], "shadowDistance");
+	postProcessMat->setChannel(textures["shadowMap"], "shadowMap");
 
 	screenObj->setMaterial(postProcessMat);
 	screenObj->addTag(POST_PROCESS);
