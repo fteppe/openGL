@@ -33,12 +33,18 @@ WindowBuilder::WindowBuilder()
 
 	unsigned width = 1024;
 	unsigned height = 720;
-
+	sf::Context context;
+	
+	
 	window.create(sf::VideoMode(width, height), "Tetra Engine", sf::Style::Close, settings);
 	glEnable(GL_DEPTH_TEST);
 	glCullFace(GL_BACK);
 	glewExperimental = GL_TRUE;
+	auto contextSetting = window.getSettings();
 	glewInit();
+	const GLubyte* vers = glGetString(GL_VERSION);
+
+	vers = glGetString(GL_VERSION);
 	//apparently an old implementation bug tends to raise an error on startup. We call geterror to remove it.
 	glGetError();
 
