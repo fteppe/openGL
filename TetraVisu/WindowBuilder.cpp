@@ -48,12 +48,7 @@ WindowBuilder::WindowBuilder()
 	glGetError();
 	_ASSERT(_CrtCheckMemory());
 	tetraRender::Camera cam(600.0f, 800.0f, 0.75f);
-	{
-		tetraRender::Camera cam2(cam);
-	}
-	tetraRender::Camera cam3(cam);
 	cam.setUp(glm::vec3(0, 0, 0));
-	tetraRender::Light light;
 	_ASSERT(_CrtCheckMemory());
 	//new tetraRender::Scene(cam);
 

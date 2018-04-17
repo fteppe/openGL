@@ -1,9 +1,14 @@
 #include "stdafx.h"
 #include "Light.h"
+#include <iostream>
 using namespace tetraRender;
 
 Light::Light()
 {
+	if (_DEBUG)
+	{
+		std::cout << "creating Light\n";
+	}
 	_ASSERT(_CrtCheckMemory());
 }
 

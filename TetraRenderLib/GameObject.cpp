@@ -1,16 +1,23 @@
 #include "stdafx.h"
 #include "GameObject.h"
 #include "Scene.h"
-
+#include <iostream>
 using namespace tetraRender;
 
 GameObject::GameObject()
 {
+	_ASSERT(_CrtCheckMemory());
+	if (_DEBUG)
+	{
+		std::cout << "creating gameoBject\n";
+	}
 	rotation = 0;
 	pos = glm::vec3(0);
 	scale = glm::vec3(1);
 	rotationAngle = glm::vec3(0, 0, 1);
 	updateModelMatrix();
+
+	_ASSERT(_CrtCheckMemory());
 }
 
 
@@ -68,10 +75,6 @@ glm::mat4 GameObject::getmodelMatrix() const
 	return modelMatrix;
 }
 
-std::shared_ptr<Material> GameObject::getMaterial()
-{
-	return material_ptr;
-}
 
 void GameObject::draw(tetraRender::Scene & scene)
 {

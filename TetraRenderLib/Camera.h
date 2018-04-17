@@ -1,9 +1,10 @@
 #pragma once
 #include <glm/matrix.hpp>
 #include <glm/vec3.hpp>
+#include "GameObject.h"
 
 namespace tetraRender {
-	class Camera
+	class Camera : public GameObject
 	{
 	public:
 		Camera();
@@ -22,16 +23,15 @@ namespace tetraRender {
 		glm::vec2 getNearFarPlanes();
 
 		~Camera();
+
 	private:
 
 		void makeLookatMat();
-
 		//the matrix that has the informationson on it's position and orientation
 		glm::mat4 lookAt;
 		//The projection type of the camera.
 		glm::vec2 size;
 		glm::mat4 projection;
-		glm::vec3 pos;
 		glm::vec3 target;
 		glm::vec3 up;
 

@@ -2,24 +2,41 @@
 #include "Camera.h"
 #include <glm/gtx/transform.hpp>
 #include <crtdbg.h>
+#include <iostream>
 
 using namespace tetraRender;
 
 Camera::Camera()
 {
 	_ASSERT(_CrtCheckMemory());
+	if (_DEBUG)
+	{
+		std::cout << "making Camera" << std::endl;
+	}
+	_ASSERT(_CrtCheckMemory());
 }
 
 Camera::Camera(float height, float width, float fov) : Camera()
 {
 	//begin and end, give how close and how far the camera renders.
+	
 	this->size = glm::vec2(width, height);
 	nearPlane = 0.1f;
 	farPlane = 200;
 	projection = glm::perspective(fov, width / height, nearPlane, farPlane);
+	//makeLookatMat();
 	_ASSERT(_CrtCheckMemory());
 }
 
+
+Camera::~Camera()
+{
+	if (_DEBUG)
+	{
+		std::cout << "destroying Camera\n";
+	}
+
+}
 //this give the projection matrix to see through the camera.
 glm::mat4 Camera::getProjection()
 {
@@ -84,11 +101,7 @@ glm::vec2 Camera::getNearFarPlanes()
 
 
 
-Camera::~Camera()
-{
-}
-
 void Camera::makeLookatMat()
 {
-	lookAt = glm::lookAt(pos, target, up);
+	this->lookAt.operator=(glm::lookAt(pos, target, up));
 }
