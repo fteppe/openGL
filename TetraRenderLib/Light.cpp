@@ -5,10 +5,7 @@ using namespace tetraRender;
 
 Light::Light()
 {
-	if (_DEBUG)
-	{
-		std::cout << "creating Light\n";
-	}
+
 	_ASSERT(_CrtCheckMemory());
 }
 

@@ -4,7 +4,7 @@
 #include "GameObject.h"
 
 namespace tetraRender {
-	class Camera : public GameObject
+	class Camera : GameObject
 	{
 	public:
 		Camera();
@@ -34,6 +34,7 @@ namespace tetraRender {
 		glm::mat4 projection;
 		glm::vec3 target;
 		glm::vec3 up;
+		//glm::vec3 pos;
 
 		float nearPlane;
 		float farPlane;

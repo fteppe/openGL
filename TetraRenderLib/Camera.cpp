@@ -9,10 +9,7 @@ using namespace tetraRender;
 Camera::Camera()
 {
 	_ASSERT(_CrtCheckMemory());
-	if (_DEBUG)
-	{
-		std::cout << "making Camera" << std::endl;
-	}
+
 	_ASSERT(_CrtCheckMemory());
 }
 
@@ -31,16 +28,14 @@ Camera::Camera(float height, float width, float fov) : Camera()
 
 Camera::~Camera()
 {
-	if (_DEBUG)
-	{
-		std::cout << "destroying Camera\n";
-	}
+
 
 }
 //this give the projection matrix to see through the camera.
 glm::mat4 Camera::getProjection()
 {
 	return projection * lookAt;
+	return glm::mat4();
 }
 
 void tetraRender::Camera::setProjectionOrtho(float height, float width, float near, float far)

@@ -32,7 +32,7 @@ namespace tetraRender
 	protected:
 
 		bool triangulated;
-
+		std::shared_ptr<Material> material_ptr;
 		std::shared_ptr<VertexBufferObject> VBO_ptr;
 	};
 

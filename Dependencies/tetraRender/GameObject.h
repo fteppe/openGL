@@ -26,7 +26,6 @@ namespace tetraRender
 		glm::vec3 getScale();
 		glm::vec4 getRotation();
 		glm::mat4 getmodelMatrix() const;
-		std::shared_ptr<Material> getMaterial();
 		virtual void draw(Scene& scene);
 		virtual void draw(Scene& scene, std::shared_ptr<Material> mat);
 	protected:
@@ -40,7 +39,7 @@ namespace tetraRender
 		//These tags are an indication for the renderer. This mus always be sorted.
 		std::set<RenderTag> renderTags;
 
-		std::shared_ptr<Material> material_ptr;
+		
 	};
 
 }
