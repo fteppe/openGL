@@ -77,6 +77,10 @@ void GameObject::draw(tetraRender::Scene & scene)
 {
 }
 
+void GameObject::draw(tetraRender::Scene & scene,std::shared_ptr<Material> mat)
+{
+}
+
 void GameObject::updateModelMatrix()
 {
 	modelMatrix = glm::rotate(rotation, rotationAngle) * glm::scale(scale) *  glm::translate(pos);

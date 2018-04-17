@@ -44,6 +44,11 @@ void Solid::draw(tetraRender::Scene& scene)
 	material_ptr->apply(VBO_ptr.get(), scene, *this);
 }
 
+void Solid::draw(tetraRender::Scene& scene, std::shared_ptr<Material> mat)
+{
+	mat->apply(VBO_ptr.get(), scene, *this);
+}
+
 std::string Solid::description()
 {
 	return "TODO";

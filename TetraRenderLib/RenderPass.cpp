@@ -50,8 +50,14 @@ void RenderPass::renderScene(tetraRender::Scene & scene)
 		//If our object has one tag part of the included tags to be rendered then we do.
 		if (!isIntersectionEmpty(this->renderTagsIncluded, go->getRenderTags()))
 		{
-			go->draw(scene);
-			//shader_ptr = go->getMaterial()->getShaderProgram().get();
+			if (optionalMaterial != NULL)
+			{
+				go->draw(scene, optionalMaterial);
+			}
+			else
+			{
+				go->draw(scene);
+			}
 		}
 	}
 	scene.setCamera(tempCamera);
@@ -61,6 +67,11 @@ void RenderPass::renderScene(tetraRender::Scene & scene)
 void RenderPass::setTextures(std::map<std::string, std::shared_ptr<Texture>> texturesIn)
 {
 	textures = texturesIn;
+}
+
+void tetraRender::RenderPass::setMat(std::shared_ptr<Material> mat)
+{
+	optionalMaterial = mat;
 }
 
 bool RenderPass::isIntersectionEmpty(std::vector<RenderTag> renderPassTags, std::set<RenderTag> elementTags)

@@ -54,8 +54,8 @@ void main()
 	offset = clamp (offset, 0.0, 0.1);
 	//This is a blur kernel;
 	//ColorOutput = vec4(depthVal);
-	//ColorOutput = blur(color, offset, 5);
-    ColorOutput = texture(shadowDistance, UV);// + texture(color, UV);
+	ColorOutput = blur(color, offset, 5) * (blur(shadowDistance, 0.0, 1).r+0.1);
+    //ColorOutput = texture(shadowDistance, UV);// + texture(normals, UV)/2;
 }
 
 vec4 blur(sampler2D map, float initialOffset, int quality)

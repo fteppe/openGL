@@ -23,6 +23,7 @@ namespace tetraRender
 		Solid(std::pair <std::string, std::string> objFile);
 		~Solid();
 		void draw(tetraRender::Scene& scene);
+		void draw(Scene& scene, std::shared_ptr<Material> mat);
 		std::string description();
 		//void setObjectSpace(glm::mat4 transfo);
 

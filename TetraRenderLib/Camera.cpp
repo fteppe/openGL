@@ -26,6 +26,13 @@ glm::mat4 Camera::getProjection()
 	return projection * lookAt;
 }
 
+void tetraRender::Camera::setProjectionOrtho(float height, float width, float near, float far)
+{
+	this->projection = glm::ortho(-width / 2, width / 2, -height / 2, height / 2, near, far);
+	nearPlane = near;
+	farPlane = far;
+}
+
 void Camera::setLookAt(glm::mat4 lookAt)
 {
 	this->lookAt = lookAt;

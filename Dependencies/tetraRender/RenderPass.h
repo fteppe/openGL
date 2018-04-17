@@ -24,13 +24,14 @@ namespace tetraRender
 		void setRenderTagsExcluded(std::vector<RenderTag> tags);
 		void renderScene(Scene & scene);
 		void setTextures(std::map < std::string, std::shared_ptr<Texture>> texturesIn);
+		void setMat(std::shared_ptr<Material> mat);
 
 	private:
 
 		bool isIntersectionEmpty(std::vector<RenderTag> renderPassTags, std::set<RenderTag> elementTags);
 
 		//A render pass always needs a view point, in the case the renderPass is to get shadows the camera will be the shadow's viewpoint
-		//Camera* camera_ptr;
+		Camera* camera_ptr;
 		//This determines where a RenderPass renders.
 		//The renderPass is the sole owner of the frameBuffer is in in charge of deleting it.
 		FrameBuffer* renderOutput;

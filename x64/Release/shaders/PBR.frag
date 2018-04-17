@@ -35,15 +35,29 @@ vec3 normalValue(vec3 normal, vec3 tangent, vec3 bitTangent,vec2 UVin);
 vec2 parralax(vec3 camTan, vec3 posTan);
 float water();
 vec4 cubeMapReflection(vec3 normalWorld, vec3 fragPosWorld, vec3 camPos);
+float shadowCalculation(vec4 fragShadowPos, sampler2D shadowMap);
+
+
+float shadowCalculation(vec4 fragShadowPos, sampler2D shadowMap)
+{
+	vec3 shadowPos = fragShadowPos.xyz/fragShadowPos.w;
+	shadowPos = shadowPos * 0.5 + 0.5;
+    float shadowTex =  texture(shadowMap, shadowPos.xy).r ;
+    float currentDepth = (shadowPos.z);
+    
+    float bias = 0.005;
+    float outVal  = currentDepth - bias > shadowTex  ? 0.0 : 1.0;
+	outVal = (shadowPos.x>1.0 || shadowPos.x<0.0) ? 1.0 : outVal;
+	outVal = (shadowPos.y>1.0 || shadowPos.y<0.0) ? 1.0 : outVal;
+
+	return outVal;
+}
 
 void main()
 {
-    vec4 shadowPos = vec4(fragDepthShadow.xyz/fragDepthShadow.w,1);
-    float shadowTex =  texture(shadowMap, shadowPos.xy).r ;
-    float currentDepth = (shadowPos.z) * 0.5 + 0.5;
+   
     
-    fragDepthShadowOut = currentDepth;
-    fragDepthShadowOut = currentDepth > shadowTex  ? 1.0 : 0.0;
+    fragDepthShadowOut = shadowCalculation(fragDepthShadow, shadowMap);
 	vec3 pos = fragPosWorld;
 	vec3 normal_ = vec3(0,1,0);//normalWorld;
 	vec2 translation = parralax(camTan, posTan);

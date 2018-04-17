@@ -28,6 +28,7 @@ namespace tetraRender
 		glm::mat4 getmodelMatrix() const;
 		std::shared_ptr<Material> getMaterial();
 		virtual void draw(Scene& scene);
+		virtual void draw(Scene& scene, std::shared_ptr<Material> mat);
 	protected:
 		void updateModelMatrix();
 		glm::vec3 pos;

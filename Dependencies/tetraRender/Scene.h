@@ -27,6 +27,7 @@ namespace tetraRender
 		void load(std::string scene);
 
 		Camera getCam() const;
+		Camera getShadowProj() const;
 		Light getLight() const;
 		std::shared_ptr<Texture> getTexture(std::string tex);
 		float getElapsedTime() const;

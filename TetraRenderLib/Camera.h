@@ -10,6 +10,7 @@ namespace tetraRender {
 		Camera(float height, float width, float fov);
 
 		glm::mat4 getProjection();
+		void setProjectionOrtho(float height, float width, float near, float far);
 		void setLookAt(glm::mat4 lookAt);
 		void setPosition(glm::vec3 pos);
 		void setTarget(glm::vec3 target);
