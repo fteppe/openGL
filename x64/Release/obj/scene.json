@@ -1,0 +1,45 @@
+{
+    
+    "shaders" :[
+            {
+            "name":"generic",
+            "type":"shaderPBR",
+            "vertex":["texture.ver"],
+            "fragment":["PBR.frag","specularCalc.frag","lightCalc.frag"]
+        }
+    ],
+    "materials":[
+        {
+            "name":"PBR",
+            "shader":"generic",
+          "channels": {
+            "normalMap": "textures/EyCkvNyNormal.png",
+            "specularityMap": "textures/EyCkvNy.png",
+            "diffuse": "textures/No-Mans-Sky-1.jpg",
+            "cubemap": "skybox"
+          }
+        }
+    ],
+  "gameObjects": [
+    {
+      "type": "solid",
+      "material": "PBR",
+      "model": [ "obj/scene.obj", "Grid" ]
+    },
+    {
+      "type": "solid",
+      "material": "PBR",
+      "model": [ "obj/scene.obj", "Suzanne" ]
+    },
+    {
+      "type": "solid",
+      "material": "PBR",
+      "model": [ "obj/scene.obj", "Torus" ]
+    },
+    {
+      "type": "solid",
+      "material": "PBR",
+      "model": [ "obj/scene.obj", "Sphere" ]
+    }
+  ]
+}
