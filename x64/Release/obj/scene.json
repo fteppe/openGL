@@ -8,22 +8,32 @@
             "fragment":["PBR.frag","specularCalc.frag","lightCalc.frag"]
         }
     ],
-    "materials":[
-        {
-            "name":"PBR",
-            "shader":"generic",
-          "channels": {
-            "normalMap": "textures/EyCkvNyNormal.png",
-            "specularityMap": "textures/EyCkvNy.png",
-            "diffuse": "textures/No-Mans-Sky-1.jpg",
-            "cubemap": "skybox"
-          }
-        }
-    ],
+  "materials": [
+    {
+      "name": "PBR",
+      "shader": "generic",
+      "channels": {
+        "normalMap": "textures/EyCkvNyNormal.png",
+        "specularityMap": "textures/EyCkvNy.png",
+        "diffuse": "textures/No-Mans-Sky-1.jpg",
+        "cubemap": "skybox"
+      }
+    },
+    {
+      "name": "stone",
+      "shader": "generic",
+      "channels": {
+        "normalMap": "textures/EyCkvNyNormal.png",
+        "specularityMap": "textures/EyCkvNy.png",
+        "diffuse": "textures/texture2.jpg",
+        "cubemap": "skybox"
+      }
+    }
+  ],
   "gameObjects": [
     {
       "type": "solid",
-      "material": "PBR",
+      "material": "stone",
       "model": [ "obj/scene.obj", "Grid" ]
     },
     {
@@ -33,7 +43,7 @@
     },
     {
       "type": "solid",
-      "material": "PBR",
+      "material": "stone",
       "model": [ "obj/scene.obj", "Torus" ]
     },
     {

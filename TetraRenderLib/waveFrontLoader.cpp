@@ -38,6 +38,11 @@ void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::
 			//building new obj
 			if (strOneLine.substr(0, 2) == "o ")
 			{
+				//If we reach the build of a new object then we need to make the previous one.
+				if (polygons.size() > 0)
+				{
+					vertexObjects.push_back(makeVBOFromData());
+				}
 				std::cout << strOneLine << std::endl;
 				std::istringstream s(strOneLine.substr(2));
 				s >> file.second;
