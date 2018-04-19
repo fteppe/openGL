@@ -165,7 +165,7 @@ void Shader::compileShader(GLuint shader, std::string shaderPath)
 	std::string source = std::string((std::istreambuf_iterator<char>(shaderSource)), std::istreambuf_iterator<char>());
 	if (source.size() == 0)
 	{
-		std::cout << __FILE__ << " " << __LINE__ << "empty shader File" << std::endl;
+		std::cout << __FILE__ << " " << __LINE__ << "empty shader File" <<shaderPath<< std::endl;
 	}
 
 	const char* shaderChar = source.c_str();
