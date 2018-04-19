@@ -186,6 +186,8 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER& mats, VBO_C
 			{
 				VBO = objects[filePath.first][filePath.second];
 			}
+
+			//If we found the object we add it to our scene, but if we don't we just output an error.
 			if (VBO != NULL)
 			{
 				
