@@ -1,0 +1,6 @@
+Struct Light{
+	bool isDirectional;
+	vec3 lightPos;
+	vec3 color;
+	vec3 intensity;
+}
