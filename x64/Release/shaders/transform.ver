@@ -17,5 +17,4 @@ void main()
 	vertexPos = vec3(objectSpace * vec4(aPos,1));
 	vertexColor = (normal);
 	gl_Position = mvp*vec4(aPos, 1.0);
-    
 }

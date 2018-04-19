@@ -114,6 +114,12 @@
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
+    <PostBuildEvent>
+      <Command>call "$(ProjectDir)script.bat"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>copies all the headers to the headers dir.</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -217,6 +223,9 @@
     <ClCompile Include="Vec3.cpp" />
     <ClCompile Include="VertexBufferObject.cpp" />
     <ClCompile Include="waveFrontLoader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="script.bat" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

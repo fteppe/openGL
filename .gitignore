@@ -24,6 +24,8 @@ bld/
 
 #keep track of the shader files.
 !**/shaders/*
+!*.ver
+!*.frag
 
 # Visual Studio 2015 cache/options directory
 .vs/

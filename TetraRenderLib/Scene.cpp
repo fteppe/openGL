@@ -26,7 +26,7 @@ tetraRender::Scene::Scene(Camera cam)
 	//The shadows of this scene
 	this->shadowProjection = this->cam;
 	shadowProjection.setPosition(glm::vec3(-2, 1, 2));
-	shadowProjection.setProjectionOrtho(2, 2, 0.01, 10);
+	shadowProjection.setProjectionOrtho(2, 2, 1, 10);
 
 	std::shared_ptr<Texture> normalsBuffer(new Texture);
 	std::shared_ptr<Texture> depthBuffer(new Texture);
