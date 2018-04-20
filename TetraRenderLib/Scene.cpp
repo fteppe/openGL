@@ -116,7 +116,8 @@ void tetraRender::Scene::setCamera(Camera camera)
 
 void tetraRender::Scene::renderScene()
 {
-
+	//It is very simple for now, but I don't believe this is how it should be done. With a hard coded pipeline
+	//Or a way to define specific steps I give myself the power to do more stuffs with stencil buffers and other.
 	for (auto pass : renderPasses)
 	{
  		pass->renderScene(*this);
