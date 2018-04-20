@@ -143,14 +143,7 @@ void VertexBufferObject::drawObject(const Shader& shader)
 
 	glBindVertexArray(VertexArrayID);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);	
-
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
-	//error = glGetError();
-	
-
 }
 
 void VertexBufferObject::setNormals(std::vector<glm::vec3> normalIn)

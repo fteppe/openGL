@@ -19,14 +19,50 @@ namespace tetraRender
 	{
 		friend class EventHandler;
 	public:
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Constructor.  Builds a scene with the basic elements that constitute any scene. This includes the rendering pipeline framebuffers.</summary>
+		///
+		/// <remarks>	Fteppe, 20/04/2018. </remarks>
+		///
+		/// <param name="cam">	The camera that willbe used to render the scene </param>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
 		Scene(Camera cam);
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Animates the scene depending on the current time. THe current way it is built isn't use but might come
+		/// 			back if I put animations back in. </summary>
+		///
+		/// <remarks>	To be deprecated </remarks>
+		///
+		/// <param name="elapsed">	The elapsed time since the creation of the scene </param>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		void animate(sf::Clock elapsed);
 		~Scene();
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	changes the camera used to render the scene. </summary>
+		///
+		/// <remarks>	Fteppe, 20/04/2018. </remarks>
+		///
+		/// <param name="camera">	The camera. </param>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		void setCamera(Camera camera);
 		/** This is the rendering pipeline and currently it is very generic which can be nice but it means some things are hard to do
 		With a more rigid pipeline I can have more controle in each step. Since I currently have very few passes it makes sense.
 		*/
 		void renderScene();
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Loads the given scene. It includes shader programs, materials, VBOs and solids.</summary>
+		///
+		/// <remarks>	Very basic and should at some point use the power of lbraries like ASSIMP to offer loading more complexe scene. The specific aren't defined yet. </remarks>
+		///
+		/// <param name="scene">	the JSON file used to load the scene </param>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		void load(std::string scene);
 
 		Camera getCam() const;
@@ -41,6 +77,13 @@ namespace tetraRender
 
 
 	private:
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Makes sky box, will load the cube, create the shader and material and load the textures. The used skybox is currently hard coded. </summary>
+		///
+		/// <remarks>	Fteppe, 20/04/2018. </remarks>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		void makeSkyBox();
 		void setupPostProcessing();
 

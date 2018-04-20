@@ -56,6 +56,7 @@ WindowBuilder::WindowBuilder()
 	_ASSERT(_CrtCheckMemory());
 	std::shared_ptr<tetraRender::Scene>  scene(new tetraRender::Scene(cam));
 	scene->load("obj/scene.json");
+	
 	tetraRender:: EventHandler handler(scene);
 	//std::cout << glGetString(GL_VERSION) << std::endl;
 	
