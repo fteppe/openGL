@@ -11,10 +11,6 @@ using namespace tetraRender;
 
 SceneLoader::SceneLoader()
 {
-	//We first test out the use of rapidJSON
-	//loading the file
-	
-	//loadModels();
 
 }
 
@@ -155,55 +151,92 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER& mats, VBO_C
 
 	for (unsigned int i = 0; i < gos.Size(); i++)
 	{
-		std::string type = gos[i]["type"].GetString();
+		GameObject* loadedGo = NULL;
+		rapidjson::Value& go = gos[i];
+		std::string type = go["type"].GetString();
 		//we check what kind of gameObject this is
-		if (type == "solid")
+		loadedGo = loadSingleGameObject(mats, objects, go);
+
+		if (loadedGo != NULL)
 		{
-			std::string mat = gos[i]["material"].GetString();
-			std::pair<std::string, std::string> filePath;
-			filePath.first = gos[i]["model"][0].GetString();
-			filePath.second = gos[i]["model"][1].GetString();
-
-			std::shared_ptr<VertexBufferObject> VBO;// = objects[filePath.first][filePath.second];
-			//In the case the object doesn't seem to exist.
-			if (objects.find(filePath.first) == objects.end())
-			{
-				WaveFrontLoader loader;
-				std::vector<VertexBufferObject*> objectsToLoad;
-				loader.loadVertexObjectVectorFromFile(filePath.first, objectsToLoad);
-
-				for (auto vbo : objectsToLoad)
-				{
-					objects[filePath.first][vbo->getFilePath().second] = std::shared_ptr<VertexBufferObject>(vbo);
-					if (vbo->getFilePath().second == filePath.second)
-					{
-						VBO = objects[filePath.first][vbo->getFilePath().second];
-					}
-				}
-				
-			}
-			else
-			{
-				VBO = objects[filePath.first][filePath.second];
-			}
-
-			//If we found the object we add it to our scene, but if we don't we just output an error.
-			if (VBO != NULL)
-			{
-				
-				gameObjects.push_back(new Solid(VBO));
-				Solid* loadedItem = ((Solid *)gameObjects.back());
-				loadedItem->setMaterial(std::shared_ptr<Material>(mats[mat]));
-				//Since it was loaded as a game object we give it the tag.
-				loadedItem->addTag(WORLD_OBJECT);
-			}
-			else
-			{
-				std::cout << "ERROR " + filePath.first + " " + filePath.second + " doesn't seem to exist" << std::endl;
-			}
+			gameObjects.push_back(loadedGo);
 		}
 	}
 	return gameObjects;
+}
+
+GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats, VBO_CONTAINER & objects, rapidjson::Value& go)
+{
+	GameObject* loadedGo = NULL;
+	std::string type = go["type"].GetString();
+	//we check what kind of gameObject this is
+	if (type == "solid")
+	{
+
+		std::string mat = go["material"].GetString();
+		std::pair<std::string, std::string> filePath;
+		filePath.first = go["model"][0].GetString();
+		filePath.second = go["model"][1].GetString();
+
+		std::shared_ptr<VertexBufferObject> VBO;// = objects[filePath.first][filePath.second];
+												//In the case the object doesn't seem to exist.
+		if (objects.find(filePath.first) == objects.end())
+		{
+			WaveFrontLoader loader;
+			std::vector<VertexBufferObject*> objectsToLoad;
+			loader.loadVertexObjectVectorFromFile(filePath.first, objectsToLoad);
+
+			for (auto vbo : objectsToLoad)
+			{
+				objects[filePath.first][vbo->getFilePath().second] = std::shared_ptr<VertexBufferObject>(vbo);
+				if (vbo->getFilePath().second == filePath.second)
+				{
+					VBO = objects[filePath.first][vbo->getFilePath().second];
+				}
+			}
+
+		}
+		else
+		{
+			VBO = objects[filePath.first][filePath.second];
+		}
+
+		//If we found the object we add it to our scene, but if we don't we just output an error.
+		if (VBO != NULL)
+		{
+			loadedGo = new Solid(VBO);
+
+			Solid* loadedItem = ((Solid *)loadedGo);
+			loadedItem->setMaterial(std::shared_ptr<Material>(mats[mat]));
+			//Since it was loaded as a game object we give it the tag.
+			loadedItem->addTag(WORLD_OBJECT);
+		}
+		else
+		{
+			std::cout << "ERROR " + filePath.first + " " + filePath.second + " doesn't seem to exist" << std::endl;
+		}
+	}
+
+	if (go.HasMember("children"))
+	{
+		rapidjson::Value& children = go["children"];
+		//If we have children to load.
+		if (children.IsArray())
+		{
+			for (rapidjson::Value& child : children.GetArray())
+			{
+				GameObject* childptr = loadSingleGameObject(mats, objects, child);
+				if (childptr != NULL && loadedGo != NULL)
+				{
+					childptr->setParent(loadedGo);
+					loadedGo->addChild(childptr);
+				}
+			}
+		}
+	}
+
+
+	return loadedGo;
 }
 
 Texture * SceneLoader::loadTexture(std::string texturePath)

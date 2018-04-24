@@ -180,6 +180,7 @@
     <ClInclude Include="EventHandler.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="InstancedObject.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Polygon.h" />
@@ -203,6 +204,7 @@
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="InstancedObject.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Polygon.cpp" />

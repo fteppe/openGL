@@ -44,7 +44,14 @@
     {
       "type": "solid",
       "material": "stone",
-      "model": [ "obj/scene.obj", "Torus" ]
+      "model": [ "obj/scene.obj", "Torus" ],
+      "children": [
+        {
+          "type": "solid",
+          "material": "PBR",
+          "model": [ "obj/scene.obj", "Suzanne" ]
+        }   
+      ]
     },
     {
       "type": "solid",

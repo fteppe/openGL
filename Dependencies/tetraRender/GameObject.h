@@ -21,6 +21,8 @@ namespace tetraRender
 		void setScale(glm::vec3 scale);
 		void setRotation(float rotation, glm::vec3 rotationAngle);
 		void addTag(RenderTag tag);
+		void addChild(GameObject* child);
+		void setParent(GameObject* parent);
 		std::set<RenderTag> getRenderTags();
 		glm::vec3 getPos();
 		glm::vec3 getScale();
@@ -35,7 +37,8 @@ namespace tetraRender
 		glm::vec3 rotationAngle;
 		float rotation;
 		glm::mat4 modelMatrix;
-
+		std::vector<GameObject*> children;
+		GameObject* parentNode;
 		//These tags are an indication for the renderer. This mus always be sorted.
 		std::set<RenderTag> renderTags;
 

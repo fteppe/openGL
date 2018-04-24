@@ -47,6 +47,16 @@ void GameObject::addTag(RenderTag tag)
 	renderTags.insert(tag);
 }
 
+void tetraRender::GameObject::addChild(GameObject * child)
+{
+	children.push_back(child);
+}
+
+void tetraRender::GameObject::setParent(GameObject * parent)
+{
+	this->parentNode = parent;
+}
+
 std::set<RenderTag> GameObject::getRenderTags()
 {
 	return renderTags;
@@ -70,16 +80,31 @@ glm::vec4 GameObject::getRotation()
 
 glm::mat4 GameObject::getmodelMatrix() const
 {
+	GameObject* parent = this->parentNode;
+	glm::mat4 mat = modelMatrix;
+	while (parent != NULL)
+	{
+		mat = mat * parent->modelMatrix;
+		parent = parent->parentNode;
+	}
 	return modelMatrix;
 }
 
 
 void GameObject::draw(tetraRender::Scene & scene)
 {
+	for (auto go : children)
+	{
+		go->draw(scene);
+	}
 }
 
 void GameObject::draw(tetraRender::Scene & scene,std::shared_ptr<Material> mat)
 {
+	for (auto go : children)
+	{
+		go->draw(scene, mat);
+	}
 }
 
 void GameObject::updateModelMatrix()
