@@ -1,11 +1,10 @@
 #version 430 core
 
-
 struct Light{
 	bool isDirectional;
-	vec3 lightPos;
+	vec3 pos;
 	vec3 color;
-	vec3 intensity;
+	float intensity;
 };
 
 in vec3 vertexPos;
@@ -24,6 +23,7 @@ uniform sampler2D shadowDistance;
 uniform float near;
 uniform float far;
 uniform mat4 inverseCam;
+uniform Light light;
 
 vec4 blur(sampler2D map, float initialOffset, int quality);
 void makeOffsetMat(float offset, inout vec2[9] offsetMat);
@@ -60,10 +60,8 @@ void main()
 	offset = max(closeOffset, faroffset)/100;
 	
 	offset = clamp (offset, 0.0, 0.1);
-	//This is a blur kernel;
-	//ColorOutput = vec4(depthVal);
 	ColorOutput = blur(color, offset, 5) * (blur(shadowDistance, 0.0, 1).r+0.1);
-    //ColorOutput = texture(shadowDistance, UV);// + texture(normals, UV)/2;
+    ColorOutput = vec4(light.pos, 0);
 }
 
 vec4 blur(sampler2D map, float initialOffset, int quality)

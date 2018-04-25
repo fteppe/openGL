@@ -9,7 +9,7 @@
 #include <glew/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 #include "Solid.h"
-
+#include "Light.h"
 using namespace tetraRender;
 
 Shader::Shader()
@@ -209,21 +209,46 @@ void Shader::getUniformLocations()
 
 void Shader::sendMatrix4(std::string name, glm::mat4 matrix)
 {
-	if (uniforms.find(name) == uniforms.end())
-	{
-		uniforms[name] = glGetUniformLocation(program, name.c_str());
-	}
-	glUniformMatrix4fv(uniforms[name], 1, false, glm::value_ptr(matrix));
+	GLint loc = getUniformLocation(name);
+	glUniformMatrix4fv(loc, 1, false, glm::value_ptr(matrix));
 }
 
 void Shader::sendFloat(std::string name, float floatIn)
 {
 	//floatIn = 0.5;
 
-	if (uniforms.find(name) == uniforms.end())
-	{
-		uniforms[name] = glGetUniformLocation(program, name.c_str());
-	}
-	glUniform1f(uniforms["time"], floatIn);
+	GLint loc = getUniformLocation(name);
+	glUniform1f(loc, floatIn);
 
+}
+
+void tetraRender::Shader::sendVec3(std::string name, glm::vec3 vec)
+{
+	GLint pos = getUniformLocation(name);
+	glUniform3f(pos, vec.x, vec.y, vec.z);
+}
+
+void tetraRender::Shader::sendLight(std::string name, tetraRender::Light light)
+{
+	//Since the light is a struct we need to send each component.
+	sendVec3(name + ".pos", light.getPos());
+	//sendVec3(name + ".pos", glm::vec3(0,0,1));
+	sendVec3(name + ".color", light.col);
+	sendFloat(name + ".intensity", light.intensity);
+	//GLint posIntensity = getUniformLocation(name + ".intensity");
+}
+
+GLint tetraRender::Shader::getUniformLocation(std::string uniform)
+{
+	GLint loc;
+	if (uniforms.find(uniform) == uniforms.end())
+	{
+		loc = glGetUniformLocation(program, uniform.c_str());
+		uniforms[uniform] = loc;
+	}
+	else
+	{
+		loc = uniforms[uniform];
+	}
+	return loc;
 }

@@ -5,7 +5,7 @@
             "name":"generic",
             "type":"shaderPBR",
             "vertex":["texture.ver"],
-            "fragment":["PBR.frag","lightCalc.frag"]
+            "fragment":["PBR.frag","lightCalc.frag","structDef.frag"]
         }
     ],
   "materials": [

@@ -269,7 +269,7 @@ void tetraRender::Scene::setupPostProcessing()
 	//models["hard"]["screen"] = vbo_ptr;
 	//this triangle has a different shader than usual.
 
-	Shader* shader = new ShaderPostProcess({ "postProcess.ver" },  { "defferedShading.frag" });
+	Shader* shader = new ShaderPostProcess({ "postProcess.ver" },  { "lightCalc.frag", "defferedShading.frag" });
 	std::shared_ptr<Shader> shader_ptr(shader);
 	Material* mat = new Material(shader_ptr);
 	std::shared_ptr<Material> postProcessMat(mat);

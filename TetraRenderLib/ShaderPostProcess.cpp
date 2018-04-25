@@ -28,4 +28,5 @@ void tetraRender::ShaderPostProcess::setProgramInformation(tetraRender::Scene & 
 
 	float time = scene.getElapsedTime();
 	sendFloat("time", time);
+	sendLight("light", scene.getLight());
 }

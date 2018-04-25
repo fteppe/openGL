@@ -12,6 +12,7 @@ namespace tetraRender
 	const std::string shaderDir = "shaders/";
 	class Scene;
 	class Solid;
+	class Light;
 
 	class Shader
 	{
@@ -31,6 +32,10 @@ namespace tetraRender
 		virtual void getUniformLocations();
 		void sendMatrix4(std::string name, glm::mat4);
 		void sendFloat(std::string name, float floatIn);
+		void sendVec3(std::string name, glm::vec3 vec);
+		void sendLight(std::string name, Light light);
+
+		GLint getUniformLocation(std::string uniform);
 
 		unsigned int program;
 		std::map<std::string, GLint> uniforms;
