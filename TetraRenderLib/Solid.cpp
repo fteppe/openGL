@@ -40,7 +40,7 @@ Solid::~Solid()
 
 void Solid::draw(tetraRender::Scene& scene)
 {
-	GameObject::draw(scene);
+ 	GameObject::draw(scene);
 	//we make sure the object still exists, if it does we render it.
 	material_ptr->apply(VBO_ptr.get(), scene, *this);
 }
@@ -54,6 +54,11 @@ void Solid::draw(tetraRender::Scene& scene, std::shared_ptr<Material> mat)
 std::string Solid::description()
 {
 	return "TODO";
+}
+
+GameObjectType tetraRender::Solid::getType() const
+{
+	return GameObjectType::SOLID;
 }
 
 

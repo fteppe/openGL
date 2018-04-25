@@ -8,13 +8,13 @@ vec3 specCalcFull(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos)
 {
 	return vec3(0.0);
 }
-vec3 specCalc(float light[7], vec3 normal, vec3 vertexPos, vec3 camPos, float specPow, float specVal)
+vec3 specCalc(float light[7], vec3 normal, vec3 fragPos, vec3 camPos, float specPow, float specVal)
 {
-	vec3 eyeVec = normalize(camPos - vertexPos);
+	vec3 eyeVec = normalize(camPos - fragPos);
 	//we get the value of the light energy hitting the fragment
-	vec3 lightIntensity = fragLight(light, normal, vertexPos);
+	vec3 lightIntensity = fragLight(light, normal, fragPos);
 	vec3 lightPos = vec3(light[0], light[1], light[2]);
-	vec3 lightDir = normalize(vertexPos - lightPos);
+	vec3 lightDir = normalize(fragPos - lightPos);
 	normal = normalize(normal);
 	float lightDirZ = dot(-lightDir, normal);
 	vec3 lightReflection = reflect(lightDir,normal);

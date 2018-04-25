@@ -1,5 +1,13 @@
 #version 430 core
 
+
+struct Light{
+	bool isDirectional;
+	vec3 lightPos;
+	vec3 color;
+	vec3 intensity;
+};
+
 in vec3 vertexPos;
 in vec2 UV;
 

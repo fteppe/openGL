@@ -13,6 +13,18 @@ enum RenderTag {
 	POST_PROCESS
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// <summary>	Values that represent game object types. </summary>
+///
+/// <remarks>	Fteppe, 25/04/2018. </remarks>
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+enum class GameObjectType {
+	LIGHT,
+	SOLID,
+	GAME_OBJECT,
+	CAMERA
+};
 //General enums that can be used accross the engine.
 enum EngineEnum {
 	SCREEN_FRAMEBUFFER //This enum is used to build a frameBuffer that will render to the screen as a primary output.

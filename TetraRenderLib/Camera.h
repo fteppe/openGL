@@ -22,6 +22,7 @@ namespace tetraRender {
 		glm::vec2 getSize();
 		glm::vec2 getNearFarPlanes();
 
+		virtual GameObjectType getType() const;
 		~Camera();
 
 	private:

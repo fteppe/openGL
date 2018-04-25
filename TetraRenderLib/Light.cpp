@@ -22,6 +22,11 @@ std::vector<float> Light::getDataArray()
 	return lightData;
 }
 
+GameObjectType tetraRender::Light::getType() const
+{
+	return GameObjectType::LIGHT;
+}
+
 
 
 

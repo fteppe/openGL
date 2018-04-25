@@ -17,6 +17,7 @@ namespace tetraRender
 		//returns an array of size 7 with all the data of the light.
 		//0-2 position,3-5 color, 6 intensity. 
 		std::vector<float> getDataArray();
+		virtual GameObjectType getType() const;
 		~Light();
 
 		glm::vec3 col;

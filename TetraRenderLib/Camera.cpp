@@ -26,6 +26,11 @@ Camera::Camera(float height, float width, float fov) : Camera()
 }
 
 
+GameObjectType tetraRender::Camera::getType() const
+{
+	return GameObjectType::CAMERA;
+}
+
 Camera::~Camera()
 {
 

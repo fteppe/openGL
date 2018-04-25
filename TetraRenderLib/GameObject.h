@@ -30,6 +30,7 @@ namespace tetraRender
 		glm::mat4 getmodelMatrix() const;
 		virtual void draw(Scene& scene);
 		virtual void draw(Scene& scene, std::shared_ptr<Material> mat);
+		virtual GameObjectType getType() const;
 		std::vector<GameObject*> getChildren();
 	protected:
 		void updateModelMatrix();

@@ -30,6 +30,8 @@ namespace tetraRender
 		glm::mat4 getmodelMatrix() const;
 		virtual void draw(Scene& scene);
 		virtual void draw(Scene& scene, std::shared_ptr<Material> mat);
+		virtual GameObjectType getType() const;
+		std::vector<GameObject*> getChildren();
 	protected:
 		void updateModelMatrix();
 		glm::vec3 pos;
@@ -39,7 +41,8 @@ namespace tetraRender
 		glm::mat4 modelMatrix;
 		std::vector<GameObject*> children;
 		GameObject* parentNode;
-		//These tags are an indication for the renderer. This mus always be sorted.
+		//These tags are an indication for the renderer, depending on what it needs to render, this gives a indication.
+		// for now the most used tags are WORLD_OBJECT et POST_PROCESSING. But I can make the difference betwen dynamic and static objects that can be interesting for lightmaps.
 		std::set<RenderTag> renderTags;
 
 		

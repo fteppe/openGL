@@ -25,7 +25,7 @@ namespace tetraRender
 		void draw(tetraRender::Scene& scene);
 		void draw(Scene& scene, std::shared_ptr<Material> mat);
 		std::string description();
-		//void setObjectSpace(glm::mat4 transfo);
+		virtual GameObjectType getType() const;
 
 		void setMaterial(std::shared_ptr<Material> const& mat);
 

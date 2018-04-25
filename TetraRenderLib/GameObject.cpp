@@ -107,6 +107,11 @@ void GameObject::draw(tetraRender::Scene & scene,std::shared_ptr<Material> mat)
 	}
 }
 
+GameObjectType tetraRender::GameObject::getType() const
+{
+	return GameObjectType::GAME_OBJECT;
+}
+
 std::vector<GameObject*> tetraRender::GameObject::getChildren()
 {
 	return children;

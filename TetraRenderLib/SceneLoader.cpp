@@ -148,6 +148,8 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER& mats, VBO_C
 	std::vector<GameObject * > gameObjects;
 	rapidjson::Value& gos = doc["gameObjects"];
 	assert(gos.IsArray());
+	GameObject* root = new GameObject();
+	gameObjects.push_back(root);
 
 	for (unsigned int i = 0; i < gos.Size(); i++)
 	{
@@ -159,7 +161,10 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER& mats, VBO_C
 
 		if (loadedGo != NULL)
 		{
-			gameObjects.push_back(loadedGo);
+			//gameObjects.push_back(loadedGo);
+			loadedGo->setParent(root);
+			root->addChild(loadedGo);
+			root->addTag(WORLD_OBJECT);
 		}
 	}
 	return gameObjects;

@@ -16,9 +16,8 @@ tetraRender::Scene::Scene(Camera cam)
 {
 	_ASSERT(_CrtCheckMemory());
 	setCamera(cam);
-	light.intensity = 1.0f;
-	light.col = glm::vec3(1, 1, 1);
-	light.setPos(glm::vec3(1, 1, 0.5));
+	
+	
 	this->cam.setPosition(glm::vec3(5, 1, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 1, 0));
@@ -150,11 +149,34 @@ void tetraRender::Scene::load(std::string scene)
 	setupPostProcessing();
 
 
+	Light* light = new Light();
+	light->intensity = 1.0f;
+	light->col = glm::vec3(1, 1, 1);
+	light->setPos(glm::vec3(1, 1, 0.5));
+	light->setParent(gameObjects[0]);
+	gameObjects[0]->addChild(light);
+
 }
 
 Camera tetraRender::Scene::getCam() const
 {
 	return cam;
+}
+
+std::vector<Light*> tetraRender::Scene::getLights(GameObject * root) const
+{
+	std::vector<Light*> lights;
+	GameObjectType type = root->getType();
+	if (type == GameObjectType::LIGHT)
+	{
+		lights.push_back((Light*)root);
+	}
+	for (auto child : root->getChildren())
+	{
+		std::vector<Light*> childLights = getLights(child);
+		lights.insert(lights.end(), childLights.begin(), childLights.end());
+	}
+	return lights;
 }
 
 Camera tetraRender::Scene::getShadowProj() const
@@ -164,7 +186,7 @@ Camera tetraRender::Scene::getShadowProj() const
 
 Light tetraRender::Scene::getLight() const
 {
-	return light;
+	return *getLights(gameObjects[0])[0];
 }
 
 std::shared_ptr<Texture> tetraRender::Scene::getTexture(std::string tex) 
@@ -247,7 +269,7 @@ void tetraRender::Scene::setupPostProcessing()
 	//models["hard"]["screen"] = vbo_ptr;
 	//this triangle has a different shader than usual.
 
-	Shader* shader = new ShaderPostProcess({ "postProcess.ver" },  { "postProcess.frag" });
+	Shader* shader = new ShaderPostProcess({ "postProcess.ver" },  { "defferedShading.frag" });
 	std::shared_ptr<Shader> shader_ptr(shader);
 	Material* mat = new Material(shader_ptr);
 	std::shared_ptr<Material> postProcessMat(mat);
