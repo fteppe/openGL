@@ -235,6 +235,15 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 		}
 	}
 
+	if (go.HasMember("pos"))
+	{
+		glm::vec3 pos(go["pos"]["x"].GetFloat(), go["pos"]["y"].GetFloat(), go["pos"]["z"].GetFloat());
+		if (loadedGo != NULL)
+		{
+			loadedGo->setPos(pos);
+		}
+	}
+
 
 	return loadedGo;
 }

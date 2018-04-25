@@ -87,7 +87,7 @@ glm::mat4 GameObject::getmodelMatrix() const
 		mat = mat * parent->modelMatrix;
 		parent = parent->parentNode;
 	}
-	return modelMatrix;
+	return mat;
 }
 
 
@@ -105,6 +105,11 @@ void GameObject::draw(tetraRender::Scene & scene,std::shared_ptr<Material> mat)
 	{
 		go->draw(scene, mat);
 	}
+}
+
+std::vector<GameObject*> tetraRender::GameObject::getChildren()
+{
+	return children;
 }
 
 void GameObject::updateModelMatrix()

@@ -185,6 +185,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="RenderPass.h" />
+    <ClInclude Include="RenderPipeline.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="Shader.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="RenderPass.cpp" />
+    <ClCompile Include="RenderPipeline.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="Shader.cpp" />
