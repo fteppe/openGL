@@ -1,11 +1,6 @@
 #version 430 core
 
-struct Light{
-	bool isDirectional;
-	vec3 pos;
-	vec3 color;
-	float intensity;
-};
+#include "lightStruct.hfrag"
 
 in vec3 vertexPos;
 in vec2 UV;
@@ -61,7 +56,7 @@ void main()
 	
 	offset = clamp (offset, 0.0, 0.1);
 	ColorOutput = blur(color, offset, 5) * (blur(shadowDistance, 0.0, 1).r+0.1);
-    ColorOutput = vec4(light.pos, 0);
+    //ColorOutput = vec4(light.pos, 0);
 }
 
 vec4 blur(sampler2D map, float initialOffset, int quality)

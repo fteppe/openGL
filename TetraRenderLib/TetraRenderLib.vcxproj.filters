@@ -87,6 +87,9 @@
     <ClInclude Include="RenderPipeline.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="PreprocessorShader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -153,6 +156,9 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="RenderPipeline.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="PreprocessorShader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

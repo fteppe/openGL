@@ -184,6 +184,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Polygon.h" />
+    <ClInclude Include="PreprocessorShader.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="RenderPipeline.h" />
     <ClInclude Include="Scene.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="PreprocessorShader.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="RenderPipeline.cpp" />
     <ClCompile Include="Scene.cpp" />

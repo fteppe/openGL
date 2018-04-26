@@ -1,6 +1,6 @@
-Struct Light{
+struct Light{
 	bool isDirectional;
-	vec3 lightPos;
+	vec3 pos;
 	vec3 color;
-	vec3 intensity;
-}
+	float intensity;
+};

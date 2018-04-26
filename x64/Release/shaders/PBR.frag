@@ -46,9 +46,12 @@ float shadowCalculation(vec4 fragShadowPos, sampler2D shadowMap)
     float currentDepth = (shadowPos.z);
     
     float bias = 0.005;
+	//So if the depth is in front of the closest item to the light then it's in the light.
     float outVal  = currentDepth - bias > shadowTex  ? 0.0 : 1.0;
-	outVal = (shadowPos.x>1.0 || shadowPos.x<0.0) ? 1.0 : outVal;
-	outVal = (shadowPos.y>1.0 || shadowPos.y<0.0) ? 1.0 : outVal;
+
+	//This is to know if what is outside the shadowmap is. We consider that it's in the shadow.
+	outVal = (shadowPos.x>1.0 || shadowPos.x<0.0) ? 0.0 : outVal;
+	outVal = (shadowPos.y>1.0 || shadowPos.y<0.0) ? 0.0 : outVal;
 
 	return outVal;
 }

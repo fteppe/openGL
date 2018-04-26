@@ -10,6 +10,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Solid.h"
 #include "Light.h"
+#include "PreprocessorShader.h"
 using namespace tetraRender;
 
 Shader::Shader()
@@ -162,7 +163,8 @@ void Shader::sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> tex
 void Shader::compileShader(GLuint shader, std::string shaderPath)
 {
 	std::ifstream shaderSource(shaderPath);
-	std::string source = std::string((std::istreambuf_iterator<char>(shaderSource)), std::istreambuf_iterator<char>());
+	std::vector<std::string> includes;
+	std::string source = PreprocessorShader::processFile(shaderPath, includes);
 	if (source.size() == 0)
 	{
 		std::cout << __FILE__ << " " << __LINE__ << "empty shader File" <<shaderPath<< std::endl;
@@ -179,8 +181,12 @@ void Shader::compileShader(GLuint shader, std::string shaderPath)
 	if (!success)
 	{
 		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::"<<shaderPath<<"::COMPILATION_FAILED\n" << infoLog << std::endl;
-		std::cout << source;
+		std::cout << "ERROR::SHADER::"<<shaderPath<<"::COMPILATION_FAILED\n" << infoLog;
+		std::cout << "inclusion order : \n";
+		for (unsigned i = 0; i < includes.size(); i++)
+		{
+			std::cout << i<<" :: "<<includes[i] << std::endl;
+		}
 	}
 }
 
