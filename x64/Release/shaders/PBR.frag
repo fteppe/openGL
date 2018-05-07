@@ -81,8 +81,8 @@ void main()
 	vec3 intensityVec = fragLight(light, normal_, pos);
 	vec3 specVec = specCalc(light, normal_, pos, camPos, specPow, specVal);
 	vec4 color = vec4(albedo(newUV),1);
-	//color *=  + specVec + ambiant;
-	color = color;
+	color = color * vec4( intensityVec+ specVec + ambiant,0);
+	//color = color;
 	
     //FragColor = color;
 	

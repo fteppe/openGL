@@ -149,12 +149,12 @@ void tetraRender::Scene::load(std::string scene)
 	setupPostProcessing();
 
 
-	Light* light = new Light();
-	light->intensity = 1.0f;
-	light->col = glm::vec3(1, 1, 1);
-	light->setPos(glm::vec3(1, 1, 0.5));
-	light->setParent(gameObjects[0]);
-	gameObjects[0]->addChild(light);
+	//Light* light = new Light();
+	//light->intensity = 1.0f;
+	//light->col = glm::vec3(1, 1, 1);
+	//light->setPos(glm::vec3(1, 1, 0.5));
+	//light->setParent(gameObjects[0]);
+	//gameObjects[0]->addChild(light);
 
 }
 

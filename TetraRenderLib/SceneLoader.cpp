@@ -222,6 +222,16 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 		}
 	}
 
+	if (type == "light")
+	{
+		//A bit early but it will do for now.
+		Light * light = new Light();
+		light->intensity = go["intensity"].GetFloat();
+		light->col = glm::vec3(1.0, 1.0, 1.0);
+		loadedGo = light;
+		
+	}
+
 	if (go.HasMember("children"))
 	{
 		rapidjson::Value& children = go["children"];
@@ -242,11 +252,15 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 
 	if (go.HasMember("pos"))
 	{
-		glm::vec3 pos(go["pos"]["x"].GetFloat(), go["pos"]["y"].GetFloat(), go["pos"]["z"].GetFloat());
-		if (loadedGo != NULL)
+		if (go["pos"].IsArray())
 		{
-			loadedGo->setPos(pos);
+			glm::vec3 pos(go["pos"][0].GetFloat(), go["pos"][1].GetFloat(), go["pos"][2].GetFloat());
+			if (loadedGo != NULL)
+			{
+				loadedGo->setPos(pos);
+			}
 		}
+		
 	}
 
 

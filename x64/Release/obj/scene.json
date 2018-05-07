@@ -15,7 +15,7 @@
       "channels": {
         "normalMap": "textures/EyCkvNyNormal.png",
         "specularityMap": "textures/EyCkvNy.png",
-        "diffuse": "textures/No-Mans-Sky-1.jpg",
+        "diffuse": "textures/Medieval_House_Diff.png",
         "cubemap": "skybox"
       }
     },
@@ -37,16 +37,22 @@
       "model": [ "obj/scene.obj", "Grid" ]
     },
     {
+      "type": "light",
+      "intensity": 1.0,
+      "pos": [0,1,2]
+    },
+    {
+      "type": "solid",
+      "material": "PBR",
+      "model": [ "obj/scene.obj", "Grid" ]
+    },
+    {
       "type": "solid",
       "material": "PBR",
       "model": [ "obj/scene.obj", "Suzanne" ]
     },
     {
-      "pos": {
-        "x": 1.0,
-        "y": 0.0,
-        "z": 0.0
-      },
+      "pos": [ 1.0, 0, 0 ],
       "type": "solid",
       "material": "stone",
       "model": [ "obj/scene.obj", "Torus" ],
