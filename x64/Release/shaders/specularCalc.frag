@@ -1,7 +1,6 @@
 #version 430 core
 #include "lightStruct.hfrag"
 #include "lightCalc.frag"
-uniform sampler2D specularMap;
 
 vec3 fragLight(float light[7], vec3 normal, vec3 vertexPos);
 

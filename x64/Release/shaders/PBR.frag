@@ -85,7 +85,7 @@ void main()
 	
 	specOut = vec3(specVal,0,0);
 	//the output of the normal vector must fit in [0,1]
-	normalOut = normal_/2 + vec3(0.5);
+	normalOut = normal_;
 	vec4 reflectionVal = cubeMapReflection(normal_, fragPosWorld, camPos);
 	FragColor =  color;
 }

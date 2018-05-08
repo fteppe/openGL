@@ -130,7 +130,7 @@ void tetraRender::RenderPipeline::setupPostProcessing(Scene & scene)
 	
 	//Push back is a bit complicated with a unique ptr;
 	
-	renderSurfaces.push_back(std::move(std::unique_ptr<Solid>( screenObj)));
+	//renderSurfaces.push_back(std::move(std::unique_ptr<Solid>( screenObj)));
 
 	scene.addGameObject(screenObj);
 }

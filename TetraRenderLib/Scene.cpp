@@ -147,7 +147,7 @@ void tetraRender::Scene::load(std::string scene)
 
 	//Testing puposes.
 
-	setupPostProcessing();
+	//setupPostProcessing();
 
 
 	//Light* light = new Light();

@@ -48,7 +48,7 @@ void main()
 	vec4 HDR = colorSample;
 	HDR = HDR/(HDR + vec4(1));
 	ColorOutput = HDR;
-
+	//ColorOutput = texture(normals, UV);
 	//We are going to go for a blurry image post processing.
 	// Building the offset matrix 
 	float offset = 0.5f;
@@ -145,7 +145,7 @@ vec3 valLight()
 		float specPow = 32.0f;
 		float specVal = texture(specularity, UV).r;
 		vec3 cameraPosition = camPos;
-		intensityVec = intensityVec + specCalc(light_, normal_, pos, cameraPosition, specPow, specVal);
+		//intensityVec = intensityVec + specCalc(light_, normal_, pos, cameraPosition, specPow, specVal);
 	}
 	return intensityVec;
 }
