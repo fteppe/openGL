@@ -5,14 +5,32 @@ using namespace tetraRender;
 
 RenderPipeline::RenderPipeline()
 {
-	std::unique_ptr<RenderPass> rp(new RenderPass);
+	//std::unique_ptr<RenderPass> rp(new RenderPass);
 	//We have to move the pointer since it is unique, so we have to transfer it and not do a simple copy.
-	renderPasses.push_back(std::move(rp));
+	//renderPasses.push_back(std::move(rp
+	setupRenderPasses();
+	setupPostProcessing();
 }
 
 
 RenderPipeline::~RenderPipeline()
 {
+}
+
+void tetraRender::RenderPipeline::renderScene(Scene & scene)
+{
+	//We use references because we iterate over a vector of unique ptr.
+	//we use const because we wont modify the pass.
+	for (auto const & pass : this->shadowmapsPasses)
+	{
+		pass->renderScene(scene);
+		//textures["depth"]->readData();
+	}
+	for (auto const & pass : this->renderPasses)
+	{
+		pass->renderScene(scene);
+		//textures["depth"]->readData();
+	}
 }
 
 void tetraRender::RenderPipeline::setupRenderPasses()
@@ -32,23 +50,23 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 	FrameBuffer * frame = new FrameBuffer;
 	frame->setHDR(true);
 	//frame->renderToScreen();
-
+	std::shared_ptr<Texture> shadowMap( new Texture());
+	
 	////ShadowMap frameBuffer
 	//gBuffer["shadowMap"] = std::shared_ptr<Texture>(new Texture);
-	//frame->setDepthTexture(gBuffer["shadowMap"]);
+	frame->setDepthTexture(shadowMap);
 	////shadow Passes
 	
-	
-	//renderPasses.push_back(new RenderPass());
-	//RenderPass * pass = renderPasses.back();
-	//pass->setRenderOutput(frame);
-	//pass->setRenderTagsIncluded({ WORLD_OBJECT });
+	std::unique_ptr<RenderPass> pass(new RenderPass);
+
+	pass->setRenderOutput(frame);
+	pass->setRenderTagsIncluded({ WORLD_OBJECT });
 	//pass->setCamera(&this->shadowProjection);
 	////We create a specific material that is very simple to render everything through it.
-	//shaders["transform"] = std::shared_ptr<Shader>(new Shader("transform.ver", "transform.frag"));
-	//materials["shadowMapMat"] = std::shared_ptr<Material>(new Material(shaders["transform"]));
-	//pass->setMat(materials["shadowMapMat"]);
-
+	std::shared_ptr<Shader> shader(new Shader("transform.ver", "transform.frag"));
+	std::shared_ptr<Material> mat (new Material(shader));
+	pass->setMat(mat);
+	shadowmapsPasses.push_back(std::move(pass));
 
 	//Colors renderPass.
 	frame = new FrameBuffer;
@@ -60,7 +78,7 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 	frame->addColorOutputTexture(gBuffer["shadowDistance"]);
 
 
-	std::unique_ptr<RenderPass> pass(new RenderPass);
+	pass = std::unique_ptr<RenderPass>(new RenderPass);
 	//We set the frame as the renderPass we want for the colors.
 
 	pass->setRenderOutput(frame);
@@ -93,7 +111,7 @@ void tetraRender::RenderPipeline::setupPostProcessing()
 	//models["hard"]["screen"] = vbo_ptr;
 	//this triangle has a different shader than usual.
 
-	Shader* shader = new ShaderPostProcess({ "postProcess.ver" }, { "postProcess.frag" });
+	Shader* shader = new ShaderPostProcess({ "postProcess.ver" }, { "defferedShading.frag" });
 	std::shared_ptr<Shader> shader_ptr(shader);
 	Material* mat = new Material(shader_ptr);
 	std::shared_ptr<Material> postProcessMat(mat);

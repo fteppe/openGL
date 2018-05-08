@@ -17,7 +17,7 @@ tetraRender::Scene::Scene(Camera cam)
 	_ASSERT(_CrtCheckMemory());
 	setCamera(cam);
 	
-	
+	renderPipeLine = std::unique_ptr<RenderPipeline>(new RenderPipeline);
 	this->cam.setPosition(glm::vec3(5, 1, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 1, 0));
@@ -117,13 +117,14 @@ void tetraRender::Scene::renderScene()
 {
 	//It is very simple for now, but I don't believe this is how it should be done. With a hard coded pipeline
 	//Or a way to define specific steps I give myself the power to do more stuffs with stencil buffers and other.
-	for (auto pass : renderPasses)
-	{
- 		pass->renderScene(*this);
-		//textures["depth"]->readData();
-	}
+	//for (auto pass : renderPasses)
+	//{
+ //		pass->renderScene(*this);
+	//	//textures["depth"]->readData();
+	//}
 	//renderPasses[0]->renderScene(*this);
 	//renderPasses[1]->renderScene(*this);
+	renderPipeLine->renderScene(*this);
 
 }
 
@@ -207,6 +208,18 @@ std::vector<GameObject*> tetraRender::Scene::getGameObjects()
 	return gameObjects;
 }
 
+std::vector<Light*> tetraRender::Scene::getLights()
+{
+	std::vector<Light*> lights;
+	//For each game objects at the root, we look for the lights in their children.
+	for (auto go : gameObjects)
+	{
+		std::vector<Light* > get = getLights(go);
+		lights.insert(lights.end(), get.begin(), get.end());
+	}
+	return lights;
+}
+
 void tetraRender::Scene::makeSkyBox()
 {
 	//TODO: change this function because this is right now the dirtiest way to do it.
@@ -269,7 +282,7 @@ void tetraRender::Scene::setupPostProcessing()
 	//models["hard"]["screen"] = vbo_ptr;
 	//this triangle has a different shader than usual.
 
-	Shader* shader = new ShaderPostProcess({ "postProcess.ver" },  { "lightCalc.frag", "defferedShading.frag" });
+	Shader* shader = new ShaderPostProcess({ "postProcess.ver" },  { "defferedShading.frag" });
 	std::shared_ptr<Shader> shader_ptr(shader);
 	Material* mat = new Material(shader_ptr);
 	std::shared_ptr<Material> postProcessMat(mat);

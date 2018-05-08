@@ -4,6 +4,8 @@
 #include <sstream>
 #include <experimental\filesystem>
 
+bool PreprocessorShader::hasVersion;
+
 PreprocessorShader::PreprocessorShader()
 {
 }
@@ -15,8 +17,12 @@ PreprocessorShader::~PreprocessorShader()
 
 std::string PreprocessorShader::processFile(std::string path, std::vector < std::string>& includedFiles)
 {
+	hasVersion = false;
 	includedFiles.push_back(path);
-	return PreprocessorShader::processFile(path, 0, includedFiles);
+	hasVersion = false;
+	std::string source = PreprocessorShader::processFile(path, 0, includedFiles);
+	return source;
+	
 }
 
 std::string PreprocessorShader::processFile(std::string path, unsigned int nbInclude, std::vector<std::string>& included)
@@ -68,19 +74,42 @@ std::string PreprocessorShader::processFile(std::string path, unsigned int nbInc
 				}
 
 			}
-
-			std::string replaceInclude = "//" + fileIncludeName + "\n";
-			nbInclude++;
-			replaceInclude = replaceInclude + "#line 0 " + std::to_string(nbInclude)+"\n";
-			replaceInclude = replaceInclude + " \n";
-
 			std::string fullPath = currentDir + fileIncludeName;
-			included.push_back(fullPath);
-			replaceInclude += PreprocessorShader::processFile(fullPath, nbInclude, included);
-			source += replaceInclude;
+			if (std::find(included.begin(), included.end(), fullPath) == included.end())
+			{
+				std::string replaceInclude = "//" + fileIncludeName + "\n";
+				nbInclude++;
+				replaceInclude = replaceInclude + "#line 0 " + std::to_string(nbInclude) + "\n";
+				replaceInclude = replaceInclude + " \n";
 
-			source += "#line "+std::to_string(currentLine+1)+" 0\n";
+
+				included.push_back(fullPath);
+				std::string includeFile = PreprocessorShader::processFile(fullPath, nbInclude, included);
+				if (includeFile.size() == 0)
+				{
+					std::cout << __FILE__ << "::" << __LINE__ << " empty file " + fullPath + "\n";
+				}
+				replaceInclude += includeFile;
+				source += replaceInclude;
+
+				source += "#line " + std::to_string(currentLine + 1) + " 0\n";
+			}
+
 		}
+		else if (line.substr(0, 8) == "#version")
+		{
+			if (hasVersion == true)
+			{
+				//We don't add the line if it is more than the first "version" or it breaks the code.
+			}
+			else if (hasVersion == false)
+			{
+				hasVersion = true;
+				source = source + line + "\n";
+			}
+			
+		}
+
 		else
 		{
 			source = source + line + "\n";

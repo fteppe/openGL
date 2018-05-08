@@ -5,7 +5,7 @@
             "name":"generic",
             "type":"shaderPBR",
             "vertex":["texture.ver"],
-            "fragment":["PBR.frag","lightCalc.frag","structDef.frag"]
+            "fragment":["PBR.frag"]
         }
     ],
   "materials": [
@@ -15,7 +15,7 @@
       "channels": {
         "normalMap": "textures/EyCkvNyNormal.png",
         "specularityMap": "textures/EyCkvNy.png",
-        "diffuse": "textures/Medieval_House_Diff.png",
+        "diffuse": "textures/img_fjords.jpg",
         "cubemap": "skybox"
       }
     },
@@ -38,8 +38,13 @@
     },
     {
       "type": "light",
-      "intensity": 1.0,
-      "pos": [0,1,2]
+      "intensity": 2.0,
+      "pos": [ 0, 0, 0.5 ]
+    },
+    {
+      "type": "light",
+      "intensity": 0.1,
+      "pos": [ 2, 1, 2 ]
     },
     {
       "type": "solid",

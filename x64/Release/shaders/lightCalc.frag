@@ -1,9 +1,8 @@
 #version 430 core
 
-
-
-
 #include "lightStruct.hfrag"
+
+
 vec3 fragLight(float light[7], vec3 normal, vec3 vertexPos)
 {
 	vec3 lightPos = vec3(light[0], light[1], light[2]);

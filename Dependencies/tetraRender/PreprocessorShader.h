@@ -35,7 +35,8 @@ public:
 		///
 		/// <returns>	A std::string. </returns>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
-
 		static std::string processFile(std::string path, unsigned int nbInclude, std::vector<std::string>& included);
+
+		static bool hasVersion;
 };
 

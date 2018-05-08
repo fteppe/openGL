@@ -1,6 +1,8 @@
 #version 430 core
 
 #include "lightStruct.hfrag"
+#include "specularCalc.frag"
+#include "lightCalc.frag"
 
 in vec3 vertexPos;
 in vec2 UV;
@@ -18,15 +20,19 @@ uniform sampler2D shadowDistance;
 uniform float near;
 uniform float far;
 uniform mat4 inverseCam;
-uniform Light light;
+uniform vec3 camPos;
+uniform Light lights[10];
+uniform int numLights;
 
 vec4 blur(sampler2D map, float initialOffset, int quality);
 void makeOffsetMat(float offset, inout vec2[9] offsetMat);
 float linearizeDepth(float depth, float near, float far);
 vec3 getPositionFromDepth(sampler2D map, vec2 screenPos, mat4 inverseCam);
+vec3 valLight();
 
 void main()
 {
+	vec3 light = valLight();
     float depthVal = (texture(depth, UV)).r;
     depthVal = linearizeDepth(depthVal, 0.1, 200);
 
@@ -38,7 +44,8 @@ void main()
     //FragColor = vec4(fogColor,1);
 	vec4 lightDim = texture(specularity, UV);
 	vec4 colorSample = texture(color, UV);
-	vec4 HDR = lightDim * colorSample;
+	colorSample = colorSample * vec4(light,0);
+	vec4 HDR = colorSample;
 	HDR = HDR/(HDR + vec4(1));
 	ColorOutput = HDR;
 
@@ -55,7 +62,7 @@ void main()
 	offset = max(closeOffset, faroffset)/100;
 	
 	offset = clamp (offset, 0.0, 0.1);
-	ColorOutput = blur(color, offset, 5) * (blur(shadowDistance, 0.0, 1).r+0.1);
+	//ColorOutput = blur(color, offset, 5) * (blur(shadowDistance, 0.0, 1).r+0.1);
     //ColorOutput = vec4(light.pos, 0);
 }
 
@@ -120,4 +127,25 @@ vec3 getPositionFromDepth(sampler2D map, vec2 screenPos, mat4 inverseCam)
 
 	pos /= pos.w;
 	return vec3(inverseCam * pos);
+}
+
+//vec3 diffuseCalc(Light light, vec3 normal, vec3 vertexPos);
+
+vec3 specCalc(Light light, vec3 normal, vec3 fragPos, vec3 camPos, float specPow, float specVal);
+
+vec3 valLight()
+{
+	vec3 intensityVec = vec3(0);
+	for(int i = 0; i < numLights; i++)
+	{
+		vec3 normal_ = vec3(texture(normals, UV));
+		vec3 pos = vec3(texture(fragPos, UV));
+		Light light_ = lights[i];
+		intensityVec = intensityVec + diffuseCalc(light_, normal_, pos);
+		float specPow = 32.0f;
+		float specVal = texture(specularity, UV).r;
+		vec3 cameraPosition = camPos;
+		intensityVec = intensityVec + specCalc(light_, normal_, pos, cameraPosition, specPow, specVal);
+	}
+	return intensityVec;
 }

@@ -29,7 +29,6 @@ uniform samplerCube skybox;
 uniform sampler2D shadowMap;
 
 vec3 fragLight(float light[7], vec3 normalWorld, vec3 fragPosWorld);
-vec3 specCalc(float light[7], vec3 normalWorld, vec3 fragPosWorld, vec3 camPos, float specPow, float specVal);
 vec3 albedo(vec2 UV);
 vec3 normalValue(vec3 normal, vec3 tangent, vec3 bitTangent,vec2 UVin);
 vec2 parralax(vec3 camTan, vec3 posTan);
@@ -78,11 +77,9 @@ void main()
 	//We use the spec map as a bump map as well, to make it look a bit better
 	//we add a constant value to the intensity, so it is never dark.
 	vec3 ambiant = vec3(0);
-	vec3 intensityVec = fragLight(light, normal_, pos);
-	vec3 specVec = specCalc(light, normal_, pos, camPos, specPow, specVal);
 	vec4 color = vec4(albedo(newUV),1);
-	color = color * vec4( intensityVec+ specVec + ambiant,0);
-	//color = color;
+	//color = color * vec4( intensityVec+ specVec + ambiant,0);
+	color = color;
 	
     //FragColor = color;
 	

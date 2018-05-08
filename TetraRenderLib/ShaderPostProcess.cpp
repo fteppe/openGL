@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Scene.h"
 #include "Solid.h"
+#include <sstream>
 
 using namespace tetraRender;
 
@@ -28,5 +29,16 @@ void tetraRender::ShaderPostProcess::setProgramInformation(tetraRender::Scene & 
 
 	float time = scene.getElapsedTime();
 	sendFloat("time", time);
-	sendLight("light", scene.getLight());
+
+	std::vector<Light *> lights = scene.getLights();
+	for (int i = 0; i < lights.size(); i++)
+	{
+		std::stringstream ss;
+		ss << "lights[" << i << "]";
+		sendLight(ss.str(), *lights[i]);
+	}
+	sendInt("numLights", lights.size());
+
+	sendVec3("camPos", scene.getCam().getPos());
+	
 }

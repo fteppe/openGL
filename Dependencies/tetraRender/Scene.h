@@ -5,13 +5,14 @@
 #include "FrameBuffer.h"
 #include "RenderPass.h"
 #include "Common.h"
+#include "RenderPipeline.h"
 #include <vector>
 #include <SFML/Window.hpp>
 
 namespace tetraRender
 {
 	class RenderPass;
-
+	class RenderPipeline;
 	/*
 	This class contains objects, a light and a camera. So we should be able to render a scene.
 	*/
@@ -66,7 +67,7 @@ namespace tetraRender
 		void load(std::string scene);
 
 		Camera getCam() const;
-		std::vector<Light*> getLights(GameObject* root) const;
+		
 
 		//These functions should change soon, I want lights with a potential camera in it, the camera will be the projection.
 		//If there is a camera there should also be a renderPass. But I don't know if it should be part of the light ot not.
@@ -75,10 +76,10 @@ namespace tetraRender
 		std::shared_ptr<Texture> getTexture(std::string tex);
 		float getElapsedTime() const;
 		std::vector<GameObject *> getGameObjects();
-
+		std::vector<Light * > getLights();
 
 	private:
-
+		std::vector<Light*> getLights(GameObject* root) const;
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Makes sky box, will load the cube, create the shader and material and load the textures. The used skybox is currently hard coded. </summary>
 		///
@@ -101,6 +102,8 @@ namespace tetraRender
 		//These are stored in the order in which they must be done.
 		std::vector<RenderPass*> renderPasses;
 		//I want to seperate render passes with a specific purpose (geometry, deffered shading, post process) and the building of shadowmaps.
+		// Now the rendering will hapen in this, so the scene is no longer responsible on the rendering.
+		std::unique_ptr<tetraRender::RenderPipeline> renderPipeLine;
 		VBO_CONTAINER models;
 		MAT_CONTAINER materials;
 		SHADER_CONTAINER shaders;

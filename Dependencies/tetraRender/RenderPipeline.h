@@ -3,6 +3,7 @@
 #include <map>
 #include "Texture.h"
 #include "Solid.h"
+#include "RenderPass.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,11 +16,13 @@
 
 namespace tetraRender
 {
+	class RenderPass;
 	class RenderPipeline
 	{
 	public:
 		RenderPipeline();
 		~RenderPipeline();
+		void renderScene(Scene& scene);
 
 	private:
 
@@ -30,10 +33,11 @@ namespace tetraRender
 		std::map<std::string, std::shared_ptr<Texture>> gBuffer;
 
 		/// <summary>	The framebuffers of this pipeline, they are only the regular framebuffers that I seperated from the shadowmaps framebuffers. </summary>
-		std::vector<std::unique_ptr<RenderPass>> renderPasses;
+		std::vector<std::unique_ptr<tetraRender:: RenderPass>> renderPasses;
 
-		std::vector<std::unique_ptr<RenderPass>> shadowmapsPasses;
-		std::vector<std::shared_ptr<Texture>> shadowmaps;
+		/// <summary>	The shadowmaps passes, they are seperated from the other render passes. </summary>
+		std::vector<std::unique_ptr<tetraRender:: RenderPass>> shadowmapsPasses;
+		std::vector<std::shared_ptr<Texture>> shadowMaps;
 
 		/// <summary>	The render surfaces. For each post processing renderpasses we need a surface to render on.
 		/// 			Each of those surfaces have a different shader that contains the post processing code, and a different material that defines  </summary>

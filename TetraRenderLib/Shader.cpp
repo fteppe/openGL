@@ -228,6 +228,12 @@ void Shader::sendFloat(std::string name, float floatIn)
 
 }
 
+void tetraRender::Shader::sendInt(std::string name, int intIn)
+{
+	GLint pos = getUniformLocation(name);
+	glUniform1i(pos, intIn);
+}
+
 void tetraRender::Shader::sendVec3(std::string name, glm::vec3 vec)
 {
 	GLint pos = getUniformLocation(name);

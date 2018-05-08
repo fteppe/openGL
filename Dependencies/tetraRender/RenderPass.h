@@ -19,12 +19,49 @@ namespace tetraRender
 		RenderPass();
 		~RenderPass();
 		void setRenderOutput(FrameBuffer * output);
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Sets a camera. This is the camera that will be used to render the scene. TO render a lightmap, the camera will be the projection of the light </summary>
+		///
+		/// <remarks>	Fteppe, 07/05/2018. </remarks>
+		///
+		/// <param name="camera">	[in,out] If non-null, the camera. </param>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		void setCamera(Camera* camera);
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Sets render tags included. this means that if a gameobject has a tag from this it will be drawn </summary>
+		///
+		/// <remarks>	Fteppe, 07/05/2018. </remarks>
+		///
+		/// <param name="tags">	The tags. </param>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		void setRenderTagsIncluded(std::vector<RenderTag> tags);
 		void setRenderTagsExcluded(std::vector<RenderTag> tags);
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Renders the scene described by scene. This contains the rendering pipeline. </summary>
+		///
+		/// <remarks>	Fteppe, 07/05/2018. </remarks>
+		///
+		/// <param name="scene">	[in,out] The scene. </param>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		void renderScene(Scene & scene);
 		void setTextures(std::map < std::string, std::shared_ptr<Texture>> texturesIn);
 		void setMat(std::shared_ptr<Material> mat);
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets the  material, null if none has been set</summary>
+		///
+		/// <remarks>	Fteppe, 07/05/2018. </remarks>
+		///
+		/// <returns>	The material that will be used in the entire pass, null if it doesn't exist </returns>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		std::shared_ptr<Material> getMaterial();
 
 	private:
 
