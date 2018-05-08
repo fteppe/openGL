@@ -145,7 +145,7 @@ vec3 valLight()
 		float specPow = 32.0f;
 		float specVal = texture(specularity, UV).r;
 		vec3 cameraPosition = camPos;
-		//intensityVec = intensityVec + specCalc(light_, normal_, pos, cameraPosition, specPow, specVal);
+		intensityVec = intensityVec + specCalc(light_, normal_, pos, cameraPosition, specPow, specVal);
 	}
 	return intensityVec;
 }

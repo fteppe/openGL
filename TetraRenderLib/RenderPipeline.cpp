@@ -70,6 +70,7 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 
 	//Colors renderPass.
 	frame = new FrameBuffer;
+	frame->setHDR(true);
 	frame->addColorOutputTexture(gBuffer["color"]);
 	frame->setDepthTexture(depthBuffer);
 	frame->addColorOutputTexture(normalsBuffer);
