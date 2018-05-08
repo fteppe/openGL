@@ -17,7 +17,7 @@ tetraRender::Scene::Scene(Camera cam)
 	_ASSERT(_CrtCheckMemory());
 	setCamera(cam);
 	
-	renderPipeLine = std::unique_ptr<RenderPipeline>(new RenderPipeline);
+	renderPipeLine = std::unique_ptr<RenderPipeline>(new RenderPipeline(*this));
 	this->cam.setPosition(glm::vec3(5, 1, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 1, 0));
@@ -162,6 +162,11 @@ void tetraRender::Scene::load(std::string scene)
 Camera tetraRender::Scene::getCam() const
 {
 	return cam;
+}
+
+void tetraRender::Scene::addGameObject(GameObject * obj)
+{
+	gameObjects.push_back(obj);
 }
 
 std::vector<Light*> tetraRender::Scene::getLights(GameObject * root) const

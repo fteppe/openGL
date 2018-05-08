@@ -3,13 +3,13 @@
 
 using namespace tetraRender;
 
-RenderPipeline::RenderPipeline()
+RenderPipeline::RenderPipeline(tetraRender::Scene &scene)
 {
 	//std::unique_ptr<RenderPass> rp(new RenderPass);
 	//We have to move the pointer since it is unique, so we have to transfer it and not do a simple copy.
 	//renderPasses.push_back(std::move(rp
 	setupRenderPasses();
-	setupPostProcessing();
+	setupPostProcessing(scene);
 }
 
 
@@ -17,7 +17,7 @@ RenderPipeline::~RenderPipeline()
 {
 }
 
-void tetraRender::RenderPipeline::renderScene(Scene & scene)
+void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 {
 	//We use references because we iterate over a vector of unique ptr.
 	//we use const because we wont modify the pass.
@@ -61,7 +61,7 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 
 	pass->setRenderOutput(frame);
 	pass->setRenderTagsIncluded({ WORLD_OBJECT });
-	//pass->setCamera(&this->shadowProjection);
+	//pass->setCamera(scene.get shadowProjection);
 	////We create a specific material that is very simple to render everything through it.
 	std::shared_ptr<Shader> shader(new Shader("transform.ver", "transform.frag"));
 	std::shared_ptr<Material> mat (new Material(shader));
@@ -90,10 +90,11 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 	//the second render pass we don't set a frameBuffer so it will render to the screen.
 	pass.reset(new RenderPass);
 	pass->setRenderTagsIncluded({ POST_PROCESS });
+	renderPasses.push_back(std::move(pass));
 	//pass->setCamera(&this->cam);
 }
 
-void tetraRender::RenderPipeline::setupPostProcessing()
+void tetraRender::RenderPipeline::setupPostProcessing(Scene & scene)
 {
 	//All this part is very exeprimental and hard coded weirdly which I would like to change in the future.
 
@@ -121,12 +122,15 @@ void tetraRender::RenderPipeline::setupPostProcessing()
 	postProcessMat->setChannel(gBuffer["specularity"], "specularity");
 	postProcessMat->setChannel(gBuffer["fragPos"], "fragPos");
 	postProcessMat->setChannel(gBuffer["shadowDistance"], "shadowDistance");
-	postProcessMat->setChannel(gBuffer["shadowMap"], "shadowMap");
+	//postProcessMat->setChannel(gBuffer["shadowMap"], "shadowMap");
 
 	screenObj->setMaterial(postProcessMat);
 	screenObj->addTag(POST_PROCESS);
 	//We add all these newly created elements to the scene;
 	
 	//Push back is a bit complicated with a unique ptr;
+	
 	renderSurfaces.push_back(std::move(std::unique_ptr<Solid>( screenObj)));
+
+	scene.addGameObject(screenObj);
 }

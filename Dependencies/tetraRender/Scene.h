@@ -67,7 +67,7 @@ namespace tetraRender
 		void load(std::string scene);
 
 		Camera getCam() const;
-		
+		void addGameObject(GameObject * obj);
 
 		//These functions should change soon, I want lights with a potential camera in it, the camera will be the projection.
 		//If there is a camera there should also be a renderPass. But I don't know if it should be part of the light ot not.

@@ -20,13 +20,13 @@ namespace tetraRender
 	class RenderPipeline
 	{
 	public:
-		RenderPipeline();
+		RenderPipeline(Scene & scene);
 		~RenderPipeline();
 		void renderScene(Scene& scene);
 
 	private:
 
-		void setupPostProcessing();
+		void setupPostProcessing(Scene & scene);
 		void setupRenderPasses();
 
 		/// <summary>	Contains all the textures of the different steps of rendering </summary>

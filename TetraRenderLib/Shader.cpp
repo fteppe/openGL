@@ -118,9 +118,9 @@ void Shader::setProgramInformation(tetraRender::Scene& scene, Solid const& objec
 {
 	glUseProgram(program);
 	Camera cam = scene.getCam();
-	Light light = scene.getLight();
+	//Light light = scene.getLight();
 	//We get the light data;
-	std::vector<float> lightData(light.getDataArray());
+	//std::vector<float> lightData(light.getDataArray());
 	//we get the camera space and calulculate the projection that will be done to all the vertices
 	glm::mat4 cameraSpace = cam.getProjection();
 	glm::mat4 objectSpace = object.getmodelMatrix();
@@ -134,7 +134,7 @@ void Shader::setProgramInformation(tetraRender::Scene& scene, Solid const& objec
 	//the objectspace that can be used to calculate lights or the posiiton of a vertex to a point. We send it to the shader.
 	
 	//we send the light data to the shader, for now we can handle only one light
-	glUniform1fv(uniforms["light"], lightData.size(), &lightData[0]);
+	//glUniform1fv(uniforms["light"], lightData.size(), &lightData[0]);
 
 }
 
@@ -151,6 +151,7 @@ void Shader::sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> tex
 			uniforms[it->first] = glGetUniformLocation(program, it->first.c_str());
 		}
 
+		
 		it->second->applyTexture(program, uniforms[it->first], i);
 		i++;
 	}
