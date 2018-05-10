@@ -173,5 +173,5 @@ void tetraRender::FrameBuffer::clear(tetraBitField mask)
 
 glm::vec2 tetraRender::FrameBuffer::getSize()
 {
-	return glm::vec2(height, width);
+	return glm::vec2(width, height);
 }

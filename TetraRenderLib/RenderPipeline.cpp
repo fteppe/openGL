@@ -38,6 +38,7 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 
 	pass = std::ref(renderPasses[1]);
 	pass.get()->getFrameBuffer().clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	pass.get()->renderScene(scene);
 
 	glm::vec2 frameSize = pass.get()->getFrameBuffer().getSize();
@@ -45,7 +46,7 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 	renderPasses[1]->getFrameBuffer().bind(GL_DRAW_FRAMEBUFFER);
 	glm::vec2 frameSize2 = renderPasses[1]->getFrameBuffer().getSize();
 	glBlitFramebuffer(0, 0, frameSize.x, frameSize.y, 0, 0, frameSize2.x, frameSize2.y, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-
+	pass.get()->getFrameBuffer().bind();
 	renderPasses[2]->renderScene(scene);
 		//textures["depth"]->readData();
 	//}
