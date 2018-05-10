@@ -10,12 +10,12 @@ namespace tetraRender
 	public:
 		WaveFrontLoader();
 		~WaveFrontLoader();
-		void loadVertexObjectVectorFromFile(std::string filename, std::vector<VertexBufferObject*> &vertexObjects);
-		VertexBufferObject* loadSpecificVBO(std::string fileName, std::string objectName);
+		void loadVertexObjectVectorFromFile(std::string filename, std::vector<Mesh*> &vertexObjects);
+		Mesh* loadSpecificVBO(std::string fileName, std::string objectName);
 
 	private:
 
-		VertexBufferObject * loadObject();
+		Mesh * loadObject();
 		//returns the index in the solid of the wavefront vertex index. If two different attributes have the same vertex, then we clone the vertex.
 		int vertexAndAttributeLink(unsigned int vertex, unsigned int attribute, std::map<int, int>& vertexToAttribute);
 
@@ -23,7 +23,7 @@ namespace tetraRender
 		//Solid makeSolidFromData();
 
 		//create an new VBO not owner of the object
-		VertexBufferObject* makeVBOFromData();
+		Mesh* makeVBOFromData();
 		std::map<int, int> fileToSolidVertexIndex;
 		//For each vertex index, which normal is associated
 		std::map<int, int > vertexToNormal;

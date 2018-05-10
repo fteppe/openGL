@@ -37,7 +37,7 @@ VBO_CONTAINER SceneLoader::loadModels()
 	WaveFrontLoader loader;
 	//assert(doc.IsObject());
 	rapidjson::Value& models = doc["models"];
-	std::vector<VertexBufferObject*> loaded;
+	std::vector<Mesh*> loaded;
 	for (unsigned int  i = 0; i < models.Size(); i++)
 	{
 		loader.loadVertexObjectVectorFromFile(models[i].GetString(), loaded);
@@ -45,7 +45,7 @@ VBO_CONTAINER SceneLoader::loadModels()
 	for (auto obj : loaded)
 	{
 		std::pair<std::string, std::string> path = obj->getFilePath();
-		objects[path.first][path.second] = std::shared_ptr<VertexBufferObject>(obj);
+		objects[path.first][path.second] = std::shared_ptr<Mesh>(obj);
 	}
 	return objects;
 }
@@ -183,17 +183,17 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 		filePath.first = go["model"][0].GetString();
 		filePath.second = go["model"][1].GetString();
 
-		std::shared_ptr<VertexBufferObject> VBO;// = objects[filePath.first][filePath.second];
+		std::shared_ptr<Mesh> VBO;// = objects[filePath.first][filePath.second];
 												//In the case the object doesn't seem to exist.
 		if (objects.find(filePath.first) == objects.end())
 		{
 			WaveFrontLoader loader;
-			std::vector<VertexBufferObject*> objectsToLoad;
+			std::vector<Mesh*> objectsToLoad;
 			loader.loadVertexObjectVectorFromFile(filePath.first, objectsToLoad);
 
 			for (auto vbo : objectsToLoad)
 			{
-				objects[filePath.first][vbo->getFilePath().second] = std::shared_ptr<VertexBufferObject>(vbo);
+				objects[filePath.first][vbo->getFilePath().second] = std::shared_ptr<Mesh>(vbo);
 				if (vbo->getFilePath().second == filePath.second)
 				{
 					VBO = objects[filePath.first][vbo->getFilePath().second];
@@ -228,6 +228,10 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 		Light * light = new Light();
 		light->intensity = go["intensity"].GetFloat();
 		light->col = glm::vec3(1.0, 1.0, 1.0);
+		if (go.HasMember("color"))
+		{
+			light->col = (glm::vec3(go["color"][0].GetFloat(), go["color"][1].GetFloat(), go["color"][2].GetFloat()));
+		}
 		loadedGo = light;
 		
 	}

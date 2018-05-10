@@ -230,17 +230,17 @@ void tetraRender::Scene::makeSkyBox()
 	//TODO: change this function because this is right now the dirtiest way to do it.
 	//to make a skybox we need a cube to draw the texture on
 	WaveFrontLoader objLoader;
-	std::vector<VertexBufferObject * > vec;
+	std::vector<Mesh * > vec;
 	objLoader.loadVertexObjectVectorFromFile("obj/common.obj", vec);
 	bool found = false;
 	
-	for (VertexBufferObject * obj : vec)
+	for (Mesh * obj : vec)
 	{
 		
 		if (obj->getFilePath().second == "Cube")
 		{
 			found = true;
-			this->models["obj/common.obj"]["Cube"] = std::shared_ptr<VertexBufferObject>(obj);
+			this->models["obj/common.obj"]["Cube"] = std::shared_ptr<Mesh>(obj);
 		}
 		else
 		{
@@ -276,13 +276,13 @@ void tetraRender::Scene::setupPostProcessing()
 	//for the post processing we need a flat triangle
 	std::vector<std::vector<int>> faces = { {0,1,2} };
 	std::vector<glm::vec3> points = { glm::vec3(-1,-1,0), glm::vec3(3,-1,0),glm::vec3(-1,3,0) };
-	VertexBufferObject * screen = new VertexBufferObject(points, faces);
+	Mesh * screen = new Mesh(points, faces);
 	//the UVs of our screen, the way it is set up we should have the sides of the screen aligned with the side of the square in the triangle.
 	std::vector<glm::vec3> uvs = { glm::vec3(0,0,0), glm::vec3(2,0,0), glm::vec3(0,2,0) };
 	screen->setUVs(uvs);
 	//we give it a name so we can more easely follow it.
 	screen->setFilePath(std::pair<std::string, std::string>("hard", "screen"));
-	std::shared_ptr<VertexBufferObject> vbo_ptr(screen);
+	std::shared_ptr<Mesh> vbo_ptr(screen);
 	Solid* screenObj = new Solid(vbo_ptr);
 	//models["hard"]["screen"] = vbo_ptr;
 	//this triangle has a different shader than usual.

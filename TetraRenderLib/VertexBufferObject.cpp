@@ -1,11 +1,11 @@
-#include "stdafx.h"
+ #include "stdafx.h"
 #include <iostream>
 #include "VertexBufferObject.h"
 #include "Polygon.h"
 
 using namespace tetraRender;
 
-VertexBufferObject::VertexBufferObject()
+Mesh::Mesh()
 {
 	
 	//vertex array: used to make the vertex array attributions. To tell when each vertex data starts.
@@ -23,7 +23,7 @@ VertexBufferObject::VertexBufferObject()
 	std::cout << "Construction VBO "<< vertexbuffer << std::endl;
 }
 
-VertexBufferObject::VertexBufferObject(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn) : VertexBufferObject()
+Mesh::Mesh(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn) : Mesh()
 {
 	 vertices = verticesIn;
 	std::vector<std::vector<int>> triangles;
@@ -45,7 +45,7 @@ VertexBufferObject::VertexBufferObject(std::vector<glm::vec3> verticesIn, std::v
 }
 
 
-VertexBufferObject::~VertexBufferObject()
+Mesh::~Mesh()
 {
 	//For now creates issues because during a copy it can be destroyed by the compiler. Which is not what I want. So will need some time to figure it out.
 	glDeleteBuffers(1,&elementbuffer);
@@ -54,18 +54,21 @@ VertexBufferObject::~VertexBufferObject()
 	std::cout << "destruction VBO "<< vertexbuffer << std::endl;
 }
 
-void VertexBufferObject::setUVs(std::vector<glm::vec3> UVin)
+void Mesh::setUVs(std::vector<glm::vec3> UVin)
 {
 	UVs = UVin;
 	updateObjectAttributes();
 }
 
-void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData)
+void Mesh::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData)
 {
 	//We bind these buffers because they are the one we are gooing to do these operations on.
 	glBindVertexArray(VertexArrayID);
+	//We bind this element buffer to the VAO.
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	//This is the size of the index but once it's flat.
 	indexSize = index.size();
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
 	int arraySize = 0;
 	std::vector<GLfloat> flatVert;
 	//we flatten the 2D array -> 1D array. So we can have all the vertex and their attributes back to back AAAAAABBBBBBBBCCCCCC etc...
@@ -74,7 +77,7 @@ void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, s
 		flatVert.insert(flatVert.end(), vertices[i].begin(), vertices[i].end());
 	}
 	//we fill the buffer that contains the indexes.
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
+	
 	//We specify which buffer we use.
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	// Give our vertices to OpenGL.
@@ -98,17 +101,17 @@ void VertexBufferObject::setVertex(std::vector<std::vector<GLfloat>> vertices, s
 	}
 }
 
-void VertexBufferObject::setFilePath(std::pair<std::string, std::string> filePath)
+void Mesh::setFilePath(std::pair<std::string, std::string> filePath)
 {
 	this->filePath = filePath;
 }
 
-std::pair<std::string, std::string> VertexBufferObject::getFilePath()
+std::pair<std::string, std::string> Mesh::getFilePath()
 {
 	return filePath;
 }
 
-void VertexBufferObject::findTangents()
+void Mesh::findTangents()
 {
 	//to find the tangent we need UV coordinates
 	if (UVs.size() > 0)
@@ -132,7 +135,7 @@ void VertexBufferObject::findTangents()
 	}
 }
 
-void VertexBufferObject::drawObject(const Shader& shader)
+void Mesh::drawObject(const Shader& shader)
 {
 	int error;
 	//error = glGetError();
@@ -146,13 +149,13 @@ void VertexBufferObject::drawObject(const Shader& shader)
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
 }
 
-void VertexBufferObject::setNormals(std::vector<glm::vec3> normalIn)
+void Mesh::setNormals(std::vector<glm::vec3> normalIn)
 {
 	normals = normalIn;
 	updateObjectAttributes();
 }
 
-void VertexBufferObject::updateObjectAttributes()
+void Mesh::updateObjectAttributes()
 {
 	//if we add a new component to our object, we need to update the information on the GC
 	//We also look for the tangents;
@@ -232,7 +235,7 @@ void VertexBufferObject::updateObjectAttributes()
 	setVertex(vertexData, flatIndex, attributeSize);
 }
 
-void VertexBufferObject::computeTangent(unsigned int P0, unsigned int P1, unsigned int P2)
+void Mesh::computeTangent(unsigned int P0, unsigned int P1, unsigned int P2)
 {
 	//TODO : correct the use case where the normal is not normal to the face.
 	//We need to get a tangent in the right direction but that is also normal to the normal

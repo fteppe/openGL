@@ -26,7 +26,7 @@ void Material::setProgramInformation(Scene & scene, Solid const & object)
 	shader_ptr->sendTexChannels(textures);
 }
 
-void Material::apply(VertexBufferObject* const& VBO, Scene & scene, Solid const& solid)
+void Material::apply(Mesh* const& VBO, Scene & scene, Solid const& solid)
 {
 	shader_ptr->setProgramInformation(scene, solid);
 	shader_ptr->sendTexChannels(textures);

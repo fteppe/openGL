@@ -30,7 +30,7 @@ enum EngineEnum {
 	SCREEN_FRAMEBUFFER //This enum is used to build a frameBuffer that will render to the screen as a primary output.
 };
 
-#define VBO_CONTAINER std::map<std::string, std::map<std::string, std::shared_ptr<VertexBufferObject>>>
+#define VBO_CONTAINER std::map<std::string, std::map<std::string, std::shared_ptr<Mesh>>>
 #define MAT_CONTAINER std::map<std::string, std::shared_ptr<Material>>
 #define TEXTURE_CONTAINER std::map<std::string, std::shared_ptr<Texture>>
 #define SHADER_CONTAINER std::map<std::string, std::shared_ptr<Shader>>

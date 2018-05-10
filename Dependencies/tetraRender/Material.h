@@ -19,7 +19,7 @@ namespace tetraRender
 		void setChannel(std::shared_ptr<Texture> text, std::string channel);
 		//We send all the relevent informations to the shader that will be necessary for the shader program
 		virtual void setProgramInformation(Scene& scene, Solid const& object);
-		void apply(VertexBufferObject* const& VBO, Scene & scene, Solid const& solid);
+		void apply(Mesh* const& VBO, Scene & scene, Solid const& solid);
 		//We get apointer on the shader program associated to this material.
 		std::shared_ptr<Shader> getShaderProgram();
 

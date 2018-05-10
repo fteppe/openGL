@@ -24,9 +24,9 @@ Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> in
 
 }
 
-Solid::Solid(std::shared_ptr<VertexBufferObject> vbo) : Solid()
+Solid::Solid(std::shared_ptr<Mesh> vbo) : Solid()
 {
-	VBO_ptr = vbo;
+	mesh_ptr = vbo;
 }
 
 tetraRender::Solid::Solid(std::pair<std::string, std::string> objFile)
@@ -42,13 +42,13 @@ void Solid::draw(tetraRender::Scene& scene)
 {
  	GameObject::draw(scene);
 	//we make sure the object still exists, if it does we render it.
-	material_ptr->apply(VBO_ptr.get(), scene, *this);
+	material_ptr->apply(mesh_ptr.get(), scene, *this);
 }
 
 void Solid::draw(tetraRender::Scene& scene, std::shared_ptr<Material> mat)
 {
 	GameObject::draw(scene, mat);
-	mat->apply(VBO_ptr.get(), scene, *this);
+	mat->apply(mesh_ptr.get(), scene, *this);
 }
 
 std::string Solid::description()

@@ -18,7 +18,7 @@ namespace tetraRender
 	public:
 		Solid();
 		Solid(std::vector<glm::vec3> vertices, std::vector<std::vector<int>> index);
-		Solid(std::shared_ptr<VertexBufferObject> vbo);
+		Solid(std::shared_ptr<Mesh> vbo);
 		//directly loads the VBO from an obj file.
 		Solid(std::pair <std::string, std::string> objFile);
 		~Solid();
@@ -33,7 +33,7 @@ namespace tetraRender
 
 		bool triangulated;
 		std::shared_ptr<Material> material_ptr;
-		std::shared_ptr<VertexBufferObject> VBO_ptr;
+		std::shared_ptr<Mesh> mesh_ptr;
 	};
 
 

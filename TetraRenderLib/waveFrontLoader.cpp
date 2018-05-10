@@ -23,7 +23,7 @@ WaveFrontLoader::~WaveFrontLoader()
 }
 
 
-void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::vector<VertexBufferObject*> &vertexObjects)
+void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::vector<Mesh*> &vertexObjects)
 {
 	std::ifstream inFile(fileName);
 	std::string strOneLine;
@@ -179,9 +179,9 @@ void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::
 	std::cout << "done loading file" << std::endl;
 }
 
-VertexBufferObject * WaveFrontLoader::loadSpecificVBO(std::string fileName, std::string objectName)
+Mesh * WaveFrontLoader::loadSpecificVBO(std::string fileName, std::string objectName)
 {
-	std::vector<VertexBufferObject*> obj;
+	std::vector<Mesh*> obj;
 	loadVertexObjectVectorFromFile(fileName, obj);
 
 	for (auto elem : obj)
@@ -254,7 +254,7 @@ int WaveFrontLoader::vertexAndAttributeLink(unsigned int vertex, unsigned int at
 
 
 
-VertexBufferObject * WaveFrontLoader::makeVBOFromData()
+Mesh * WaveFrontLoader::makeVBOFromData()
 {
 	std::cout << "making obj" << std::endl;
 	std::vector<glm::vec3> UVs;
@@ -277,7 +277,7 @@ VertexBufferObject * WaveFrontLoader::makeVBOFromData()
 
 	}
 	//Solid result(solidVertices, polygons);
-	VertexBufferObject* vbo = new VertexBufferObject(solidVertices, polygons);
+	Mesh* vbo = new Mesh(solidVertices, polygons);
 	vbo->setNormals(normals);
 	vbo->setUVs(UVs);
 	vbo->setFilePath(file);

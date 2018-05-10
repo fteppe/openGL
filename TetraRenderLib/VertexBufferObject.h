@@ -6,12 +6,12 @@
 //The vertex Buffer object contains all the geometry elements of an object.
 namespace tetraRender
 {
-	class VertexBufferObject
+	class Mesh
 	{
 	public:
-		VertexBufferObject();
-		VertexBufferObject(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn);
-		~VertexBufferObject();
+		Mesh();
+		Mesh(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn);
+		~Mesh();
 		/*
 		*@param vertices a 2D array of series of n doubles, each n double representing a vertex. 1st line vertex coord and other lines vertex attributes
 		*@param index indexes of the vertices to build the triangles (read it in sets of 3). ex: 1 2 3 1 4 5 2 3 5...
