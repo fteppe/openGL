@@ -15,7 +15,7 @@
       "channels": {
         "normalMap": "textures/EyCkvNyNormal.png",
         "specularityMap": "textures/EyCkvNy.png",
-        "diffuse": "textures/img_fjords.jpg",
+        "diffuse": "textures/No-Mans-Sky-1.jpg",
         "cubemap": "skybox"
       }
     },
@@ -24,6 +24,7 @@
       "shader": "generic",
       "channels": {
         "normalMap": "textures/EyCkvNyNormal.png",
+        "depthMap": "textures/EyCkvNyNormal.png",
         "specularityMap": "textures/EyCkvNy.png",
         "diffuse": "textures/texture2.jpg",
         "cubemap": "skybox"

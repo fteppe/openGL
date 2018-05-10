@@ -64,10 +64,13 @@ void main()
 	vec3 normal_ = vec3(0,1,0);//normalWorld;
 	vec2 translation = parralax(camTan, posTan);
 	vec2 newUV = UV + translation;
-	fragPos = pos;
+    
 
 	vec3 bumpVal = texture(normalMap, UV).rgb;
 	normal_ = normalValue(normalWorld, tangentWorld, biTangentWorld, newUV);
+
+    pos =  pos - 0.1 * normal_ *(1- texture(depthMap, UV).r);
+	fragPos = pos;
 	
 	vec4 specularity = vec4(texture(specularityMap, newUV));
 	float specVal = (specularity.r);
