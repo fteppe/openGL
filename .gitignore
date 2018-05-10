@@ -265,3 +265,4 @@ paket-files/
 __pycache__/
 *.pyc
 /lib/TetraRenderLib.lib
+/lib/TetraRenderLib-d.lib
