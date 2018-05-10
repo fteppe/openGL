@@ -1,5 +1,6 @@
 #include "RenderPipeline.h"
 #include "ShaderPostProcess.h"
+#include <functional>
 
 using namespace tetraRender;
 
@@ -26,11 +27,28 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 		pass->renderScene(scene);
 		//textures["depth"]->readData();
 	}
-	for (auto const & pass : this->renderPasses)
-	{
-		pass->renderScene(scene);
+	/*for (auto const & pass : this->renderPasses)
+	{*/
+
+	//We render the first elements without lights to a texture.
+	auto  pass = std::ref(renderPasses[0]);
+	
+	pass.get()->getFrameBuffer().clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	pass.get()->renderScene(scene);
+
+	pass = std::ref(renderPasses[1]);
+	pass.get()->getFrameBuffer().clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	pass.get()->renderScene(scene);
+
+	glm::vec2 frameSize = pass.get()->getFrameBuffer().getSize();
+	renderPasses[0]->getFrameBuffer().bind(GL_READ_FRAMEBUFFER);
+	renderPasses[1]->getFrameBuffer().bind(GL_DRAW_FRAMEBUFFER);
+	glm::vec2 frameSize2 = renderPasses[1]->getFrameBuffer().getSize();
+	glBlitFramebuffer(0, 0, frameSize.x, frameSize.y, 0, 0, frameSize2.x, frameSize2.y, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+	renderPasses[2]->renderScene(scene);
 		//textures["depth"]->readData();
-	}
+	//}
 }
 
 void tetraRender::RenderPipeline::setupRenderPasses()
@@ -93,6 +111,12 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 	pass->setRenderTagsIncluded({ POST_PROCESS });
 	renderPasses.push_back(std::move(pass));
 	//pass->setCamera(&this->cam);
+	
+
+	
+	pass.reset(new RenderPass);
+	pass->setRenderTagsIncluded({ FORWARD_RENDER });
+	renderPasses.push_back(std::move(pass));
 }
 
 void tetraRender::RenderPipeline::setupPostProcessing(Scene & scene)

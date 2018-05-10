@@ -3,9 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <glew/glew.h>
-#include <SFML/OpenGL.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/vec3.hpp>
+
 #include <iostream>
 #include <iomanip>
 
@@ -14,6 +12,7 @@
 #include <tetraRender\Camera.h>
 #include <tetraRender\Scene.h>
 #include <tetraRender\EventHandler.h>
+#include <tetraRender/Common.h>
 
 
 //This will build a window using open GL and stuff, this is a way to unclutter the main.
@@ -33,8 +32,8 @@ WindowBuilder::WindowBuilder()
 	settings.minorVersion = 5;
 	settings.attributeFlags = sf::ContextSettings::Core;
 
-	unsigned width = 1024;
-	unsigned height = 720;
+	unsigned width = WIDTH;
+	unsigned height = HEIGHT;
 
 	
 	window.create(sf::VideoMode(width, height), "Tetra Engine", sf::Style::Close, settings);

@@ -63,6 +63,8 @@ namespace tetraRender
 
 		std::shared_ptr<Material> getMaterial();
 
+		FrameBuffer& getFrameBuffer();
+
 	private:
 
 		bool isIntersectionEmpty(std::vector<RenderTag> renderPassTags, std::set<RenderTag> elementTags);

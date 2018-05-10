@@ -265,7 +265,8 @@ void tetraRender::Scene::makeSkyBox()
 	Solid* sky = new Solid(models["obj/common.obj"]["Cube"]);
 	sky->setMaterial(materials["sky"]);
 	sky->setScale(glm::vec3(100, 100, 100));
-	sky->addTag(WORLD_OBJECT);
+	//sky->addTag(WORLD_OBJECT);
+	sky->addTag(FORWARD_RENDER);
 	gameObjects.push_back(sky);
 }
 

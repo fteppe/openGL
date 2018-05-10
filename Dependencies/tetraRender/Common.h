@@ -1,5 +1,5 @@
 #pragma once
-
+#include <glew/glew.h>
 //This file contains common values used accross the application.
 
 //Thses tags are used to determine what must and what mussn't be rendered during a render pass.
@@ -10,7 +10,8 @@ enum RenderTag {
 	STATIC,
 	DYNAMIC,
 	WORLD_OBJECT ,
-	POST_PROCESS
+	POST_PROCESS,
+	FORWARD_RENDER
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,6 +30,8 @@ enum class GameObjectType {
 enum EngineEnum {
 	SCREEN_FRAMEBUFFER //This enum is used to build a frameBuffer that will render to the screen as a primary output.
 };
+
+#define tetraBitField GLbitfield
 
 #define VBO_CONTAINER std::map<std::string, std::map<std::string, std::shared_ptr<Mesh>>>
 #define MAT_CONTAINER std::map<std::string, std::shared_ptr<Material>>

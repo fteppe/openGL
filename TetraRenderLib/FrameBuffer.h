@@ -2,6 +2,7 @@
 #include <memory>
 #include "Texture.h"
 #include "Common.h"
+#include <glm/vec2.hpp>
 namespace tetraRender
 {
 	class FrameBuffer
@@ -27,7 +28,10 @@ namespace tetraRender
 		void setHDR(bool hdrVal);
 
 		void bind();
+		void bind(GLenum target);
 		void unbind();
+		void clear(tetraBitField mask);
+		glm::vec2 getSize();
 	private:
 		unsigned int height, width;
 		bool isHDR;

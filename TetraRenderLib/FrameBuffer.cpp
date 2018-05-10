@@ -46,7 +46,7 @@ void FrameBuffer::renderToThis()
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//We tell here which color buffers we want to render. if we have no texture we always render one buffer.
 
@@ -58,8 +58,8 @@ void FrameBuffer::renderToScreen()
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glEnable(GL_DEPTH_TEST);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.1, 0.1, 0.1, 0);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClearColor(0.1, 0.1, 0.1, 0);
 }
 
 void FrameBuffer::addColorOutputTexture(std::shared_ptr<Texture> texture)
@@ -153,8 +153,25 @@ void FrameBuffer::bind()
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
 }
 
+void tetraRender::FrameBuffer::bind(GLenum target)
+{
+	glBindFramebuffer(target, frameBufferId);
+}
+
 void FrameBuffer::unbind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+}
+
+void tetraRender::FrameBuffer::clear(tetraBitField mask)
+{
+	bind();
+	glClear(mask);
+
+}
+
+glm::vec2 tetraRender::FrameBuffer::getSize()
+{
+	return glm::vec2(height, width);
 }
