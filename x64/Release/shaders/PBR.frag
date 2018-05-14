@@ -108,7 +108,7 @@ vec2 parralax(vec3 camTan, vec3 posTan)
 		return vec2(0);
 	}
 	
-	int nbSample = 200;
+	int nbSample = 30;
 
 	float nbSamplef = float(nbSample);
 	float stepSize = 1/ nbSamplef;

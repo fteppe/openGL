@@ -1,17 +1,23 @@
 {
-    
-    "shaders" :[
-            {
-            "name":"generic",
-            "type":"shaderPBR",
-            "vertex":["texture.ver"],
-            "fragment":["PBR.frag"]
-        }
-    ],
+
+  "shaders": [
+    {
+      "name": "generic",
+      "type": "shaderPBR",
+      "vertex": [ "texture.ver" ],
+      "fragment": [ "PBR.frag" ]
+    },
+    {
+      "name": "generic2",
+      "type": "shaderPBR",
+      "vertex": [ "texture.ver" ],
+      "fragment": [ "PBR.frag" ]
+    }
+  ],
   "materials": [
     {
       "name": "PBR",
-      "shader": "generic",
+      "shader": "generic2",
       "channels": {
         "normalMap": "textures/EyCkvNyNormal.png",
         "specularityMap": "textures/EyCkvNy.png",
@@ -24,7 +30,7 @@
       "shader": "generic",
       "channels": {
         "normalMap": "textures/EyCkvNyNormal.png",
-        "depthMap": "textures/EyCkvNyNormal.png",
+        "depthMap": "textures/EyCkvNy.png",
         "specularityMap": "textures/EyCkvNy.png",
         "diffuse": "textures/texture2.jpg",
         "cubemap": "skybox"
