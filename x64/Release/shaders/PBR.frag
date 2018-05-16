@@ -69,12 +69,13 @@ void main()
 	vec3 bumpVal = texture(normalMap, UV).rgb;
 	normal_ = normalValue(normalWorld, tangentWorld, biTangentWorld, newUV);
 
-    pos =  pos - 0.1 * normal_ *(1- texture(depthMap, UV).r);
+	//We move the position so that we get the position of the fragment after parallax.
+    pos =  pos + translation.x * tangentWorld + translation.y * biTangentWorld;
 	fragPos = pos;
 	
 	vec4 specularity = vec4(texture(specularityMap, newUV));
 	float specVal = (specularity.r);
-	specVal = 1  -specVal;
+	specVal = specVal;
 
 	float specPow = 32;
 	//We use the spec map as a bump map as well, to make it look a bit better

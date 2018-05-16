@@ -63,7 +63,8 @@ void main()
 	
 	offset = clamp (offset, 0.0, 0.1);
 	//ColorOutput = blur(color, offset, 5) * (blur(shadowDistance, 0.0, 1).r+0.1);
-    //ColorOutput = vec4(light.pos, 0);
+    //ColorOutput = texture(specularity, UV);
+	//float specVal = texture(specularity, UV).r;
 }
 
 vec4 blur(sampler2D map, float initialOffset, int quality)
@@ -142,7 +143,7 @@ vec3 valLight()
 		vec3 pos = vec3(texture(fragPos, UV));
 		Light light_ = lights[i];
 		intensityVec = intensityVec + diffuseCalc(light_, normal_, pos);
-		float specPow = 32.0f;
+		float specPow = 8000.0f;
 		float specVal = texture(specularity, UV).r;
 		vec3 cameraPosition = camPos;
 		intensityVec = intensityVec + specCalc(light_, normal_, pos, cameraPosition, specPow, specVal);

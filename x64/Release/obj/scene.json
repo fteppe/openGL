@@ -29,10 +29,10 @@
       "name": "stone",
       "shader": "generic",
       "channels": {
-        "normalMap": "textures/EyCkvNyNormal.png",
-        "depthMap": "textures/EyCkvNy.png",
-        "specularityMap": "textures/EyCkvNy.png",
-        "diffuse": "textures/texture2.jpg",
+        "normalMap": "textures/cobblestone_normal.jpg",
+        "depthMap": "textures/cobblestone_height.jpg",
+        "specularityMap": "textures/cobblestone_spec.jpg",
+        "diffuse": "textures/cobblestone_albedo.png",
         "cubemap": "skybox"
       }
     }
