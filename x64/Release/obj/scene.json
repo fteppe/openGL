@@ -55,6 +55,12 @@
       "pos": [ 0.8, 0.1, 0.8 ]
     },
     {
+      "type": "light",
+      "intensity": 2.0,
+      "color": [ -0.5, 1, 0.5 ],
+      "pos": [ -0.8, 0.1, 0.8 ]
+    },
+    {
       "type": "solid",
       "material": "PBR",
       "model": [ "obj/scene.obj", "Grid" ]
