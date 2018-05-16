@@ -136,6 +136,7 @@ vec3 specCalc(Light light, vec3 normal, vec3 fragPos, vec3 camPos, float specPow
 
 vec3 valLight()
 {
+	float ambiant = 0.1f; 
 	vec3 intensityVec = vec3(0);
 	for(int i = 0; i < numLights; i++)
 	{
@@ -143,10 +144,10 @@ vec3 valLight()
 		vec3 pos = vec3(texture(fragPos, UV));
 		Light light_ = lights[i];
 		intensityVec = intensityVec + diffuseCalc(light_, normal_, pos);
-		float specPow = 8000.0f;
+		float specPow = 64;
 		float specVal = texture(specularity, UV).r;
 		vec3 cameraPosition = camPos;
 		intensityVec = intensityVec + specCalc(light_, normal_, pos, cameraPosition, specPow, specVal);
 	}
-	return intensityVec;
+	return intensityVec + ambiant;
 }

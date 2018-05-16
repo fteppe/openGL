@@ -76,7 +76,7 @@ void main()
 	vec4 specularity = vec4(texture(specularityMap, newUV));
 	float specVal = (specularity.r);
 	specVal = specVal;
-
+	specVal = 1.0;
 	float specPow = 32;
 	//We use the spec map as a bump map as well, to make it look a bit better
 	//we add a constant value to the intensity, so it is never dark.
