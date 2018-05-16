@@ -24,8 +24,17 @@ vec3 diffuseCalc(Light light, vec3 normal, vec3 vertexPos)
 	float lightDistance = length(lightPos - vertexPos);
 	vec3 lightDir = normalize(lightPos - vertexPos);
 	//The light intensity is the dot product of the normal and the light direction floored at one. We also take into account the intensity of the light and it's distance.
-	intensity = max(dot(normal, lightDir),0) * intensity * inversesqrt(lightDistance);
-	vec3 intensityVec = vec3(intensity, intensity, intensity) * lightCol;
+	//intensity = max(dot(normal, lightDir),0) * intensity * inversesqrt(lightDistance);
+
+    //This is based on the incidance of the light.
+    float lightFlux = max(dot(normal, lightDir),0);
+    //We choose another function for attenuation:
+    float paramA = 0.1;
+    float paramB = 0.01;
+    float attenuation = 1.0/(1.0 + paramA * lightDistance + paramB * lightDistance * lightDistance);
+
+
+	vec3 intensityVec = vec3(intensity * lightFlux * attenuation) * lightCol;
 	return intensityVec;
 }
 
