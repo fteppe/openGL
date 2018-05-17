@@ -52,8 +52,41 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 	//}
 }
 
+	void tetraRender::RenderPipeline::setShadowPoV(Camera* PoV, int index)
+	{
+		//We make sure the index is part of the number of passes.
+		if (index < shadowmapsPasses.size())
+		{
+			shadowmapsPasses[index]->setCamera(PoV);
+		}
+	}
+
 void tetraRender::RenderPipeline::setupRenderPasses()
 {
+	//We create the material that is used to render the scene from the PoV of a light.
+	std::shared_ptr<Shader> shaderShadowPass = std::shared_ptr<Shader>(new Shader("transform.ver", "transform.frag"));
+	std::shared_ptr<Material> shadowMapsMat = std::shared_ptr<Material>(new Material(shaderShadowPass));
+	//pass->setMat(shadowMapsMat);
+
+	//We take the maximum number of shadowmap and create a renderpass for each.
+	//If there are less shadowpas than possible shadows we waste some space but consider it an acceptable tradeof.
+	std::unique_ptr<RenderPass> shadowPass;
+	FrameBuffer* shadowBuffer;
+	for (unsigned i = 0; i < MAX_NUM_SHADOWMAP; i++)
+	{
+		shadowPass.reset(new RenderPass);
+		//All shadowMaps renderPasses share the same material that just renders geometry.
+		shadowPass->setMat(shadowMapsMat);
+		shadowBuffer = new FrameBuffer;
+		//We add a new texture to the frameBuffer to which will be written the shadowMap.
+		shadowBuffer->setDepthTexture(std::shared_ptr< Texture>(new Texture));
+		//We use std::move because we manipulate unique ptr; After that shadowPass cannot be used unless it is reset or it will crash the app.
+		shadowmapsPasses.push_back(std::move(shadowPass));
+	}
+
+
+
+	//We create the different textures for the GBuffer.
 	std::shared_ptr<Texture> normalsBuffer(new Texture);
 	std::shared_ptr<Texture> depthBuffer(new Texture);
 	std::shared_ptr<Texture> spec(new Texture);

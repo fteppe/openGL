@@ -41,3 +41,5 @@ enum EngineEnum {
 //This will be a constant for our program. Shared accross the entire program.
 #define WIDTH 1024
 #define HEIGHT 720
+
+const unsigned int MAX_NUM_SHADOWMAP = 3;

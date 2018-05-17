@@ -4,6 +4,8 @@
 #include "Texture.h"
 #include "Solid.h"
 #include "RenderPass.h"
+#include <glm/mat4x4.hpp>
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -13,7 +15,6 @@
 // Also in the future it allows us to have inheritance in the pipeline to do rendering differently.
 // For now the steps are all hardcoded in the engine without any scripting possible to change it.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
 namespace tetraRender
 {
 	class RenderPass;
@@ -21,12 +22,30 @@ namespace tetraRender
 	{
 	public:
 		RenderPipeline(Scene & scene);
-		~RenderPipeline();
+		~RenderPipeline();		
+		/// <summary>
+		/// Renders the scene, It does that by going through the whole pipeline, rendering lightmaps and depending on the tags of the objects it renders them or not.
+		/// </summary>
+		/// <param name="scene">The scene.</param>
 		void renderScene(Scene& scene);
+		
+		/// <summary>
+		/// Sets the shadow's PoV for a certain renderPass.
+		/// </summary>
+		/// <param name="PoV">The PoV of the light.</param>
+		/// <param name="index">The index of the renderPass that will have it's Camera changed.</param>
+		void setShadowPoV(Camera* PoV, int index);
 
-	private:
-
-		void setupPostProcessing(Scene & scene);
+	private:		
+		/// <summary>
+		/// Setups the post processing pipeline, creating the textures for the G-buffer and loading the 
+		/// right shaders and materials.
+		/// </summary>
+		/// <param name="scene">The scene.</param>
+		void setupPostProcessing(Scene & scene);		
+		/// <summary>
+		/// Setups the rendering passes and the shadowmap passes.
+		/// </summary>
 		void setupRenderPasses();
 
 		/// <summary>	Contains all the textures of the different steps of rendering </summary>
@@ -35,7 +54,8 @@ namespace tetraRender
 		/// <summary>	The framebuffers of this pipeline, they are only the regular framebuffers that I seperated from the shadowmaps framebuffers. </summary>
 		std::vector<std::unique_ptr<tetraRender:: RenderPass>> renderPasses;
 
-		/// <summary>	The shadowmaps passes, they are seperated from the other render passes. </summary>
+		/// <summary>	The shadowmaps passes, they are seperated from the other render passes.
+		/// THe renderpass contains the camera that is the point of view of the light</summary>
 		std::vector<std::unique_ptr<tetraRender:: RenderPass>> shadowmapsPasses;
 		std::vector<std::shared_ptr<Texture>> shadowMaps;
 
