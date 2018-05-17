@@ -98,7 +98,7 @@ Camera EventHandler::camMouvement(sf::Event event)
 		}
 	}
 	cam.setTarget(target);
-	cam.setPosition(campPos);
+	cam.setPos(campPos);
 	return cam;
 }
 

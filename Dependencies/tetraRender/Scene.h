@@ -85,9 +85,12 @@ namespace tetraRender
 		///
 		/// <remarks>	Fteppe, 20/04/2018. </remarks>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
-
 		void makeSkyBox();
-		void setupPostProcessing();
+		
+		/// <summary>
+		/// Updates the shadow maps, it will take all the lights that project shadows and assign them a shadowmap.
+		/// </summary>
+		void updateShadowMaps();
 
 		Camera cam;
 		//I want to have an array of lights, that can have a camera that does the projection shadow.
@@ -99,8 +102,6 @@ namespace tetraRender
 		GameObject* skybox;
 		//SceneLoader loader;
 
-		//These are stored in the order in which they must be done.
-		std::vector<RenderPass*> renderPasses;
 		//I want to seperate render passes with a specific purpose (geometry, deffered shading, post process) and the building of shadowmaps.
 		// Now the rendering will hapen in this, so the scene is no longer responsible on the rendering.
 		std::unique_ptr<tetraRender::RenderPipeline> renderPipeLine;

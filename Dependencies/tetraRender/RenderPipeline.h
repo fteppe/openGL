@@ -36,6 +36,8 @@ namespace tetraRender
 		/// <param name="index">The index of the renderPass that will have it's Camera changed.</param>
 		void setShadowPoV(Camera* PoV, int index);
 
+		
+
 	private:		
 		/// <summary>
 		/// Setups the post processing pipeline, creating the textures for the G-buffer and loading the 

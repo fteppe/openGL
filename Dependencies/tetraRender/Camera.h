@@ -13,7 +13,7 @@ namespace tetraRender {
 		glm::mat4 getProjection();
 		void setProjectionOrtho(float height, float width, float near, float far);
 		void setLookAt(glm::mat4 lookAt);
-		void setPosition(glm::vec3 pos);
+		void setPos(glm::vec3 pos);
 		void setTarget(glm::vec3 target);
 		void setUp(glm::vec3 up);
 		glm::vec3 getPos();

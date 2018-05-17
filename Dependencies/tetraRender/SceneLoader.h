@@ -28,6 +28,7 @@ namespace tetraRender
 		MAT_CONTAINER loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CONTAINER& shaders);
 		std::vector<GameObject *> loadGameObjects(MAT_CONTAINER& mats, VBO_CONTAINER& objects);
 		GameObject* loadSingleGameObject(MAT_CONTAINER& mats, VBO_CONTAINER& objects, rapidjson::Value& go);
+		Solid* loadSolid(MAT_CONTAINER& mats, VBO_CONTAINER& objects, rapidjson::Value& go);
 	private:
 		Texture * loadTexture(std::string texturePath);
 		rapidjson::Document doc;

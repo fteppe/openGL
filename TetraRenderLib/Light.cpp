@@ -5,7 +5,7 @@ using namespace tetraRender;
 
 Light::Light()
 {
-
+	hasShadow = false;
 	_ASSERT(_CrtCheckMemory());
 }
 
@@ -22,6 +22,15 @@ std::vector<float> Light::getDataArray()
 	return lightData;
 }
 
+void tetraRender::Light::setPos(glm::vec3 pos)
+{
+	GameObject::setPos(pos);
+	if (hasShadow)
+	{
+		shadowProjection.setPos(pos);
+	}
+}
+
 GameObjectType tetraRender::Light::getType() const
 {
 	return GameObjectType::LIGHT;
@@ -32,4 +41,20 @@ GameObjectType tetraRender::Light::getType() const
 
 Light::~Light()
 {
+}
+
+void tetraRender::Light::setProjection(glm::vec3 lookAt, glm::vec3 up)
+{
+	shadowProjection.setUp(up);
+	shadowProjection.setTarget(lookAt);
+}
+
+bool tetraRender::Light::getHasShadow()
+{
+	return hasShadow;
+}
+
+Camera * tetraRender::Light::getShadowProjection()
+{
+	return &shadowProjection;
 }

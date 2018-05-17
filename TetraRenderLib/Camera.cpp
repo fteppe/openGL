@@ -55,9 +55,9 @@ void Camera::setLookAt(glm::mat4 lookAt)
 	this->lookAt = lookAt;
 }
 
-void Camera::setPosition(glm::vec3 pos)
+void Camera::setPos(glm::vec3 pos)
 {
-	this->pos = pos;
+	GameObject::setPos(pos);
 	makeLookatMat();
 }
 

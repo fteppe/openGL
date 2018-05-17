@@ -17,7 +17,7 @@ namespace tetraRender
 	public:
 		GameObject();
 		~GameObject();
-		void setPos(glm::vec3 pos);
+		virtual void setPos(glm::vec3 pos);
 		void setScale(glm::vec3 scale);
 		void setRotation(float rotation, glm::vec3 rotationAngle);
 		void addTag(RenderTag tag);

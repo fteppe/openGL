@@ -22,10 +22,13 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 {
 	//We use references because we iterate over a vector of unique ptr.
 	//we use const because we wont modify the pass.
+	unsigned int i = 0;
 	for (auto const & pass : this->shadowmapsPasses)
 	{
-		pass->renderScene(scene);
-		//textures["depth"]->readData();
+		if (i < numShadows)
+		{
+			pass->renderScene(scene);
+		}
 	}
 	/*for (auto const & pass : this->renderPasses)
 	{*/
@@ -48,8 +51,7 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 	glBlitFramebuffer(0, 0, frameSize.x, frameSize.y, 0, 0, frameSize2.x, frameSize2.y, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 	pass.get()->getFrameBuffer().bind();
 	renderPasses[2]->renderScene(scene);
-		//textures["depth"]->readData();
-	//}
+
 }
 
 	void tetraRender::RenderPipeline::setShadowPoV(Camera* PoV, int index)
@@ -59,6 +61,11 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 		{
 			shadowmapsPasses[index]->setCamera(PoV);
 		}
+	}
+
+	void tetraRender::RenderPipeline::setNumShadows(unsigned int numShadows)
+	{
+		this->numShadows = numShadows;
 	}
 
 void tetraRender::RenderPipeline::setupRenderPasses()

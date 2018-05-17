@@ -177,49 +177,7 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 	//we check what kind of gameObject this is
 	if (type == "solid")
 	{
-
-		std::string mat = go["material"].GetString();
-		std::pair<std::string, std::string> filePath;
-		filePath.first = go["model"][0].GetString();
-		filePath.second = go["model"][1].GetString();
-
-		std::shared_ptr<Mesh> VBO;// = objects[filePath.first][filePath.second];
-												//In the case the object doesn't seem to exist.
-		if (objects.find(filePath.first) == objects.end())
-		{
-			WaveFrontLoader loader;
-			std::vector<Mesh*> objectsToLoad;
-			loader.loadVertexObjectVectorFromFile(filePath.first, objectsToLoad);
-
-			for (auto vbo : objectsToLoad)
-			{
-				objects[filePath.first][vbo->getFilePath().second] = std::shared_ptr<Mesh>(vbo);
-				if (vbo->getFilePath().second == filePath.second)
-				{
-					VBO = objects[filePath.first][vbo->getFilePath().second];
-				}
-			}
-
-		}
-		else
-		{
-			VBO = objects[filePath.first][filePath.second];
-		}
-
-		//If we found the object we add it to our scene, but if we don't we just output an error.
-		if (VBO != NULL)
-		{
-			loadedGo = new Solid(VBO);
-
-			Solid* loadedItem = ((Solid *)loadedGo);
-			loadedItem->setMaterial(std::shared_ptr<Material>(mats[mat]));
-			//Since it was loaded as a game object we give it the tag.
-			loadedItem->addTag(WORLD_OBJECT);
-		}
-		else
-		{
-			std::cout << "ERROR " + filePath.first + " " + filePath.second + " doesn't seem to exist" << std::endl;
-		}
+		loadedGo = loadSolid(mats, objects, go);
 	}
 
 	if (type == "light")
@@ -267,6 +225,55 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 		
 	}
 
+
+	return loadedGo;
+}
+
+Solid * tetraRender::SceneLoader::loadSolid(MAT_CONTAINER & mats, VBO_CONTAINER & objects, rapidjson::Value & go)
+{
+	Solid * loadedGo = NULL;
+	std::string mat = go["material"].GetString();
+	std::pair<std::string, std::string> filePath;
+	filePath.first = go["model"][0].GetString();
+	filePath.second = go["model"][1].GetString();
+
+	std::shared_ptr<Mesh> VBO;// = objects[filePath.first][filePath.second];
+							  //In the case the object doesn't seem to exist.
+	if (objects.find(filePath.first) == objects.end())
+	{
+		WaveFrontLoader loader;
+		std::vector<Mesh*> objectsToLoad;
+		loader.loadVertexObjectVectorFromFile(filePath.first, objectsToLoad);
+
+		for (auto vbo : objectsToLoad)
+		{
+			objects[filePath.first][vbo->getFilePath().second] = std::shared_ptr<Mesh>(vbo);
+			if (vbo->getFilePath().second == filePath.second)
+			{
+				VBO = objects[filePath.first][vbo->getFilePath().second];
+			}
+		}
+
+	}
+	else
+	{
+		VBO = objects[filePath.first][filePath.second];
+	}
+
+	//If we found the object we add it to our scene, but if we don't we just output an error.
+	if (VBO != NULL)
+	{
+		loadedGo = new Solid(VBO);
+
+		Solid* loadedItem = ((Solid *)loadedGo);
+		loadedItem->setMaterial(std::shared_ptr<Material>(mats[mat]));
+		//Since it was loaded as a game object we give it the tag.
+		loadedItem->addTag(WORLD_OBJECT);
+	}
+	else
+	{
+		std::cout << "ERROR " + filePath.first + " " + filePath.second + " doesn't seem to exist" << std::endl;
+	}
 
 	return loadedGo;
 }

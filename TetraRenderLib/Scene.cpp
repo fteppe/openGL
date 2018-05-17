@@ -18,13 +18,13 @@ tetraRender::Scene::Scene(Camera cam)
 	setCamera(cam);
 	
 	renderPipeLine = std::unique_ptr<RenderPipeline>(new RenderPipeline(*this));
-	this->cam.setPosition(glm::vec3(5, 1, 5));
+	this->cam.setPos(glm::vec3(5, 1, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 1, 0));
 
 	//The shadows of this scene
 	this->shadowProjection = this->cam;
-	shadowProjection.setPosition(glm::vec3(-2, 1, 2));
+	shadowProjection.setPos(glm::vec3(-2, 1, 2));
 	shadowProjection.setProjectionOrtho(2, 2, 1, 10);
 	clock.restart();
 }
@@ -207,14 +207,19 @@ void tetraRender::Scene::makeSkyBox()
 void tetraRender::Scene::updateShadowMaps()
 {
 	//We get all the lights.
-	std::vector<Light> lights;
+	std::vector<Light*> lights = getLights();;
 	int i = 0;
 
 	//We get the camera's and update the map. 
 	for (auto light : lights)
 	{
 		//This needs to be done better by adding cameras to light but a good chunk is done already.
-		renderPipeLine->setShadowPoV(&cam, i);
+		if (light->getHasShadow() == true)
+		{
+			Camera* lightProj = light->getShadowProjection();
+			renderPipeLine->setShadowPoV(&cam, i);
+		}
+		
 	}
 }
 
