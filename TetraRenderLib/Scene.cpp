@@ -206,6 +206,15 @@ void tetraRender::Scene::makeSkyBox()
 
 void tetraRender::Scene::updateShadowMaps()
 {
+	//We get all the lights.
+	std::vector<Light> lights;
+	int i = 0;
 
+	//We get the camera's and update the map. 
+	for (auto light : lights)
+	{
+		//This needs to be done better by adding cameras to light but a good chunk is done already.
+		renderPipeLine->setShadowPoV(&cam, i);
+	}
 }
 
