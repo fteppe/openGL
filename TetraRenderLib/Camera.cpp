@@ -8,9 +8,7 @@ using namespace tetraRender;
 
 Camera::Camera()
 {
-	_ASSERT(_CrtCheckMemory());
 
-	_ASSERT(_CrtCheckMemory());
 }
 
 Camera::Camera(float height, float width, float fov) : Camera()
@@ -22,7 +20,6 @@ Camera::Camera(float height, float width, float fov) : Camera()
 	farPlane = 200;
 	projection = glm::perspective(fov, width / height, nearPlane, farPlane);
 	//makeLookatMat();
-	_ASSERT(_CrtCheckMemory());
 }
 
 

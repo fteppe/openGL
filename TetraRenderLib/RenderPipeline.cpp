@@ -27,29 +27,33 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 	{
 		if (i < numShadows)
 		{
+			pass->getFrameBuffer().clear(GL_DEPTH_BUFFER_BIT);
 			pass->renderScene(scene);
 		}
+		i++;
 	}
 	/*for (auto const & pass : this->renderPasses)
 	{*/
 
 	//We render the first elements without lights to a texture.
 	auto  pass = std::ref(renderPasses[0]);
-	
 	pass.get()->getFrameBuffer().clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	pass.get()->renderScene(scene);
 
+	//The second pass is where the shading is done.
 	pass = std::ref(renderPasses[1]);
 	pass.get()->getFrameBuffer().clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	pass.get()->renderScene(scene);
 
+	//The next step is done so we can render new elements of the scene AFTER deferred shading.
+	//For that we copy the depth buffer to the deferred shading pass.
 	glm::vec2 frameSize = pass.get()->getFrameBuffer().getSize();
 	renderPasses[0]->getFrameBuffer().bind(GL_READ_FRAMEBUFFER);
 	renderPasses[1]->getFrameBuffer().bind(GL_DRAW_FRAMEBUFFER);
 	glm::vec2 frameSize2 = renderPasses[1]->getFrameBuffer().getSize();
 	glBlitFramebuffer(0, 0, frameSize.x, frameSize.y, 0, 0, frameSize2.x, frameSize2.y, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 	pass.get()->getFrameBuffer().bind();
+	//We now render the elements of the scene that are forward rendered.
 	renderPasses[2]->renderScene(scene);
 
 }
@@ -88,6 +92,9 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 		//We add a new texture to the frameBuffer to which will be written the shadowMap.
 		shadowBuffer->setDepthTexture(std::shared_ptr< Texture>(new Texture));
 		//We use std::move because we manipulate unique ptr; After that shadowPass cannot be used unless it is reset or it will crash the app.
+		
+		shadowPass->setRenderOutput(shadowBuffer);
+		shadowPass->setRenderTagsIncluded({ WORLD_OBJECT });
 		shadowmapsPasses.push_back(std::move(shadowPass));
 	}
 
@@ -103,29 +110,13 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 	gBuffer["depth"] = depthBuffer;
 	gBuffer["specularity"] = spec;
 	gBuffer["fragPos"] = fragPos;
-	gBuffer["shadowDistance"] = std::shared_ptr<Texture>(new Texture);
+	//gBuffer["shadowDistance"] = std::shared_ptr<Texture>(new Texture);
 
 
 	FrameBuffer * frame = new FrameBuffer;
 	frame->setHDR(true);
 	//frame->renderToScreen();
-	std::shared_ptr<Texture> shadowMap( new Texture());
 	
-	////ShadowMap frameBuffer
-	//gBuffer["shadowMap"] = std::shared_ptr<Texture>(new Texture);
-	frame->setDepthTexture(shadowMap);
-	////shadow Passes
-	
-	std::unique_ptr<RenderPass> pass(new RenderPass);
-
-	pass->setRenderOutput(frame);
-	pass->setRenderTagsIncluded({ WORLD_OBJECT });
-	//pass->setCamera(scene.get shadowProjection);
-	////We create a specific material that is very simple to render everything through it.
-	std::shared_ptr<Shader> shader(new Shader("transform.ver", "transform.frag"));
-	std::shared_ptr<Material> mat (new Material(shader));
-	pass->setMat(mat);
-	shadowmapsPasses.push_back(std::move(pass));
 
 	//Colors renderPass.
 	frame = new FrameBuffer;
@@ -135,10 +126,10 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 	frame->addColorOutputTexture(normalsBuffer);
 	frame->addColorOutputTexture(spec);
 	frame->addColorOutputTexture(fragPos);
-	frame->addColorOutputTexture(gBuffer["shadowDistance"]);
+	//frame->addColorOutputTexture(gBuffer["shadowDistance"]);
 
 
-	pass = std::unique_ptr<RenderPass>(new RenderPass);
+	std::unique_ptr<RenderPass> pass = std::unique_ptr<RenderPass>(new RenderPass);
 	//We set the frame as the renderPass we want for the colors.
 
 	pass->setRenderOutput(frame);
@@ -187,7 +178,7 @@ void tetraRender::RenderPipeline::setupPostProcessing(Scene & scene)
 	postProcessMat->setChannel(gBuffer["depth"], "depth");
 	postProcessMat->setChannel(gBuffer["specularity"], "specularity");
 	postProcessMat->setChannel(gBuffer["fragPos"], "fragPos");
-	postProcessMat->setChannel(gBuffer["shadowDistance"], "shadowDistance");
+	//postProcessMat->setChannel(gBuffer["shadowDistance"], "shadowDistance");
 	//postProcessMat->setChannel(gBuffer["shadowMap"], "shadowMap");
 
 	screenObj->setMaterial(postProcessMat);

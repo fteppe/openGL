@@ -183,14 +183,8 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 	if (type == "light")
 	{
 		//A bit early but it will do for now.
-		Light * light = new Light();
-		light->intensity = go["intensity"].GetFloat();
-		light->col = glm::vec3(1.0, 1.0, 1.0);
-		if (go.HasMember("color"))
-		{
-			light->col = (glm::vec3(go["color"][0].GetFloat(), go["color"][1].GetFloat(), go["color"][2].GetFloat()));
-		}
-		loadedGo = light;
+
+		loadedGo = loadLight(go);
 		
 	}
 
@@ -276,6 +270,28 @@ Solid * tetraRender::SceneLoader::loadSolid(MAT_CONTAINER & mats, VBO_CONTAINER 
 	}
 
 	return loadedGo;
+}
+
+Light * tetraRender::SceneLoader::loadLight(rapidjson::Value & go)
+{
+	Light * light = new Light();
+	light->intensity = go["intensity"].GetFloat();
+	light->col = glm::vec3(1.0, 1.0, 1.0);
+	if (go.HasMember("color"))
+	{
+		light->col = (glm::vec3(go["color"][0].GetFloat(), go["color"][1].GetFloat(), go["color"][2].GetFloat()));
+	}
+	//if this light has a shadowProjection, it means that this light projects shadows.
+	if (go.HasMember("shadowProjection"))
+	{
+		const auto target = (go["shadowProjection"]["target"]).GetArray();
+		glm::vec3 up(0, 1, 0);
+		glm::vec3 targetVec(target[0].GetFloat(), target[1].GetFloat(), target[2].GetFloat());
+		light->setProjection(targetVec, up);
+		light->getShadowProjection()->setProjectionOrtho(5, 5, 0.1, 10);
+	}
+
+	return light;
 }
 
 Texture * SceneLoader::loadTexture(std::string texturePath)

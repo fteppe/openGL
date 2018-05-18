@@ -24,6 +24,7 @@ namespace tetraRender
 
 		void setProjection(glm::vec3 target, glm::vec3 up);
 		bool getHasShadow();
+		Camera* getShadowProjection();
 
 		//This bool helps us know if we should get the projection from this light or not.
 		bool hasShadow;

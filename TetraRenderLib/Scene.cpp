@@ -59,6 +59,10 @@ void tetraRender::Scene::setCamera(Camera camera)
 
 void tetraRender::Scene::renderScene()
 {
+	//We make sure the right shadows are being rendered, we send to the pipeline which PoV must be rendered.
+	updateShadowMaps();
+	//We then start the whole rendering pipeline that is handled by a specific object
+	//this pipeline includes shadowmaps rendering and the rendering of the scene.
 	renderPipeLine->renderScene(*this);
 }
 
@@ -217,9 +221,11 @@ void tetraRender::Scene::updateShadowMaps()
 		if (light->getHasShadow() == true)
 		{
 			Camera* lightProj = light->getShadowProjection();
-			renderPipeLine->setShadowPoV(&cam, i);
+			renderPipeLine->setShadowPoV(lightProj, i);
+			i++;
 		}
 		
 	}
+	renderPipeLine->setNumShadows(i);
 }
 

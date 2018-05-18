@@ -45,8 +45,10 @@ Light::~Light()
 
 void tetraRender::Light::setProjection(glm::vec3 lookAt, glm::vec3 up)
 {
+	shadowProjection.setPos(pos);
 	shadowProjection.setUp(up);
 	shadowProjection.setTarget(lookAt);
+	hasShadow = true;
 }
 
 bool tetraRender::Light::getHasShadow()

@@ -35,7 +35,7 @@ namespace tetraRender
 		/// <param name="PoV">The PoV of the light.</param>
 		/// <param name="index">The index of the renderPass that will have it's Camera changed.</param>
 		void setShadowPoV(Camera* PoV, int index);
-
+		void setNumShadows(unsigned int numShadows);
 		
 
 	private:		
@@ -63,7 +63,11 @@ namespace tetraRender
 
 		/// <summary>	The render surfaces. For each post processing renderpasses we need a surface to render on.
 		/// 			Each of those surfaces have a different shader that contains the post processing code, and a different material that defines  </summary>
-		std::vector<std::unique_ptr<Solid>> renderSurfaces;
+		std::vector<std::unique_ptr<Solid>> renderSurfaces;		
+		/// <summary>
+		/// The number of shadwos that are currently necessary.
+		/// </summary>
+		unsigned int numShadows;
 	};
 }
 
