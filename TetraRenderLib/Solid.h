@@ -4,7 +4,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "Texture.h"
-#include "VertexBufferObject.h"
+#include "Mesh.h"
 #include <glm/matrix.hpp>
 #include <memory>
 

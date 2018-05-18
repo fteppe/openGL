@@ -31,6 +31,7 @@ void Material::apply(Mesh* const& VBO, Scene & scene, Solid const& solid)
 	shader_ptr->setProgramInformation(scene, solid);
 	shader_ptr->sendTexChannels(textures);
 	VBO->drawObject(*shader_ptr);
+	shader_ptr->resetTextureUnitCount();
 }
 
 std::shared_ptr<Shader> Material::getShaderProgram()

@@ -1,6 +1,6 @@
 #pragma once
 #include "Shader.h"
-#include "VertexBufferObject.h"
+#include "Mesh.h"
 #include <memory>
 #include <map>
 #include <string>

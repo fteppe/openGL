@@ -66,9 +66,6 @@
     <ClInclude Include="Vec3.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="VertexBufferObject.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="waveFrontLoader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -88,6 +85,9 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="PreprocessorShader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -143,9 +143,6 @@
     <ClCompile Include="Vec3.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="VertexBufferObject.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="waveFrontLoader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -159,6 +156,9 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="PreprocessorShader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

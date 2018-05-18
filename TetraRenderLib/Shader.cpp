@@ -142,23 +142,17 @@ void Shader::sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> tex
 {
 	glUseProgram(program);
 	//iterating through the map of channels.
-	int i = 0;
 	for (auto it = textures.begin(); it != textures.end(); it++)
 	{
 		//we send to the program the channel, with it's name and the texture unit.
-		if (uniforms.find(it->first) == uniforms.end())
-		{
-			uniforms[it->first] = glGetUniformLocation(program, it->first.c_str());
-		}
+		sendTexture(it->first, it->second);
+	}
 
-		
-		it->second->applyTexture(program, uniforms[it->first], i);
-		i++;
-	}
-	if (i > highestTextureUnitUsed)
-	{
-		highestTextureUnitUsed = i;
-	}
+}
+
+void tetraRender::Shader::resetTextureUnitCount()
+{
+	this->highestTextureUnitUsed = 0;
 }
 
 void Shader::compileShader(GLuint shader, std::string shaderPath)
@@ -249,6 +243,17 @@ void tetraRender::Shader::sendLight(std::string name, tetraRender::Light light)
 	sendVec3(name + ".color", light.col);
 	sendFloat(name + ".intensity", light.intensity);
 	//GLint posIntensity = getUniformLocation(name + ".intensity");
+}
+
+void tetraRender::Shader::sendTexture(std::string channelName, std::shared_ptr<Texture> tex)
+{
+	highestTextureUnitUsed++;
+	if (uniforms.find(channelName) == uniforms.end())
+	{
+		uniforms[channelName] = glGetUniformLocation(program, channelName.c_str());
+	}
+	
+	tex->applyTexture(this->program, uniforms[channelName], highestTextureUnitUsed);
 }
 
 GLint tetraRender::Shader::getUniformLocation(std::string uniform)

@@ -1,5 +1,5 @@
 #pragma once
-#include "VertexBufferObject.h"
+#include "Mesh.h"
 #include "GameObject.h"
 
 namespace tetraRender {

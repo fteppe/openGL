@@ -4,7 +4,7 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
 #include <vector>
-#include "VertexBufferObject.h"
+#include "Mesh.h"
 #include "Texture.h"
 #include "Shader.h"
 #include "Material.h"

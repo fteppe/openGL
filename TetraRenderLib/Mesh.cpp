@@ -1,6 +1,6 @@
  #include "stdafx.h"
 #include <iostream>
-#include "VertexBufferObject.h"
+#include "Mesh.h"
 #include "Polygon.h"
 
 using namespace tetraRender;
@@ -147,6 +147,7 @@ void Mesh::drawObject(const Shader& shader)
 	glBindVertexArray(VertexArrayID);
 
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
+
 }
 
 void Mesh::setNormals(std::vector<glm::vec3> normalIn)

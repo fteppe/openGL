@@ -197,7 +197,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vec3.h" />
-    <ClInclude Include="VertexBufferObject.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="waveFrontLoader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -227,7 +227,7 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vec3.cpp" />
-    <ClCompile Include="VertexBufferObject.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="waveFrontLoader.cpp" />
   </ItemGroup>
   <ItemGroup>

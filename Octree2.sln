@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Octree2", "Octree2\Octree2.vcxproj", "{CCD73715-5A52-41BF-A3DA-2D77E68E8761}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TetraEngine", "TetraEngine\TetraEngine.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FCBCDB85-039C-49E7-A594-7380F15A3083} = {FCBCDB85-039C-49E7-A594-7380F15A3083}
@@ -53,14 +51,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CCD73715-5A52-41BF-A3DA-2D77E68E8761}.Debug|x64.ActiveCfg = Debug|x64
-		{CCD73715-5A52-41BF-A3DA-2D77E68E8761}.Debug|x64.Build.0 = Debug|x64
-		{CCD73715-5A52-41BF-A3DA-2D77E68E8761}.Debug|x86.ActiveCfg = Debug|Win32
-		{CCD73715-5A52-41BF-A3DA-2D77E68E8761}.Debug|x86.Build.0 = Debug|Win32
-		{CCD73715-5A52-41BF-A3DA-2D77E68E8761}.Release|x64.ActiveCfg = Release|x64
-		{CCD73715-5A52-41BF-A3DA-2D77E68E8761}.Release|x64.Build.0 = Release|x64
-		{CCD73715-5A52-41BF-A3DA-2D77E68E8761}.Release|x86.ActiveCfg = Release|Win32
-		{CCD73715-5A52-41BF-A3DA-2D77E68E8761}.Release|x86.Build.0 = Release|Win32
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x64.ActiveCfg = Debug|x64
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x64.Build.0 = Debug|x64
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x86.ActiveCfg = Debug|x64
@@ -92,8 +82,8 @@ Global
 		{3DECBD49-B112-4504-92A5-7F781A899379} = {E32AC566-0CF1-48A1-94D2-B16A60EC7F4D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {39BABE6F-64FF-43C3-8F19-8EDDFF05CEE5}
 		Qt5Version = 10.1
+		SolutionGuid = {39BABE6F-64FF-43C3-8F19-8EDDFF05CEE5}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
