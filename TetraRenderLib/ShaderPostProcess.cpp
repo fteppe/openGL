@@ -60,6 +60,7 @@ void tetraRender::ShaderPostProcess::setProgramInformation(tetraRender::Scene & 
 					nameShadowProj << "shadowProjection[" << indexShadow << "]";
 					sendMatrix4(nameShadowProj.str(), projMat);
 					sendInt(ss.str() + ".shadowIndex", indexShadow);
+					indexShadow++;
 				}
 				
 			}

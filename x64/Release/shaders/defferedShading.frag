@@ -139,7 +139,7 @@ vec3 specCalc(Light light, vec3 normal, vec3 fragPos, vec3 camPos, float specPow
 
 vec3 valLight()
 {
-	float ambiant = 0.1f; 
+	float ambiant = 0.06f; 
 	vec3 intensityVec = vec3(0);
 	for(int i = 0; i < numLights; i++)
 	{
@@ -160,6 +160,7 @@ vec3 valLight()
             float shadow = shadowCalculation(shadowPos, shadowMaps[shadowIndex]);
             lightIntensity *= vec3(shadow);
         }
+        
         intensityVec = intensityVec + lightIntensity;
 	}
 	return intensityVec + ambiant;
