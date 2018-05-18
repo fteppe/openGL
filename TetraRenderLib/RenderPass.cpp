@@ -81,6 +81,11 @@ std::shared_ptr<Material> tetraRender::RenderPass::getMaterial()
 	return optionalMaterial;
 }
 
+Camera * tetraRender::RenderPass::getCamera()
+{
+	return camera_ptr;
+}
+
 FrameBuffer & tetraRender::RenderPass::getFrameBuffer()
 {
 	return *renderOutput;

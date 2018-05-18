@@ -152,6 +152,11 @@ void Shader::sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> tex
 
 void tetraRender::Shader::resetTextureUnitCount()
 {
+	for (int i = 0; i < highestTextureUnitUsed; i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 	this->highestTextureUnitUsed = 0;
 }
 
@@ -242,18 +247,21 @@ void tetraRender::Shader::sendLight(std::string name, tetraRender::Light light)
 	//sendVec3(name + ".pos", glm::vec3(0,0,1));
 	sendVec3(name + ".color", light.col);
 	sendFloat(name + ".intensity", light.intensity);
+	//By default we consider that no light has a shadow, and we change that when we send the shadows datas.
+	sendInt(name + ".shadowIndex", -1);
 	//GLint posIntensity = getUniformLocation(name + ".intensity");
 }
 
 void tetraRender::Shader::sendTexture(std::string channelName, std::shared_ptr<Texture> tex)
 {
-	highestTextureUnitUsed++;
+	
 	if (uniforms.find(channelName) == uniforms.end())
 	{
 		uniforms[channelName] = glGetUniformLocation(program, channelName.c_str());
 	}
 	
 	tex->applyTexture(this->program, uniforms[channelName], highestTextureUnitUsed);
+	highestTextureUnitUsed++;
 }
 
 GLint tetraRender::Shader::getUniformLocation(std::string uniform)

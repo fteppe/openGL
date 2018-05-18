@@ -23,7 +23,7 @@ namespace tetraRender
 		//We add another output color.
 		void addColorOutputTexture(std::shared_ptr<Texture> texture);
 		void setDepthTexture(std::shared_ptr<Texture> texture);
-
+		std::shared_ptr<Texture> getDepthTexture();
 		//If we want our framebuffer to have HDR values we set it to true, by doing so all color output textures must be HDR as well.
 		void setHDR(bool hdrVal);
 

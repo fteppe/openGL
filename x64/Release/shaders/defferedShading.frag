@@ -14,7 +14,7 @@ uniform sampler2D normals;
 uniform sampler2D depth;
 uniform sampler2D specularity;
 uniform sampler2D fragPos;
-uniform sampler2D shadowDistance;
+uniform sampler2D shadowMaps[5];
 
 
 uniform float near;
@@ -23,6 +23,7 @@ uniform mat4 inverseCam;
 uniform vec3 camPos;
 uniform Light lights[10];
 uniform int numLights;
+uniform mat4 shadowProjection[5];
 
 vec4 blur(sampler2D map, float initialOffset, int quality);
 void makeOffsetMat(float offset, inout vec2[9] offsetMat);
@@ -52,7 +53,7 @@ void main()
 	//We are going to go for a blurry image post processing.
 	// Building the offset matrix 
 	float offset = 0.5f;
-
+    
 	
 	float faroffset = (depthVal - pow(2, 10*centerDepth));
 	//faroffset = clamp(faroffset, 0, 2000);
@@ -62,8 +63,10 @@ void main()
 	offset = max(closeOffset, faroffset)/100;
 	
 	offset = clamp (offset, 0.0, 0.1);
+    vec3 pos = vec3(texture(fragPos, UV));
+    
 	//ColorOutput = blur(color, offset, 5) * (blur(shadowDistance, 0.0, 1).r+0.1);
-    //ColorOutput = texture(specularity, UV);
+    //ColorOutput = texture(shadowMaps[0], UV);
 	//float specVal = texture(specularity, UV).r;
 }
 
@@ -140,14 +143,25 @@ vec3 valLight()
 	vec3 intensityVec = vec3(0);
 	for(int i = 0; i < numLights; i++)
 	{
+        vec3 lightIntensity = vec3(0);
 		vec3 normal_ = vec3(texture(normals, UV));
 		vec3 pos = vec3(texture(fragPos, UV));
 		Light light_ = lights[i];
-		intensityVec = intensityVec + diffuseCalc(light_, normal_, pos);
+		lightIntensity = lightIntensity + diffuseCalc(light_, normal_, pos);
 		float specPow = 64;
 		float specVal = texture(specularity, UV).r;
 		vec3 cameraPosition = camPos;
-		intensityVec = intensityVec + specCalc(light_, normal_, pos, cameraPosition, specPow, specVal);
+		lightIntensity = lightIntensity + specCalc(light_, normal_, pos, cameraPosition, specPow, specVal);
+
+        int shadowIndex = light_.shadowIndex;
+        if(shadowIndex >= 0)
+        {
+            vec4 shadowPos = shadowProjection[shadowIndex] * vec4(pos,1);
+            float shadow = shadowCalculation(shadowPos, shadowMaps[shadowIndex]);
+            lightIntensity *= vec3(shadow);
+        }
+        intensityVec = intensityVec + lightIntensity;
 	}
 	return intensityVec + ambiant;
 }
+

@@ -62,7 +62,7 @@ namespace tetraRender
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		std::shared_ptr<Material> getMaterial();
-
+		Camera* getCamera();
 		FrameBuffer& getFrameBuffer();
 
 	private:

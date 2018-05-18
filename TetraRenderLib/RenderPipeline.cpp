@@ -72,6 +72,11 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 		this->numShadows = numShadows;
 	}
 
+	std::vector<std::unique_ptr<RenderPass>>& tetraRender::RenderPipeline::getShadowMapsPass()
+	{
+		return shadowmapsPasses;
+	}
+
 void tetraRender::RenderPipeline::setupRenderPasses()
 {
 	//We create the material that is used to render the scene from the PoV of a light.

@@ -137,6 +137,11 @@ void FrameBuffer::setDepthTexture(std::shared_ptr<Texture> texture)
 	unbind();
 }
 
+std::shared_ptr<Texture> tetraRender::FrameBuffer::getDepthTexture()
+{
+	return depthBufferTexture;
+}
+
 void tetraRender::FrameBuffer::setHDR(bool hdrVal)
 {
 	//TODO : update all textures

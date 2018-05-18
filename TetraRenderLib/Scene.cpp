@@ -163,6 +163,11 @@ std::vector<Light*> tetraRender::Scene::getLights()
 	return lights;
 }
 
+RenderPipeline & tetraRender::Scene::getRenderPipeLine()
+{
+	return *this->renderPipeLine;
+}
+
 void tetraRender::Scene::makeSkyBox()
 {
 	//TODO: change this function because this is right now the dirtiest way to do it.

@@ -31,11 +31,41 @@ void tetraRender::ShaderPostProcess::setProgramInformation(tetraRender::Scene & 
 	sendFloat("time", time);
 
 	std::vector<Light *> lights = scene.getLights();
+	//We send the light data but also the data concerning shadows. This is a bit tricky since this information is a bit "deep in our data structures".
+	//Because of how it is setup we consider that the first light we find with a shadow projection is asigned the first shadowmap etc...
+	unsigned indexShadow = 0;
 	for (int i = 0; i < lights.size(); i++)
 	{
 		std::stringstream ss;
+		Light* light = lights[i];
 		ss << "lights[" << i << "]";
-		sendLight(ss.str(), *lights[i]);
+		sendLight(ss.str(), *light);
+		if (light->getHasShadow())
+		{
+			//It doesn't work yet!!!
+			//scene.getRenderPipeLine().getShadowMapsPass();
+			if (indexShadow < scene.getRenderPipeLine().getShadowMapsPass().size())
+			{
+				auto& shadowPass = scene.getRenderPipeLine().getShadowMapsPass()[indexShadow];
+				Camera* shadowProj = shadowPass->getCamera();
+
+				if (shadowProj != NULL)
+				{
+					glm::mat4 projMat = shadowProj->getProjection();
+					std::shared_ptr<Texture> shadowMap = shadowPass->getFrameBuffer().getDepthTexture();
+					std::stringstream nameShadowMap;
+					nameShadowMap << "shadowMaps[" << indexShadow << "]";
+					sendTexture(nameShadowMap.str(), shadowMap);
+					std::stringstream nameShadowProj;
+					nameShadowProj << "shadowProjection[" << indexShadow << "]";
+					sendMatrix4(nameShadowProj.str(), projMat);
+					sendInt(ss.str() + ".shadowIndex", indexShadow);
+				}
+				
+			}
+			
+		}
+
 	}
 	sendInt("numLights", lights.size());
 

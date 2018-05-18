@@ -3,4 +3,5 @@ struct Light{
 	vec3 pos;
 	vec3 color;
 	float intensity;
+	int shadowIndex;
 };

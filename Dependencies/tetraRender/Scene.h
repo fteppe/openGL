@@ -78,6 +78,8 @@ namespace tetraRender
 		std::vector<GameObject *> getGameObjects();
 		std::vector<Light * > getLights();
 
+		RenderPipeline& getRenderPipeLine();
+
 	private:
 		std::vector<Light*> getLights(GameObject* root) const;
 		////////////////////////////////////////////////////////////////////////////////////////////////////
