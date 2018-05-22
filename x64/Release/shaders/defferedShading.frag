@@ -45,6 +45,7 @@ void main()
     //FragColor = vec4(fogColor,1);
 	vec4 lightDim = texture(specularity, UV);
 	vec4 colorSample = texture(color, UV);
+	//colorSample = vec4(1);
 	colorSample = colorSample * vec4(light,0);
 	vec4 HDR = colorSample;
 	HDR = HDR/(HDR + vec4(1));

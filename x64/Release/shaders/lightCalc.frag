@@ -29,8 +29,8 @@ vec3 diffuseCalc(Light light, vec3 normal, vec3 vertexPos)
     //This is based on the incidance of the light.
     float lightFlux = max(dot(normal, lightDir),0);
     //We choose another function for attenuation:
-    float paramA = 0.1;
-    float paramB = 0.01;
+    float paramA = 0.0;
+    float paramB = 1;
     float attenuation = 1.0/(1.0 + paramA * lightDistance + paramB * lightDistance * lightDistance);
 
 
