@@ -13,14 +13,11 @@ RenderPass::RenderPass() : renderOutput(new FrameBuffer(SCREEN_FRAMEBUFFER))
 
 RenderPass::~RenderPass()
 {
-	delete renderOutput;
-	renderOutput = NULL;
 }
 
-void RenderPass::setRenderOutput(FrameBuffer * output)
+void RenderPass::setRenderOutput(std::shared_ptr<FrameBuffer> output)
 {
 	//Before we change the output, we delete the previous one to avoid hangin memory usage.
-	delete renderOutput;
 	renderOutput = output;
 }
 

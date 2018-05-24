@@ -18,7 +18,7 @@ namespace tetraRender
 	public:
 		RenderPass();
 		~RenderPass();
-		void setRenderOutput(FrameBuffer * output);
+		void setRenderOutput(std::shared_ptr<FrameBuffer> output);
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Sets a camera. This is the camera that will be used to render the scene. TO render a lightmap, the camera will be the projection of the light </summary>
@@ -73,7 +73,7 @@ namespace tetraRender
 		Camera* camera_ptr;
 		//This determines where a RenderPass renders.
 		//The renderPass is the sole owner of the frameBuffer is in in charge of deleting it.
-		FrameBuffer* renderOutput;
+		std::shared_ptr<FrameBuffer> renderOutput;
 		//This render pass will render only the game objects that have these tags 
 		std::vector<RenderTag> renderTagsIncluded;
 		//This renderPass will render all objects excluded the ones containing these tags.

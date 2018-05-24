@@ -87,13 +87,13 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 	//We take the maximum number of shadowmap and create a renderpass for each.
 	//If there are less shadowpas than possible shadows we waste some space but consider it an acceptable tradeof.
 	std::unique_ptr<RenderPass> shadowPass;
-	FrameBuffer* shadowBuffer;
+	std::shared_ptr<FrameBuffer> shadowBuffer;
 	for (unsigned i = 0; i < MAX_NUM_SHADOWMAP; i++)
 	{
 		shadowPass.reset(new RenderPass);
 		//All shadowMaps renderPasses share the same material that just renders geometry.
 		shadowPass->setMat(shadowMapsMat);
-		shadowBuffer = new FrameBuffer;
+		shadowBuffer.reset( new FrameBuffer);
 		//We add a new texture to the frameBuffer to which will be written the shadowMap.
 		shadowBuffer->setDepthTexture(std::shared_ptr< Texture>(new Texture));
 		//We use std::move because we manipulate unique ptr; After that shadowPass cannot be used unless it is reset or it will crash the app.
@@ -118,14 +118,9 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 	//gBuffer["shadowDistance"] = std::shared_ptr<Texture>(new Texture);
 
 
-	FrameBuffer * frame = new FrameBuffer;
+	std::shared_ptr<FrameBuffer> frame (new FrameBuffer);
 	frame->setHDR(true);
-	//frame->renderToScreen();
-	
 
-	//Colors renderPass.
-	frame = new FrameBuffer;
-	frame->setHDR(true);
 	frame->addColorOutputTexture(gBuffer["color"]);
 	frame->setDepthTexture(depthBuffer);
 	frame->addColorOutputTexture(normalsBuffer);
@@ -154,6 +149,11 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 	pass.reset(new RenderPass);
 	pass->setRenderTagsIncluded({ FORWARD_RENDER });
 	renderPasses.push_back(std::move(pass));
+
+	pass.reset(new RenderPass);
+	pass->setRenderTagsIncluded({ POST_PROCESS });
+	//renderPasses.push_back(std::move(pass));
+
 }
 
 void tetraRender::RenderPipeline::setupPostProcessing(Scene & scene)
