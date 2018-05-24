@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shader", "shader", "{07F9E6
 		x64\Release\shaders\debug.frag = x64\Release\shaders\debug.frag
 		x64\Release\shaders\defferedShading.frag = x64\Release\shaders\defferedShading.frag
 		x64\Release\shaders\directionalLight.frag = x64\Release\shaders\directionalLight.frag
+		x64\Release\shaders\kernel.frag = x64\Release\shaders\kernel.frag
 		x64\Release\shaders\lightCalc.frag = x64\Release\shaders\lightCalc.frag
 		x64\Release\shaders\lightStruct.hfrag = x64\Release\shaders\lightStruct.hfrag
 		x64\Release\shaders\PBR.frag = x64\Release\shaders\PBR.frag
@@ -83,8 +84,8 @@ Global
 		{3DECBD49-B112-4504-92A5-7F781A899379} = {E32AC566-0CF1-48A1-94D2-B16A60EC7F4D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {39BABE6F-64FF-43C3-8F19-8EDDFF05CEE5}
 		Qt5Version = 10.1
+		SolutionGuid = {39BABE6F-64FF-43C3-8F19-8EDDFF05CEE5}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
