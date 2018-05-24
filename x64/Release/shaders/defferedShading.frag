@@ -7,7 +7,7 @@
 in vec3 vertexPos;
 in vec2 UV;
 
-out vec4 ColorOutput;
+layout(location = 0) out vec4 ColorOutput;
 
 uniform sampler2D color;
 uniform sampler2D normals;

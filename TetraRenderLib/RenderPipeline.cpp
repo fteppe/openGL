@@ -56,6 +56,10 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 	//We now render the elements of the scene that are forward rendered.
 	renderPasses[2]->renderScene(scene);
 
+	auto & finalPass = renderPasses[3];
+	finalPass->getFrameBuffer().clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	finalPass->renderScene(scene);
+
 }
 
 	void tetraRender::RenderPipeline::setShadowPoV(Camera* PoV, int index)
@@ -140,6 +144,13 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 
 	//the second render pass we don't set a frameBuffer so it will render to the screen.
 	pass.reset(new RenderPass);
+
+	frame.reset(new FrameBuffer);
+	frame->setHDR(true);
+	std::shared_ptr<Texture> fullColor(new Texture);
+	gBuffer["fullColor"] = fullColor;
+	frame->addColorOutputTexture(fullColor);
+	pass->setRenderOutput(frame);
 	pass->setRenderTagsIncluded({ POST_PROCESS });
 	renderPasses.push_back(std::move(pass));
 	//pass->setCamera(&this->cam);
@@ -147,12 +158,13 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 
 	
 	pass.reset(new RenderPass);
+	pass->setRenderOutput(frame);
 	pass->setRenderTagsIncluded({ FORWARD_RENDER });
 	renderPasses.push_back(std::move(pass));
 
 	pass.reset(new RenderPass);
 	pass->setRenderTagsIncluded({ POST_PROCESS });
-	//renderPasses.push_back(std::move(pass));
+	renderPasses.push_back(std::move(pass));
 
 }
 
@@ -192,7 +204,10 @@ void tetraRender::RenderPipeline::setupPostProcessing(Scene & scene)
 	
 	//Push back is a bit complicated with a unique ptr;
 	
-	//renderSurfaces.push_back(std::move(std::unique_ptr<Solid>( screenObj)));
+	std::shared_ptr<Shader> shaderEffects(new ShaderPostProcess({ "postProcess.ver" }, { "postProcessEffect.frag" }));
+	std::shared_ptr<Material> materialEffects(new Material(shaderEffects));
+	materialEffects->setChannel(gBuffer["fullColor"], "fullColor");
+	renderPasses.back()->setMat(materialEffects);
 
 	scene.addGameObject(screenObj);
 }
