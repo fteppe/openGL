@@ -8,6 +8,7 @@ in vec3 vertexPos;
 in vec2 UV;
 
 layout(location = 0) out vec4 ColorOutput;
+layout(location = 1) out vec4 bright;
 
 uniform sampler2D color;
 uniform sampler2D normals;
@@ -47,23 +48,13 @@ void main()
 	vec4 colorSample = texture(color, UV);
 	//colorSample = vec4(1);
 	colorSample = colorSample * vec4(light,0);
-	vec4 HDR = colorSample;
-	HDR = HDR/(HDR + vec4(1));
-	ColorOutput = HDR;
-	//ColorOutput = texture(normals, UV);
-	//We are going to go for a blurry image post processing.
-	// Building the offset matrix 
-	float offset = 0.5f;
-    
-	
-	float faroffset = (depthVal - pow(2, 10*centerDepth));
-	//faroffset = clamp(faroffset, 0, 2000);
-	float closeOffset = (0.02+centerDepth/100  - depthVal);
-	//closeOffset = clamp(closeOffset, 0, 2000);
 
-	offset = max(closeOffset, faroffset)/100;
+	ColorOutput = colorSample;
+	float bloomThreshold = 0.2;
+	float isABoveThreshold = float(length(colorSample) > bloomThreshold);
+	bright = colorSample * isABoveThreshold;
 	
-	offset = clamp (offset, 0.0, 0.1);
+	
     vec3 pos = vec3(texture(fragPos, UV));
     
 	//ColorOutput = blur(color, offset, 5) * (blur(shadowDistance, 0.0, 1).r+0.1);

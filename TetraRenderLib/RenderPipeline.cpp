@@ -126,7 +126,6 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 	frame->setHDR(true);
 
 	frame->addColorOutputTexture(gBuffer["color"]);
-	frame->setDepthTexture(depthBuffer);
 	frame->addColorOutputTexture(normalsBuffer);
 	frame->addColorOutputTexture(spec);
 	frame->addColorOutputTexture(fragPos);
@@ -148,8 +147,12 @@ void tetraRender::RenderPipeline::setupRenderPasses()
 	frame.reset(new FrameBuffer);
 	frame->setHDR(true);
 	std::shared_ptr<Texture> fullColor(new Texture);
+	std::shared_ptr<Texture> bright(new Texture);
 	gBuffer["fullColor"] = fullColor;
+	gBuffer["bright"] = bright;
 	frame->addColorOutputTexture(fullColor);
+	frame->addColorOutputTexture(bright);
+	frame->setDepthTexture(depthBuffer);
 	pass->setRenderOutput(frame);
 	pass->setRenderTagsIncluded({ POST_PROCESS });
 	renderPasses.push_back(std::move(pass));
@@ -207,6 +210,8 @@ void tetraRender::RenderPipeline::setupPostProcessing(Scene & scene)
 	std::shared_ptr<Shader> shaderEffects(new ShaderPostProcess({ "postProcess.ver" }, { "postProcessEffect.frag" }));
 	std::shared_ptr<Material> materialEffects(new Material(shaderEffects));
 	materialEffects->setChannel(gBuffer["fullColor"], "fullColor");
+	materialEffects->setChannel(gBuffer["bright"], "bright");
+	materialEffects->setChannel(gBuffer["depth"], "depth");
 	renderPasses.back()->setMat(materialEffects);
 
 	scene.addGameObject(screenObj);
