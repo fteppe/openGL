@@ -19,8 +19,8 @@
       "name": "PBR",
       "shader": "generic2",
       "channels": {
-        "normalMap": "textures/EyCkvNyNormal.png",
-        "specularityMap": "textures/EyCkvNy.png",
+        "normalMap": "textures/EyCkvNyNormal.jpg",
+        "specularityMap": "textures/EyCkvNy.jpg",
         "diffuse": "textures/No-Mans-Sky-1.jpg",
         "cubemap": "skybox"
       }
@@ -32,7 +32,7 @@
         "normalMap": "textures/cobblestone_normal.jpg",
         "depthMap": "textures/cobblestone_height.jpg",
         "specularityMap": "textures/cobblestone_spec.jpg",
-        "diffuse": "textures/cobblestone_albedo.png",
+        "diffuse": "textures/cobblestone_albedo.jpg",
         "cubemap": "skybox"
       }
     }

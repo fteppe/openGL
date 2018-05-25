@@ -27,6 +27,8 @@ FrameBuffer::FrameBuffer(EngineEnum frameType)
 	height = HEIGHT;
 	frameBufferId = 0;
 	renderBufferId = 0;
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+	
 }
 
 

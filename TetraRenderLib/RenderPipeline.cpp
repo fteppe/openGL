@@ -58,7 +58,9 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 
 	auto & finalPass = renderPasses[3];
 	finalPass->getFrameBuffer().clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glEnable(GL_FRAMEBUFFER_SRGB);
 	finalPass->renderScene(scene);
+	//glDisable(GL_FRAMEBUFFER_SRGB);
 
 }
 

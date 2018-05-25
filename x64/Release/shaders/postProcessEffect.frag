@@ -103,7 +103,7 @@ vec4 depthOfField(sampler2D map,sampler2D depth, float depthVal, float depthThre
 vec4 toneMapping(vec4 value)
 {
 	vec4 toneMapped = (value / (vec4(1)+ value));
-	float gamma = 1.5;
+	float gamma = 0.8;
 	toneMapped = pow(toneMapped, vec4(1.0 / gamma));
-	return toneMapped;
+	return value;
 }
