@@ -50,16 +50,14 @@ void main()
 	colorSample = colorSample * vec4(light,0);
 
 	ColorOutput = colorSample;
-	float bloomThreshold = 0.6;
-	float isABoveThreshold = float(length(colorSample) > bloomThreshold);
+	float bloomThreshold = 0.9;
+	//The numbers in the brightness calculations are based on human perception.
+	float brightness = dot(colorSample.rgb, vec3(0.2126, 0.7152, 0.0722));
+	float isABoveThreshold = float(brightness > bloomThreshold);
 	bright = colorSample * isABoveThreshold;
 	
 	
     vec3 pos = vec3(texture(fragPos, UV));
-    
-	//ColorOutput = blur(color, offset, 5) * (blur(shadowDistance, 0.0, 1).r+0.1);
-    //ColorOutput = texture(shadowMaps[0], UV);
-	//float specVal = texture(specularity, UV).r;
 }
 
 

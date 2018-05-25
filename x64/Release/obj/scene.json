@@ -45,7 +45,7 @@
     },
     {
       "type": "light",
-      "intensity": 5,
+      "intensity": 20,
       "pos": [ -2, 1, -2 ],
       "color": [1, 1, 1 ],
       "shadowProjection": {

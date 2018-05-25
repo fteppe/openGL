@@ -11,19 +11,56 @@ uniform sampler2D bright;
 uniform sampler2D depth;
 
 
-vec4 blur(sampler2D map,sampler2D depth, float depthVal, float depthThreshold, int quality);
+vec4 depthOfField(sampler2D map,sampler2D depth, float depthVal, float depthThreshold, int quality);
+vec4 blur(sampler2D map, float initialOffset, int quality);
+vec4 toneMapping(vec4 value);
 
 void main(){
     
 
     float depthVal = texture(depth, UV).r;
     float depthThreshold = texture(depth, vec2(0.5,0.5)).r + 0.1;
-    vec4 color = blur(fullColor, depth, depthVal, depthThreshold, 4);
-    colorOut = color;
+    vec4 color = depthOfField(fullColor, depth, depthVal, depthThreshold, 4);
+	vec4 bloom = blur(bright, 0.01, 2);
+	//bloom = vec4(color);
+    colorOut = toneMapping((color + bloom)/2);
+	//colorOut = bloom;
 }
 
+vec4 blur(sampler2D map, float initialOffset, int quality)
+{
+	float kernel[9] = {
+	2,2,2,
+	2,2,2,
+	2,2,2};
 
-vec4 blur(sampler2D map,sampler2D depth, float depthVal, float depthThreshold, int quality)
+
+		vec4 outputVal = vec4(0);
+	float offset = initialOffset;
+	for(int i = 0; i< quality; i++)
+	{
+		vec2 offsetMat[9];
+		makeOffsetMat(offset, offsetMat);
+        vec4 accumulation = vec4(0);
+        float kernelValAccumulation = 0.0;
+		for(int j = 0; j < 9; j++)
+		{
+			vec2 offsetUV = vec2 (UV + offsetMat[j]);
+            float depthValLocal = texture(depth, offsetUV).r;
+            accumulation += texture(map, offsetUV) * kernel[j];
+            kernelValAccumulation += kernel[j];
+		}
+
+        outputVal = outputVal/2+ (accumulation ) / (kernelValAccumulation * (2));
+		offset = offset - offset/quality;
+	}
+
+	return outputVal;
+	return vec4(0);
+
+}
+
+vec4 depthOfField(sampler2D map,sampler2D depth, float depthVal, float depthThreshold, int quality)
 {
 	float kernel[9] = {
 	2,2,2,
@@ -37,16 +74,8 @@ vec4 blur(sampler2D map,sampler2D depth, float depthVal, float depthThreshold, i
         initialOffset = clamp(initialOffset, 0.0, 0.01);
     }
 
-	float totalKernel = 0;
-	for(int  i=0 ; i < kernel.length(); i++)
-	{
-		totalKernel += kernel[i];
-	}
-
-
 	vec4 outputVal = vec4(0);
 	float offset = initialOffset;
-	offset = offset + offset/quality;
 	for(int i = 0; i< quality; i++)
 	{
 		vec2 offsetMat[9];
@@ -68,6 +97,13 @@ vec4 blur(sampler2D map,sampler2D depth, float depthVal, float depthThreshold, i
 		offset = offset - offset/quality;
 	}
 
-    outputVal = outputVal;
 	return outputVal;
+}
+
+vec4 toneMapping(vec4 value)
+{
+	vec4 toneMapped = (value / (vec4(1)+ value));
+	float gamma = 1.5;
+	toneMapped = pow(toneMapped, vec4(1.0 / gamma));
+	return toneMapped;
 }
