@@ -15,5 +15,5 @@ void main()
 	light = vec3(1);
 	normal  = vec3(0);
     FragColor = texture(skybox , normalize(pos));
-	//FragColor = vec4(vertexPos,1);
+	FragColor = pow(FragColor, vec4(2.2));
 }

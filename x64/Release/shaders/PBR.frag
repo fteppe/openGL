@@ -83,7 +83,7 @@ void main()
 	vec3 ambiant = vec3(0);
 	vec4 color = vec4(albedo(newUV),1);
 	//color = color * vec4( intensityVec+ specVec + ambiant,0);
-	color = color;
+	color = pow(color, vec4(2.2));;
 	
     //FragColor = color;
 	
