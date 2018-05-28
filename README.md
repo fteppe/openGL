@@ -13,7 +13,9 @@ The last project is barely started I have justa  skeleton, the purpose is to get
 
 ## Main features
 - object loading and display
+- cube maps
 - multiple texture channels for normal, specular, Parralax Occlusion Mapping...
+- a scene loader that uses JSON files tailored to this engine that can load models, shaders, materials, lights that can project orthogonal shadows.
 - realtime shadows with light maps.
 - Possibility to mix deferred and forward rendering.
 - depth of field post processing effect.
@@ -21,11 +23,12 @@ The last project is barely started I have justa  skeleton, the purpose is to get
 - Gamma Correction
 - Tone mapping
 
-# wanted features
+## wanted features
 - more scene files to hilight different features
 - cascaded shadows
+- controllers on the different objects to interact with them through an interface.
 - a user interface to edit scenes and materials in real time.
 - instanciation for particle system.
-- use tiled rendering and a compute shader to diminish the amount of light/fragment calculation. 
+- use tiled rendering and a compute shader to diminish the amount of light/fragment calculation.
 
 It is all very simple, but allowed me to learn about a lot of different techniques. And I try to build the library so it is easy to add more to it fast.

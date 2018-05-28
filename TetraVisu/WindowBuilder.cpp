@@ -42,29 +42,41 @@ WindowBuilder::WindowBuilder()
 	glewExperimental = GL_TRUE;
 	glewInit();
 	
-	_ASSERT(_CrtCheckMemory());
 	//apparently an old implementation bug tends to raise an error on startup. We call geterror to remove it.
 	glGetError();
-	_ASSERT(_CrtCheckMemory());
-	tetraRender::Camera cam(600.0f, 800.0f, 0.75f);
-	cam.setUp(glm::vec3(0, 0, 0));
-	_ASSERT(_CrtCheckMemory());
-	//new tetraRender::Scene(cam);
 
-	sf::Clock clock;
-	_ASSERT(_CrtCheckMemory());
-	std::shared_ptr<tetraRender::Scene>  scene(new tetraRender::Scene(cam));
-	scene->load("obj/scene.json");
 	
-	tetraRender:: EventHandler handler(scene);
+	
 	//std::cout << glGetString(GL_VERSION) << std::endl;
 	
 
+
+}
+
+WindowBuilder::WindowBuilder(std::string sceneFile) : WindowBuilder()
+{
+	tetraRender::Camera cam(600.0f, 800.0f, 0.75f);
+	cam.setUp(glm::vec3(0, 0, 0));
+	//new tetraRender::Scene(cam);
+
+	
+	scene = std::shared_ptr<tetraRender::Scene>(new tetraRender::Scene(cam));
+	scene->load(sceneFile);
+}
+
+
+WindowBuilder::~WindowBuilder()
+{
+}
+
+void WindowBuilder::draw()
+{
+	tetraRender::EventHandler handler(scene);
 	while (window.isOpen())
 	{
 		// check all the window's events that were triggered since the last iteration of the loop
-		
-		
+
+
 		sf::Event event;
 		int time = clock.getElapsedTime().asMilliseconds();
 		int frameTime = sf::milliseconds(16).asMilliseconds();
@@ -79,7 +91,7 @@ WindowBuilder::WindowBuilder()
 
 			std::cout << '\r' << std::setw(4) << std::setfill(' ') << time;
 			clock.restart();
-			
+
 			scene->renderScene();
 			window.display();
 		}
@@ -94,13 +106,4 @@ WindowBuilder::WindowBuilder()
 
 
 	}
-}
-
-
-WindowBuilder::~WindowBuilder()
-{
-}
-
-void WindowBuilder::draw()
-{
 }
