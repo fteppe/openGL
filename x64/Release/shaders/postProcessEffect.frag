@@ -51,7 +51,7 @@ vec4 blur(sampler2D map, float initialOffset, int quality)
             kernelValAccumulation += kernel[j];
 		}
 
-        outputVal = outputVal/2+ (accumulation ) / (kernelValAccumulation * (2));
+        outputVal = (outputVal *i)/(i+1)+ (accumulation ) / (kernelValAccumulation * (i+1));
 		offset = offset - offset/quality;
 	}
 

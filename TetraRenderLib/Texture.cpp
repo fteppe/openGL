@@ -65,9 +65,6 @@ void Texture::loadTexture(std::string textureName)
 	std::cout << "done loading " << textureName << std::endl;
 }
 
-void Texture::loadTextures(std::vector<std::string> textureName)
-{
-}
 
 void Texture::applyTexture(GLuint program, GLuint texturePos, int textureUnit)
 {

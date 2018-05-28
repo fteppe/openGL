@@ -31,7 +31,7 @@ namespace tetraRender
 		Solid* loadSolid(MAT_CONTAINER& mats, VBO_CONTAINER& objects, rapidjson::Value& go);
 		Light* loadLight(rapidjson::Value& go);
 	private:
-		Texture * loadTexture(std::string texturePath);
+		Texture * loadTexture(rapidjson::Value& texture);
 		rapidjson::Document doc;
 
 	};

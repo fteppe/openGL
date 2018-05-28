@@ -4,6 +4,7 @@
 #include <string>
 #include <glew/glew.h>
 #include "stb_image.h"
+#include "Resource.h"
 
 #ifndef  STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
@@ -12,7 +13,7 @@
 
 namespace tetraRender
 {
-	class Texture
+	class Texture : public Resource
 	{
 	public:
 		Texture();

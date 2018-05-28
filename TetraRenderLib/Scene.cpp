@@ -71,6 +71,8 @@ void tetraRender::Scene::load(std::string scene)
 
 	SceneLoader loader;
 	loader.setSceneToLoad(scene);
+	auto texturesLoaded = loader.loadTextures();
+	textures.insert(texturesLoaded.begin(), texturesLoaded.end());
 
 	auto shadersLoaded = loader.loadShaders();
 	shaders.insert(shadersLoaded.begin(), shadersLoaded.end());
@@ -196,10 +198,10 @@ void tetraRender::Scene::makeSkyBox()
 		std::cout<<__FILE__<<"::"<<__LINE__<<"ERROR: element not found"<<std::endl;
 	}
 
-	textures["skybox"] = std::shared_ptr<Texture>(new CubeMap);
+	//textures["skybox"] = std::shared_ptr<Texture>(new CubeMap);
 	std::string textureDir = "textures/skybox/";
 	std::vector<std::string> tex = { textureDir + "right.jpg", textureDir + "left.jpg", textureDir + "top.jpg", textureDir + "bottom.jpg",  textureDir + "front.jpg",textureDir + "back.jpg" };
-	textures["skybox"]->loadTextures(tex);
+	//textures["skybox"]->loadTextures(tex);
 	Shader* shaderSky = new Shader(std::vector<std::string>({ "cubeMap.ver" }), { "cubeMap.frag" });
 	//shaders["skybox"] = std::shared_ptr<Shader>(new Shader(std::vector<std::string>({ "cubeMap.ver" }), { "cubeMap.frag" }));
 	shaders["skybox"] = std::shared_ptr<Shader>(shaderSky);

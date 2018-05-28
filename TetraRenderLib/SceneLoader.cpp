@@ -3,7 +3,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
+#include <vector>
+#include "CubeMap.h"
 #include "waveFrontLoader.h"
 #include "ShaderPBR.h"
 
@@ -26,6 +27,10 @@ void SceneLoader::setSceneToLoad(std::string file)
 	std::string json = std::string((std::istreambuf_iterator<char>(sceneSource)), std::istreambuf_iterator<char>());
 
 	doc.Parse(json.c_str());
+	if (doc.HasParseError())
+	{
+		std::cout << "PARSE ERROR \n";
+	}
 
 }
 
@@ -54,15 +59,14 @@ TEXTURE_CONTAINER SceneLoader::loadTextures()
 {
 	std::cout<<__FILE__<<" "<<__LINE__<<" loading textures"<<std::endl;
 	TEXTURE_CONTAINER textures;
-	rapidjson::Value::MemberIterator iterator = doc.FindMember("textures");
 	rapidjson::Value& texs = doc["textures"];
 	//assert(iterator != d.End());
 	assert(texs.IsArray());
 
 	for (unsigned int i = 0; i < texs.Size(); i++)
 	{
-		std::string texPath = texs[i].GetString();
-		textures[texPath] = std::shared_ptr<Texture>(loadTexture(texPath));
+		std::shared_ptr<Texture> tex( loadTexture(texs[i]));
+		textures[tex->getName()] = tex;
 	}
 	return textures;
 }
@@ -121,22 +125,20 @@ MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CON
 		std::string shaderName = mats[i]["shader"].GetString();
 		std::map<std::string, std::string> channels;
 		//we iterate accross the channels to find them all
+		materials[matName] = std::shared_ptr<Material>(new Material(shaders[shaderName]));
 		for (rapidjson::Value::MemberIterator j = mats[i]["channels"].MemberBegin(); j != mats[i]["channels"].MemberEnd(); j++)
 		{
-			channels[j->name.GetString()] = j->value.GetString();
-		}
-
-		materials[matName] = std::shared_ptr<Material>(new Material(shaders[shaderName]));
-		for (auto tex : channels)
-		{
-			std::string texPath = tex.second;
-			//In the case the texture wasn't loaded. We load it.
-			if (textures.find(texPath) == textures.end())
+			std::string channelName = j->name.GetString();
+			
+			std::shared_ptr<Texture> texture(loadTexture(j->value));
+			//We only add the new texture if it doesn't already exists
+			if (textures.find(texture->getName()) == textures.end())
 			{
-				textures[texPath] = std::shared_ptr<Texture>(loadTexture(texPath));
-				
+				textures[texture->getName()] = texture;
 			}
-			materials[matName]->setChannel(textures[texPath], tex.first);
+			
+			materials[matName]->setChannel(texture, channelName);
+
 		}
 	}
 
@@ -294,11 +296,31 @@ Light * tetraRender::SceneLoader::loadLight(rapidjson::Value & go)
 	return light;
 }
 
-Texture * SceneLoader::loadTexture(std::string texturePath)
+Texture * SceneLoader::loadTexture(rapidjson::Value& texture)
 {
-	std::string texName = texturePath;
 	Texture *tex = (new Texture());
-	tex->loadTexture(texName);
+	if (texture.IsString())
+	{
+		tex->loadTexture(texture.GetString());
+		tex->setName(texture.GetString());
+	}
+	else if(texture.IsObject())
+	{
+		if (texture["type"] == "CUBEMAP")
+		{
+			delete tex;
+			CubeMap* map = new CubeMap();
+			std::string textureDir = texture["file"].GetString();
+			textureDir += "/";
+			std::vector<std::string> cubeSides = { textureDir + "right.jpg", textureDir + "left.jpg", textureDir + "top.jpg", textureDir + "bottom.jpg",  textureDir + "front.jpg",textureDir + "back.jpg" };
+			map->loadTextures(cubeSides);
+			tex = map;
+		}
+		std::string name = texture["name"].GetString();
+		tex->setName(name);
+	}
+	
+	
 	return tex;
 }
 
