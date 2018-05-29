@@ -20,16 +20,22 @@ enum RenderTag {
 /// <remarks>	Fteppe, 25/04/2018. </remarks>
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-enum class GameObjectType {
-	LIGHT,
-	SOLID,
-	GAME_OBJECT,
-	CAMERA
-};
+
 //General enums that can be used accross the engine.
 enum EngineEnum {
 	SCREEN_FRAMEBUFFER //This enum is used to build a frameBuffer that will render to the screen as a primary output.
 };
+
+namespace tetraRender {
+	enum class  ParameterType { VEC3, FLOAT, INT };
+
+	enum class GameObjectType {
+		LIGHT,
+		SOLID,
+		GAME_OBJECT,
+		CAMERA
+	};
+}
 
 #define tetraBitField GLbitfield
 

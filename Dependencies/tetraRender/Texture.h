@@ -20,7 +20,6 @@ namespace tetraRender
 		~Texture();
 		void bind();
 		void loadTexture(std::string textureName);
-		virtual void loadTextures(std::vector<std::string> textureName);
 		void applyTexture(GLuint program, GLuint texturePos, int textureUnit);
 		void setDataType(GLenum dataType);
 		void setFormat(GLenum format);

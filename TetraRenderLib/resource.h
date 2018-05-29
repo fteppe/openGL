@@ -5,7 +5,7 @@
 // Next default values for new objects
 // 
 #include <string>
-
+#include "ParameterContainer.h"
 
 namespace tetraRender
 {
@@ -18,6 +18,7 @@ public:
 	std::string getName();
 protected:
 	std::string name;
+	ParameterContainer parameters;
 
 };
 }

@@ -84,8 +84,8 @@ Global
 		{3DECBD49-B112-4504-92A5-7F781A899379} = {E32AC566-0CF1-48A1-94D2-B16A60EC7F4D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {39BABE6F-64FF-43C3-8F19-8EDDFF05CEE5}
 		Qt5Version = 10.1
+		SolutionGuid = {39BABE6F-64FF-43C3-8F19-8EDDFF05CEE5}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
