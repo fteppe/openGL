@@ -1,6 +1,7 @@
 {
   "textures": {
-    "file": "textures/skybox"
+    "file": "textures/skybox",
+      "name": "skybox"
   },
 
   "shaders": [
