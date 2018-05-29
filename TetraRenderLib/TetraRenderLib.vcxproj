@@ -183,6 +183,7 @@
     <ClInclude Include="InstancedObject.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="ParameterContainer.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="PreprocessorShader.h" />
     <ClInclude Include="RenderPass.h" />
@@ -210,6 +211,7 @@
     <ClCompile Include="InstancedObject.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="ParameterContainer.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="PreprocessorShader.cpp" />
     <ClCompile Include="RenderPass.cpp" />
