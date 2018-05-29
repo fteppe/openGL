@@ -76,6 +76,13 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 		this->numShadows = numShadows;
 	}
 
+	void tetraRender::RenderPipeline::update(Scene & scene)
+	{
+		auto postProcessMat = renderPasses[1]->getMaterial();
+		auto sky = scene.getTexture("skybox");
+		postProcessMat->setChannel(sky, "skybox");
+	}
+
 	std::vector<std::unique_ptr<RenderPass>>& tetraRender::RenderPipeline::getShadowMapsPass()
 	{
 		return shadowmapsPasses;
@@ -198,10 +205,12 @@ void tetraRender::RenderPipeline::setupPostProcessing(Scene & scene)
 	postProcessMat->setChannel(gBuffer["depth"], "depth");
 	postProcessMat->setChannel(gBuffer["specularity"], "specularity");
 	postProcessMat->setChannel(gBuffer["fragPos"], "fragPos");
+
 	//postProcessMat->setChannel(gBuffer["shadowDistance"], "shadowDistance");
 	//postProcessMat->setChannel(gBuffer["shadowMap"], "shadowMap");
 
-	screenObj->setMaterial(postProcessMat);
+	renderPasses[1]->setMat(postProcessMat);
+	//screenObj->setMaterial(postProcessMat);
 	screenObj->addTag(POST_PROCESS);
 	//We add all these newly created elements to the scene;
 	

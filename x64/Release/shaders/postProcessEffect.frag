@@ -23,7 +23,7 @@ void main(){
     vec4 color = depthOfField(fullColor, depth, depthVal, depthThreshold, 4);
 	vec4 bloom = blur(bright, 0.01, 4);
 	//bloom = vec4(color);
-    colorOut = toneMapping((color + bloom)/2);
+    colorOut = toneMapping((color)/2);
 	//colorOut = bloom;
 }
 

@@ -16,6 +16,7 @@ uniform sampler2D depth;
 uniform sampler2D specularity;
 uniform sampler2D fragPos;
 uniform sampler2D shadowMaps[5];
+uniform samplerCube skybox;
 
 
 uniform float near;
@@ -44,18 +45,22 @@ void main()
     vec3 fogColor = vec3((depthVal)*vec4(1) + (1-depthVal)*texture(color,UV));
 	
     //FragColor = vec4(fogColor,1);
+	vec3 normal = texture(normals, UV).rgb;
 	vec4 lightDim = texture(specularity, UV);
 	vec4 colorSample = texture(color, UV);
+	vec4 IBL = texture(skybox, normal , 6);
+	IBL = pow(IBL + 0.2, vec4(10));
 	//colorSample = vec4(1);
-	colorSample = colorSample * vec4(light,0);
-
+	colorSample = colorSample * (vec4(light,0));
 	ColorOutput = colorSample;
-	float bloomThreshold = 0.9;
+	
+	//ColorOutput = vec4(normal, 1);
+	float bloomThreshold = 1.0;
 	//The numbers in the brightness calculations are based on human perception.
 	float brightness = dot(colorSample.rgb, vec3(0.2126, 0.7152, 0.0722));
 	float isABoveThreshold = float(brightness > bloomThreshold);
 	bright = colorSample * isABoveThreshold;
-	
+	//bright = vec4(0.0);
 	
     vec3 pos = vec3(texture(fragPos, UV));
 }

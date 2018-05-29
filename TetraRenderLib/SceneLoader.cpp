@@ -306,18 +306,40 @@ Texture * SceneLoader::loadTexture(rapidjson::Value& texture)
 	}
 	else if(texture.IsObject())
 	{
-		if (texture["type"] == "CUBEMAP")
+		if (texture.HasMember("gamma"))
 		{
-			delete tex;
-			CubeMap* map = new CubeMap();
-			std::string textureDir = texture["file"].GetString();
-			textureDir += "/";
-			std::vector<std::string> cubeSides = { textureDir + "right.jpg", textureDir + "left.jpg", textureDir + "top.jpg", textureDir + "bottom.jpg",  textureDir + "front.jpg",textureDir + "back.jpg" };
-			map->loadTextures(cubeSides);
-			tex = map;
+			tex->setGamma(true);
 		}
-		std::string name = texture["name"].GetString();
-		tex->setName(name);
+		if (texture.HasMember("type"))
+		{
+		
+			if (texture["type"] == "CUBEMAP")
+			{
+				delete tex;
+				CubeMap* map = new CubeMap();
+				map->setGamma(texture.HasMember("gamma"));
+				std::string textureDir = texture["file"].GetString();
+				textureDir += "/";
+				std::vector<std::string> cubeSides = { textureDir + "right.jpg", textureDir + "left.jpg", textureDir + "top.jpg", textureDir + "bottom.jpg",  textureDir + "front.jpg",textureDir + "back.jpg" };
+				map->loadTextures(cubeSides);
+				tex = map;
+			}
+			
+		}
+		if (!texture.HasMember("name"))
+		{
+			tex->setName(texture["file"].GetString());
+			tex->loadTexture(texture["file"].GetString());
+		}
+		else
+		{
+			std::string name = texture["name"].GetString();
+			tex->setName(name);
+		}
+		
+
+		
+		
 	}
 	
 	

@@ -14,7 +14,7 @@ void CubeMap::loadTextures(std::vector<std::string > cubeMapElements)
 
 	int width, height, nrChannels;
 	unsigned char* data;
-	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+	glBindTexture(textureType, textureID);
 	setTextureParameters();
 	//the regular order is : right, left, top, bottom, back, front
 	for (int i = 0 ; i < cubeMapElements.size() ; i++)
@@ -28,19 +28,7 @@ void CubeMap::loadTextures(std::vector<std::string > cubeMapElements)
 		std::cout << "done loading " << textureName << std::endl;
 	}
 	
-	//texturePath = textureName;
-	
-	//textureData = std::vector<unsigned char>(data, data+width* height* nrChannels);
-
-	
-	//Depending on the number of channels the texture is loaded differently.
-	
-	//once the texture has been loaded we free it from the ram where it is no longer used.
-	
 	glGenerateMipmap(textureType);
-
-
-	
 }
 
 

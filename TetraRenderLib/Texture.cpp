@@ -14,6 +14,7 @@ Texture::Texture()
 	width = 0;
 	height = 0;
 	nrChannels = 0;
+	gamma = false;
 }
 
 
@@ -135,7 +136,12 @@ void Texture::loadImage(GLuint texType, int width, int height, int nrChannels, u
 	}
 	else if (nrChannels == 3)
 	{
-		glTexImage2D(texType, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		GLenum internalFormat = GL_RGB;
+		if (gamma)
+		{
+			internalFormat = GL_SRGB;
+		}
+		glTexImage2D(texType, 0, internalFormat, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	}
 	else
 	{
@@ -143,12 +149,18 @@ void Texture::loadImage(GLuint texType, int width, int height, int nrChannels, u
 	}
 }
 
+void tetraRender::Texture::setGamma(bool needsGammaCorrection)
+{
+	gamma = needsGammaCorrection;
+
+}
+
 void Texture::setTextureParameters()
 {
 	
 	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
 }

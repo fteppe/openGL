@@ -36,6 +36,7 @@ namespace tetraRender
 		/// <param name="index">The index of the renderPass that will have it's Camera changed.</param>
 		void setShadowPoV(Camera* PoV, int index);
 		void setNumShadows(unsigned int numShadows);
+		void update(Scene& scene);
 		std::vector<std::unique_ptr<RenderPass>>& getShadowMapsPass();
 		
 

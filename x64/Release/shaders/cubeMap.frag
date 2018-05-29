@@ -14,6 +14,8 @@ void main()
 	vec3 pos = vec3(vertexPos.x,vertexPos.y,vertexPos.z);
 	light = vec3(1);
 	normal  = vec3(0);
-    FragColor = texture(skybox , normalize(pos));
-	FragColor = pow(FragColor, vec4(2.2)) * 5;
+	vec4 IBL = texture(skybox, pos, 4);
+	IBL = pow(IBL + 0.2, vec4(5));
+    FragColor = texture(skybox , normalize(pos)) * 5;
+	//FragColor = IBL;
 }

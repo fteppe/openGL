@@ -84,7 +84,7 @@ void tetraRender::Scene::load(std::string scene)
 	gameObjects.insert(gameObjects.end(), elementsLoaded.begin(), elementsLoaded.end());
 
 	makeSkyBox();
-
+	renderPipeLine->update(*this);
 	//Testing puposes.
 
 	//setupPostProcessing();
