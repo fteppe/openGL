@@ -27,16 +27,19 @@ namespace tetraRender
 		virtual void setProgramInformation(Scene & scene, Solid const& object);
 		virtual void sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> textures);
 		void resetTextureUnitCount();
-	protected:
-		void compileShader(GLuint shader, std::string shaderPath);
-		void linkProgram();
-		virtual void getUniformLocations();
+
+
 		void sendMatrix4(std::string name, glm::mat4);
 		void sendFloat(std::string name, float floatIn);
 		void sendInt(std::string name, int intIn);
 		void sendVec3(std::string name, glm::vec3 vec);
 		void sendLight(std::string name, Light light);
 		void sendTexture(std::string channelName, std::shared_ptr<Texture>);
+
+	protected:
+		void compileShader(GLuint shader, std::string shaderPath);
+		void linkProgram();
+		virtual void getUniformLocations();
 		GLint getUniformLocation(std::string uniform);
 
 		unsigned int program;
