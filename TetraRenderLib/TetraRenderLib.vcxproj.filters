@@ -1,176 +1,179 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Fichiers sources">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Fichiers de ressources">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Common.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="EventHandler.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Polygon.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderPass.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneLoader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderPBR.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Solid.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Vec3.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="waveFrontLoader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameBuffer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeMap.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderPostProcess.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="InstancedObject.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderPipeline.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="PreprocessorShader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="CubeMap.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="EventHandler.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="FrameBuffer.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Polygon.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderPass.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneLoader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderPBR.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Solid.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Vec3.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="waveFrontLoader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderPostProcess.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="InstancedObject.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderPipeline.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="ParameterContainer.cpp">
+      <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="PreprocessorShader.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderPass.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderPipeline.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneLoader.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Vec3.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="waveFrontLoader.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>sources\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeMap.cpp">
+      <Filter>sources\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancedObject.cpp">
+      <Filter>sources\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>sources\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>sources\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>sources\resources</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>sources\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Polygon.cpp">
+      <Filter>sources\resources</Filter>
     </ClCompile>
     <ClCompile Include="Resource.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>sources\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderPostProcess.cpp">
+      <Filter>sources\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderPBR.cpp">
+      <Filter>sources\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>sources\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Solid.cpp">
+      <Filter>sources\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>sources\resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="script.bat">
-      <Filter>Fichiers sources</Filter>
-    </None>
+    <ClInclude Include="Camera.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeMap.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="EventHandler.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameBuffer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="InstancedObject.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ParameterContainer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PreprocessorShader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPass.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPipeline.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneLoader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderPBR.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderPostProcess.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Solid.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec3.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="waveFrontLoader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="script.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="sources">
+      <UniqueIdentifier>{4b9785a4-0021-499d-9cfb-7ea798ccba07}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="headers">
+      <UniqueIdentifier>{c17e5d2d-f770-4e51-a5e5-f0743294c285}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="sources\resources">
+      <UniqueIdentifier>{c4933da4-6877-40b5-8a5e-79f1e6943bfa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
