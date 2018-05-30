@@ -7,7 +7,7 @@
 
 namespace tetraRender
 {
-	class Material
+	class Material : public Resource
 	{
 	public:
 		Material();
