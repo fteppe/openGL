@@ -7,7 +7,14 @@
 #include <iostream>
 #include <iomanip>
 
+#include <crtdbg.h>
+#include <tetraRender\Scene.h>
+#include <tetraRender\EventHandler.h>
 
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/System/Clock.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
 
 #include "imgui.h"
 #include "imgui-sfml.h"
@@ -26,24 +33,30 @@ WindowBuilder::WindowBuilder()
 	settings.antialiasingLevel = 2; // Optional
 									// Request OpenGL version 3.2 (optional but recommended)
 	settings.majorVersion = 4;
-	settings.minorVersion = 5;
+	settings.minorVersion = 3;
 	settings.attributeFlags = sf::ContextSettings::Core;
 
 	unsigned width = WIDTH;
 	unsigned height = HEIGHT;
 
 	
-	window.create(sf::VideoMode(width, height), "Tetra Engine", sf::Style::Close, settings);
-	ImGui::SFML::Init(window);
+	window.create(sf::VideoMode(width, height), "Tetra Engine", sf::Style::Default);
+	window.setFramerateLimit(60);
 
-	glEnable(GL_DEPTH_TEST);
-	glCullFace(GL_BACK);
+	window.setActive();
+
 	glewExperimental = GL_TRUE;
 	glewInit();
+	glEnable(GL_DEPTH_TEST);
+	glCullFace(GL_BACK);
+	ImGui::SFML::Init(window);
+
+
+	
 	//apparently an old implementation bug tends to raise an error on startup. We call geterror to remove it.
 	glGetError();
 
-	//window.resetGLStates();
+	
 	
 	//std::cout << glGetString(GL_VERSION) << std::endl;
 	
@@ -55,11 +68,8 @@ WindowBuilder::WindowBuilder(std::string sceneFile) : WindowBuilder()
 {
 	tetraRender::Camera cam(600.0f, 800.0f, 0.75f);
 	cam.setUp(glm::vec3(0, 0, 0));
-	//new tetraRender::Scene(cam);
-
-	
-	//scene = std::shared_ptr<tetraRender::Scene>(new tetraRender::Scene(cam));
-	//scene->load(sceneFile);
+	scene = std::shared_ptr<tetraRender::Scene>(new tetraRender::Scene(cam));
+	scene->load(sceneFile);
 }
 
 
@@ -69,50 +79,40 @@ WindowBuilder::~WindowBuilder()
 
 void WindowBuilder::draw()
 {
-	//tetraRender::EventHandler handler(scene);
-	while (window.isOpen())
-	{
-		// check all the window's events that were triggered since the last iteration of the loop
+	sf::CircleShape shape(100.f);
+	shape.setFillColor(sf::Color::Green);
+	tetraRender::EventHandler handler(scene);
 
+	sf::Clock deltaClock;
+	while (window.isOpen()) {
+		window.clear();
 
 		sf::Event event;
-		int time = clock.getElapsedTime().asMilliseconds();
-		int frameTime = sf::milliseconds(16).asMilliseconds();
-		bool needNewFrame = time >= frameTime;
-		//It would seem that without this sync, there is a fall in performance. Not sure why yet. Also the application takes way more resources without it;
-		//std::cout << '\r' << std::setw(4) << std::setfill(' ');
-		if (needNewFrame)
-		{
-			//Render time.
-			clock.restart();
-			//scene->renderScene();
-		}
-		if (window.pollEvent(event))
-		{
-
-			//handler.handle(event);
-			// "close requested" event: we close the window
-			if (event.type == sf::Event::Closed)
-			{
+		while (window.pollEvent(event)) {
+			ImGui::SFML::ProcessEvent(event);
+			handler.handle(event);
+			if (event.type == sf::Event::Closed) {
 				window.close();
-
 			}
 		}
-		ImGui::SFML::ProcessEvent(event);
+		scene->renderScene();
 		ImGui::SFML::Update(window, deltaClock.restart());
 
 
-		if (ImGui::Button("Update window title")) {
-			// this code gets if user clicks on the button
-			// yes, you could have written if(ImGui::InputText(...))
-			// but I do this to show how buttons work :)
-		}
-		ImGui::End(); // end window
+		ImGui::Begin("Hello, world!");
+		ImGui::Button("Look at this pretty button3333");
+		ImGui::End();
 
-		ImGui::SFML::Render(window);
+		//window.pushGLStates();
+		//ImGui::SFML::Render(window);
+		window.draw(shape);
+
+		//window.popGLStates();
 		window.display();
-
-
-
 	}
+
+	ImGui::SFML::Shutdown();
+
+
+	
 }
