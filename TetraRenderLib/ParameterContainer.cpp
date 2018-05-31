@@ -40,7 +40,7 @@ glm::vec3 tetraRender::ParameterContainer::getVec3(std::string valname)
 	return val;
 }
 
-parametersList tetraRender::ParameterContainer::getParameters()
+std::vector<parameter> tetraRender::ParameterContainer::getParameters()
 {
 	return parameters;
 }

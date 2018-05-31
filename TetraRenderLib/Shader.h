@@ -27,7 +27,7 @@ namespace tetraRender
 		virtual void setProgramInformation(Scene & scene, Solid const& object);
 		virtual void sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> textures);
 		void resetTextureUnitCount();
-
+		void use();
 
 		void sendMatrix4(std::string name, glm::mat4);
 		void sendFloat(std::string name, float floatIn);

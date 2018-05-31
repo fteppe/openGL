@@ -1,9 +1,4 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by Octree2.rc
-
-// Next default values for new objects
-// 
+#pragma once
 #include <string>
 #include "ParameterContainer.h"
 
@@ -18,7 +13,7 @@ public:
 	std::string getName();
 protected:
 	std::string name;
-	ParameterContainer parameters;
+	ParameterContainer parametersContainer;
 
 };
 }

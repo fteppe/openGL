@@ -1,9 +1,12 @@
 #pragma once
+#include "Resource.h"
 #include "Shader.h"
 #include "Mesh.h"
 #include <memory>
 #include <map>
 #include <string>
+
+
 
 namespace tetraRender
 {
@@ -24,6 +27,12 @@ namespace tetraRender
 		std::shared_ptr<Shader> getShaderProgram();
 
 	private:
+		
+		/// <summary>
+		/// Fills the parameter container, we query openGL and the shader once it has compiled to get all the uniform variables
+		/// that start with pu_ for public.
+		/// </summary>
+		void fillParameterContainer();
 		//We have a pointer on a shader because the same shader can be used with different textures.
 		//No ownership of the shader, is only an observer.
 		std::shared_ptr<Shader> shader_ptr;

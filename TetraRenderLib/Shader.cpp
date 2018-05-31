@@ -160,6 +160,11 @@ void tetraRender::Shader::resetTextureUnitCount()
 	this->highestTextureUnitUsed = 0;
 }
 
+void tetraRender::Shader::use()
+{
+	glUseProgram(program);
+}
+
 void Shader::compileShader(GLuint shader, std::string shaderPath)
 {
 	std::ifstream shaderSource(shaderPath);

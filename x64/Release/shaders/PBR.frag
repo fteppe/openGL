@@ -17,7 +17,6 @@ layout(location = 2) out vec3 specOut;
 layout(location = 3) out vec3 fragPos;
 layout(location = 4) out float fragDepthShadowOut;
 
-uniform float[7] light;
 uniform float time;
 uniform vec3 camPos;
 uniform sampler2D diffuse;
@@ -27,6 +26,13 @@ uniform sampler2D depthMap;
 uniform samplerCube skybox;
 
 uniform sampler2D shadowMap;
+
+struct input_var{
+	vec3 color;
+};
+
+uniform input_var pu_var;
+
 
 vec3 fragLight(float light[7], vec3 normalWorld, vec3 fragPosWorld);
 vec3 albedo(vec2 UV);
@@ -92,6 +98,7 @@ void main()
 	normalOut = normal_;
 	vec4 reflectionVal = cubeMapReflection(normal_, fragPosWorld, camPos);
 	FragColor =  color;
+	FragColor = vec4(pu_var.color,0);
 }
 
 vec3 albedo(vec2 UVin)

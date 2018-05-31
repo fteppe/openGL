@@ -13,7 +13,7 @@
 
 namespace tetraRender
 {
-	class Texture : public Resource
+	class Texture : public tetraRender::Resource
 	{
 	public:
 		Texture();
