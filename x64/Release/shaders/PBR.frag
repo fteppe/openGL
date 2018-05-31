@@ -9,13 +9,11 @@ in vec3 posTan;
 in vec3 camTan;
 //in vec3 tang;
  
-in vec4 fragDepthShadow;
 
 layout(location = 0) out vec4 FragColor;
 layout(location = 1) out vec3 normalOut;
 layout(location = 2) out vec3 specOut;
 layout(location = 3) out vec3 fragPos;
-layout(location = 4) out float fragDepthShadowOut;
 
 uniform float time;
 uniform vec3 camPos;
@@ -43,29 +41,11 @@ vec4 cubeMapReflection(vec3 normalWorld, vec3 fragPosWorld, vec3 camPos);
 float shadowCalculation(vec4 fragShadowPos, sampler2D shadowMap);
 
 
-float shadowCalculation(vec4 fragShadowPos, sampler2D shadowMap)
-{
-	vec3 shadowPos = fragShadowPos.xyz/fragShadowPos.w;
-	shadowPos = shadowPos * 0.5 + 0.5;
-    float shadowTex =  texture(shadowMap, shadowPos.xy).r ;
-    float currentDepth = (shadowPos.z);
-    
-    float bias = 0.005;
-	//So if the depth is in front of the closest item to the light then it's in the light.
-    float outVal  = currentDepth - bias > shadowTex  ? 0.0 : 1.0;
-
-	//This is to know if what is outside the shadowmap is. We consider that it's in the shadow.
-	outVal = (shadowPos.x>1.0 || shadowPos.x<0.0) ? 0.0 : outVal;
-	outVal = (shadowPos.y>1.0 || shadowPos.y<0.0) ? 0.0 : outVal;
-
-	return outVal;
-}
 
 void main()
 {
    
     
-    fragDepthShadowOut = shadowCalculation(fragDepthShadow, shadowMap);
 	vec3 pos = fragPosWorld;
 	vec3 normal_ = vec3(0,1,0);//normalWorld;
 	vec2 translation = parralax(camTan, posTan);
@@ -98,7 +78,7 @@ void main()
 	normalOut = normal_;
 	vec4 reflectionVal = cubeMapReflection(normal_, fragPosWorld, camPos);
 	FragColor =  color;
-	FragColor = vec4(pu_var.color,0);
+	//FragColor = vec4(pu_var.color,0);
 }
 
 vec3 albedo(vec2 UVin)

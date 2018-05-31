@@ -7,13 +7,10 @@
 #include <iostream>
 #include <iomanip>
 
-#include <crtdbg.h>
 
-#include <tetraRender\Camera.h>
-#include <tetraRender\Scene.h>
-#include <tetraRender\EventHandler.h>
-#include <tetraRender/Common.h>
 
+#include "imgui.h"
+#include "imgui-sfml.h"
 
 //This will build a window using open GL and stuff, this is a way to unclutter the main.
 WindowBuilder::WindowBuilder()
@@ -37,15 +34,16 @@ WindowBuilder::WindowBuilder()
 
 	
 	window.create(sf::VideoMode(width, height), "Tetra Engine", sf::Style::Close, settings);
+	ImGui::SFML::Init(window);
+
 	glEnable(GL_DEPTH_TEST);
 	glCullFace(GL_BACK);
 	glewExperimental = GL_TRUE;
 	glewInit();
-	
 	//apparently an old implementation bug tends to raise an error on startup. We call geterror to remove it.
 	glGetError();
 
-	
+	//window.resetGLStates();
 	
 	//std::cout << glGetString(GL_VERSION) << std::endl;
 	
@@ -60,8 +58,8 @@ WindowBuilder::WindowBuilder(std::string sceneFile) : WindowBuilder()
 	//new tetraRender::Scene(cam);
 
 	
-	scene = std::shared_ptr<tetraRender::Scene>(new tetraRender::Scene(cam));
-	scene->load(sceneFile);
+	//scene = std::shared_ptr<tetraRender::Scene>(new tetraRender::Scene(cam));
+	//scene->load(sceneFile);
 }
 
 
@@ -71,7 +69,7 @@ WindowBuilder::~WindowBuilder()
 
 void WindowBuilder::draw()
 {
-	tetraRender::EventHandler handler(scene);
+	//tetraRender::EventHandler handler(scene);
 	while (window.isOpen())
 	{
 		// check all the window's events that were triggered since the last iteration of the loop
@@ -85,24 +83,35 @@ void WindowBuilder::draw()
 		//std::cout << '\r' << std::setw(4) << std::setfill(' ');
 		if (needNewFrame)
 		{
-
-
 			//Render time.
-
-			std::cout << '\r' << std::setw(4) << std::setfill(' ') << time;
 			clock.restart();
-
-			scene->renderScene();
-			window.display();
+			//scene->renderScene();
 		}
 		if (window.pollEvent(event))
 		{
-			//scene->eventHandler(event);
-			handler.handle(event);
+
+			//handler.handle(event);
 			// "close requested" event: we close the window
 			if (event.type == sf::Event::Closed)
+			{
 				window.close();
+
+			}
 		}
+		ImGui::SFML::ProcessEvent(event);
+		ImGui::SFML::Update(window, deltaClock.restart());
+
+
+		if (ImGui::Button("Update window title")) {
+			// this code gets if user clicks on the button
+			// yes, you could have written if(ImGui::InputText(...))
+			// but I do this to show how buttons work :)
+		}
+		ImGui::End(); // end window
+
+		ImGui::SFML::Render(window);
+		window.display();
+
 
 
 	}

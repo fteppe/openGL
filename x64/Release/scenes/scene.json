@@ -19,20 +19,19 @@
       "type": "shaderPBR",
       "vertex": [ "texture.ver" ],
       "fragment": [ "PBR.frag" ]
+    },
+    {
+      "name": "color",
+      "type": "shaderPBR",
+      "vertex": [ "transform.ver" ],
+      "fragment": ["col.frag"]
     }
   ],
   "materials": [
     {
       "name": "PBR",
-      "shader": "generic2",
+      "shader": "color",
       "channels": {
-        "normalMap": "textures/EyCkvNyNormal.jpg",
-        "specularityMap": "textures/EyCkvNy.jpg",
-        "diffuse": {
-          "file": "textures/No-Mans-Sky-1.jpg",
-          "gamma": true
-        },
-        "cubemap": "skybox"
       }
     },
     {
