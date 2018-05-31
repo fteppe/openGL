@@ -165,6 +165,11 @@ std::vector<Light*> tetraRender::Scene::getLights()
 	return lights;
 }
 
+MAT_CONTAINER & tetraRender::Scene::getMaterials()
+{
+	return materials;
+}
+
 RenderPipeline & tetraRender::Scene::getRenderPipeLine()
 {
 	return *this->renderPipeLine;

@@ -2,6 +2,8 @@
 
 using namespace tetraRender;
 
+const std::string nameField = "name";
+
 Resource::Resource()
 {
 }
@@ -13,10 +15,10 @@ Resource::~Resource()
 
 void Resource::setName(std::string name)
 {
-	this->name = name;
+	parametersContainer.set(nameField, name);
 }
 
 std::string Resource::getName()
 {
-	return name;
+	return parametersContainer.getString(nameField);
 }

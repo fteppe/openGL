@@ -77,7 +77,7 @@ namespace tetraRender
 		float getElapsedTime() const;
 		std::vector<GameObject *> getGameObjects();
 		std::vector<Light * > getLights();
-
+		MAT_CONTAINER & getMaterials();
 		RenderPipeline& getRenderPipeLine();
 
 	private:
