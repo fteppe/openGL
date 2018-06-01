@@ -7,7 +7,6 @@
 #include "Common.h"
 #include "RenderPipeline.h"
 #include <vector>
-#include <SFML/Window.hpp>
 
 namespace tetraRender
 {
@@ -39,7 +38,7 @@ namespace tetraRender
 		/// <param name="elapsed">	The elapsed time since the creation of the scene </param>
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		void animate(sf::Clock elapsed);
+		void animate(float elapsed);
 		~Scene();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +98,6 @@ namespace tetraRender
 		//I don't want to deal with supporting omni lights that generate 3D shadows for now.
 		Camera shadowProjection;
 		Light light;
-		sf::Clock clock;
 		std::vector<GameObject*> gameObjects;
 		GameObject* skybox;
 		//SceneLoader loader;

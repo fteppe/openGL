@@ -1,7 +1,7 @@
 #pragma once
-#include <SFML/Window.hpp>
-#include <SFML\Graphics\RenderWindow.hpp>
+
 #include <tetraRender/Scene.h>
+#include <SDL2/SDL.h>
 //
 class WindowBuilder
 {
@@ -13,9 +13,8 @@ public:
 	void draw();
 
 private:
-	sf::RenderWindow window;
+	SDL_Window* window;
+	SDL_GLContext gl_context;
 	std::shared_ptr<tetraRender::Scene> scene;
-	sf::Clock clock;
-	sf::Clock deltaClock;
 };
 

@@ -26,15 +26,14 @@ tetraRender::Scene::Scene(Camera cam)
 	this->shadowProjection = this->cam;
 	shadowProjection.setPos(glm::vec3(-2, 1, 2));
 	shadowProjection.setProjectionOrtho(2, 2, 1, 10);
-	clock.restart();
 }
 
 
-void tetraRender::Scene::animate(sf::Clock elapsed)
+void tetraRender::Scene::animate(float elapsed)
 {
 	glm::mat4 camPos = glm::lookAt(glm::vec3(0.0, 5.0, 2.0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
 	
-	float rotation = elapsed.getElapsedTime().asMilliseconds();
+	float rotation = elapsed;
 	//std::cout << rotation << std::endl;
 	glm::mat4 rot = glm::rotate(0.002f, glm::vec3(0, 0, 1));
 	glm::vec3 pos = cam.getPos();
@@ -143,8 +142,7 @@ std::shared_ptr<Texture> tetraRender::Scene::getTexture(std::string tex)
 
 float tetraRender::Scene::getElapsedTime() const
 {
-	sf::Time time= clock.getElapsedTime();
-	float elapsedTime = time.asSeconds();
+	float elapsedTime = 0.0;
 	return elapsedTime;
 }
 
