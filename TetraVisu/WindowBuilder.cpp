@@ -4,6 +4,7 @@
 
 #include <iostream>
 
+#include <tetraRender/resource.h>
 #include <tetraRender\Scene.h>
 #include "imgui.h"
 #include "imgui_impl_sdl_gl3.h"
@@ -37,7 +38,7 @@ WindowBuilder::WindowBuilder()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 	SDL_DisplayMode current;
 	SDL_GetCurrentDisplayMode(0, &current);
-	window = SDL_CreateWindow("ImGui SDL2+OpenGL3 example", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	window = SDL_CreateWindow("ImGui SDL2+OpenGL3 example", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE| SDL_RENDERER_PRESENTVSYNC);
 	gl_context = SDL_GL_CreateContext(window);
 	SDL_GL_SetSwapInterval(1); // Enable vsync
 
@@ -73,6 +74,7 @@ WindowBuilder::WindowBuilder(std::string sceneFile) : WindowBuilder()
 	cam.setUp(glm::vec3(0, 0, 0));
 	scene = std::shared_ptr<tetraRender::Scene>(new tetraRender::Scene(cam));
 	scene->load(sceneFile);
+	handler = EventHandler(scene);
 
 }
 
@@ -101,16 +103,34 @@ void WindowBuilder::draw()
 		while (SDL_PollEvent(&event))
 		{
 			ImGui_ImplSdlGL3_ProcessEvent(&event);
+			handler.handle(event);
 			if (event.type == SDL_QUIT)
 				done = true;
 		}
 		scene->renderScene();
 		ImGui_ImplSdlGL3_NewFrame(window);
 
-		ImGui::Begin("ShaderEditor");
-		ImGui::Text("some small text");
+		ImGui::Begin("Material editor");
+		for (auto material : scene->getMaterials())
+		{
+			auto& val = material.second->getParameters();
+			for (auto param : val.getParameters())
+			{
+				//if the parameter is a vector.
+				if (param.second == tetraRender::ParameterType::VEC3)
+				{
+					glm::vec3 vector = val.getVec3(param.first);
+					float vec[3] = { vector.x, vector.y, vector.z };
+					//Imgui::InputFloat3(param.first.c_str(), vec, 5);
+					ImGui::InputFloat3(param.first.c_str(), vec, 2);
+					vector.x = vec[0]; vector.y = vec[1]; vector.z = vec[2];
+					val.set(param.first, vector);
+				}
+			}
+			ImGui::Text("--------");
+		}
 		ImGui::Button("ok");
-
+		ImGui::End();
 		// Rendering
 		glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
 		ImGui::Render();

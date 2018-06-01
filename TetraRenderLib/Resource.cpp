@@ -22,3 +22,8 @@ std::string Resource::getName()
 {
 	return parametersContainer.getString(nameField);
 }
+
+ParameterContainer& tetraRender::Resource::getParameters()
+{
+	return parametersContainer;
+}

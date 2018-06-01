@@ -25,12 +25,7 @@ uniform samplerCube skybox;
 
 uniform sampler2D shadowMap;
 
-struct input_var{
-	vec3 color;
-};
-
-uniform input_var pu_var;
-
+uniform vec3 pu_depth;
 
 vec3 fragLight(float light[7], vec3 normalWorld, vec3 fragPosWorld);
 vec3 albedo(vec2 UV);
@@ -89,7 +84,7 @@ vec3 albedo(vec2 UVin)
 
 vec2 parralax(vec3 camTan, vec3 posTan)
 {
-	float heightScale = 0.1;
+	float heightScale = pu_depth.r;
 	//If there is no bound map we get out of the function without trying to give a valid result.
 	if(textureSize(depthMap,0).x < 2)
 	{

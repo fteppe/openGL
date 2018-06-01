@@ -11,6 +11,7 @@ public:
 	~Resource();
 	void setName(std::string name);
 	std::string getName();
+	ParameterContainer& getParameters();
 protected:
 	std::string name;
 	ParameterContainer parametersContainer;
