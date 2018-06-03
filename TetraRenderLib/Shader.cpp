@@ -53,46 +53,13 @@ Shader::Shader(std::vector<std::string> vertexShaders, std::vector<std::string> 
 	//We create the shaders
 	for (int i = 0; i < vertexShaders.size(); i++)
 	{
-		vertexs.push_back(glCreateShader(GL_VERTEX_SHADER));
+		shaderFiles.push_back(std::pair<std::string, GLenum>(vertexShaders[i], GL_VERTEX_SHADER));
 	}
 	for (int i = 0; i < fragmentShaders.size(); i++)
 	{
-		fragments.push_back(glCreateShader(GL_FRAGMENT_SHADER));
+		shaderFiles.push_back(std::pair<std::string, GLenum>(fragmentShaders[i], GL_FRAGMENT_SHADER));
 	}
-	std::cout << "Compiling shaders" << std::endl;
-	//We compile them
-	for (int i = 0; i < vertexShaders.size(); i++)
-	{
-		compileShader(vertexs[i], shaderDir + vertexShaders[i]);
-	}
-	for (int i = 0; i < fragmentShaders.size(); i++)
-	{
-		compileShader(fragments[i], shaderDir + fragmentShaders[i]);
-	}
-	//we create a program
-	program = glCreateProgram();
-	//we attach each shader to the program
-	for (int i = 0; i < vertexShaders.size(); i++)
-	{
-		glAttachShader(program, vertexs[i]);
-	}
-	for (int i = 0; i < fragmentShaders.size(); i++)
-	{
-		glAttachShader(program, fragments[i]);
-	}
-	//linking
-	std::cout << "Linking" << std::endl;
-	linkProgram();
-	//one this is done we delete the shaders
-	for (int i = 0; i < vertexShaders.size(); i++)
-	{
-		glDeleteShader(vertexs[i]);
-
-	}
-	for (int i = 0; i < fragmentShaders.size(); i++)
-	{
-		glDeleteShader(fragments[i]);
-	}
+	compileAll();
 	getUniformLocations();
 }
 
@@ -103,6 +70,42 @@ Shader::Shader(std::vector<std::string> vertexShaders, std::vector<std::string> 
 Shader::~Shader()
 {
 	glDeleteProgram(program);
+}
+
+void tetraRender::Shader::compileAll()
+{
+	std::vector<GLuint> shaders;
+	for (auto shaderFile : shaderFiles)
+	{
+		shaders.push_back(glCreateShader(shaderFile.second));
+
+	}
+	int i = 0;
+	for (auto shaderFile : shaderFiles)
+	{
+		compileShader(shaders[i], shaderDir + shaderFile.first);
+		i++;
+	}
+	program = glCreateProgram();
+	//we attach each shader to the program
+	i = 0;
+	for (auto shaderFile : shaderFiles)
+	{
+		glAttachShader(program, shaders[i]);
+		i++;
+	}
+	i = 0;
+	for (auto shaderFile : shaderFiles)
+	{
+		glDeleteShader(shaders[i]);
+		i++;
+	}
+
+	//linking
+	std::cout << "Linking" << std::endl;
+	linkProgram();
+
+
 }
 
 unsigned int Shader::getProgram() const

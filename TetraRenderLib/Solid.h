@@ -26,7 +26,7 @@ namespace tetraRender
 		void draw(Scene& scene, std::shared_ptr<Material> mat);
 		std::string description();
 		virtual GameObjectType getType() const;
-
+		Material& getMaterial();
 		void setMaterial(std::shared_ptr<Material> const& mat);
 
 	protected:

@@ -64,11 +64,14 @@ GameObjectType tetraRender::Solid::getType() const
 	return GameObjectType::SOLID;
 }
 
+Material & tetraRender::Solid::getMaterial()
+{
+	return *material_ptr;
+}
+
 
 void Solid::setMaterial(std::shared_ptr<Material> const & mat)
 {
 	material_ptr = mat;
 }
-
-
 

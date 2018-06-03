@@ -23,6 +23,7 @@ namespace tetraRender
 		Shader(std::vector<std::string> vertexShaders, std::vector<std::string> fragmentShaders);
 		//Shader(const Shader& shader);
 		~Shader();
+		void compileAll();
 		unsigned int getProgram() const;
 		virtual void setProgramInformation(Scene & scene, Solid const& object);
 		virtual void sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> textures);
@@ -37,6 +38,8 @@ namespace tetraRender
 		void sendTexture(std::string channelName, std::shared_ptr<Texture>);
 
 	protected:
+		//All the shader files necessary to compile the things.
+		std::vector<std::pair<std::string, GLenum>> shaderFiles;
 		void compileShader(GLuint shader, std::string shaderPath);
 		void linkProgram();
 		virtual void getUniformLocations();
