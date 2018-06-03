@@ -163,17 +163,7 @@ void WindowBuilder::MaterialUI(std::shared_ptr<tetraRender::Material> mat)
 	ImGui::Text("--------");
 	auto& val = mat->getParameters();
 	ImGui::Text(mat->getName().c_str());
-	for (auto param : val.getParameters())
-	{
-		//if the parameter is a vector.
-		if (param.second == tetraRender::ParameterType::VEC3)
-		{
-			glm::vec3 vector = val.getVec3(param.first);
-			vector = Vec3Input(vector, param.first.c_str());
-			val.set(param.first, vector);
-
-		}
-	}
+	parameterInput(val, *mat);
 	ImGui::Text("--------");
 }
 
@@ -183,7 +173,13 @@ void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int p
 	auto children = gameObject->getChildren();
 	if (children.size() > 0)
 	{
-		if (ImGui::TreeNode(std::to_string(pos).c_str(), name.c_str()))
+		bool tree = ImGui::TreeNode(std::to_string(pos).c_str(), name.c_str());
+
+		if (ImGui::IsItemClicked())
+		{
+			selectedObject = gameObject;
+		}
+		if (tree)
 		{
 			int i = 0;
 			for (auto child : gameObject->getChildren())
@@ -191,12 +187,10 @@ void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int p
 				gameObjectTreeUI(child,i);
 			}
 		}
-		if (ImGui::IsItemClicked())
-		{
-			selectedObject = gameObject;
-		}
-
 		ImGui::TreePop();
+
+
+		
 	}
 	else
 	{
@@ -219,21 +213,35 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject)
 {
 	ImGui::Text(selectedObject->getName().c_str());
 	auto& paramContainer = selectedObject->getParameters();
+	parameterInput(paramContainer, *gameObject);
+	selectedObject->update();
+}
+
+void WindowBuilder::parameterInput(tetraRender::ParameterContainer & param, tetraRender::Resource & resource)
+{
+	auto& paramContainer = resource.getParameters();
 	for (auto param : paramContainer.getParameters())
 	{
 		if (param.second == tetraRender::ParameterType::VEC3)
 		{
-			glm::vec3 vector = selectedObject->getParameters().getVec3(param.first);
+			glm::vec3 vector = resource.getParameters().getVec3(param.first);
 			vector = Vec3Input(vector, param.first.c_str());
 			paramContainer.set(param.first, vector);
 
 		}
 		else if (param.second == tetraRender::ParameterType::FLOAT)
 		{
-			float val = selectedObject->getParameters().getFloat(param.first);
-			val = ImGui::InputFloat(param.first.c_str(), &val,0.05f);
+			float val = resource.getParameters().getFloat(param.first);
+			ImGui::InputFloat(param.first.c_str(), &val, 0.1f, 1);
+			paramContainer.set(param.first, val);
+		}
+		else if (param.second == tetraRender::ParameterType::BOOL)
+		{
+			bool val = resource.getParameters().getBool(param.first);
+			ImGui::Checkbox(param.first.c_str(), &val);
 			paramContainer.set(param.first, val);
 		}
 	}
-	selectedObject->update();
+	resource.update();
 }
+

@@ -20,6 +20,7 @@ namespace tetraRender
 		std::vector<float> getDataArray();
 		void setPos(glm::vec3 pos);
 		virtual GameObjectType getType() const;
+		virtual void update();
 		~Light();
 
 		void setProjection(glm::vec3 target, glm::vec3 up);
@@ -27,12 +28,12 @@ namespace tetraRender
 		Camera* getShadowProjection();
 
 		//This bool helps us know if we should get the projection from this light or not.
-		bool hasShadow;
 		//This is the matrix that is used to do the shadow projection in case it is necessary.
 		//if it is null, then it means that this light doesn't project anything.
 		Camera shadowProjection;
 		static const std::string col;
 		static const std::string intensity;
+		static const std::string hasShadow;
 	};
 }
 

@@ -49,6 +49,27 @@ void tetraRender::ParameterContainer::set(std::string valName, float val)
 	floats[valName] = val;
 }
 
+void tetraRender::ParameterContainer::set(std::string valName, bool val)
+{
+	bool paramExists = checkParameterExistance(valName, ParameterType::BOOL);
+	//if the parameter doesn't exist we add it to the list. If it already exist no need to change the list but we edit it's value.
+	if (paramExists == false)
+	{
+		parameters.push_back(std::pair<std::string, tetraRender::ParameterType>(valName, ParameterType::BOOL));
+	}
+	bools[valName] = val;
+}
+
+bool tetraRender::ParameterContainer::getBool(std::string valName)
+{
+	bool val = false;
+	if (bools.find(valName) != bools.end())
+	{
+		val = bools[valName];
+	}
+	return val;
+}
+
 glm::vec3 tetraRender::ParameterContainer::getVec3(std::string valname)
 {
 	glm::vec3 val = glm::vec3(0);

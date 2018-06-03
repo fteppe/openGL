@@ -43,6 +43,10 @@ void Material::apply(Mesh* const& VBO, Scene & scene, Solid const& solid)
 		{
 			shader_ptr->sendVec3(param.first, parametersContainer.getVec3(param.first));
 		}
+		else if (param.second == ParameterType::FLOAT)
+		{
+			shader_ptr->sendFloat(param.first, parametersContainer.getFloat(param.first));
+		}
 	}
 }
 
@@ -71,6 +75,10 @@ void tetraRender::Material::fillParameterContainer()
 			if (type == GL_FLOAT_VEC3)
 			{
 				parametersContainer.set(uniformName, glm::vec3(0));
+			}
+			else if (type == GL_FLOAT)
+			{
+				parametersContainer.set(uniformName, 0.0f);
 			}
 		}
 		

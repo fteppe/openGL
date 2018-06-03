@@ -27,7 +27,7 @@ enum EngineEnum {
 };
 
 namespace tetraRender {
-	enum class  ParameterType { VEC3, FLOAT, INT, STRING };
+	enum class  ParameterType { VEC3, FLOAT, INT, STRING, BOOL };
 
 	enum class GameObjectType {
 		LIGHT,

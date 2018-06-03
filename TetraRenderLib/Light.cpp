@@ -4,11 +4,12 @@
 using namespace tetraRender;
 const std::string Light::col = "col";
 const std::string Light::intensity = "intensity";
+const std::string Light::hasShadow = "hasShadow";
 
 Light::Light()
 {
-	hasShadow = false;
-	parametersContainer.set(intensity, 1);
+	parametersContainer.set(hasShadow, false);
+	parametersContainer.set(intensity, 1.0f);
 }
 
 Light::Light(glm::vec3 pos, float intensityIn) : Light()
@@ -22,7 +23,7 @@ Light::Light(glm::vec3 pos, float intensityIn) : Light()
 void tetraRender::Light::setPos(glm::vec3 pos)
 {
 	GameObject::setPos(pos);
-	if (hasShadow)
+	if (parametersContainer.getFloat(hasShadow))
 	{
 		shadowProjection.setPos(pos);
 	}
@@ -31,6 +32,12 @@ void tetraRender::Light::setPos(glm::vec3 pos)
 GameObjectType tetraRender::Light::getType() const
 {
 	return GameObjectType::LIGHT;
+}
+
+void tetraRender::Light::update()
+{
+	//this might seem a bit weird but we need to make sure that we properly update the position of the light respectively and the one of the shadowProjection.
+	setPos(getPos());
 }
 
 
@@ -45,12 +52,12 @@ void tetraRender::Light::setProjection(glm::vec3 lookAt, glm::vec3 up)
 	shadowProjection.setPos(getPos());
 	shadowProjection.setUp(up);
 	shadowProjection.setTarget(lookAt);
-	hasShadow = true;
+	parametersContainer.set(hasShadow, true);
 }
 
 bool tetraRender::Light::getHasShadow()
 {
-	return hasShadow;
+	return parametersContainer.getBool(hasShadow);
 }
 
 Camera * tetraRender::Light::getShadowProjection()

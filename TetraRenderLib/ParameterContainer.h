@@ -25,6 +25,8 @@ namespace tetraRender
 		void set(std::string valName, glm::vec3 val);
 		void set(std::string valName, std::string val);
 		void set(std::string valName, float val);
+		void set(std::string valName, bool val);
+		bool getBool(std::string valName);
 		glm::vec3 getVec3(std::string valname);
 		std::string getString(std::string valName);
 		float getFloat(std::string valName);
@@ -36,6 +38,7 @@ namespace tetraRender
 		std::map<std::string, float> floats;
 		std::map<std::string, glm::vec3> vectors;
 		std::map<std::string, std::string> strings;
+		std::map<std::string, bool> bools;
 		//This is a vector of all the parameters, It is a bad idea to put the value directly since a lot of polymorphism would be necessary.
 		//it would also mean no primitive types.
 		std::vector<parameter> parameters;
