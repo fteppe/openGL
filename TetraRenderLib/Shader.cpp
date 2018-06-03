@@ -250,8 +250,8 @@ void tetraRender::Shader::sendLight(std::string name, tetraRender::Light light)
 	//Since the light is a struct we need to send each component.
 	sendVec3(name + ".pos", light.getPos());
 	//sendVec3(name + ".pos", glm::vec3(0,0,1));
-	sendVec3(name + ".color", light.col);
-	sendFloat(name + ".intensity", light.intensity);
+	sendVec3(name + ".color", light.getParameters().getVec3(Light::col));
+	sendFloat(name + ".intensity", light.getParameters().getFloat(Light::intensity));
 	//By default we consider that no light has a shadow, and we change that when we send the shadows datas.
 	sendInt(name + ".shadowIndex", -1);
 	//GLint posIntensity = getUniformLocation(name + ".intensity");

@@ -6,6 +6,7 @@ const std::string nameField = "name";
 
 Resource::Resource()
 {
+	parametersContainer.setResource(this);
 }
 
 
@@ -26,4 +27,8 @@ std::string Resource::getName()
 ParameterContainer& tetraRender::Resource::getParameters()
 {
 	return parametersContainer;
+}
+
+void tetraRender::Resource::update()
+{
 }

@@ -27,6 +27,8 @@ Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> in
 Solid::Solid(std::shared_ptr<Mesh> vbo) : Solid()
 {
 	mesh_ptr = vbo;
+	auto vboFilePath = mesh_ptr->getFilePath();
+	setName(vboFilePath.first + "::"+vboFilePath.second);
 }
 
 tetraRender::Solid::Solid(std::pair<std::string, std::string> objFile)

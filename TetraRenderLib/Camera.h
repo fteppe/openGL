@@ -4,7 +4,7 @@
 #include "GameObject.h"
 
 namespace tetraRender {
-	class Camera : GameObject
+	class Camera : public GameObject
 	{
 	public:
 		Camera();
@@ -16,7 +16,6 @@ namespace tetraRender {
 		void setPos(glm::vec3 pos);
 		void setTarget(glm::vec3 target);
 		void setUp(glm::vec3 up);
-		glm::vec3 getPos();
 		glm::vec3 getTarget();
 		glm::vec3 getUp();
 		glm::vec2 getSize();

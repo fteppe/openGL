@@ -31,8 +31,8 @@ namespace tetraRender
 		//This is the matrix that is used to do the shadow projection in case it is necessary.
 		//if it is null, then it means that this light doesn't project anything.
 		Camera shadowProjection;
-		glm::vec3 col;
-		float intensity;
+		static const std::string col;
+		static const std::string intensity;
 	};
 }
 

@@ -53,7 +53,7 @@ void tetraRender::Scene::animate(float elapsed)
 
 void tetraRender::Scene::setCamera(Camera camera) 
 {
-	cam = (camera);
+	cam =  (camera);
 }
 
 void tetraRender::Scene::renderScene()
@@ -124,15 +124,8 @@ std::vector<Light*> tetraRender::Scene::getLights(GameObject * root) const
 	return lights;
 }
 
-Camera tetraRender::Scene::getShadowProj() const
-{
-	return shadowProjection;
-}
 
-Light tetraRender::Scene::getLight() const
-{
-	return *getLights(gameObjects[0])[0];
-}
+
 
 std::shared_ptr<Texture> tetraRender::Scene::getTexture(std::string tex) 
 {

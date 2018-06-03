@@ -2,25 +2,22 @@
 #include "Light.h"
 #include <iostream>
 using namespace tetraRender;
+const std::string Light::col = "col";
+const std::string Light::intensity = "intensity";
 
 Light::Light()
 {
 	hasShadow = false;
-	_ASSERT(_CrtCheckMemory());
+	parametersContainer.set(intensity, 1);
 }
 
-Light::Light(glm::vec3 pos, float intensity) : Light()
+Light::Light(glm::vec3 pos, float intensityIn) : Light()
 {
-	this->intensity = intensity;
-	this->pos = (pos);
-	_ASSERT(_CrtCheckMemory());
+	parametersContainer.set(col, glm::vec3(1));
+	parametersContainer.set(intensity, intensityIn);
+	setPos(pos);
 }
 
-std::vector<float> Light::getDataArray()
-{
-	std::vector<float> lightData({ pos.x, pos.y, pos.z, col.x, col.y, col.z, intensity });
-	return lightData;
-}
 
 void tetraRender::Light::setPos(glm::vec3 pos)
 {
@@ -45,7 +42,7 @@ Light::~Light()
 
 void tetraRender::Light::setProjection(glm::vec3 lookAt, glm::vec3 up)
 {
-	shadowProjection.setPos(pos);
+	shadowProjection.setPos(getPos());
 	shadowProjection.setUp(up);
 	shadowProjection.setTarget(lookAt);
 	hasShadow = true;

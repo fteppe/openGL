@@ -113,23 +113,23 @@ void WindowBuilder::draw()
 		ImGui::Begin("Material editor");
 		for (auto material : scene->getMaterials())
 		{
-			auto& val = material.second->getParameters();
-			for (auto param : val.getParameters())
-			{
-				//if the parameter is a vector.
-				if (param.second == tetraRender::ParameterType::VEC3)
-				{
-					glm::vec3 vector = val.getVec3(param.first);
-					float vec[3] = { vector.x, vector.y, vector.z };
-					//Imgui::InputFloat3(param.first.c_str(), vec, 5);
-					ImGui::InputFloat3(param.first.c_str(), vec, 2);
-					vector.x = vec[0]; vector.y = vec[1]; vector.z = vec[2];
-					val.set(param.first, vector);
-				}
-			}
-			ImGui::Text("--------");
+			this->MaterialUI(material.second);
 		}
-		ImGui::Button("ok");
+		ImGui::End();
+		ImGui::Begin("GameObjects");
+		int i = 0;
+		for (auto go : scene->getGameObjects())
+		{
+			gameObjectTreeUI(go,i);
+			i++;
+		}
+		ImGui::End();
+
+		ImGui::Begin("Game object editor");
+		if (selectedObject)
+		{
+			gameObjectEditUI(selectedObject);
+		}
 		ImGui::End();
 		// Rendering
 		glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
@@ -147,4 +147,93 @@ void WindowBuilder::draw()
 	SDL_Quit();
 
 	
+}
+
+glm::vec3 WindowBuilder::Vec3Input(glm::vec3 vector, std::string label)
+{
+	float vec[3] = { vector.x, vector.y, vector.z };
+	//Imgui::InputFloat3(param.first.c_str(), vec, 5);
+	ImGui::InputFloat3(label.c_str(), vec, 2);
+	vector.x = vec[0]; vector.y = vec[1]; vector.z = vec[2];
+	return vector;
+}
+
+void WindowBuilder::MaterialUI(std::shared_ptr<tetraRender::Material> mat)
+{
+	ImGui::Text("--------");
+	auto& val = mat->getParameters();
+	ImGui::Text(mat->getName().c_str());
+	for (auto param : val.getParameters())
+	{
+		//if the parameter is a vector.
+		if (param.second == tetraRender::ParameterType::VEC3)
+		{
+			glm::vec3 vector = val.getVec3(param.first);
+			vector = Vec3Input(vector, param.first.c_str());
+			val.set(param.first, vector);
+
+		}
+	}
+	ImGui::Text("--------");
+}
+
+void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int pos)
+{
+	std::string name = gameObject->getName();
+	auto children = gameObject->getChildren();
+	if (children.size() > 0)
+	{
+		if (ImGui::TreeNode(std::to_string(pos).c_str(), name.c_str()))
+		{
+			int i = 0;
+			for (auto child : gameObject->getChildren())
+			{
+				gameObjectTreeUI(child,i);
+			}
+		}
+		if (ImGui::IsItemClicked())
+		{
+			selectedObject = gameObject;
+		}
+
+		ImGui::TreePop();
+	}
+	else
+	{
+		if (ImGui::Button(name.c_str()), std::to_string(pos).c_str())
+		{
+		}
+		if (ImGui::IsItemClicked())
+		{
+			selectedObject = gameObject;
+		}
+	}
+
+
+	
+
+
+}
+
+void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject)
+{
+	ImGui::Text(selectedObject->getName().c_str());
+	auto& paramContainer = selectedObject->getParameters();
+	for (auto param : paramContainer.getParameters())
+	{
+		if (param.second == tetraRender::ParameterType::VEC3)
+		{
+			glm::vec3 vector = selectedObject->getParameters().getVec3(param.first);
+			vector = Vec3Input(vector, param.first.c_str());
+			paramContainer.set(param.first, vector);
+
+		}
+		else if (param.second == tetraRender::ParameterType::FLOAT)
+		{
+			float val = selectedObject->getParameters().getFloat(param.first);
+			val = ImGui::InputFloat(param.first.c_str(), &val,0.05f);
+			paramContainer.set(param.first, val);
+		}
+	}
+	selectedObject->update();
 }

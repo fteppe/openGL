@@ -126,6 +126,7 @@ MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CON
 		std::map<std::string, std::string> channels;
 		//we iterate accross the channels to find them all
 		materials[matName] = std::shared_ptr<Material>(new Material(shaders[shaderName]));
+		materials[matName]->setName(matName);
 		for (rapidjson::Value::MemberIterator j = mats[i]["channels"].MemberBegin(); j != mats[i]["channels"].MemberEnd(); j++)
 		{
 			std::string channelName = j->name.GetString();
@@ -151,6 +152,7 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER& mats, VBO_C
 	rapidjson::Value& gos = doc["gameObjects"];
 	assert(gos.IsArray());
 	GameObject* root = new GameObject();
+	root->setName("root");
 	gameObjects.push_back(root);
 
 	for (unsigned int i = 0; i < gos.Size(); i++)
@@ -181,13 +183,16 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 	{
 		loadedGo = loadSolid(mats, objects, go);
 	}
-
-	if (type == "light")
+	else if (type == "light")
 	{
 		//A bit early but it will do for now.
 
 		loadedGo = loadLight(go);
 		
+	}
+	else
+	{
+		loadedGo->setName("null point");
 	}
 
 	if (go.HasMember("children"))
@@ -265,6 +270,8 @@ Solid * tetraRender::SceneLoader::loadSolid(MAT_CONTAINER & mats, VBO_CONTAINER 
 		loadedItem->setMaterial(std::shared_ptr<Material>(mats[mat]));
 		//Since it was loaded as a game object we give it the tag.
 		loadedItem->addTag(WORLD_OBJECT);
+		loadedItem->setName(filePath.first + "::" + filePath.second);
+		
 	}
 	else
 	{
@@ -277,11 +284,13 @@ Solid * tetraRender::SceneLoader::loadSolid(MAT_CONTAINER & mats, VBO_CONTAINER 
 Light * tetraRender::SceneLoader::loadLight(rapidjson::Value & go)
 {
 	Light * light = new Light();
-	light->intensity = go["intensity"].GetFloat();
-	light->col = glm::vec3(1.0, 1.0, 1.0);
+	light->getParameters().set(Light::intensity,go["intensity"].GetFloat());
 	if (go.HasMember("color"))
 	{
-		light->col = (glm::vec3(go["color"][0].GetFloat(), go["color"][1].GetFloat(), go["color"][2].GetFloat()));
+		glm::vec3 col = (glm::vec3(go["color"][0].GetFloat(), go["color"][1].GetFloat(), go["color"][2].GetFloat()));
+		light->getParameters().set(Light::col, col);
+
+
 	}
 	//if this light has a shadowProjection, it means that this light projects shadows.
 	if (go.HasMember("shadowProjection"))
@@ -292,6 +301,7 @@ Light * tetraRender::SceneLoader::loadLight(rapidjson::Value & go)
 		light->setProjection(targetVec, up);
 		light->getShadowProjection()->setProjectionOrtho(5, 5, 0.1, 10);
 	}
+	light->setName("light");
 
 	return light;
 }

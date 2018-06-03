@@ -4,18 +4,18 @@
 #include <iostream>
 using namespace tetraRender;
 
+const std::string GameObject::pos = "pos";
+const std::string GameObject::scale = "scale";
+const std::string GameObject::rotationAngle = "rotAngle";
+
 GameObject::GameObject()
 {
-	_ASSERT(_CrtCheckMemory());
-
-	
 	rotation = 0;
-	pos = glm::vec3(0);
-	scale = glm::vec3(1);
-	rotationAngle = glm::vec3(0, 0, 1);
+	setPos(glm::vec3(0));
+	setScale(glm::vec3(1));
+	setRotation(0, glm::vec3(0, 0, 1));
 	updateModelMatrix();
 
-	_ASSERT(_CrtCheckMemory());
 }
 
 
@@ -23,22 +23,22 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::setPos(glm::vec3 pos)
+void GameObject::setPos(glm::vec3 position)
 {
-	this->pos = pos;
+	parametersContainer.set(this->pos, position);
 	updateModelMatrix();
 }
 
-void GameObject::setScale(glm::vec3 scale)
+void GameObject::setScale(glm::vec3 scaleVec)
 {
-	this->scale = scale;
+	parametersContainer.set(scale, scaleVec);
 	updateModelMatrix();
 }
 
-void GameObject::setRotation(float rotation, glm::vec3 rotationAngle)
+void GameObject::setRotation(float rotation, glm::vec3 rotationAngleVec)
 {
 	this->rotation = rotation;
-	this->rotationAngle = rotationAngle;
+	parametersContainer.set(rotationAngle, rotationAngleVec);
 	updateModelMatrix();
 }
 
@@ -64,18 +64,18 @@ std::set<RenderTag> GameObject::getRenderTags()
 
 glm::vec3 GameObject::getPos()
 {
-	return pos;
+	return parametersContainer.getVec3(pos);
 }
 
 glm::vec3 GameObject::getScale()
 {
-	return scale;
+	return parametersContainer.getVec3(scale);
 }
 
 glm::vec4 GameObject::getRotation()
 {
 	//TODO: see if this is right, might not be.
-	return glm::vec4(rotationAngle, rotation);
+	return glm::vec4(parametersContainer.getVec3(rotationAngle), rotation);
 }
 
 glm::mat4 GameObject::getmodelMatrix() const
@@ -117,7 +117,13 @@ std::vector<GameObject*> tetraRender::GameObject::getChildren()
 	return children;
 }
 
+void tetraRender::GameObject::update()
+{
+	updateModelMatrix();
+}
+
 void GameObject::updateModelMatrix()
 {
-	modelMatrix = glm::rotate(rotation, rotationAngle) * glm::scale(scale) *  glm::translate(pos);
+	glm::vec3 posVec = parametersContainer.getVec3(pos);
+	modelMatrix = glm::rotate(rotation, parametersContainer.getVec3(rotationAngle)) * glm::scale(getScale()) *  glm::translate(getPos());
 }

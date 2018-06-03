@@ -5,6 +5,7 @@
 #include <memory>
 #include "Material.h"
 #include "Common.h"
+#include "resource.h"
 
 class Scene;
 
@@ -12,7 +13,7 @@ class Scene;
 //rotation...
 namespace tetraRender
 {
-	class GameObject
+	class GameObject : public Resource
 	{
 	public:
 		GameObject();
@@ -32,11 +33,13 @@ namespace tetraRender
 		virtual void draw(Scene& scene, std::shared_ptr<Material> mat);
 		virtual tetraRender::GameObjectType getType() const;
 		std::vector<GameObject*> getChildren();
+		virtual void update();
+
 	protected:
 		void updateModelMatrix();
-		glm::vec3 pos;
-		glm::vec3 scale;
-		glm::vec3 rotationAngle;
+		static const std::string pos;
+		static const std::string scale;
+		static const std::string rotationAngle;
 		float rotation;
 		glm::mat4 modelMatrix;
 		std::vector<GameObject*> children;
