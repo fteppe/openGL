@@ -41,24 +41,23 @@ void RenderPass::renderScene(tetraRender::Scene & scene)
 	}
 	renderOutput->bind();
 	//TODO: we must be able to go further than that in the future.
-	std::vector<GameObject*> objects = scene.getGameObjects();
-	Shader * shader_ptr;
+	std::vector<GameObject*> gos = this->getObjectsToDraw(scene.getGameObjects());
 	//we iterate through all our objects, and we see which one we render.
-	for (GameObject* go : objects)
-	{
+
 		//If our object has one tag part of the included tags to be rendered then we do.
-		if (!isIntersectionEmpty(this->renderTagsIncluded, go->getRenderTags()))
+	for (auto go : gos)
+	{
+		if (optionalMaterial)
 		{
-			if (optionalMaterial != NULL)
-			{
-				go->draw(scene, optionalMaterial);
-			}
-			else
-			{
-				go->draw(scene);
-			}
+			go->draw(scene, this->optionalMaterial);
+		}
+		else
+		{
+			go->draw(scene);
 		}
 	}
+
+	
 	scene.setCamera(tempCamera);
 	//renderOutput->renderToScreen();
 }
@@ -76,6 +75,25 @@ void tetraRender::RenderPass::setMat(std::shared_ptr<Material> mat)
 std::shared_ptr<Material> tetraRender::RenderPass::getMaterial()
 {
 	return optionalMaterial;
+}
+
+std::vector<GameObject*> tetraRender::RenderPass::getObjectsToDraw(GameObject * gameObject)
+{
+	//TODO: fix all this algorythm that is wrong.
+	std::vector<GameObject*> returnVal;
+
+	for (auto goChild : gameObject->getChildren())
+	{
+		auto childrenObjs = getObjectsToDraw(goChild);
+		returnVal.insert(returnVal.end(), childrenObjs.begin(), childrenObjs.end());
+	}
+	//we check if the game object should be rendered.
+	if (!isIntersectionEmpty(this->renderTagsIncluded, gameObject->getRenderTags()))
+	{
+			returnVal.push_back(gameObject);
+	}
+	
+	return returnVal;
 }
 
 Camera * tetraRender::RenderPass::getCamera()

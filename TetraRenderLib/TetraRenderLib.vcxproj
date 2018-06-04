@@ -190,6 +190,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneLoader.h" />
+    <ClInclude Include="SceneSaver.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderPBR.h" />
     <ClInclude Include="ShaderPostProcess.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneLoader.cpp" />
+    <ClCompile Include="SceneSaver.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderPBR.cpp" />
     <ClCompile Include="ShaderPostProcess.cpp" />

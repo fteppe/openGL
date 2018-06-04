@@ -118,6 +118,11 @@ std::vector<GameObject*> tetraRender::GameObject::getChildren()
 	return children;
 }
 
+GameObject * tetraRender::GameObject::getParent()
+{
+	return parentNode;
+}
+
 void tetraRender::GameObject::update()
 {
 	updateModelMatrix();

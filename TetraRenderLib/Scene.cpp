@@ -16,16 +16,14 @@ tetraRender::Scene::Scene(Camera cam)
 {
 	_ASSERT(_CrtCheckMemory());
 	setCamera(cam);
-	
+	gameObjects = new GameObject();
+	gameObjects->setName("sceneRoot");
 	renderPipeLine = std::unique_ptr<RenderPipeline>(new RenderPipeline(*this));
 	this->cam.setPos(glm::vec3(5, 1, 5));
 	this->cam.setTarget(glm::vec3(0, 0, 0));
 	this->cam.setUp(glm::vec3(0, 1, 0));
 
 	//The shadows of this scene
-	this->shadowProjection = this->cam;
-	shadowProjection.setPos(glm::vec3(-2, 1, 2));
-	shadowProjection.setProjectionOrtho(2, 2, 1, 10);
 }
 
 
@@ -38,16 +36,14 @@ void tetraRender::Scene::animate(float elapsed)
 	glm::mat4 rot = glm::rotate(0.002f, glm::vec3(0, 0, 1));
 	glm::vec3 pos = cam.getPos();
 	//pos = rot * glm::vec4(pos , 1);
-	light.setPos( rot * glm::vec4(light.getPos(), 1));//;glm::vec4(5,0, 3,1);
 }
 
 
  tetraRender::Scene::~Scene()
 {
-	for (GameObject* obj : gameObjects)
-	{
-		delete obj;
-	}
+
+	delete gameObjects;
+
 
 }
 
@@ -80,22 +76,13 @@ void tetraRender::Scene::load(std::string scene)
 	materials.insert(materialsLoaded.begin(), materialsLoaded.end());
 
 	auto elementsLoaded = loader.loadGameObjects(materials, models);
-	gameObjects.insert(gameObjects.end(), elementsLoaded.begin(), elementsLoaded.end());
+	for (auto go : elementsLoaded)
+	{
+		gameObjects->addChild(go);
+	}
 
 	makeSkyBox();
 	renderPipeLine->update(*this);
-	//Testing puposes.
-
-	//setupPostProcessing();
-
-
-	//Light* light = new Light();
-	//light->intensity = 1.0f;
-	//light->col = glm::vec3(1, 1, 1);
-	//light->setPos(glm::vec3(1, 1, 0.5));
-	//light->setParent(gameObjects[0]);
-	//gameObjects[0]->addChild(light);
-
 }
 
 Camera tetraRender::Scene::getCam() const
@@ -105,7 +92,7 @@ Camera tetraRender::Scene::getCam() const
 
 void tetraRender::Scene::addGameObject(GameObject * obj)
 {
-	gameObjects.push_back(obj);
+	gameObjects->addChild(obj);
 }
 
 std::vector<Light*> tetraRender::Scene::getLights(GameObject * root) const
@@ -139,7 +126,7 @@ float tetraRender::Scene::getElapsedTime() const
 	return elapsedTime;
 }
 
-std::vector<GameObject*> tetraRender::Scene::getGameObjects()
+GameObject* tetraRender::Scene::getGameObjects()
 {
 	return gameObjects;
 }
@@ -148,11 +135,10 @@ std::vector<Light*> tetraRender::Scene::getLights()
 {
 	std::vector<Light*> lights;
 	//For each game objects at the root, we look for the lights in their children.
-	for (auto go : gameObjects)
-	{
-		std::vector<Light* > get = getLights(go);
+
+		std::vector<Light* > get = getLights(gameObjects);
 		lights.insert(lights.end(), get.begin(), get.end());
-	}
+	
 	return lights;
 }
 
@@ -208,7 +194,7 @@ void tetraRender::Scene::makeSkyBox()
 	sky->setScale(glm::vec3(100, 100, 100));
 	//sky->addTag(WORLD_OBJECT);
 	sky->addTag(FORWARD_RENDER);
-	gameObjects.push_back(sky);
+	addGameObject(sky);
 }
 
 void tetraRender::Scene::updateShadowMaps()

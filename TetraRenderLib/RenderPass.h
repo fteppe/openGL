@@ -62,6 +62,9 @@ namespace tetraRender
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		std::shared_ptr<Material> getMaterial();
+
+		std::vector<GameObject* > getObjectsToDraw(GameObject* gameObject);
+
 		Camera* getCamera();
 		FrameBuffer& getFrameBuffer();
 

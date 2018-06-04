@@ -88,6 +88,7 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 		return shadowmapsPasses;
 	}
 
+
 void tetraRender::RenderPipeline::setupRenderPasses()
 {
 	//We create the material that is used to render the scene from the PoV of a light.
@@ -210,7 +211,7 @@ void tetraRender::RenderPipeline::setupPostProcessing(Scene & scene)
 	//postProcessMat->setChannel(gBuffer["shadowMap"], "shadowMap");
 
 	renderPasses[1]->setMat(postProcessMat);
-	//screenObj->setMaterial(postProcessMat);
+	screenObj->setMaterial(postProcessMat);
 	screenObj->addTag(POST_PROCESS);
 	//We add all these newly created elements to the scene;
 	

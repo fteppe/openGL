@@ -33,6 +33,7 @@ namespace tetraRender
 		virtual void draw(Scene& scene, std::shared_ptr<Material> mat);
 		virtual tetraRender::GameObjectType getType() const;
 		std::vector<GameObject*> getChildren();
+		GameObject* getParent();
 		virtual void update();
 
 	protected:

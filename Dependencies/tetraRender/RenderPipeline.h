@@ -39,6 +39,7 @@ namespace tetraRender
 		void update(Scene& scene);
 		std::vector<std::unique_ptr<RenderPass>>& getShadowMapsPass();
 		
+		
 
 	private:		
 		/// <summary>

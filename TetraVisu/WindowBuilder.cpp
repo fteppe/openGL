@@ -118,11 +118,9 @@ void WindowBuilder::draw()
 		ImGui::End();
 		ImGui::Begin("GameObjects");
 		int i = 0;
-		for (auto go : scene->getGameObjects())
-		{
-			gameObjectTreeUI(go,i);
-			i++;
-		}
+
+		gameObjectTreeUI(scene->getGameObjects(),i);
+
 		ImGui::End();
 
 		ImGui::Begin("Game object editor");

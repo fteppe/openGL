@@ -71,7 +71,7 @@ namespace tetraRender
 
 		std::shared_ptr<Texture> getTexture(std::string tex);
 		float getElapsedTime() const;
-		std::vector<GameObject *> getGameObjects();
+		GameObject* getGameObjects();
 		std::vector<Light * > getLights();
 		MAT_CONTAINER & getMaterials();
 		RenderPipeline& getRenderPipeLine();
@@ -93,10 +93,9 @@ namespace tetraRender
 		Camera cam;
 		//I want to have an array of lights, that can have a camera that does the projection shadow.
 		//I don't want to deal with supporting omni lights that generate 3D shadows for now.
-		Camera shadowProjection;
-		Light light;
-		std::vector<GameObject*> gameObjects;
-		GameObject* skybox;
+
+
+		GameObject* gameObjects;
 		//SceneLoader loader;
 
 		//I want to seperate render passes with a specific purpose (geometry, deffered shading, post process) and the building of shadowmaps.
