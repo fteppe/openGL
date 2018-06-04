@@ -7,6 +7,10 @@
 
 using namespace tetraRender;
 
+const std::string Texture::file = "file";
+const std::string Texture::gammaCorrected = "gammaCorrected";
+const std::string Texture::HDRvalue = "HDRValues";
+
 Texture::Texture()
 {
 	glGenTextures(1, &textureID);
@@ -14,7 +18,9 @@ Texture::Texture()
 	width = 0;
 	height = 0;
 	nrChannels = 0;
-	gamma = false;
+	parametersContainer.set(gammaCorrected, false);
+	parametersContainer.set(HDRvalue, false);
+	parametersContainer.set(file, "");
 }
 
 
@@ -30,6 +36,7 @@ void Texture::bind()
 
 void Texture::loadTexture(std::string textureName)
 {
+	parametersContainer.set(file, textureName);
 	//If we have no name for our texture we create an empty one
 	if (textureName.size() == 0)
 	{
@@ -137,7 +144,7 @@ void Texture::loadImage(GLuint texType, int width, int height, int nrChannels, u
 	else if (nrChannels == 3)
 	{
 		GLenum internalFormat = GL_RGB;
-		if (gamma)
+		if (parametersContainer.getBool(gammaCorrected))
 		{
 			internalFormat = GL_SRGB;
 		}
@@ -151,7 +158,7 @@ void Texture::loadImage(GLuint texType, int width, int height, int nrChannels, u
 
 void tetraRender::Texture::setGamma(bool needsGammaCorrection)
 {
-	gamma = needsGammaCorrection;
+	parametersContainer.set(gammaCorrected, needsGammaCorrection);
 
 }
 

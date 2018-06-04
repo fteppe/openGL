@@ -35,13 +35,15 @@ namespace tetraRender
 	protected:
 
 		void setTextureParameters();
-		bool gamma;
 		GLuint textureID;
 		GLint textureType;
 		GLenum dataType;
 		GLenum internalFormat;
 		int width, height, nrChannels;
 		std::string texturePath;
+		static const std::string file;
+		static const std::string gammaCorrected;
+		static const std::string HDRvalue;
 		//std::vector<unsigned char> textureData;
 	};
 }

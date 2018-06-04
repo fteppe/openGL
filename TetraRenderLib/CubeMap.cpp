@@ -11,7 +11,6 @@ CubeMap::CubeMap() : Texture()
 
 void CubeMap::loadTextures(std::vector<std::string > cubeMapElements)
 {
-
 	int width, height, nrChannels;
 	unsigned char* data;
 	glBindTexture(textureType, textureID);
