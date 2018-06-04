@@ -131,6 +131,7 @@ void WindowBuilder::draw()
 			gameObjectEditUI(selectedObject);
 		}
 		ImGui::End();
+		ImGui::ShowDemoWindow();
 		// Rendering
 		glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
 		ImGui::Render();
@@ -153,7 +154,7 @@ glm::vec3 WindowBuilder::Vec3Input(glm::vec3 vector, std::string label)
 {
 	float vec[3] = { vector.x, vector.y, vector.z };
 	//Imgui::InputFloat3(param.first.c_str(), vec, 5);
-	ImGui::InputFloat3(label.c_str(), vec, 2);
+	ImGui::DragFloat3(label.c_str(), vec, 0.1f);
 	vector.x = vec[0]; vector.y = vec[1]; vector.z = vec[2];
 	return vector;
 }
@@ -241,7 +242,7 @@ void WindowBuilder::parameterInput(tetraRender::ParameterContainer & param, tetr
 		else if (param.second == tetraRender::ParameterType::FLOAT)
 		{
 			float val = resource.getParameters().getFloat(param.first);
-			ImGui::InputFloat(param.first.c_str(), &val, 0.1f, 1);
+			ImGui::DragFloat(param.first.c_str(), &val, 0.1f);
 			paramContainer.set(param.first, val);
 		}
 		else if (param.second == tetraRender::ParameterType::BOOL)

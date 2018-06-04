@@ -49,6 +49,7 @@ void GameObject::addTag(RenderTag tag)
 
 void tetraRender::GameObject::addChild(GameObject * child)
 {
+	child->setParent(this);
 	children.push_back(child);
 }
 
@@ -125,5 +126,5 @@ void tetraRender::GameObject::update()
 void GameObject::updateModelMatrix()
 {
 	glm::vec3 posVec = parametersContainer.getVec3(pos);
-	modelMatrix = glm::rotate(rotation, parametersContainer.getVec3(rotationAngle)) * glm::scale(getScale()) *  glm::translate(getPos());
+	modelMatrix = glm::translate(getPos()) * glm::scale(getScale()) * glm::rotate(rotation, parametersContainer.getVec3(rotationAngle));
 }

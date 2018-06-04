@@ -82,8 +82,9 @@
     },
     {
       "type": "solid",
-      "material": "PBR",
-      "model": [ "obj/scene.obj", "Grid" ]
+      "material": "stone",
+      "model": [ "obj/scene.obj", "Grid" ],
+	  "pos":[1,0,0]
     },
     {
       "type": "solid",
