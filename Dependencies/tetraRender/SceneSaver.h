@@ -10,6 +10,9 @@ namespace tetraRender
 		SceneSaver();
 		~SceneSaver();
 		std::string toJson(Scene& scene);
+
+		void addGameObjectToJSON(rapidjson::Writer<rapidjson::StringBuffer>& writer, GameObject* gameObject);
+		void parameterToJSON(rapidjson::Writer<rapidjson::StringBuffer>& writer, ParameterContainer const & params);
 	};
 }
 

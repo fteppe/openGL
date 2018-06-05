@@ -26,11 +26,11 @@ namespace tetraRender
 		void set(std::string valName, std::string val);
 		void set(std::string valName, float val);
 		void set(std::string valName, bool val);
-		bool getBool(std::string valName);
-		glm::vec3 getVec3(std::string valname);
-		std::string getString(std::string valName);
-		float getFloat(std::string valName);
-		std::vector<parameter> getParameters();
+		bool getBool(std::string valName) const;
+		glm::vec3 getVec3(std::string valname) const;
+		std::string getString(std::string valName) const;
+		float getFloat(std::string valName) const;
+		std::vector<parameter> getParameters() const;
 
 	private:
 

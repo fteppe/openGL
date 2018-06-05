@@ -36,11 +36,14 @@ namespace tetraRender
 		GameObject* getParent();
 		virtual void update();
 
-	protected:
-		void updateModelMatrix();
 		static const std::string pos;
 		static const std::string scale;
 		static const std::string rotationAngle;
+		static const std::string childrenField;
+
+	protected:
+		void updateModelMatrix();
+
 		float rotation;
 		glm::mat4 modelMatrix;
 		std::vector<GameObject*> children;

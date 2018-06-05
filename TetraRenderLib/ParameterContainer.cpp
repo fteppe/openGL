@@ -60,47 +60,47 @@ void tetraRender::ParameterContainer::set(std::string valName, bool val)
 	bools[valName] = val;
 }
 
-bool tetraRender::ParameterContainer::getBool(std::string valName)
+bool tetraRender::ParameterContainer::getBool(std::string valName) const
 {
 	bool val = false;
 	if (bools.find(valName) != bools.end())
 	{
-		val = bools[valName];
+		val = bools.find(valName)->second;
 	}
 	return val;
 }
 
-glm::vec3 tetraRender::ParameterContainer::getVec3(std::string valname)
+glm::vec3 tetraRender::ParameterContainer::getVec3(std::string valname) const
 {
 	glm::vec3 val = glm::vec3(0);
 	if (vectors.find(valname) != vectors.end())
 	{
-		val = vectors[valname];
+		val = vectors.find(valname)->second;
 	}
 	return val;
 }
 
-std::string tetraRender::ParameterContainer::getString(std::string valName)
+std::string tetraRender::ParameterContainer::getString(std::string valName) const
 {
 	std::string val = "";
 	if (strings.find(valName) != strings.end())
 	{
-		val = strings[valName];
+		val = strings.find(valName)->second;
 	}
 	return val;
 }
 
-float tetraRender::ParameterContainer::getFloat(std::string valName)
+float tetraRender::ParameterContainer::getFloat(std::string valName) const
 {
 	float val = 0;
 	if (floats.find(valName) != floats.end())
 	{
-		val = floats[valName];
+		val = floats.find(valName)->second;
 	}
 	return val;
 }
 
-std::vector<parameter> tetraRender::ParameterContainer::getParameters()
+std::vector<parameter> tetraRender::ParameterContainer::getParameters() const
 {
 	return parameters;
 }

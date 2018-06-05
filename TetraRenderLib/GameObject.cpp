@@ -7,6 +7,7 @@ using namespace tetraRender;
 const std::string GameObject::pos = "pos";
 const std::string GameObject::scale = "scale";
 const std::string GameObject::rotationAngle = "rotAngle";
+const std::string GameObject::childrenField = "children";
 
 GameObject::GameObject()
 {

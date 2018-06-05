@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include <tetraRender/resource.h>
+#include <tetraRender/SceneSaver.h>
 #include <tetraRender\Scene.h>
 #include "imgui.h"
 #include "imgui_impl_sdl_gl3.h"
@@ -74,6 +74,8 @@ WindowBuilder::WindowBuilder(std::string sceneFile) : WindowBuilder()
 	cam.setUp(glm::vec3(0, 0, 0));
 	scene = std::shared_ptr<tetraRender::Scene>(new tetraRender::Scene(cam));
 	scene->load(sceneFile);
+	tetraRender::SceneSaver saver;
+	std::cout << saver.toJson(*scene);
 	handler = EventHandler(scene);
 
 }
@@ -201,9 +203,6 @@ void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int p
 			selectedObject = gameObject;
 		}
 	}
-
-
-	
 
 
 }
