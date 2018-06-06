@@ -43,6 +43,7 @@
         "depthMap": "textures/cobblestone_height.jpg",
         "specularityMap": "textures/cobblestone_spec.jpg",
         "diffuse": {
+		"name":"bricks",
           "file": "textures/cobblestone_albedo.jpg",
           "gamma": true
           }

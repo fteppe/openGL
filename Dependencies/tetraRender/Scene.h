@@ -72,6 +72,7 @@ namespace tetraRender
 		std::shared_ptr<Texture> getTexture(std::string tex);
 		float getElapsedTime() const;
 		GameObject* getGameObjects();
+		
 		std::vector<Light * > getLights();
 		MAT_CONTAINER & getMaterials();
 		RenderPipeline& getRenderPipeLine();

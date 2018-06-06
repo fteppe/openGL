@@ -21,6 +21,7 @@ Texture::Texture()
 	parametersContainer.set(gammaCorrected, false);
 	parametersContainer.set(HDRvalue, false);
 	parametersContainer.set(file, std::string(""));
+	parametersContainer.set("type", std::string("TEXTURE2D"));
 }
 
 

@@ -136,8 +136,24 @@ MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CON
 			for (rapidjson::Value::MemberIterator j = mats[i]["channels"].MemberBegin(); j != mats[i]["channels"].MemberEnd(); j++)
 			{
 				std::string channelName = j->name.GetString();
-
-				std::shared_ptr<Texture> texture(loadTexture(j->value));
+				std::shared_ptr<Texture> texture;
+				if (j->value.IsString())
+				{
+					std::string texName = j->value.GetString();
+					if (textures.find(texName) != textures.end())
+					{
+						texture = textures.find(texName)->second;
+					}
+					else
+					{
+						texture = std::shared_ptr<Texture>(loadTexture(j->value));
+					}
+				}
+				else
+				{
+					texture = std::shared_ptr<Texture>(loadTexture(j->value));
+				}
+				
 				//We only add the new texture if it doesn't already exists
 				if (textures.find(texture->getName()) == textures.end())
 				{
@@ -356,10 +372,7 @@ Texture * SceneLoader::loadTexture(rapidjson::Value& texture)
 	}
 	else if(texture.IsObject())
 	{
-		if (texture.HasMember("gamma"))
-		{
-			tex->setGamma(true);
-		}
+		setResourceParam(*tex, texture);
 		if (texture.HasMember("type"))
 		{
 		
@@ -372,24 +385,36 @@ Texture * SceneLoader::loadTexture(rapidjson::Value& texture)
 				textureDir += "/";
 				std::vector<std::string> cubeSides = { textureDir + "right.jpg", textureDir + "left.jpg", textureDir + "top.jpg", textureDir + "bottom.jpg",  textureDir + "front.jpg",textureDir + "back.jpg" };
 				map->loadTextures(cubeSides);
+				map->getParameters().set("file", textureDir);
 				tex = map;
 			}
-			
-		}
-		if (!texture.HasMember("name"))
-		{
-			tex->setName(texture["file"].GetString());
-			tex->loadTexture(texture["file"].GetString());
+			else
+			{
+				std::string textureDir = texture["file"].GetString();
+				tex->getParameters().set("file", textureDir);
+				tex->loadTexture(textureDir);
+
+			}
 		}
 		else
 		{
 			std::string name = texture["name"].GetString();
 			tex->setName(name);
+			std::string textureDir;
+			if (!texture.HasMember("file"))
+			{
+				textureDir = name;
+			}
+			else
+			{
+				textureDir = texture["file"].GetString();
+			}
+		 
+			tex->getParameters().set("file", textureDir);
+			tex->loadTexture(textureDir);
 		}
-		
-
-		
-		
+		std::string name = texture["name"].GetString();
+		tex->setName(name);
 	}
 	
 	
