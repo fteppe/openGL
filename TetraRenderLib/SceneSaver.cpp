@@ -28,7 +28,8 @@ std::string tetraRender::SceneSaver::toJson(Scene & scene)
 	writer.StartObject();
 	writer.Key("gameObjects");
 	writer.StartArray();
-	addGameObjectToJSON(writer, scene.getGameObjects(), mats);
+	for(auto go : scene.getGameObjects()->getChildren())
+	addGameObjectToJSON(writer,go , mats);
 	writer.EndArray();
 
 	writer.Key("materials");
