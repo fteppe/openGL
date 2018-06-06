@@ -45,8 +45,7 @@
         "diffuse": {
           "file": "textures/cobblestone_albedo.jpg",
           "gamma": true
-          },
-          "cubemap": "skybox"
+          }
         }
     }
   ],

@@ -111,7 +111,7 @@ bool tetraRender::ParameterContainer::checkParameterExistance(std::string paramN
 	for (auto param : parameters)
 	{
 		//It means that this parameter already exists, so no need to add it to the list.
-		if (param == std::pair<std::string, tetraRender::ParameterType>(paramName, type))
+		if (param.first == paramName)
 		{
 			paramExists = true;
 		}

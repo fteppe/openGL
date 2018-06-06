@@ -1,4 +1,5 @@
 #include "SceneSaver.h"
+#include <fstream>
 
 
 using namespace tetraRender;
@@ -19,8 +20,12 @@ std::string tetraRender::SceneSaver::toJson(Scene & scene)
 	
 	rapidjson::StringBuffer buffer;
 	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+
+
 	std::map<std::string, Material*> mats;
 	std::map<std::string, Texture*> texs;
+	
+	writer.StartObject();
 	writer.Key("gameObjects");
 	writer.StartArray();
 	addGameObjectToJSON(writer, scene.getGameObjects(), mats);
@@ -49,8 +54,15 @@ std::string tetraRender::SceneSaver::toJson(Scene & scene)
 		textureToJSON(writer, tex.second);
 	}
 	writer.EndArray();
-
+	writer.EndObject();
 	return buffer.GetString();
+}
+
+void tetraRender::SceneSaver::saveToFile(Scene & scene, std::string filePath)
+{
+	std::string file = toJson(scene);
+	std::ofstream out(filePath.c_str());
+	out << file;
 }
 
 void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::StringBuffer>& writer, GameObject * gameObject,std::map<std::string, Material*>& mats )
@@ -68,6 +80,8 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 		if (mat != NULL)
 		{
 			mats[mat->getName()] = mat;
+			writer.Key("material");
+			writer.String(mat->getName().c_str());
 		}
 		writer.Key("model");
 		writer.StartArray();
@@ -100,10 +114,12 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 	writer.EndObject();
 }
 
-void tetraRender::SceneSaver::materialToJSON(Writer & writer, Material * mat, std::map<std::string, Texture*> textures)
+void tetraRender::SceneSaver::materialToJSON(Writer & writer, Material * mat, std::map<std::string, Texture*>& textures)
 {
 	writer.StartObject();
 	parameterToJSON(writer, mat->getParameters());
+	writer.Key("shader");
+	writer.String(mat->getShaderProgram()->getName().c_str());
 	writer.Key("channels");
 	writer.StartObject();
 	for (auto pair : mat->getChannels())
@@ -137,7 +153,7 @@ void tetraRender::SceneSaver::shaderToJSON(Writer & writer, Shader * shader)
 		}
 	}
 	writer.EndArray();
-	writer.Key("vertex");
+	writer.Key("fragment");
 	writer.StartArray();
 	for (auto shaderFile : shader->getShaderFiles())
 	{

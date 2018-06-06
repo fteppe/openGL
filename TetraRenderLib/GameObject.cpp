@@ -16,6 +16,7 @@ GameObject::GameObject()
 	setScale(glm::vec3(1));
 	setRotation(0, glm::vec3(0, 0, 1));
 	updateModelMatrix();
+	setName("nullObject");
 
 }
 

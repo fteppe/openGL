@@ -6,6 +6,7 @@ using namespace tetraRender;
 
 Material::Material()
 {
+	setName("mat");
 }
 Material::Material(std::shared_ptr<Shader> shader) : Material()
 {

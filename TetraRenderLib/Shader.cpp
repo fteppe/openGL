@@ -16,6 +16,8 @@ using namespace tetraRender;
 Shader::Shader()
 {
 	highestTextureUnitUsed = 0;
+	setName("shader");
+	parametersContainer.set("type", std::string("basicShader"));
 }
 
 Shader::Shader(std::string vertex, std::string fragment) : Shader()

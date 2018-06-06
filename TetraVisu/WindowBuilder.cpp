@@ -75,7 +75,6 @@ WindowBuilder::WindowBuilder(std::string sceneFile) : WindowBuilder()
 	scene = std::shared_ptr<tetraRender::Scene>(new tetraRender::Scene(cam));
 	scene->load(sceneFile);
 	tetraRender::SceneSaver saver;
-	std::cout << saver.toJson(*scene);
 	handler = EventHandler(scene);
 
 }
@@ -129,6 +128,13 @@ void WindowBuilder::draw()
 		if (selectedObject)
 		{
 			gameObjectEditUI(selectedObject);
+		}
+		ImGui::End();
+
+		ImGui::Begin("menu");
+		if (ImGui::Button("save"));
+		{
+			tetraRender::SceneSaver().saveToFile(*scene, "scenes/saved.json");
 		}
 		ImGui::End();
 		ImGui::ShowDemoWindow();

@@ -106,7 +106,10 @@ SHADER_CONTAINER SceneLoader::loadShaders()
 		//if we have a PBR shader
 		if (shaderType == "shaderPBR")
 		{
-			shaders[shaderName] = std::shared_ptr<Shader> (new ShaderPBR(vertexShaderFiles, fragmentShaderFiles));
+			auto newShader = std::shared_ptr<Shader>(new ShaderPBR(vertexShaderFiles, fragmentShaderFiles));
+			newShader->setName(shaderName);
+			newShader->getParameters().set("type", std::string(shaderType));
+			shaders[shaderName] = newShader;
 		}
 	}
 
@@ -125,23 +128,27 @@ MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CON
 		std::string shaderName = mats[i]["shader"].GetString();
 		std::map<std::string, std::string> channels;
 		//we iterate accross the channels to find them all
-		materials[matName] = std::shared_ptr<Material>(new Material(shaders[shaderName]));
-		this->setResourceParam(*materials[matName], mats[i]);
-		materials[matName]->setName(matName);
-		for (rapidjson::Value::MemberIterator j = mats[i]["channels"].MemberBegin(); j != mats[i]["channels"].MemberEnd(); j++)
+		if (shaders.find(shaderName) != shaders.end())
 		{
-			std::string channelName = j->name.GetString();
-			
-			std::shared_ptr<Texture> texture(loadTexture(j->value));
-			//We only add the new texture if it doesn't already exists
-			if (textures.find(texture->getName()) == textures.end())
+			materials[matName] = std::shared_ptr<Material>(new Material(shaders[shaderName]));
+			this->setResourceParam(*materials[matName], mats[i]);
+			materials[matName]->setName(matName);
+			for (rapidjson::Value::MemberIterator j = mats[i]["channels"].MemberBegin(); j != mats[i]["channels"].MemberEnd(); j++)
 			{
-				textures[texture->getName()] = texture;
-			}
-			
-			materials[matName]->setChannel(texture, channelName);
+				std::string channelName = j->name.GetString();
 
+				std::shared_ptr<Texture> texture(loadTexture(j->value));
+				//We only add the new texture if it doesn't already exists
+				if (textures.find(texture->getName()) == textures.end())
+				{
+					textures[texture->getName()] = texture;
+				}
+
+				materials[matName]->setChannel(texture, channelName);
+
+			}
 		}
+
 	}
 
 	return materials;
@@ -160,7 +167,6 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER& mats, VBO_C
 	{
 		GameObject* loadedGo = NULL;
 		rapidjson::Value& go = gos[i];
-		std::string type = go["type"].GetString();
 		//we check what kind of gameObject this is
 		loadedGo = loadSingleGameObject(mats, objects, go);
 
@@ -177,60 +183,60 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER& mats, VBO_C
 
 GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats, VBO_CONTAINER & objects, rapidjson::Value& go)
 {
+	bool loadingWorked = true;
 	GameObject* loadedGo = NULL;
-	std::string type = go["type"].GetString();
-	//we check what kind of gameObject this is
-	if (type == "solid")
+	if (go["type"].IsString())
 	{
-		loadedGo = loadSolid(mats, objects, go);
-	}
-	else if (type == "light")
-	{
-		//A bit early but it will do for now.
-
-		loadedGo = loadLight(go);
-		
-	}
-	else
-	{
-		loadedGo->setName("null point");
-	}
-
-	setResourceParam(*loadedGo, go);
-
-	if (go.HasMember("children"))
-	{
-		rapidjson::Value& children = go["children"];
-		//If we have children to load.
-		if (children.IsArray())
+		std::string type = go["type"].GetString();
+		//we check what kind of gameObject this is
+		if (type == "solid")
 		{
-			for (rapidjson::Value& child : children.GetArray())
+			loadedGo = loadSolid(mats, objects, go);
+			if (loadedGo == NULL)
 			{
-				GameObject* childptr = loadSingleGameObject(mats, objects, child);
-				if (childptr != NULL && loadedGo != NULL)
+				loadingWorked = false;
+			}
+		}
+		else if (type == "light")
+		{
+			//A bit early but it will do for now.
+			loadedGo = loadLight(go);
+			if (loadedGo == NULL)
+			{
+				loadingWorked = false;
+			}
+		}
+	}
+	else if(go["type"].IsNull())
+	{
+		loadedGo = new GameObject();
+	}
+	if(loadedGo != NULL)
+	{
+		setResourceParam(*loadedGo, go);
+		loadedGo->update();
+		if (go.HasMember("children"))
+		{
+			rapidjson::Value& children = go["children"];
+			//If we have children to load.
+			if (children.IsArray())
+			{
+				for (rapidjson::Value& child : children.GetArray())
 				{
-					childptr->setParent(loadedGo);
-					loadedGo->addChild(childptr);
+					GameObject* childptr = loadSingleGameObject(mats, objects, child);
+					if (childptr != NULL && loadedGo != NULL)
+					{
+						childptr->setParent(loadedGo);
+						loadedGo->addChild(childptr);
+					}
 				}
 			}
 		}
 	}
 
 
-	//if (go.HasMember("pos"))
-	//{
-	//	if (go["pos"].IsArray())
-	//	{
-	//		glm::vec3 pos(go["pos"][0].GetFloat(), go["pos"][1].GetFloat(), go["pos"][2].GetFloat());
-	//		if (loadedGo != NULL)
-	//		{
-	//			loadedGo->setPos(pos);
-	//		}
-	//	}
-	//	
-	//}
 
-	loadedGo->update();
+
 	return loadedGo;
 }
 
@@ -271,10 +277,19 @@ Solid * tetraRender::SceneLoader::loadSolid(MAT_CONTAINER & mats, VBO_CONTAINER 
 		loadedGo = new Solid(VBO);
 
 		Solid* loadedItem = ((Solid *)loadedGo);
-		loadedItem->setMaterial(std::shared_ptr<Material>(mats[mat]));
-		//Since it was loaded as a game object we give it the tag.
-		loadedItem->addTag(WORLD_OBJECT);
-		loadedItem->setName(filePath.first + "::" + filePath.second);
+		if (mats.find(mat) != mats.end())
+		{
+			loadedItem->setMaterial(std::shared_ptr<Material>(mats[mat]));
+			//Since it was loaded as a game object we give it the tag.
+			loadedItem->addTag(WORLD_OBJECT);
+			loadedItem->setName(filePath.first + "::" + filePath.second);
+		}
+		else
+		{
+			delete loadedItem;
+			loadedGo = NULL;
+		}
+
 		
 	}
 	else

@@ -20,7 +20,7 @@ Texture::Texture()
 	nrChannels = 0;
 	parametersContainer.set(gammaCorrected, false);
 	parametersContainer.set(HDRvalue, false);
-	parametersContainer.set(file, "");
+	parametersContainer.set(file, std::string(""));
 }
 
 

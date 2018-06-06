@@ -7,6 +7,7 @@ using namespace tetraRender;
 CubeMap::CubeMap() : Texture()
 {
 	textureType = GL_TEXTURE_CUBE_MAP;
+	parametersContainer.set("type", std::string("CUBEMAP"));
 }
 
 void CubeMap::loadTextures(std::vector<std::string > cubeMapElements)
