@@ -14,7 +14,7 @@ namespace tetraRender
 	class Solid;
 	class Light;
 
-	class Shader
+	class Shader : public Resource
 	{
 	public:
 		Shader();
@@ -29,6 +29,7 @@ namespace tetraRender
 		virtual void sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> textures);
 		void resetTextureUnitCount();
 		void use();
+		std::vector<std::pair<std::string, GLenum>> getShaderFiles();
 
 		void sendMatrix4(std::string name, glm::mat4);
 		void sendFloat(std::string name, float floatIn);

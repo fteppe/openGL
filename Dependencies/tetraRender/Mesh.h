@@ -23,8 +23,8 @@ namespace tetraRender
 		void setUVs(std::vector<glm::vec3> UVin);
 		//This allows us to set the vertexAttributes of this object on the graphic card.
 		void setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData);
-		void setFilePath(std::pair<std::string, std::string> filePath);
-		std::pair<std::string, std::string> getFilePath();
+		void setFilePath(std::pair<std::string, std::string> filePath) ;
+		std::pair<std::string, std::string> getFilePath() const;
 		//THis function is used to find the tangent and bi-tangent that make the link between object coordinate 
 		//and the UV coordinate.
 		void findTangents();

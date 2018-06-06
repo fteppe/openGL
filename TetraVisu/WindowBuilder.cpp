@@ -216,9 +216,9 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject)
 	if (gameObject->getType() == tetraRender::GameObjectType::SOLID)
 	{
 		//We can do static cast because we know for sure that it's a Solid thanks to the check above.
-		auto& mat = static_cast<tetraRender::Solid*>(gameObject)->getMaterial();
-		ImGui::Text(("Material : " + mat.getName()).c_str());
-		parameterInput(mat.getParameters(), mat);
+		tetraRender::Material * mat = static_cast<tetraRender::Solid*>(gameObject)->getMaterial();
+		ImGui::Text(("Material : " + mat->getName()).c_str());
+		parameterInput(mat->getParameters(), *mat);
 
 	}
 	selectedObject->update();

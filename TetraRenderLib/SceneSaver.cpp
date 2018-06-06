@@ -19,13 +19,41 @@ std::string tetraRender::SceneSaver::toJson(Scene & scene)
 	
 	rapidjson::StringBuffer buffer;
 	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+	std::map<std::string, Material*> mats;
+	std::map<std::string, Texture*> texs;
+	writer.Key("gameObjects");
+	writer.StartArray();
+	addGameObjectToJSON(writer, scene.getGameObjects(), mats);
+	writer.EndArray();
 
-	addGameObjectToJSON(writer, scene.getGameObjects());
+	writer.Key("materials");
+	writer.StartArray();
+	for (auto mat : mats)
+	{
+		materialToJSON(writer, mat.second, texs);
+	}
+	writer.EndArray();
+
+	writer.Key("shaders");
+	writer.StartArray();
+	for (auto mat : mats)
+	{
+		shaderToJSON(writer, mat.second->getShaderProgram().get());
+	}
+	writer.EndArray();
+
+	writer.Key("textures");
+	writer.StartArray();
+	for (auto tex : texs)
+	{
+		textureToJSON(writer, tex.second);
+	}
+	writer.EndArray();
 
 	return buffer.GetString();
 }
 
-void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::StringBuffer>& writer, GameObject * gameObject)
+void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::StringBuffer>& writer, GameObject * gameObject,std::map<std::string, Material*>& mats )
 {
 	writer.StartObject();
 	writer.Key("type");
@@ -33,7 +61,22 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 	switch (gameObject->getType())
 	{
 	case GameObjectType::SOLID:
+	{
 		writer.String("solid");
+		Solid* solid = static_cast<Solid*>(gameObject);
+		auto mat = solid->getMaterial();
+		if (mat != NULL)
+		{
+			mats[mat->getName()] = mat;
+		}
+		writer.Key("model");
+		writer.StartArray();
+		auto model = solid->getMesh().getFilePath();
+		writer.String(model.first.c_str());
+		writer.String(model.second.c_str());
+		writer.EndArray();
+	}
+
 		break;
 	case GameObjectType::LIGHT:
 		writer.String("light");
@@ -42,7 +85,7 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 		writer.Null();
 		break;
 	}
-
+	
 
 	ParameterContainer& paramContainer = gameObject->getParameters();
 	parameterToJSON(writer, paramContainer);
@@ -51,7 +94,57 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 	writer.StartArray();
 	for (auto child : gameObject->getChildren())
 	{
-		addGameObjectToJSON(writer, child);
+		addGameObjectToJSON(writer, child, mats);
+	}
+	writer.EndArray();
+	writer.EndObject();
+}
+
+void tetraRender::SceneSaver::materialToJSON(Writer & writer, Material * mat, std::map<std::string, Texture*> textures)
+{
+	writer.StartObject();
+	parameterToJSON(writer, mat->getParameters());
+	writer.Key("channels");
+	writer.StartObject();
+	for (auto pair : mat->getChannels())
+	{
+		textures[pair.second->getName()] = pair.second.get();
+		writer.Key(pair.first.c_str());
+		writer.String(pair.second->getName().c_str());
+	}
+	writer.EndObject();
+	writer.EndObject();
+}
+
+void tetraRender::SceneSaver::textureToJSON(Writer & writer, Texture * tex)
+{
+	writer.StartObject();
+	parameterToJSON(writer, tex->getParameters());
+	writer.EndObject();
+}
+
+void tetraRender::SceneSaver::shaderToJSON(Writer & writer, Shader * shader)
+{
+	writer.StartObject();
+	parameterToJSON(writer, shader->getParameters());
+	writer.Key("vertex");
+	writer.StartArray();
+	for (auto shaderFile : shader->getShaderFiles())
+	{
+		if (shaderFile.second == GL_VERTEX_SHADER)
+		{
+			writer.String(shaderFile.first.c_str());
+		}
+	}
+	writer.EndArray();
+	writer.Key("vertex");
+	writer.StartArray();
+	for (auto shaderFile : shader->getShaderFiles())
+	{
+		if (shaderFile.second == GL_FRAGMENT_SHADER)
+		{
+			writer.String(shaderFile.first.c_str());
+		}
 	}
 	writer.EndArray();
 	writer.EndObject();

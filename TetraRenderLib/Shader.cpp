@@ -168,6 +168,11 @@ void tetraRender::Shader::use()
 	glUseProgram(program);
 }
 
+std::vector<std::pair<std::string, GLenum>> tetraRender::Shader::getShaderFiles()
+{
+	return shaderFiles;
+}
+
 void Shader::compileShader(GLuint shader, std::string shaderPath)
 {
 	std::ifstream shaderSource(shaderPath);

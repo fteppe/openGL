@@ -30,6 +30,7 @@ namespace tetraRender
 		GameObject* loadSingleGameObject(MAT_CONTAINER& mats, VBO_CONTAINER& objects, rapidjson::Value& go);
 		Solid* loadSolid(MAT_CONTAINER& mats, VBO_CONTAINER& objects, rapidjson::Value& go);
 		Light* loadLight(rapidjson::Value& go);
+		void setResourceParam(Resource& resource, rapidjson::Value& resourceJSON);
 	private:
 		Texture * loadTexture(rapidjson::Value& texture);
 		rapidjson::Document doc;

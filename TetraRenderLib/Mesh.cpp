@@ -106,7 +106,7 @@ void Mesh::setFilePath(std::pair<std::string, std::string> filePath)
 	this->filePath = filePath;
 }
 
-std::pair<std::string, std::string> Mesh::getFilePath()
+std::pair<std::string, std::string> Mesh::getFilePath() const
 {
 	return filePath;
 }

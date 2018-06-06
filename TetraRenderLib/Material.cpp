@@ -55,6 +55,11 @@ std::shared_ptr<Shader> Material::getShaderProgram()
 	return shader_ptr;
 }
 
+const std::map<std::string, std::shared_ptr<Texture>> tetraRender::Material::getChannels()
+{
+	return this->textures;
+}
+
 void tetraRender::Material::fillParameterContainer()
 {
 	GLint count;

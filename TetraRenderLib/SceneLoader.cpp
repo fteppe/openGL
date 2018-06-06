@@ -126,6 +126,7 @@ MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CON
 		std::map<std::string, std::string> channels;
 		//we iterate accross the channels to find them all
 		materials[matName] = std::shared_ptr<Material>(new Material(shaders[shaderName]));
+		this->setResourceParam(*materials[matName], mats[i]);
 		materials[matName]->setName(matName);
 		for (rapidjson::Value::MemberIterator j = mats[i]["channels"].MemberBegin(); j != mats[i]["channels"].MemberEnd(); j++)
 		{
@@ -195,6 +196,8 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 		loadedGo->setName("null point");
 	}
 
+	setResourceParam(*loadedGo, go);
+
 	if (go.HasMember("children"))
 	{
 		rapidjson::Value& children = go["children"];
@@ -213,23 +216,7 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 		}
 	}
 
-	for (rapidjson::Value::MemberIterator i = go.MemberBegin(); i != go.MemberEnd(); i++)
-	{
-		std::string paramName = i->name.GetString();
-		rapidjson::Value & parameter = i->value;
-		//Now that we have a value we try to know what it is to be able to construct the corresponding parameter.
-		if (parameter.IsArray())
-		{
-			//if the array is of size 3 and contains floats then we have a float vector.
-			if (parameter.GetArray().Size() == 3 && parameter.GetArray()[0].IsNumber())
-			{
-				auto vecParam = parameter.GetArray();
-				glm::vec3 vector(vecParam[0].GetFloat(), vecParam[1].GetFloat(), vecParam[2].GetFloat());
-				loadedGo->getParameters().set(paramName, vector);
-			}
-		}
 
-	}
 	//if (go.HasMember("pos"))
 	//{
 	//	if (go["pos"].IsArray())
@@ -321,6 +308,27 @@ Light * tetraRender::SceneLoader::loadLight(rapidjson::Value & go)
 	light->setName("light");
 
 	return light;
+}
+
+void tetraRender::SceneLoader::setResourceParam(Resource & resource, rapidjson::Value & resourceJSON)
+{
+	for (rapidjson::Value::MemberIterator i = resourceJSON.MemberBegin(); i != resourceJSON.MemberEnd(); i++)
+	{
+		std::string paramName = i->name.GetString();
+		rapidjson::Value & parameter = i->value;
+		//Now that we have a value we try to know what it is to be able to construct the corresponding parameter.
+		if (parameter.IsArray())
+		{
+			//if the array is of size 3 and contains floats then we have a float vector.
+			if (parameter.GetArray().Size() == 3 && parameter.GetArray()[0].IsNumber())
+			{
+				auto vecParam = parameter.GetArray();
+				glm::vec3 vector(vecParam[0].GetFloat(), vecParam[1].GetFloat(), vecParam[2].GetFloat());
+				resource.getParameters().set(paramName, vector);
+			}
+		}
+
+	}
 }
 
 Texture * SceneLoader::loadTexture(rapidjson::Value& texture)

@@ -25,6 +25,7 @@ namespace tetraRender
 		void apply(Mesh* const& VBO, Scene & scene, Solid const& solid);
 		//We get apointer on the shader program associated to this material.
 		std::shared_ptr<Shader> getShaderProgram();
+		const std::map<std::string, std::shared_ptr<Texture>> getChannels();
 
 	private:
 		

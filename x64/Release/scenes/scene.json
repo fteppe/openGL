@@ -31,6 +31,7 @@
     {
       "name": "PBR",
       "shader": "color",
+      "pu_color": [0,1,0],
       "channels": {
       }
     },
