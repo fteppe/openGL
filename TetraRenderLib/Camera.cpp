@@ -37,7 +37,6 @@ Camera::~Camera()
 glm::mat4 Camera::getProjection()
 {
 	return projection * lookAt;
-	return glm::mat4();
 }
 
 void tetraRender::Camera::setProjectionOrtho(float height, float width, float near, float far)
@@ -95,5 +94,6 @@ glm::vec2 Camera::getNearFarPlanes()
 
 void Camera::makeLookatMat()
 {
-	this->lookAt.operator=(glm::lookAt(getPos(), target, up));
+	glm::vec3 camPos = getmodelMatrix() * glm::vec4(1);
+	this->lookAt.operator=(glm::lookAt(camPos, target, up));
 }

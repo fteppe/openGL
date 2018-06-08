@@ -15,7 +15,7 @@ public:
 
 private:
 	glm::vec3 Vec3Input(glm::vec3 vec, std::string label);
-	void MaterialUI(std::shared_ptr<tetraRender::Material> mat);
+	void MaterialUI(tetraRender::Material* mat);
 	//if a children is selected then a parent won't be (not sure if effective)
 	void gameObjectTreeUI(tetraRender::GameObject* gameObject, int pos);
 	void gameObjectEditUI(tetraRender::GameObject* gameObject);

@@ -150,7 +150,10 @@ void Shader::sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> tex
 	for (auto it = textures.begin(); it != textures.end(); it++)
 	{
 		//we send to the program the channel, with it's name and the texture unit.
-		sendTexture(it->first, it->second);
+		if (it->second != nullptr)
+		{
+			sendTexture(it->first, it->second);
+		}
 	}
 
 }

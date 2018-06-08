@@ -2,7 +2,7 @@
 #include "Light.h"
 #include <iostream>
 using namespace tetraRender;
-const std::string Light::col = "col";
+const std::string Light::col = "color";
 const std::string Light::intensity = "intensity";
 const std::string Light::hasShadow = "hasShadow";
 
@@ -42,6 +42,7 @@ void tetraRender::Light::update()
 	if (parametersContainer.getBool(hasShadow))
 	{
 		shadowProjection.setPos(pos);
+		shadowProjection.update();
 	}
 }
 
@@ -57,6 +58,7 @@ void tetraRender::Light::setProjection(glm::vec3 lookAt, glm::vec3 up)
 	shadowProjection.setPos(getPos());
 	shadowProjection.setUp(up);
 	shadowProjection.setTarget(lookAt);
+	shadowProjection.setParent(this);
 	parametersContainer.set(hasShadow, true);
 }
 

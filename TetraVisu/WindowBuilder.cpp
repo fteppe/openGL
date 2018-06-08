@@ -114,7 +114,7 @@ void WindowBuilder::draw()
 		ImGui::Begin("Material editor");
 		for (auto material : scene->getMaterials())
 		{
-			this->MaterialUI(material.second);
+			this->MaterialUI(material.second.get());
 		}
 		ImGui::End();
 		ImGui::Begin("GameObjects");
@@ -166,13 +166,29 @@ glm::vec3 WindowBuilder::Vec3Input(glm::vec3 vector, std::string label)
 	return vector;
 }
 
-void WindowBuilder::MaterialUI(std::shared_ptr<tetraRender::Material> mat)
+void WindowBuilder::MaterialUI(tetraRender::Material* mat)
 {
-	ImGui::Text("--------");
+	ImGui::Separator();
 	auto& val = mat->getParameters();
 	ImGui::Text(mat->getName().c_str());
 	parameterInput(val, *mat);
-	ImGui::Text("--------");
+	for (auto channel : mat->getChannels())
+	{
+		ImGui::Text(channel.first.c_str());
+		ImGui::SameLine();
+		if (channel.second != nullptr)
+		{
+			std::shared_ptr<tetraRender::Texture > tex = channel.second;
+			ImGui::Button((tex->getName()).c_str());
+			if (ImGui::IsItemClicked())
+			{
+
+			}
+		}
+		//ImGui::EndGroup();
+	}
+	ImGui::Separator();
+
 }
 
 void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int pos)
@@ -227,7 +243,7 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject)
 		tetraRender::Material * mat = static_cast<tetraRender::Solid*>(gameObject)->getMaterial();
 		ImGui::Text(("Material : " + mat->getName()).c_str());
 
-		parameterInput(mat->getParameters(), *mat);
+		MaterialUI(mat);
 
 	}
 	selectedObject->update();
@@ -267,8 +283,6 @@ void WindowBuilder::gameObjectContext(tetraRender::GameObject * gameobject, int 
 	const char* idChar = idCharString.c_str();
 	if (ImGui::BeginPopupContextItem(idChar))
 	{
-		ImGui::Text(std::to_string(id).c_str());
-
 		ImGui::Button("delete");
 		if (ImGui::IsItemClicked())
 		{

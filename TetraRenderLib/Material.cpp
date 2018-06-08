@@ -87,6 +87,10 @@ void tetraRender::Material::fillParameterContainer()
 				parametersContainer.set(uniformName, 0.0f);
 			}
 		}
+		if (type == GL_SAMPLER_2D ||type == GL_SAMPLER_3D)
+		{
+			setChannel(nullptr, uniformName);
+		}
 		
 	}
 	
