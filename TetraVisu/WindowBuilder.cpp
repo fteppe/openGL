@@ -119,7 +119,6 @@ void WindowBuilder::draw()
 		ImGui::End();
 		ImGui::Begin("GameObjects");
 		int i = 0;
-
 		gameObjectTreeUI(scene->getGameObjects(),i);
 
 		ImGui::End();
@@ -132,9 +131,11 @@ void WindowBuilder::draw()
 		ImGui::End();
 
 		ImGui::Begin("menu");
-		if (ImGui::Button("save"));
+		ImGui::Button("save");
+		if (ImGui::IsItemClicked())
 		{
 			tetraRender::SceneSaver().saveToFile(*scene, "scenes/saved.json");
+			std::cout << "scene saved to " << "scenes/saved.json \n";
 		}
 		ImGui::End();
 		ImGui::ShowDemoWindow();
@@ -176,34 +177,34 @@ void WindowBuilder::MaterialUI(std::shared_ptr<tetraRender::Material> mat)
 
 void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int pos)
 {
+
 	std::string name = gameObject->getName();
 	auto children = gameObject->getChildren();
 	if (children.size() > 0)
 	{
 		bool tree = ImGui::TreeNode(std::to_string(pos).c_str(), name.c_str());
-
+		gameObjectContext(gameObject, pos);
 		if (ImGui::IsItemClicked())
 		{
 			selectedObject = gameObject;
 		}
 		if (tree)
 		{
-			int i = 0;
+			int childPos = pos;
 			for (auto child : gameObject->getChildren())
 			{
-				gameObjectTreeUI(child,i);
+				childPos++;
+				gameObjectTreeUI(child,childPos);
+
 			}
+			ImGui::TreePop();
+
 		}
-		ImGui::TreePop();
-
-
-		
 	}
 	else
 	{
-		if (ImGui::Button(name.c_str()), std::to_string(pos).c_str())
-		{
-		}
+		ImGui::Button(name.c_str()), std::to_string(pos).c_str();
+		gameObjectContext(gameObject, pos);
 		if (ImGui::IsItemClicked())
 		{
 			selectedObject = gameObject;
@@ -219,11 +220,13 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject)
 	auto& paramContainer = selectedObject->getParameters();
 	parameterInput(paramContainer, *gameObject);
 
+
 	if (gameObject->getType() == tetraRender::GameObjectType::SOLID)
 	{
 		//We can do static cast because we know for sure that it's a Solid thanks to the check above.
 		tetraRender::Material * mat = static_cast<tetraRender::Solid*>(gameObject)->getMaterial();
 		ImGui::Text(("Material : " + mat->getName()).c_str());
+
 		parameterInput(mat->getParameters(), *mat);
 
 	}
@@ -256,5 +259,40 @@ void WindowBuilder::parameterInput(tetraRender::ParameterContainer & param, tetr
 		}
 	}
 	resource.update();
+}
+
+void WindowBuilder::gameObjectContext(tetraRender::GameObject * gameobject, int id)
+{ 
+	std::string idCharString = std::to_string(id);
+	const char* idChar = idCharString.c_str();
+	if (ImGui::BeginPopupContextItem(idChar))
+	{
+		ImGui::Text(std::to_string(id).c_str());
+
+		ImGui::Button("delete");
+		if (ImGui::IsItemClicked())
+		{
+			if (gameobject != nullptr)
+			{
+				gameobject->removeFromParent();
+				delete gameobject;
+				if (gameobject == selectedObject)
+				{
+					selectedObject = nullptr;
+				}
+			}
+		}
+		ImGui::Button("move here");
+		if (ImGui::IsItemClicked())
+		{
+			if (gameobject != selectedObject && gameobject != nullptr)
+			{
+				selectedObject->removeFromParent();
+				selectedObject->setParent(gameobject);
+				gameobject->addChild(selectedObject);
+			}
+		}
+		ImGui::EndPopup();
+	}
 }
 

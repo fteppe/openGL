@@ -36,6 +36,7 @@ GameObjectType tetraRender::Light::getType() const
 
 void tetraRender::Light::update()
 {
+	GameObject::update();
 	//this might seem a bit weird but we need to make sure that we properly update the position of the light respectively and the one of the shadowProjection.
 	glm::vec3 pos = getPos();
 	if (parametersContainer.getBool(hasShadow))

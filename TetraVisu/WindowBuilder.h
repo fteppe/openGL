@@ -20,6 +20,7 @@ private:
 	void gameObjectTreeUI(tetraRender::GameObject* gameObject, int pos);
 	void gameObjectEditUI(tetraRender::GameObject* gameObject);
 	void parameterInput(tetraRender::ParameterContainer & param, tetraRender::Resource& resource);
+	void gameObjectContext(tetraRender::GameObject* gameobject, int id);
 
 	tetraRender::GameObject* selectedObject;
 	SDL_Window* window;

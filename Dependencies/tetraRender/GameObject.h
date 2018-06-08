@@ -34,6 +34,8 @@ namespace tetraRender
 		virtual tetraRender::GameObjectType getType() const;
 		std::vector<GameObject*> getChildren();
 		GameObject* getParent();
+		GameObject* removeChild(GameObject * child);
+		GameObject* removeFromParent();
 		virtual void update();
 
 		static const std::string pos;

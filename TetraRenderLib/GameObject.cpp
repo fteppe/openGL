@@ -125,6 +125,42 @@ GameObject * tetraRender::GameObject::getParent()
 	return parentNode;
 }
 
+GameObject * tetraRender::GameObject::removeChild(GameObject * childToRemove)
+{
+	//We want to remove the child in parameter from the list of child of this node. It should be noted that if this vector is 
+	//not part of the children, nothing will hapen.
+	GameObject* returnObj = nullptr;
+	std::vector<GameObject*> newChildren;
+	for (auto child : children)
+	{
+		if (child != childToRemove)
+		{
+			newChildren.push_back(child);
+		}
+		else
+		{
+			returnObj = child;
+		}
+	}
+	children = newChildren;
+
+	return returnObj;
+}
+
+GameObject * tetraRender::GameObject::removeFromParent()
+{
+	GameObject* parent = getParent();
+	if (parent != nullptr)
+	{
+		if (parent->removeChild(this) == nullptr)
+		{
+			std::cout << "removed from parent failed \n";
+		}
+		
+	}
+	return parent;
+}
+
 void tetraRender::GameObject::update()
 {
 	updateModelMatrix();

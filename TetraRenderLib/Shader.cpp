@@ -258,7 +258,7 @@ void tetraRender::Shader::sendVec3(std::string name, glm::vec3 vec)
 void tetraRender::Shader::sendLight(std::string name, tetraRender::Light light)
 {
 	//Since the light is a struct we need to send each component.
-	sendVec3(name + ".pos", light.getPos());
+	sendVec3(name + ".pos",light.getmodelMatrix() * glm::vec4(light.getPos(),1));
 	//sendVec3(name + ".pos", glm::vec3(0,0,1));
 	sendVec3(name + ".color", light.getParameters().getVec3(Light::col));
 	sendFloat(name + ".intensity", light.getParameters().getFloat(Light::intensity));
