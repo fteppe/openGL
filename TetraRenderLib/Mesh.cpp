@@ -33,7 +33,7 @@ Mesh::Mesh(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> inde
 		if (indexIn[i].size() > 3)
 		{
 			//std::cout << __FILE__ << "::" << __LINE__ << "ERROR :: not a triangle" << std::endl;
-			triangles = perso::Polygon::triangleSplittingIndex(vertices, indexIn[i], offset);
+			triangles = tetraRender::Polygon::triangleSplittingIndex(vertices, indexIn[i], offset);
 			index.insert(index.end(), triangles.begin(), triangles.end());
 		}
 		else

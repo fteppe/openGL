@@ -42,6 +42,8 @@ void tetraRender::Light::update()
 	if (parametersContainer.getBool(hasShadow))
 	{
 		shadowProjection.setPos(pos);
+		setProjection(glm::vec3(0), glm::vec3(0, 1, 0));
+		shadowProjection.setProjectionOrtho(5, 5, 0.1, 10);
 		shadowProjection.update();
 	}
 }

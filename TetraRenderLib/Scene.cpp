@@ -6,6 +6,7 @@
 #include "CubeMap.h"
 #include "ShaderPostProcess.h"
 
+#include<iostream>
 #include <memory>
 #include <crtdbg.h>
 

@@ -179,7 +179,6 @@
     <ClInclude Include="CubeMap.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="InstancedObject.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="ParameterContainer.h" />
@@ -198,7 +197,6 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Vec3.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="waveFrontLoader.h" />
   </ItemGroup>
@@ -207,7 +205,6 @@
     <ClCompile Include="CubeMap.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="InstancedObject.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="ParameterContainer.cpp" />
@@ -230,7 +227,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Vec3.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="waveFrontLoader.cpp" />
   </ItemGroup>

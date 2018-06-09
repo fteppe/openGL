@@ -185,7 +185,6 @@ void WindowBuilder::MaterialUI(tetraRender::Material* mat)
 
 			}
 		}
-		//ImGui::EndGroup();
 	}
 	ImGui::Separator();
 

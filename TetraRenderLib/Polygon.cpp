@@ -3,7 +3,6 @@
 #include <sstream>
 #include <numeric>//iota
 
-using namespace perso;
 using namespace tetraRender;
 
 Polygon::Polygon(std::vector<glm::vec3> pointsList)
@@ -33,7 +32,7 @@ std::vector<Polygon> Polygon::triangleSplitting()
 	return earSplitting();
 }
 
-std::vector<std::vector<int>> perso::Polygon::triangleSplittingIndex(perso::Polygon polygon, int offset)
+std::vector<std::vector<int>> tetraRender::Polygon::triangleSplittingIndex(tetraRender::Polygon polygon, int offset)
 {
 	int size = polygon.getPoints().size();
 	//points is the array of point taken in order
@@ -56,7 +55,7 @@ std::vector<std::vector<int>> perso::Polygon::triangleSplittingIndex(perso::Poly
 	return ears;
 }
 
-std::vector<std::vector<int>> perso::Polygon::triangleSplittingIndex(std::vector<glm::vec3> points, std::vector<int> index, int offset)
+std::vector<std::vector<int>> tetraRender::Polygon::triangleSplittingIndex(std::vector<glm::vec3> points, std::vector<int> index, int offset)
 {
 	int size = index.size();
 	//points is the array of point taken in order
@@ -77,12 +76,12 @@ std::vector<std::vector<int>> perso::Polygon::triangleSplittingIndex(std::vector
 	return ears;
 }
 
-std::vector<glm::vec3> perso::Polygon::getPoints()
+std::vector<glm::vec3> tetraRender::Polygon::getPoints()
 {
 	return points;
 }
 
-std::vector<GLfloat> perso::Polygon::getVertArray()
+std::vector<GLfloat> tetraRender::Polygon::getVertArray()
 {
 	std::vector<GLfloat> vertices;
 	//we put all the coordinates in one GLfoat array.
@@ -95,7 +94,7 @@ std::vector<GLfloat> perso::Polygon::getVertArray()
 	return vertices;
 }
 
-unsigned int perso::Polygon::getVertArraySize()
+unsigned int tetraRender::Polygon::getVertArraySize()
 {
 	return points.size() * 3 * sizeof(GLfloat);
 }
@@ -123,7 +122,7 @@ std::vector<Polygon> Polygon::earSplitting()
 	return ears;
 }
 
-bool Polygon::isInPolygon(std::vector<Vec3> triangle)
+bool Polygon::isInPolygon(std::vector<glm::vec3> triangle)
 {
 	return false;
 }

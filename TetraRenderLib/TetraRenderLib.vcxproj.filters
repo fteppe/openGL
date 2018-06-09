@@ -25,9 +25,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="Vec3.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
     <ClCompile Include="waveFrontLoader.cpp">
       <Filter>sources</Filter>
     </ClCompile>
@@ -35,9 +32,6 @@
       <Filter>sources\resources</Filter>
     </ClCompile>
     <ClCompile Include="CubeMap.cpp">
-      <Filter>sources\resources</Filter>
-    </ClCompile>
-    <ClCompile Include="InstancedObject.cpp">
       <Filter>sources\resources</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
@@ -78,37 +72,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h">
-      <Filter>headers</Filter>
-    </ClInclude>
     <ClInclude Include="Common.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeMap.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="FrameBuffer.h">
       <Filter>headers</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="InstancedObject.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>headers</Filter>
-    </ClInclude>
     <ClInclude Include="ParameterContainer.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Polygon.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="PreprocessorShader.h">
@@ -120,25 +90,13 @@
     <ClInclude Include="RenderPipeline.h">
       <Filter>headers</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>headers</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="SceneLoader.h">
       <Filter>headers</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderPBR.h">
-      <Filter>headers</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderPostProcess.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Solid.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
@@ -147,17 +105,47 @@
     <ClInclude Include="targetver.h">
       <Filter>headers</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Vec3.h">
-      <Filter>headers</Filter>
-    </ClInclude>
     <ClInclude Include="waveFrontLoader.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="SceneSaver.h">
       <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>headers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeMap.h">
+      <Filter>headers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>headers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>headers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>headers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>headers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon.h">
+      <Filter>headers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>headers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>headers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderPBR.h">
+      <Filter>headers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Solid.h">
+      <Filter>headers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>headers\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +162,9 @@
     </Filter>
     <Filter Include="sources\resources">
       <UniqueIdentifier>{c4933da4-6877-40b5-8a5e-79f1e6943bfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\Resources">
+      <UniqueIdentifier>{3eaa704b-8c7f-42d2-9efc-90dec781f9af}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
