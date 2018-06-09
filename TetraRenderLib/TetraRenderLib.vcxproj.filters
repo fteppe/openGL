@@ -70,6 +70,9 @@
     <ClCompile Include="SceneSaver.cpp">
       <Filter>sources</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceAtlas.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -146,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>headers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceAtlas.h">
+      <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

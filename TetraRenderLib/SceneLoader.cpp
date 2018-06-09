@@ -352,7 +352,20 @@ void tetraRender::SceneLoader::setResourceParam(Resource & resource, rapidjson::
 				glm::vec3 vector(vecParam[0].GetFloat(), vecParam[1].GetFloat(), vecParam[2].GetFloat());
 				resource.getParameters().set(paramName, vector);
 			}
+			else if (parameter.IsString())
+			{
+				resource.getParameters().set(paramName, parameter.GetString());
+			}
 		}
+		else if (parameter.IsBool())
+		{
+			resource.getParameters().set(paramName, parameter.GetBool());
+		}
+		else if (parameter.IsNumber())
+		{
+			resource.getParameters().set(paramName, parameter.GetFloat());
+		}
+
 
 	}
 }
@@ -375,7 +388,7 @@ Texture * SceneLoader::loadTexture(rapidjson::Value& texture)
 			{
 				delete tex;
 				CubeMap* map = new CubeMap();
-				map->setGamma(texture.HasMember("gamma"));
+				setResourceParam(*map, texture);
 				std::string textureDir = texture["file"].GetString();
 				textureDir += "/";
 				std::vector<std::string> cubeSides = { textureDir + "right.jpg", textureDir + "left.jpg", textureDir + "top.jpg", textureDir + "bottom.jpg",  textureDir + "front.jpg",textureDir + "back.jpg" };

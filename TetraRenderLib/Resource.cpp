@@ -31,4 +31,5 @@ ParameterContainer& tetraRender::Resource::getParameters()
 
 void tetraRender::Resource::update()
 {
+	setName(getName());
 }
