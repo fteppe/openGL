@@ -9,6 +9,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "GameObject.h"
+#include "ResourceAtlas.h"
 #include "Common.h"
 
 
@@ -22,13 +23,13 @@ namespace tetraRender
 		SceneLoader();
 		~SceneLoader();
 		void setSceneToLoad(std::string file);
-		VBO_CONTAINER  loadModels();
-		TEXTURE_CONTAINER loadTextures();
-		SHADER_CONTAINER loadShaders();
-		MAT_CONTAINER loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CONTAINER& shaders);
-		std::vector<GameObject *> loadGameObjects(MAT_CONTAINER& mats, VBO_CONTAINER& objects);
-		GameObject* loadSingleGameObject(MAT_CONTAINER& mats, VBO_CONTAINER& objects, rapidjson::Value& go);
-		Solid* loadSolid(MAT_CONTAINER& mats, VBO_CONTAINER& objects, rapidjson::Value& go);
+		void  loadModels(ResourceAtlas& atlas);
+		void loadTextures(ResourceAtlas& atlas);
+		void loadShaders(ResourceAtlas& atlas);
+		void loadMaterials(ResourceAtlas& atlas);
+		std::vector<GameObject *> loadGameObjects(ResourceAtlas& atlas);
+		GameObject* loadSingleGameObject(ResourceAtlas& atlas, rapidjson::Value& go);
+		Solid* loadSolid(ResourceAtlas& atlas, rapidjson::Value& go);
 		Light* loadLight(rapidjson::Value& go);
 		void setResourceParam(Resource& resource, rapidjson::Value& resourceJSON);
 	private:

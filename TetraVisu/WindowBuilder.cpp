@@ -34,8 +34,8 @@ WindowBuilder::WindowBuilder()
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_DisplayMode current;
 	SDL_GetCurrentDisplayMode(0, &current);
 	window = SDL_CreateWindow("ImGui SDL2+OpenGL3 example", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE| SDL_RENDERER_PRESENTVSYNC);
@@ -59,9 +59,10 @@ WindowBuilder::WindowBuilder()
 	
 	//apparently an old implementation bug tends to raise an error on startup. We call geterror to remove it.
 	glGetError();
-
-	
-	
+	if (SDL_GL_GetCurrentContext() == NULL)
+	{
+		std::cout << "no active openGL context!!\n";
+	}
 	std::cout << glGetString(GL_VERSION) << std::endl;
 	
 

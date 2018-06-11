@@ -16,6 +16,14 @@ namespace tetraRender
 		ResourceAtlas();
 		~ResourceAtlas();
 		std::string addResource(AtlasContainer<Resource> container, std::shared_ptr<Resource> resource);
+		std::string addTexture(std::shared_ptr<Texture> texture);
+		std::shared_ptr<Texture> getTexture(std::string texName);
+		std::string addShader(std::shared_ptr<Shader> shader);
+		std::shared_ptr<Shader> getShader(std::string shaderName);
+		std::string addMaterial(std::shared_ptr<Material> mat);
+		std::shared_ptr<Material> getMaterial(std::string materialName);
+		const MeshContainer& getMeshes();
+		void addMesh( std::shared_ptr<Mesh> mesh);
 		std::string getUniqueGameObjectName(std::string gameObjectName);
 
 
@@ -25,6 +33,7 @@ namespace tetraRender
 		AtlasContainer<Material> materials;
 		MeshContainer meshes;
 		std::set < std::string> gameObjectNames;
+		std::set<std::string> loadedFiles;
 		GameObject* root;
 	};
 

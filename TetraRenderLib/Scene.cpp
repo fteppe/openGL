@@ -67,16 +67,16 @@ void tetraRender::Scene::load(std::string scene)
 
 	SceneLoader loader;
 	loader.setSceneToLoad(scene);
-	auto texturesLoaded = loader.loadTextures();
-	textures.insert(texturesLoaded.begin(), texturesLoaded.end());
+	loader.loadTextures(resources);
+	//textures.insert(texturesLoaded.begin(), texturesLoaded.end());
 
-	auto shadersLoaded = loader.loadShaders();
-	shaders.insert(shadersLoaded.begin(), shadersLoaded.end());
+	loader.loadShaders(resources);
+	//shaders.insert(shadersLoaded.begin(), shadersLoaded.end());
 
-	auto materialsLoaded = loader.loadMaterials(textures, shaders);
-	materials.insert(materialsLoaded.begin(), materialsLoaded.end());
+	loader.loadMaterials(resources);
+	//materials.insert(materialsLoaded.begin(), materialsLoaded.end());
 
-	auto elementsLoaded = loader.loadGameObjects(materials, models);
+	auto elementsLoaded = loader.loadGameObjects(resources);
 	for (auto go : elementsLoaded)
 	{
 		gameObjects->addChild(go);
@@ -117,8 +117,7 @@ std::vector<Light*> tetraRender::Scene::getLights(GameObject * root) const
 
 std::shared_ptr<Texture> tetraRender::Scene::getTexture(std::string tex) 
 {
-	std::shared_ptr<Texture> texture =  textures[tex];
-	return texture;
+	return resources.getTexture(tex);
 }
 
 float tetraRender::Scene::getElapsedTime() const

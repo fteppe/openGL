@@ -34,11 +34,10 @@ void SceneLoader::setSceneToLoad(std::string file)
 
 }
 
-VBO_CONTAINER SceneLoader::loadModels()
+void SceneLoader::loadModels(ResourceAtlas& atlas)
 {
 	std::cout<<__FILE__<<" "<<__LINE__<<" loading models"<<std::endl;
 	//rapidjson::Value& objects = d["models"];
-	VBO_CONTAINER objects;
 	WaveFrontLoader loader;
 	//assert(doc.IsObject());
 	rapidjson::Value& models = doc["models"];
@@ -50,15 +49,13 @@ VBO_CONTAINER SceneLoader::loadModels()
 	for (auto obj : loaded)
 	{
 		std::pair<std::string, std::string> path = obj->getFilePath();
-		objects[path.first][path.second] = std::shared_ptr<Mesh>(obj);
+		atlas.addMesh(std::shared_ptr<Mesh>(obj));
 	}
-	return objects;
 }
 
-TEXTURE_CONTAINER SceneLoader::loadTextures()
+void SceneLoader::loadTextures(ResourceAtlas& atlas)
 {
 	std::cout<<__FILE__<<" "<<__LINE__<<" loading textures"<<std::endl;
-	TEXTURE_CONTAINER textures;
 	rapidjson::Value& texs = doc["textures"];
 	//assert(iterator != d.End());
 	assert(texs.IsArray());
@@ -66,15 +63,13 @@ TEXTURE_CONTAINER SceneLoader::loadTextures()
 	for (unsigned int i = 0; i < texs.Size(); i++)
 	{
 		std::shared_ptr<Texture> tex( loadTexture(texs[i]));
-		textures[tex->getName()] = tex;
+		atlas.addTexture(tex);
 	}
-	return textures;
 }
 
-SHADER_CONTAINER SceneLoader::loadShaders()
+void SceneLoader::loadShaders(ResourceAtlas& atlas)
 {
 	std::cout<<__FILE__<<" "<<__LINE__<<" loading shaders"<<std::endl;
-	SHADER_CONTAINER shaders;
 	assert(doc.IsObject());
 	rapidjson::Value& shadersArray = doc["shaders"];
 	//assert(shadersArray.IsArray());
@@ -109,17 +104,16 @@ SHADER_CONTAINER SceneLoader::loadShaders()
 			auto newShader = std::shared_ptr<Shader>(new ShaderPBR(vertexShaderFiles, fragmentShaderFiles));
 			newShader->setName(shaderName);
 			newShader->getParameters().set("type", std::string(shaderType));
-			shaders[shaderName] = newShader;
+			atlas.addShader( newShader);
 		}
 	}
 
-	return shaders;
 }
 
-MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CONTAINER& shaders)
+void SceneLoader::loadMaterials(ResourceAtlas& atlas)
 {
-	MAT_CONTAINER materials;
-
+	//MAT_CONTAINER materials;
+	std::shared_ptr<Material> loadedMat;
 	rapidjson::Value& mats = doc["materials"];
 	assert(mats.IsArray());
 	for (unsigned int i = 0; i < mats.Size(); i++)
@@ -128,11 +122,12 @@ MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CON
 		std::string shaderName = mats[i]["shader"].GetString();
 		std::map<std::string, std::string> channels;
 		//we iterate accross the channels to find them all
-		if (shaders.find(shaderName) != shaders.end())
+		std::shared_ptr<Shader> shader = atlas.getShader(shaderName);
+		if (shader != nullptr)
 		{
-			materials[matName] = std::shared_ptr<Material>(new Material(shaders[shaderName]));
-			this->setResourceParam(*materials[matName], mats[i]);
-			materials[matName]->setName(matName);
+			loadedMat = std::shared_ptr<Material>(new Material(shader));
+			this->setResourceParam(*loadedMat, mats[i]);
+			loadedMat->setName(matName);
 			for (rapidjson::Value::MemberIterator j = mats[i]["channels"].MemberBegin(); j != mats[i]["channels"].MemberEnd(); j++)
 			{
 				std::string channelName = j->name.GetString();
@@ -140,9 +135,10 @@ MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CON
 				if (j->value.IsString())
 				{
 					std::string texName = j->value.GetString();
-					if (textures.find(texName) != textures.end())
+					std::shared_ptr<Texture> tex = atlas.getTexture(texName);
+					if (tex != nullptr)
 					{
-						texture = textures.find(texName)->second;
+						texture = tex;
 					}
 					else
 					{
@@ -155,22 +151,19 @@ MAT_CONTAINER SceneLoader::loadMaterials(TEXTURE_CONTAINER& textures, SHADER_CON
 				}
 				
 				//We only add the new texture if it doesn't already exists
-				if (textures.find(texture->getName()) == textures.end())
-				{
-					textures[texture->getName()] = texture;
-				}
 
-				materials[matName]->setChannel(texture, channelName);
+				atlas.addTexture(texture);
+
+				loadedMat->setChannel(texture, channelName);
 
 			}
+			atlas.addMaterial(loadedMat);
 		}
 
 	}
-
-	return materials;
 }
 
-std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER& mats, VBO_CONTAINER& objects)
+std::vector<GameObject*> SceneLoader::loadGameObjects(ResourceAtlas& atlas)
 {
 	std::vector<GameObject * > gameObjects;
 	rapidjson::Value& gos = doc["gameObjects"];
@@ -181,7 +174,7 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER& mats, VBO_C
 		GameObject* loadedGo = NULL;
 		rapidjson::Value& go = gos[i];
 		//we check what kind of gameObject this is
-		loadedGo = loadSingleGameObject(mats, objects, go);
+		loadedGo = loadSingleGameObject(atlas, go);
 
 		if (loadedGo != NULL)
 		{
@@ -192,7 +185,7 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(MAT_CONTAINER& mats, VBO_C
 	return gameObjects;
 }
 
-GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats, VBO_CONTAINER & objects, rapidjson::Value& go)
+GameObject* tetraRender::SceneLoader::loadSingleGameObject(ResourceAtlas& atlas, rapidjson::Value& go)
 {
 	bool loadingWorked = true;
 	GameObject* loadedGo = NULL;
@@ -202,7 +195,7 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 		//we check what kind of gameObject this is
 		if (type == "solid")
 		{
-			loadedGo = loadSolid(mats, objects, go);
+			loadedGo = loadSolid(atlas, go);
 			if (loadedGo == NULL)
 			{
 				loadingWorked = false;
@@ -234,7 +227,7 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 			{
 				for (rapidjson::Value& child : children.GetArray())
 				{
-					GameObject* childptr = loadSingleGameObject(mats, objects, child);
+					GameObject* childptr = loadSingleGameObject(atlas, child);
 					if (childptr != NULL && loadedGo != NULL)
 					{
 						childptr->setParent(loadedGo);
@@ -251,7 +244,7 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(MAT_CONTAINER & mats,
 	return loadedGo;
 }
 
-Solid * tetraRender::SceneLoader::loadSolid(MAT_CONTAINER & mats, VBO_CONTAINER & objects, rapidjson::Value & go)
+Solid * tetraRender::SceneLoader::loadSolid(ResourceAtlas& atlas, rapidjson::Value & go)
 {
 	Solid * loadedGo = NULL;
 	std::string mat = go["material"].GetString();
@@ -261,6 +254,9 @@ Solid * tetraRender::SceneLoader::loadSolid(MAT_CONTAINER & mats, VBO_CONTAINER 
 
 	std::shared_ptr<Mesh> VBO;// = objects[filePath.first][filePath.second];
 							  //In the case the object doesn't seem to exist.
+
+	auto objects = atlas.getMeshes();
+	//That means the mesh hasn't been loaded already.
 	if (objects.find(filePath.first) == objects.end())
 	{
 		WaveFrontLoader loader;
@@ -269,7 +265,8 @@ Solid * tetraRender::SceneLoader::loadSolid(MAT_CONTAINER & mats, VBO_CONTAINER 
 
 		for (auto vbo : objectsToLoad)
 		{
-			objects[filePath.first][vbo->getFilePath().second] = std::shared_ptr<Mesh>(vbo);
+
+			atlas.addMesh(std::shared_ptr<Mesh>(vbo));
 			if (vbo->getFilePath().second == filePath.second)
 			{
 				VBO = objects[filePath.first][vbo->getFilePath().second];
@@ -288,9 +285,10 @@ Solid * tetraRender::SceneLoader::loadSolid(MAT_CONTAINER & mats, VBO_CONTAINER 
 		loadedGo = new Solid(VBO);
 
 		Solid* loadedItem = ((Solid *)loadedGo);
-		if (mats.find(mat) != mats.end())
+		std::shared_ptr<Material> material = atlas.getMaterial(mat);
+		if (material != nullptr)
 		{
-			loadedItem->setMaterial(std::shared_ptr<Material>(mats[mat]));
+			loadedItem->setMaterial(material);
 			//Since it was loaded as a game object we give it the tag.
 			loadedItem->addTag(WORLD_OBJECT);
 			loadedItem->setName(filePath.first + "::" + filePath.second);
@@ -372,7 +370,7 @@ void tetraRender::SceneLoader::setResourceParam(Resource & resource, rapidjson::
 
 Texture * SceneLoader::loadTexture(rapidjson::Value& texture)
 {
-	Texture *tex = (new Texture());
+	Texture *tex = (new Texture);
 	if (texture.IsString())
 	{
 		tex->loadTexture(texture.GetString());

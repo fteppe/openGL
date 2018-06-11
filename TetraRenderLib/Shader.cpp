@@ -20,32 +20,15 @@ Shader::Shader()
 	parametersContainer.set("type", std::string("basicShader"));
 }
 
-Shader::Shader(std::string vertex, std::string fragment) : Shader()
+
+Shader::Shader(std::string vertex, std::string fragment)
 {
+	std::vector<std::string> vertices;
+	vertices.push_back(vertex);
+	std::vector<std::string> fragments;
+	fragments.push_back(fragment);
+	Shader(vertices, fragments);
 
-	vertex = shaderDir + vertex;
-	fragment = shaderDir + fragment;
-	std::string lightCalc = "shaders/lightCalc.frag";
-
-	GLuint vertexId = glCreateShader(GL_VERTEX_SHADER);
-	GLuint fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
-	GLuint lumDiffuseCalc = glCreateShader(GL_FRAGMENT_SHADER);
-	//compiling both shaders
-	compileShader(vertexId, vertex);
-	compileShader(fragmentId, fragment);
-	compileShader(lumDiffuseCalc, lightCalc);
-
-	program = glCreateProgram();
-	glAttachShader(program, vertexId);
-	glAttachShader(program, fragmentId);
-	glAttachShader(program, lumDiffuseCalc);
-	//once they are linked to a program they are deleted
-	linkProgram();
-	glDeleteShader(vertexId);
-	glDeleteShader(fragmentId);
-	glDeleteShader(lumDiffuseCalc);
-
-	getUniformLocations();
 }
 
 Shader::Shader(std::vector<std::string> vertexShaders, std::vector<std::string> fragmentShaders) : Shader() 

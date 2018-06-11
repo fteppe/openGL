@@ -4,6 +4,7 @@
 #include "SceneLoader.h"
 #include "FrameBuffer.h"
 #include "RenderPass.h"
+#include "ResourceAtlas.h"
 #include "Common.h"
 #include "RenderPipeline.h"
 #include <vector>
@@ -106,8 +107,11 @@ namespace tetraRender
 		MAT_CONTAINER materials;
 		SHADER_CONTAINER shaders;
 		//I want to separate the textures of a scene and the G-Buffer and shadowmaps.
-		TEXTURE_CONTAINER textures;
-
+		TEXTURE_CONTAINER textures;		
+		/// <summary>
+		/// The resources of our scene, this includes textures, materials and game objects.
+		/// </summary>
+		ResourceAtlas resources;
 	};
 
 
