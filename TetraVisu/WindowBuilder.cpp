@@ -233,28 +233,38 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject)
 void WindowBuilder::parameterInput(tetraRender::ParameterContainer & param, tetraRender::Resource & resource)
 {
 	auto& paramContainer = resource.getParameters();
+	bool parametersChanged = false;
 	for (auto param : paramContainer.getParameters())
 	{
 		if (param.second == tetraRender::ParameterType::VEC3)
 		{
 			glm::vec3 vector = resource.getParameters().getVec3(param.first);
+			glm::vec3 witness = vector;
 			vector = Vec3Input(vector, param.first.c_str());
+			parametersChanged = parametersChanged || (witness != vector);
 			paramContainer.set(param.first, vector);
 
 		}
 		else if (param.second == tetraRender::ParameterType::FLOAT)
 		{
 			float val = resource.getParameters().getFloat(param.first);
+			float witness = val;
 			ImGui::DragFloat(param.first.c_str(), &val, 0.1f);
+			parametersChanged = parametersChanged || (witness != val);
 			paramContainer.set(param.first, val);
 		}
 		else if (param.second == tetraRender::ParameterType::BOOL)
 		{
 			bool val = resource.getParameters().getBool(param.first);
+			bool witness = val;
 			ImGui::Checkbox(param.first.c_str(), &val);
+			parametersChanged = parametersChanged || (witness != val);
 			paramContainer.set(param.first, val);
 		}
 	}
-	resource.update();
+	if (parametersChanged)
+	{
+		resource.update();
+	}
 }
 

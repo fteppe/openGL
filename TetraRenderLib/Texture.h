@@ -25,7 +25,9 @@ namespace tetraRender
 		void setFormat(GLenum format);
 		void setDimensions(int width, int height);
 		void loadImage(GLuint textureType, int width, int height, int channels, unsigned char * data);
+		void loadHDR(GLuint textureType, int width, int height, int channels, float * data);
 		void setGamma(bool needsGammaCorrection);
+		void update();
 		/*
 		*Gets all texture data back from the GPU.
 		*/
