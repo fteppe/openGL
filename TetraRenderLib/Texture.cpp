@@ -46,7 +46,7 @@ void Texture::loadTexture(std::string textureName)
 	}
 	else
 	{
-		unsigned char* data;
+		unsigned char* data = nullptr;
 
 		texturePath = textureName;
 		std::cout << "loading " << textureName << std::endl;
@@ -61,6 +61,8 @@ void Texture::loadTexture(std::string textureName)
 			if (data)
 			{
 				loadImage(textureType, width, height, nrChannels, data);
+				stbi_image_free(data);
+
 			}
 			else
 			{
@@ -74,7 +76,6 @@ void Texture::loadTexture(std::string textureName)
 
 		setTextureParameters();
 		//once the texture has been loaded we free it from the ram where it is no longer used.
-		stbi_image_free(data);
 		glGenerateMipmap(textureType);
 	}
 
