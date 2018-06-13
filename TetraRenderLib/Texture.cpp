@@ -46,26 +46,36 @@ void Texture::loadTexture(std::string textureName)
 	}
 	else
 	{
-		unsigned char* data;
+		unsigned char* data = nullptr;
 
 		texturePath = textureName;
 		std::cout << "loading " << textureName << std::endl;
-		data = stbi_load(textureName.c_str(), &width, &height, &nrChannels, 0);
-		//textureData = std::vector<unsigned char>(data, data+width* height* nrChannels);
-		glBindTexture(textureType, textureID);
-		setTextureParameters();
-		//Depending on the number of channels the texture is loaded differently.
-		if (data)
+		//if we are loading a HDR texture then we need to load it differently
+		if (parametersContainer.getBool(Texture::HDRvalue))
 		{
-			loadImage(textureType, width, height, nrChannels, data);
+			float* dataFloat = stbi_loadf(textureName.c_str(), &width, &height, &nrChannels, 0);
 		}
 		else
 		{
-			std::cout << "no texture" << std::endl;
-		}
+			data = stbi_load(textureName.c_str(), &width, &height, &nrChannels, 0);
+			if (data)
+			{
+				loadImage(textureType, width, height, nrChannels, data);
+				stbi_image_free(data);
 
+			}
+			else
+			{
+				std::cout << "no texture" << std::endl;
+			}
+		}
+		//textureData = std::vector<unsigned char>(data, data+width* height* nrChannels);
+		glBindTexture(textureType, textureID);
+
+		//Depending on the number of channels the texture is loaded differently.
+
+		setTextureParameters();
 		//once the texture has been loaded we free it from the ram where it is no longer used.
-		stbi_image_free(data);
 		glGenerateMipmap(textureType);
 	}
 
@@ -157,10 +167,38 @@ void Texture::loadImage(GLuint texType, int width, int height, int nrChannels, u
 	}
 }
 
+void tetraRender::Texture::loadHDR(GLuint textureType, int width, int height, int channels, float * data)
+{
+	this->width = width;
+	this->height = height;
+	this->nrChannels = nrChannels;
+	if (nrChannels == 1)
+	{
+		glTexImage2D(textureType, 0, GL_R16F, width, height, 0, GL_RED, GL_FLOAT, data);
+	}
+	else if (nrChannels == 2)
+	{
+		glTexImage2D(textureType, 0, GL_RG16F, width, height, 0, GL_RG, GL_FLOAT, data);
+	}
+	else if (nrChannels == 3)
+	{
+		glTexImage2D(textureType, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
+	}
+	else
+	{
+		glTexImage2D(textureType, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, data);
+	}
+}
+
 void tetraRender::Texture::setGamma(bool needsGammaCorrection)
 {
 	parametersContainer.set(gammaCorrected, needsGammaCorrection);
 
+}
+
+void tetraRender::Texture::update()
+{
+	loadTexture(parametersContainer.getString(file));
 }
 
 void Texture::setTextureParameters()
