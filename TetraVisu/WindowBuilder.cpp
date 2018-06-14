@@ -281,7 +281,7 @@ void WindowBuilder::parameterInput(tetraRender::ParameterContainer & param, tetr
 			paramContainer.set(param.first, val);
 		}
 	}
-	if (parametersChanged)
+	if (1)
 	{
 		resource.update();
 	}

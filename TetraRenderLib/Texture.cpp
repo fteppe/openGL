@@ -38,6 +38,7 @@ void Texture::bind()
 void Texture::loadTexture(std::string textureName)
 {
 	parametersContainer.set(file, textureName);
+	glBindTexture(textureType, textureID);
 	//If we have no name for our texture we create an empty one
 	if (textureName.size() == 0)
 	{

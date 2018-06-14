@@ -255,7 +255,7 @@ Solid * tetraRender::SceneLoader::loadSolid(ResourceAtlas& atlas, rapidjson::Val
 	std::shared_ptr<Mesh> VBO;// = objects[filePath.first][filePath.second];
 							  //In the case the object doesn't seem to exist.
 
-	auto objects = atlas.getMeshes();
+	const MeshContainer& objects = atlas.getMeshes();
 	//That means the mesh hasn't been loaded already.
 	if (objects.find(filePath.first) == objects.end())
 	{
@@ -269,14 +269,14 @@ Solid * tetraRender::SceneLoader::loadSolid(ResourceAtlas& atlas, rapidjson::Val
 			atlas.addMesh(std::shared_ptr<Mesh>(vbo));
 			if (vbo->getFilePath().second == filePath.second)
 			{
-				VBO = objects[filePath.first][vbo->getFilePath().second];
+				VBO = objects.find(filePath.first)->second.find(filePath.second)->second;
 			}
 		}
 
 	}
 	else
 	{
-		VBO = objects[filePath.first][filePath.second];
+		VBO = objects.find(filePath.first)->second.find(filePath.second)->second;
 	}
 
 	//If we found the object we add it to our scene, but if we don't we just output an error.
