@@ -23,8 +23,23 @@ Shader::Shader()
 
 Shader::Shader(std::string vertex, std::string fragment)
 {
-
-	//Shader(vertices, fragments);
+	std::vector<std::string> vertexShaders;
+	vertexShaders.push_back(vertex);
+	std::vector<std::string> fragmentShaders;
+	fragmentShaders.push_back(fragment);
+		std::vector<GLuint> vertexs;
+	std::vector<GLuint> fragments;
+	//We create the shaders
+	for (int i = 0; i < vertexShaders.size(); i++)
+	{
+		shaderFiles.push_back(std::pair<std::string, GLenum>(vertexShaders[i], GL_VERTEX_SHADER));
+	}
+	for (int i = 0; i < fragmentShaders.size(); i++)
+	{
+		shaderFiles.push_back(std::pair<std::string, GLenum>(fragmentShaders[i], GL_FRAGMENT_SHADER));
+	}
+	compileAll();
+	getUniformLocations();
 
 }
 
@@ -77,7 +92,7 @@ void tetraRender::Shader::compileAll()
 		i++;
 	}
 	i = 0;
-	//linking
+		//linking
 	std::cout << "Linking" << std::endl;
 	linkProgram();
 	for (auto shaderFile : shaderFiles)
