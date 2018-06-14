@@ -45,7 +45,7 @@
         "diffuse": {
 		"name":"bricks",
           "file": "textures/cobblestone_albedo.jpg",
-          "gamma": true
+          "gammaCorrected": true
           }
         }
     }

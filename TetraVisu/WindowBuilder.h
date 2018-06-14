@@ -17,6 +17,7 @@ private:
 	glm::vec3 Vec3Input(glm::vec3 vec, std::string label);
 	void MaterialUI(tetraRender::Material* mat);
 	//if a children is selected then a parent won't be (not sure if effective)
+	void textureUI(tetraRender::Texture* tex);
 	void gameObjectTreeUI(tetraRender::GameObject* gameObject, int pos);
 	void gameObjectEditUI(tetraRender::GameObject* gameObject);
 	void parameterInput(tetraRender::ParameterContainer & param, tetraRender::Resource& resource);

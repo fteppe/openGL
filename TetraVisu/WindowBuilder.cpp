@@ -181,6 +181,7 @@ void WindowBuilder::MaterialUI(tetraRender::Material* mat)
 		{
 			std::shared_ptr<tetraRender::Texture > tex = channel.second;
 			ImGui::Button((tex->getName()).c_str());
+			this->textureUI(tex.get());
 			if (ImGui::IsItemClicked())
 			{
 
@@ -189,6 +190,11 @@ void WindowBuilder::MaterialUI(tetraRender::Material* mat)
 	}
 	ImGui::Separator();
 
+}
+
+void WindowBuilder::textureUI(tetraRender::Texture * tex)
+{
+	parameterInput(tex->getParameters(), *tex);
 }
 
 void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int pos)
