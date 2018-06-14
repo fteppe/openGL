@@ -23,6 +23,7 @@ namespace tetraRender
 		std::string addMaterial(std::shared_ptr<Material> mat);
 		std::shared_ptr<Material> getMaterial(std::string materialName);
 		const MeshContainer& getMeshes();
+		const AtlasContainer<Texture>& getTextures();
 		void addMesh( std::shared_ptr<Mesh> mesh);
 		std::string getUniqueGameObjectName(std::string gameObjectName);
 

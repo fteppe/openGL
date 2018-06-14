@@ -75,7 +75,8 @@ namespace tetraRender
 		GameObject* getGameObjects();
 		
 		std::vector<Light * > getLights();
-		//MAT_CONTAINER & getMaterials();
+		ResourceAtlas & getResources();
+
 		RenderPipeline& getRenderPipeLine();
 
 	private:

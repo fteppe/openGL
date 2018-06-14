@@ -142,7 +142,10 @@ std::vector<Light*> tetraRender::Scene::getLights()
 	return lights;
 }
 
-
+ResourceAtlas & tetraRender::Scene::getResources()
+{
+	return resources;
+}
 
 RenderPipeline & tetraRender::Scene::getRenderPipeLine()
 {

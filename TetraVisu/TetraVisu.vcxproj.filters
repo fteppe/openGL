@@ -48,6 +48,9 @@
     <ClInclude Include="imgui_impl_sdl_gl3.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="ResourcesLibrary.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -72,6 +75,9 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_sdl_gl3.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourcesLibrary.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

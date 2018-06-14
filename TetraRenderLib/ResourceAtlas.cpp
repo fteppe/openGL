@@ -98,6 +98,11 @@ std::shared_ptr<Material> tetraRender::ResourceAtlas::getMaterial(std::string ma
 	return materials.find(materialName)->second;
 }
 
+const AtlasContainer<Texture>& tetraRender::ResourceAtlas::getTextures()
+{
+	return textures;
+}
+
 const MeshContainer & tetraRender::ResourceAtlas::getMeshes()
 {
 	return meshes;

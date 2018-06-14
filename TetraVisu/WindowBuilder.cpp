@@ -77,6 +77,7 @@ WindowBuilder::WindowBuilder(std::string sceneFile) : WindowBuilder()
 	scene->load(sceneFile);
 	tetraRender::SceneSaver saver;
 	handler = EventHandler(scene);
+	library = ResourcesLibrary(&scene->getResources());
 
 }
 
@@ -111,7 +112,7 @@ void WindowBuilder::draw()
 		}
 		scene->renderScene();
 		ImGui_ImplSdlGL3_NewFrame(window);
-
+		library.display();
 		ImGui::Begin("GameObjects");
 		int i = 0;
 		gameObjectTreeUI(scene->getGameObjects(),i);
@@ -175,7 +176,7 @@ void WindowBuilder::MaterialUI(tetraRender::Material* mat)
 		{
 			std::shared_ptr<tetraRender::Texture > tex = channel.second;
 			ImGui::Button((tex->getName()).c_str());
-			this->textureUI(tex.get());
+			textureUI(tex.get());
 			if (ImGui::IsItemClicked())
 			{
 
@@ -232,8 +233,8 @@ void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int p
 
 void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject)
 {
-	ImGui::Text(selectedObject->getName().c_str());
-	auto& paramContainer = selectedObject->getParameters();
+	ImGui::Text(gameObject->getName().c_str());
+	auto& paramContainer = gameObject->getParameters();
 	parameterInput(paramContainer, *gameObject);
 
 
@@ -246,7 +247,7 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject)
 		MaterialUI(mat);
 
 	}
-	selectedObject->update();
+	gameObject->update();
 }
 
 void WindowBuilder::parameterInput(tetraRender::ParameterContainer & param, tetraRender::Resource & resource)

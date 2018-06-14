@@ -3,6 +3,7 @@
 #include <tetraRender/Scene.h>
 #include <SDL2/SDL.h>
 #include "EventHandler.h"
+#include "ResourcesLibrary.h"
 //
 class WindowBuilder
 {
@@ -12,21 +13,23 @@ public:
 	~WindowBuilder();
 
 	void draw();
+	static void MaterialUI(tetraRender::Material* mat);
+	//if a children is selected then a parent won't be (not sure if effective)
+	static void textureUI(tetraRender::Texture* tex);
+	void gameObjectTreeUI(tetraRender::GameObject* gameObject, int pos);
+	static void gameObjectEditUI(tetraRender::GameObject* gameObject);
+	static void parameterInput(tetraRender::ParameterContainer & param, tetraRender::Resource& resource);
+	void gameObjectContext(tetraRender::GameObject* gameobject, int id);
 
 private:
-	glm::vec3 Vec3Input(glm::vec3 vec, std::string label);
-	void MaterialUI(tetraRender::Material* mat);
-	//if a children is selected then a parent won't be (not sure if effective)
-	void textureUI(tetraRender::Texture* tex);
-	void gameObjectTreeUI(tetraRender::GameObject* gameObject, int pos);
-	void gameObjectEditUI(tetraRender::GameObject* gameObject);
-	void parameterInput(tetraRender::ParameterContainer & param, tetraRender::Resource& resource);
-	void gameObjectContext(tetraRender::GameObject* gameobject, int id);
+	static glm::vec3 Vec3Input(glm::vec3 vec, std::string label);
+
 
 	tetraRender::GameObject* selectedObject;
 	SDL_Window* window;
 	SDL_GLContext gl_context;
 	EventHandler handler;
 	std::shared_ptr<tetraRender::Scene> scene;
+	ResourcesLibrary library;
 };
 
