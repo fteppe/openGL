@@ -35,10 +35,35 @@ void Texture::bind()
 	glBindTexture(textureType, this->textureID);
 }
 
-void Texture::loadTexture(std::string textureName)
+void Texture::loadTexture(std::string textureName, GLenum textureTypeIn)
 {
-	parametersContainer.set(file, textureName);
+	void* data = readFile(textureName);
+	if (data)
+	{
+		if (parametersContainer.getBool(Texture::HDRvalue))
+		{
+			data = stbi_loadf(textureName.c_str(), &width, &height, &nrChannels, 0);
+			loadHDR(textureTypeIn, width, height, nrChannels, (float*)data);
+		}
+		else
+		{
+			data = stbi_load(textureName.c_str(), &width, &height, &nrChannels, 0);
+			loadImage(textureTypeIn, width, height, nrChannels, (unsigned char*)data);
+		}
+		glGenerateMipmap(textureTypeIn);
+		stbi_image_free(data);
+	}
+	else
+	{
+		std::cout << "no data in " + textureName << std::endl;
+	}
+}
+
+void * tetraRender::Texture::readFile(std::string textureName)
+{
+	//parametersContainer.set(file, textureName);
 	glBindTexture(textureType, textureID);
+	void* data = nullptr;
 	//If we have no name for our texture we create an empty one
 	if (textureName.size() == 0)
 	{
@@ -47,44 +72,46 @@ void Texture::loadTexture(std::string textureName)
 	}
 	else
 	{
-		unsigned char* data = nullptr;
+		//unsigned char* data = nullptr;
 
 		texturePath = textureName;
 		std::cout << "loading " << textureName << std::endl;
 		//if we are loading a HDR texture then we need to load it differently
 		if (parametersContainer.getBool(Texture::HDRvalue))
 		{
-			float* dataFloat = stbi_loadf(textureName.c_str(), &width, &height, &nrChannels, 0);
-			loadHDR(textureType, width, height, nrChannels, dataFloat);
-			stbi_image_free(dataFloat);
+			data = stbi_loadf(textureName.c_str(), &width, &height, &nrChannels, 0);
+			//loadHDR(textureType, width, height, nrChannels, dataFloat);
+			//stbi_image_free(dataFloat);
 		}
 		else
 		{
 			data = stbi_load(textureName.c_str(), &width, &height, &nrChannels, 0);
-			if (data)
-			{
-				loadImage(textureType, width, height, nrChannels, data);
-				stbi_image_free(data);
 
-			}
-			else
-			{
-				std::cout << "no texture" << std::endl;
-			}
+		}
+		if (data)
+		{
+			//loadImage(textureType, width, height, nrChannels, data);
+			//stbi_image_free(data);
+
+		}
+		else
+		{
+			std::cout << "no texture" << std::endl;
 		}
 		//textureData = std::vector<unsigned char>(data, data+width* height* nrChannels);
+		std::cout << "done loading " << textureName << std::endl;
+
 		glBindTexture(textureType, textureID);
 
 		//Depending on the number of channels the texture is loaded differently.
 
 		setTextureParameters();
 		//once the texture has been loaded we free it from the ram where it is no longer used.
-		glGenerateMipmap(textureType);
+		//glGenerateMipmap(textureType);
 	}
 
-	
-	
-	std::cout << "done loading " << textureName << std::endl;
+
+	return data;
 }
 
 

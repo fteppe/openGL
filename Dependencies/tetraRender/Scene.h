@@ -75,7 +75,7 @@ namespace tetraRender
 		GameObject* getGameObjects();
 		
 		std::vector<Light * > getLights();
-		MAT_CONTAINER & getMaterials();
+		//MAT_CONTAINER & getMaterials();
 		RenderPipeline& getRenderPipeLine();
 
 	private:
@@ -103,11 +103,7 @@ namespace tetraRender
 		//I want to seperate render passes with a specific purpose (geometry, deffered shading, post process) and the building of shadowmaps.
 		// Now the rendering will hapen in this, so the scene is no longer responsible on the rendering.
 		std::unique_ptr<tetraRender::RenderPipeline> renderPipeLine;
-		VBO_CONTAINER models;
-		MAT_CONTAINER materials;
-		SHADER_CONTAINER shaders;
-		//I want to separate the textures of a scene and the G-Buffer and shadowmaps.
-		TEXTURE_CONTAINER textures;		
+
 		/// <summary>
 		/// The resources of our scene, this includes textures, materials and game objects.
 		/// </summary>

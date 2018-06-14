@@ -142,10 +142,7 @@ std::vector<Light*> tetraRender::Scene::getLights()
 	return lights;
 }
 
-MAT_CONTAINER & tetraRender::Scene::getMaterials()
-{
-	return materials;
-}
+
 
 RenderPipeline & tetraRender::Scene::getRenderPipeLine()
 {
@@ -160,14 +157,15 @@ void tetraRender::Scene::makeSkyBox()
 	std::vector<Mesh * > vec;
 	objLoader.loadVertexObjectVectorFromFile("obj/common.obj", vec);
 	bool found = false;
-	
+	std::shared_ptr<Mesh> mesh = nullptr;
 	for (Mesh * obj : vec)
 	{
 		
 		if (obj->getFilePath().second == "Cube")
 		{
 			found = true;
-			this->models["obj/common.obj"]["Cube"] = std::shared_ptr<Mesh>(obj);
+			mesh = std::shared_ptr<Mesh>(obj);
+			resources.addMesh(mesh);
 		}
 		else
 		{
@@ -186,11 +184,12 @@ void tetraRender::Scene::makeSkyBox()
 	//textures["skybox"]->loadTextures(tex);
 	Shader* shaderSky = new Shader(std::vector<std::string>({ "cubeMap.ver" }), { "cubeMap.frag" });
 	//shaders["skybox"] = std::shared_ptr<Shader>(new Shader(std::vector<std::string>({ "cubeMap.ver" }), { "cubeMap.frag" }));
-	shaders["skybox"] = std::shared_ptr<Shader>(shaderSky);
-	materials["sky"] = std::shared_ptr<Material>(new Material(shaders["skybox"]));
-	materials["sky"]->setChannel(textures["skybox"], "skybox");
-	Solid* sky = new Solid(models["obj/common.obj"]["Cube"]);
-	sky->setMaterial(materials["sky"]);
+	std::shared_ptr<Shader> shader = std::shared_ptr<Shader>(shaderSky);
+	resources.addShader(shader);
+	std::shared_ptr<Material> mat = std::shared_ptr<Material>(new Material(shader));
+	mat->setChannel(resources.getTexture("skybox"), "skybox");
+	Solid* sky = new Solid(mesh);
+	sky->setMaterial(mat);
 	sky->setScale(glm::vec3(100, 100, 100));
 	//sky->addTag(WORLD_OBJECT);
 	sky->addTag(FORWARD_RENDER);

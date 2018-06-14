@@ -112,12 +112,6 @@ void WindowBuilder::draw()
 		scene->renderScene();
 		ImGui_ImplSdlGL3_NewFrame(window);
 
-		ImGui::Begin("Material editor");
-		for (auto material : scene->getMaterials())
-		{
-			this->MaterialUI(material.second.get());
-		}
-		ImGui::End();
 		ImGui::Begin("GameObjects");
 		int i = 0;
 		gameObjectTreeUI(scene->getGameObjects(),i);
@@ -261,6 +255,8 @@ void WindowBuilder::parameterInput(tetraRender::ParameterContainer & param, tetr
 	bool parametersChanged = false;
 	for (auto param : paramContainer.getParameters())
 	{
+		std::string label = param.first + resource.getName();
+
 		if (param.second == tetraRender::ParameterType::VEC3)
 		{
 			glm::vec3 vector = resource.getParameters().getVec3(param.first);
@@ -282,7 +278,11 @@ void WindowBuilder::parameterInput(tetraRender::ParameterContainer & param, tetr
 		{
 			bool val = resource.getParameters().getBool(param.first);
 			bool witness = val;
-			ImGui::Checkbox(param.first.c_str(), &val);
+			ImGui::Checkbox((param.first+"##"+label).c_str(), &val);
+			//if (ImGui::IsItemClicked())
+			//{
+			//	val = !val;
+			//}
 			parametersChanged = parametersChanged || (witness != val);
 			paramContainer.set(param.first, val);
 		}

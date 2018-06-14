@@ -21,14 +21,18 @@ void CubeMap::loadTextures(std::vector<std::string > cubeMapElements)
 	{
 		std::string textureName = cubeMapElements[i];
 		std::cout << "loading " << textureName << std::endl;
-		data = stbi_load(textureName.c_str(), &width, &height, &nrChannels, 0);
 		GLint texType = GL_TEXTURE_CUBE_MAP_POSITIVE_X + i;
-		loadImage(texType, width, height, nrChannels, data);
-		stbi_image_free(data);
-		std::cout << "done loading " << textureName << std::endl;
+		loadTexture(textureName, texType);
 	}
 	
 	glGenerateMipmap(textureType);
+}
+
+void tetraRender::CubeMap::update()
+{
+	std::string textureDir = getParameters().getString(file);
+	std::vector<std::string> cubeSides = { textureDir + "right.jpg", textureDir + "left.jpg", textureDir + "top.jpg", textureDir + "bottom.jpg",  textureDir + "front.jpg",textureDir + "back.jpg" };
+	loadTextures(cubeSides);
 }
 
 

@@ -9,6 +9,7 @@ namespace tetraRender
 	public:
 		CubeMap();
 		void loadTextures(std::vector<std::string > cubeMapElements);
+		void update();
 		~CubeMap();
 	};
 }
