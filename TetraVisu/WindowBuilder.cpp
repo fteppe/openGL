@@ -176,10 +176,15 @@ void WindowBuilder::MaterialUI(tetraRender::Material* mat)
 		{
 			std::shared_ptr<tetraRender::Texture > tex = channel.second;
 			ImGui::Button((tex->getName()).c_str());
-			textureUI(tex.get());
+			
 			if (ImGui::IsItemClicked())
 			{
-
+				ImGui::OpenPopup(channel.first.c_str());
+			}
+			if (ImGui::BeginPopupModal(channel.first.c_str(),NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				textureUI(tex.get());
+				ImGui::EndPopup();
 			}
 		}
 	}

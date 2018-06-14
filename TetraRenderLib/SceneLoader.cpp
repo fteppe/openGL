@@ -374,8 +374,10 @@ Texture * SceneLoader::loadTexture(rapidjson::Value& texture)
 	Texture *tex = (new Texture);
 	if (texture.IsString())
 	{
-		tex->loadTexture(texture.GetString());
-		tex->setName(texture.GetString());
+		std::string textureString = texture.GetString();
+		tex->loadTexture(textureString);
+		tex->setName(textureString);
+		tex->getParameters().set(Texture::file, textureString);
 	}
 	else if(texture.IsObject())
 	{
@@ -423,7 +425,10 @@ Texture * SceneLoader::loadTexture(rapidjson::Value& texture)
 		std::string name = texture["name"].GetString();
 		tex->setName(name);
 	}
-	
+	else
+	{
+		std::cout << "can't parse texture\n";
+	}
 	
 	return tex;
 }
