@@ -55,6 +55,8 @@ void Texture::loadTexture(std::string textureName)
 		if (parametersContainer.getBool(Texture::HDRvalue))
 		{
 			float* dataFloat = stbi_loadf(textureName.c_str(), &width, &height, &nrChannels, 0);
+			loadHDR(textureType, width, height, nrChannels, dataFloat);
+			stbi_image_free(dataFloat);
 		}
 		else
 		{

@@ -23,11 +23,8 @@ Shader::Shader()
 
 Shader::Shader(std::string vertex, std::string fragment)
 {
-	std::vector<std::string> vertices;
-	vertices.push_back(vertex);
-	std::vector<std::string> fragments;
-	fragments.push_back(fragment);
-	Shader(vertices, fragments);
+
+	//Shader(vertices, fragments);
 
 }
 
@@ -80,15 +77,16 @@ void tetraRender::Shader::compileAll()
 		i++;
 	}
 	i = 0;
+	//linking
+	std::cout << "Linking" << std::endl;
+	linkProgram();
 	for (auto shaderFile : shaderFiles)
 	{
 		glDeleteShader(shaders[i]);
 		i++;
 	}
 
-	//linking
-	std::cout << "Linking" << std::endl;
-	linkProgram();
+
 
 
 }

@@ -92,7 +92,11 @@ void tetraRender::RenderPipeline::renderScene(tetraRender:: Scene & scene)
 void tetraRender::RenderPipeline::setupRenderPasses()
 {
 	//We create the material that is used to render the scene from the PoV of a light.
-	std::shared_ptr<Shader> shaderShadowPass = std::shared_ptr<Shader>(new Shader("transform.ver", "transform.frag"));
+	std::vector<std::string> vertices;
+	vertices.push_back("transform.ver");
+	std::vector<std::string> fragments;
+	fragments.push_back("transform.frag");
+	std::shared_ptr<Shader> shaderShadowPass = std::shared_ptr<Shader>(new Shader(vertices, fragments));
 	std::shared_ptr<Material> shadowMapsMat = std::shared_ptr<Material>(new Material(shaderShadowPass));
 	//pass->setMat(shadowMapsMat);
 

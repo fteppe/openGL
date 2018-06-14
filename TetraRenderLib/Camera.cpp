@@ -94,6 +94,6 @@ glm::vec2 Camera::getNearFarPlanes()
 
 void Camera::makeLookatMat()
 {
-	glm::vec3 camPos = getmodelMatrix() * glm::vec4(1);
+	//glm::vec3 camPos = getmodelMatrix() * glm::vec4(1);
 	this->lookAt.operator=(glm::lookAt(getPos(), target, up));
 }

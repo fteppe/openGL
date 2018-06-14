@@ -312,6 +312,7 @@ Solid * tetraRender::SceneLoader::loadSolid(ResourceAtlas& atlas, rapidjson::Val
 Light * tetraRender::SceneLoader::loadLight(rapidjson::Value & go)
 {
 	Light * light = new Light();
+	//setResourceParam(*light, go);
 	light->getParameters().set(Light::intensity,go["intensity"].GetFloat());
 	if (go.HasMember("color"))
 	{
