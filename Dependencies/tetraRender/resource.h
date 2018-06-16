@@ -15,6 +15,8 @@ public:
 	ParameterContainer& getParameters();
 	//This will use it's parameters to update itself accordingly.
 	virtual void update();
+	static const std::string nameField;
+
 protected:
 	std::string name;
 	ParameterContainer parametersContainer;

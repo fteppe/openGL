@@ -167,7 +167,9 @@ std::string WindowBuilder::stringInput(std::string input, std::string label)
 	char * name = new char[maxNameSize];
 	strcpy_s(name, maxNameSize, input.c_str());
 	ImGui::InputText(label.c_str(), name, maxNameSize);
-	return std::string(name);
+	std::string val= std::string(name);
+	delete name;
+	return val;
 }
 
 void WindowBuilder::MaterialUI(tetraRender::Material* mat, tetraRender::ResourceAtlas& atlas)
@@ -221,18 +223,24 @@ void WindowBuilder::MaterialUI(tetraRender::Material* mat, tetraRender::Resource
 
 void WindowBuilder::textureUI(tetraRender::Texture * tex)
 {
+
+
 	std::string name = tex->getName();
 	std::string newName = stringInput(name, "nameTex");
-	tex->setName(newName);
+
 	std::string fileName = tex->getParameters().getString(tetraRender::Texture::file);
-	std::string newFileName = stringInput(fileName, "filename");
+	std::string newFileName = stringInput(fileName, ("filename##"+fileName).c_str());
+
 	ImGui::SameLine();
 	ImGui::Button("reload");
 	if (ImGui::IsItemClicked())
 	{
+		tex->setName(newName);
 		tex->getParameters().set(tetraRender::Texture::file, newFileName);
 		tex->update();
 	}
+
+
 	parameterInput(tex->getParameters(), *tex);
 }
 

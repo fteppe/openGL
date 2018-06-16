@@ -56,9 +56,15 @@ void ResourcesLibrary::display()
 			if (ImGui::BeginPopupModal(tex.second->getName().c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
 				WindowBuilder::textureUI(tex.second.get());
-				if (ImGui::Button("OK", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+				ImGui::Button("OK", ImVec2(120, 0));
+				if (ImGui::IsItemClicked()) { ImGui::CloseCurrentPopup(); }
 				ImGui::EndPopup();
 			}
+		}
+		ImGui::Button("add texture");
+		if (ImGui::IsItemClicked())
+		{
+			resources->addTexture(std::shared_ptr<tetraRender::Texture>(new tetraRender::Texture));
 		}
 		ImGui::TreePop();
 	}

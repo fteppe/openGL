@@ -37,6 +37,7 @@ std::string tetraRender::ResourceAtlas::addTexture(std::shared_ptr<Texture> tex)
 		modifiedName = resourceName + std::to_string(i);
 		i++;
 	}
+	tex->setName(modifiedName);
 	textures.emplace(modifiedName, tex);
 	return modifiedName;
 }
@@ -63,6 +64,7 @@ std::string tetraRender::ResourceAtlas::addShader(std::shared_ptr<Shader> shader
 		modifiedName = resourceName + std::to_string(i);
 		i++;
 	}
+	shader->setName(modifiedName);
 	shaders.emplace(modifiedName, shader);
 	return modifiedName;
 }

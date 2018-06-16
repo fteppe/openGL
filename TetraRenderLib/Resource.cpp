@@ -2,7 +2,7 @@
 
 using namespace tetraRender;
 
-const std::string nameField = "name";
+const std::string Resource::nameField = "name";
 
 Resource::Resource()
 {
