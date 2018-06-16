@@ -16,6 +16,7 @@ namespace tetraRender
 		Material();
 		Material(std::shared_ptr<Shader> shader);
 		~Material();
+		void setShader(std::shared_ptr<Shader> newShader);
 		//This allows the user to create a texture channel and bind a texture to it.
 		//The user lust always be aware that the channel name and the channel in the shader should match
 		//Although it is the shader object that will handle sending this information, so a object inheriting form shader could redefine this.
@@ -23,6 +24,7 @@ namespace tetraRender
 		//We send all the relevent informations to the shader that will be necessary for the shader program
 		virtual void setProgramInformation(Scene& scene, Solid const& object);
 		void apply(Mesh* const& VBO, Scene & scene, Solid const& solid);
+		void update();
 		//We get apointer on the shader program associated to this material.
 		std::shared_ptr<Shader> getShaderProgram();
 		const std::map<std::string, std::shared_ptr<Texture>> getChannels();

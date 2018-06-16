@@ -103,6 +103,11 @@ const AtlasContainer<Texture>& tetraRender::ResourceAtlas::getTextures()
 	return textures;
 }
 
+const AtlasContainer<Shader>& tetraRender::ResourceAtlas::getShaders()
+{
+	return shaders;
+}
+
 const MeshContainer & tetraRender::ResourceAtlas::getMeshes()
 {
 	return meshes;

@@ -19,6 +19,8 @@ public:
 	void gameObjectTreeUI(tetraRender::GameObject* gameObject, int pos);
 	static void gameObjectEditUI(tetraRender::GameObject* gameObject);
 	static void parameterInput(tetraRender::ParameterContainer & param, tetraRender::Resource& resource);
+	static std::shared_ptr<tetraRender::Shader> selectShader();
+	static std::shared_ptr<tetraRender::Texture> selectTexture(std::string channel);
 	void gameObjectContext(tetraRender::GameObject* gameobject, int id);
 
 private:
@@ -29,7 +31,7 @@ private:
 	SDL_Window* window;
 	SDL_GLContext gl_context;
 	EventHandler handler;
-	std::shared_ptr<tetraRender::Scene> scene;
+	static std::shared_ptr<tetraRender::Scene> scene;
 	ResourcesLibrary library;
 };
 

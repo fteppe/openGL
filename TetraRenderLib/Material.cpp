@@ -18,6 +18,12 @@ Material::~Material()
 {
 }
 
+void tetraRender::Material::setShader(std::shared_ptr<Shader> newShader)
+{
+	this->shader_ptr = newShader;
+	fillParameterContainer();
+}
+
 void Material::setChannel( std::shared_ptr<Texture> text, std::string channel )
 {
 	textures[channel] = text;
@@ -31,13 +37,12 @@ void Material::setProgramInformation(Scene & scene, Solid const & object)
 
 void Material::apply(Mesh* const& VBO, Scene & scene, Solid const& solid)
 {
+	shader_ptr->use();
+
 	shader_ptr->setProgramInformation(scene, solid);
 	shader_ptr->sendTexChannels(textures);
-	VBO->drawObject(*shader_ptr);
-	shader_ptr->resetTextureUnitCount();
 	//We take all the parameters of that material and send it to the shader.
 	//This is great to have custom public variables and to be able to change them on the fly.
-	shader_ptr->use();
 	for (auto param : parametersContainer.getParameters())
 	{
 		if (param.second == ParameterType::VEC3)
@@ -49,6 +54,14 @@ void Material::apply(Mesh* const& VBO, Scene & scene, Solid const& solid)
 			shader_ptr->sendFloat(param.first, parametersContainer.getFloat(param.first));
 		}
 	}
+	VBO->drawObject(*shader_ptr);
+	shader_ptr->resetTextureUnitCount();
+
+}
+
+void tetraRender::Material::update()
+{
+	//fillParameterContainer();
 }
 
 std::shared_ptr<Shader> Material::getShaderProgram()
@@ -65,6 +78,9 @@ void tetraRender::Material::fillParameterContainer()
 {
 	GLint count;
 	glGetProgramiv(shader_ptr->getProgram(), GL_ACTIVE_UNIFORMS, &count);
+
+	textures.clear();
+	parametersContainer = ParameterContainer();
 
 	for (int i = 0; i < count; i++)
 	{

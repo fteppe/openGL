@@ -11,6 +11,8 @@
 #include <stdio.h>
 
 
+std::shared_ptr<tetraRender::Scene> WindowBuilder::scene = nullptr;
+
 //This will build a window using open GL and stuff, this is a way to unclutter the main.
 WindowBuilder::WindowBuilder()
 {
@@ -21,8 +23,8 @@ WindowBuilder::WindowBuilder()
 	const std::string title = "openGL";
 
 
-	unsigned width = WIDTH;
-	unsigned height = HEIGHT;
+	unsigned width = tetraRender::WIDTH;
+	unsigned height = tetraRender::HEIGHT;
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
 	{
 		printf("Error: %s\n", SDL_GetError());
@@ -38,7 +40,7 @@ WindowBuilder::WindowBuilder()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_DisplayMode current;
 	SDL_GetCurrentDisplayMode(0, &current);
-	window = SDL_CreateWindow("ImGui SDL2+OpenGL3 example", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE| SDL_RENDERER_PRESENTVSYNC);
+	window = SDL_CreateWindow("Tetra Render editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE| SDL_RENDERER_PRESENTVSYNC);
 	gl_context = SDL_GL_CreateContext(window);
 	SDL_GL_SetSwapInterval(1); // Enable vsync
 
@@ -167,25 +169,34 @@ void WindowBuilder::MaterialUI(tetraRender::Material* mat)
 	ImGui::Separator();
 	auto& val = mat->getParameters();
 	ImGui::Text(mat->getName().c_str());
+	ImGui::Button(mat->getShaderProgram()->getName().c_str());
+	std::shared_ptr<tetraRender::Shader> selectedShader = selectShader();
+	
+	if (selectedShader != nullptr)
+	{
+		mat->setShader( selectedShader  );
+		mat->update();
+	}
+	selectedShader = nullptr;
 	parameterInput(val, *mat);
 	for (auto channel : mat->getChannels())
 	{
 		ImGui::Text(channel.first.c_str());
-		ImGui::SameLine();
 		if (channel.second != nullptr)
 		{
+			ImGui::SameLine();
+
 			std::shared_ptr<tetraRender::Texture > tex = channel.second;
 			ImGui::Button((tex->getName()).c_str());
-			
-			if (ImGui::IsItemClicked())
-			{
-				ImGui::OpenPopup(channel.first.c_str());
-			}
-			if (ImGui::BeginPopupModal(channel.first.c_str(),NULL, ImGuiWindowFlags_AlwaysAutoResize))
-			{
-				textureUI(tex.get());
-				ImGui::EndPopup();
-			}
+		}
+		else
+		{
+			ImGui::Button("set Texture");
+		}
+		std::shared_ptr<tetraRender::Texture> selectedTexture = selectTexture(channel.first);
+		if (selectedTexture != nullptr)
+		{
+			mat->setChannel(selectedTexture, channel.first);
 		}
 	}
 	ImGui::Separator();
@@ -297,6 +308,69 @@ void WindowBuilder::parameterInput(tetraRender::ParameterContainer & param, tetr
 	{
 		resource.update();
 	}
+}
+
+std::shared_ptr<tetraRender::Shader> WindowBuilder::selectShader()
+{
+	std::shared_ptr<tetraRender::Shader> returnVal = nullptr;
+	tetraRender::ResourceAtlas& atlas = scene->getResources();
+	if (ImGui::IsItemClicked())
+	{
+		ImGui::OpenPopup("choose Shader");
+
+	}
+	if (ImGui::BeginPopupModal("choose Shader"))
+	{
+		for (auto shaderEntry : atlas.getShaders())
+		{
+			ImGui::Button(shaderEntry.second->getName().c_str());
+			if (ImGui::IsItemClicked())
+			{
+				returnVal = shaderEntry.second;
+				ImGui::CloseCurrentPopup();
+			}
+		}
+		ImGui::Button("cancel");
+		if (ImGui::IsItemClicked())
+		{
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	return returnVal;
+}
+
+std::shared_ptr<tetraRender::Texture> WindowBuilder::selectTexture(std::string channel)
+{
+	std::shared_ptr<tetraRender::Texture> selectedTexture = nullptr;
+	tetraRender::ResourceAtlas& atlas = scene->getResources();
+	if (ImGui::IsItemClicked())
+	{
+		ImGui::OpenPopup(("choose tex##"+channel).c_str());
+
+	}
+	if (ImGui::BeginPopupModal(("choose tex##" + channel).c_str()))
+	{
+		for (auto textureEntry : atlas.getTextures())
+		{
+			ImGui::Button(textureEntry.second->getName().c_str());
+			if (ImGui::IsItemClicked())
+			{
+				selectedTexture = textureEntry.second;
+				ImGui::CloseCurrentPopup();
+			}
+		}
+		ImGui::Button("cancel");
+		if (ImGui::IsItemClicked())
+		{
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+	return selectedTexture;
 }
 
 void WindowBuilder::gameObjectContext(tetraRender::GameObject * gameobject, int id)

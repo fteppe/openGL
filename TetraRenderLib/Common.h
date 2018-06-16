@@ -45,7 +45,10 @@ namespace tetraRender {
 #define SHADER_CONTAINER std::map<std::string, std::shared_ptr<Shader>>
 
 //This will be a constant for our program. Shared accross the entire program.
-#define WIDTH 1024
-#define HEIGHT 720
 
-const unsigned int MAX_NUM_SHADOWMAP = 3;
+namespace tetraRender {
+	const unsigned int WIDTH = 1280;
+	const unsigned int HEIGHT = 720;
+
+	const unsigned int MAX_NUM_SHADOWMAP = 3;
+}

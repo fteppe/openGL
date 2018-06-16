@@ -7,8 +7,8 @@ using namespace tetraRender;
 FrameBuffer::FrameBuffer()
 {
 	//TODO: not have these has hard coded values.
-	width = WIDTH;
-	height = HEIGHT;
+	width = tetraRender::WIDTH;
+	height = tetraRender::HEIGHT;
 	isHDR = false;
 	glGenFramebuffers(1, &frameBufferId);
 
@@ -78,7 +78,6 @@ void FrameBuffer::addColorOutputTexture(std::shared_ptr<Texture> texture)
 	{
 		textureColorSize = GL_RGB16F;
 	}
-	glTexImage2D(GL_TEXTURE_2D, 0, textureColorSize, width, height, 0, GL_RGB, GL_FLOAT, NULL);
 	//we send the image to the graphic card
 	glTexImage2D(GL_TEXTURE_2D, 0, textureColorSize, width, height, 0, GL_RGB, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -158,6 +157,8 @@ void FrameBuffer::bind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
+	glViewport(0, 0, width, height);
+
 }
 
 void tetraRender::FrameBuffer::bind(GLenum target)
