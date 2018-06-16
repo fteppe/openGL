@@ -89,6 +89,7 @@ std::string tetraRender::ResourceAtlas::addMaterial(std::shared_ptr<Material> ma
 		modifiedName = resourceName + std::to_string(i);
 		i++;
 	}
+	mat->setName(modifiedName);
 	materials.emplace(modifiedName, mat);
 	return modifiedName;
 }

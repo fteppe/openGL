@@ -92,10 +92,11 @@ vec3 valLight()
 		vec3 pos = vec3(texture(fragPos, UV));
 		Light light_ = lights[i];
 		lightIntensity = lightIntensity + diffuseCalc(light_, normal_, pos);
-		float specPow = 64;
-		float specVal = texture(specularity, UV).r;
+		vec2 specValues = texture(specularity, UV).rg;
+        float specVal = clamp(specValues.r, 0, 10);
+        float glossyness = clamp(specValues.g, 16 , 4096);
 		vec3 cameraPosition = camPos;
-		lightIntensity = lightIntensity + specCalc(light_, normal_, pos, cameraPosition, specPow, specVal);
+		lightIntensity = lightIntensity + specCalc(light_, normal_, pos, cameraPosition, glossyness, specVal);
 
         int shadowIndex = light_.shadowIndex;
         if(shadowIndex >= 0)

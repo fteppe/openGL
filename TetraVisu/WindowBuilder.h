@@ -26,6 +26,7 @@ public:
 
 private:
 	static glm::vec3 Vec3Input(glm::vec3 vec, std::string label);
+	static std::string stringInput(std::string input, std::string label);
 
 
 	tetraRender::GameObject* selectedObject;

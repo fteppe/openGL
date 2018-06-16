@@ -125,9 +125,13 @@ void tetraRender::SceneSaver::materialToJSON(Writer & writer, Material * mat, st
 	writer.StartObject();
 	for (auto pair : mat->getChannels())
 	{
-		textures[pair.second->getName()] = pair.second.get();
-		writer.Key(pair.first.c_str());
-		writer.String(pair.second->getName().c_str());
+		std::shared_ptr<Texture> tex = pair.second;
+		if (tex != nullptr)
+		{
+			textures[pair.second->getName()] = pair.second.get();
+			writer.Key(pair.first.c_str());
+			writer.String(pair.second->getName().c_str());
+		}
 	}
 	writer.EndObject();
 	writer.EndObject();

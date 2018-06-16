@@ -10,6 +10,7 @@ ResourcesLibrary::ResourcesLibrary()
 
 ResourcesLibrary::ResourcesLibrary(tetraRender::ResourceAtlas * resourcesIn)
 {
+	matEditorOpen = -1;
 	resources = resourcesIn;
 }
 
@@ -18,19 +19,28 @@ void ResourcesLibrary::display()
 	ImGui::Begin("resources");
 	if (ImGui::TreeNode("materials"))
 	{
+		int i = 0;
 		for (auto mat : resources->getMaterials())
 		{
 			ImGui::Button(mat.second->getName().c_str());
 			if (ImGui::IsItemClicked())
 			{
-				ImGui::OpenPopup(mat.second->getName().c_str());
+				matEditorOpen = i;
 			}
-			if (ImGui::BeginPopupModal(mat.second->getName().c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			if (matEditorOpen == i)
 			{
+				ImGui::Begin("mat");
 				WindowBuilder::MaterialUI(mat.second.get(), *this->resources);
-				if (ImGui::Button("OK", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
-				ImGui::EndPopup();
+				if (ImGui::Button("OK", ImVec2(120, 0))) { matEditorOpen = -1; }
+				ImGui::End();
 			}
+			i++;
+		}
+		ImGui::Separator();
+		ImGui::Button("add material");
+		if (ImGui::IsItemClicked())
+		{
+			resources->addMaterial(std::shared_ptr<tetraRender::Material>(new tetraRender::Material));
 		}
 		ImGui::TreePop();
 	}

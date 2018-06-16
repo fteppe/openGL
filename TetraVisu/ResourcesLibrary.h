@@ -9,5 +9,6 @@ public:
 	~ResourcesLibrary();
 private:
 	tetraRender::ResourceAtlas* resources;
+	int matEditorOpen;
 };
 

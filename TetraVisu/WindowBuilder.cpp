@@ -118,9 +118,7 @@ void WindowBuilder::draw()
 		int i = 0;
 		gameObjectTreeUI(scene->getGameObjects(),i);
 
-		ImGui::End();
-
-		ImGui::Begin("Game object editor");
+		ImGui::Separator();
 		if (selectedObject)
 		{
 			gameObjectEditUI(selectedObject, scene->getResources());
@@ -163,12 +161,30 @@ glm::vec3 WindowBuilder::Vec3Input(glm::vec3 vector, std::string label)
 	return vector;
 }
 
+std::string WindowBuilder::stringInput(std::string input, std::string label)
+{
+	unsigned int maxNameSize = 50;
+	char * name = new char[maxNameSize];
+	strcpy_s(name, maxNameSize, input.c_str());
+	ImGui::InputText(label.c_str(), name, maxNameSize);
+	return std::string(name);
+}
+
 void WindowBuilder::MaterialUI(tetraRender::Material* mat, tetraRender::ResourceAtlas& atlas)
 {
 	ImGui::Separator();
 	auto& val = mat->getParameters();
-	ImGui::Text(mat->getName().c_str());
-	ImGui::Button(mat->getShaderProgram()->getName().c_str());
+
+	mat->setName(stringInput(mat->getName(), "name"));
+	//ImGui::Text(mat->getName().c_str());
+	if (mat->getShaderProgram() != nullptr)
+	{
+		ImGui::Button(mat->getShaderProgram()->getName().c_str());
+	}
+	else
+	{
+		ImGui::Button("choose a shader Program");
+	}
 	std::shared_ptr<tetraRender::Shader> selectedShader = selectShader(atlas);
 	
 	if (selectedShader != nullptr)
@@ -181,9 +197,10 @@ void WindowBuilder::MaterialUI(tetraRender::Material* mat, tetraRender::Resource
 	for (auto channel : mat->getChannels())
 	{
 		ImGui::Text(channel.first.c_str());
+		ImGui::SameLine();
+
 		if (channel.second != nullptr)
 		{
-			ImGui::SameLine();
 
 			std::shared_ptr<tetraRender::Texture > tex = channel.second;
 			ImGui::Button((tex->getName()).c_str());
@@ -204,6 +221,18 @@ void WindowBuilder::MaterialUI(tetraRender::Material* mat, tetraRender::Resource
 
 void WindowBuilder::textureUI(tetraRender::Texture * tex)
 {
+	std::string name = tex->getName();
+	std::string newName = stringInput(name, "nameTex");
+	tex->setName(newName);
+	std::string fileName = tex->getParameters().getString(tetraRender::Texture::file);
+	std::string newFileName = stringInput(fileName, "filename");
+	ImGui::SameLine();
+	ImGui::Button("reload");
+	if (ImGui::IsItemClicked())
+	{
+		tex->getParameters().set(tetraRender::Texture::file, newFileName);
+		tex->update();
+	}
 	parameterInput(tex->getParameters(), *tex);
 }
 
@@ -248,7 +277,8 @@ void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int p
 
 void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject, tetraRender::ResourceAtlas & atlas)
 {
-	ImGui::Text(gameObject->getName().c_str());
+	gameObject->setName(stringInput(gameObject->getName(), "name"));
+	//ImGui::Text(gameObject->getName().c_str());
 	auto& paramContainer = gameObject->getParameters();
 	parameterInput(paramContainer, *gameObject);
 
@@ -333,6 +363,7 @@ std::shared_ptr<tetraRender::Shader> WindowBuilder::selectShader(tetraRender::Re
 				ImGui::CloseCurrentPopup();
 			}
 		}
+		ImGui::Separator();
 		ImGui::Button("cancel");
 		if (ImGui::IsItemClicked())
 		{
@@ -364,6 +395,8 @@ std::shared_ptr<tetraRender::Texture> WindowBuilder::selectTexture(std::string c
 				ImGui::CloseCurrentPopup();
 			}
 		}
+		ImGui::Separator();
+
 		ImGui::Button("cancel");
 		if (ImGui::IsItemClicked())
 		{
@@ -394,6 +427,7 @@ std::shared_ptr<tetraRender::Material> WindowBuilder::selectMaterial(tetraRender
 				ImGui::CloseCurrentPopup();
 			}
 		}
+		ImGui::Separator();
 		ImGui::Button("cancel");
 		if (ImGui::IsItemClicked())
 		{

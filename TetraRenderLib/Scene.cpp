@@ -188,10 +188,14 @@ void tetraRender::Scene::makeSkyBox()
 	Shader* shaderSky = new Shader(std::vector<std::string>({ "cubeMap.ver" }), { "cubeMap.frag" });
 	//shaders["skybox"] = std::shared_ptr<Shader>(new Shader(std::vector<std::string>({ "cubeMap.ver" }), { "cubeMap.frag" }));
 	std::shared_ptr<Shader> shader = std::shared_ptr<Shader>(shaderSky);
+	shader->setName("skybox");
 	resources.addShader(shader);
 	std::shared_ptr<Material> mat = std::shared_ptr<Material>(new Material(shader));
 	mat->setChannel(resources.getTexture("skybox"), "skybox");
+	mat->setName("skybox");
 	Solid* sky = new Solid(mesh);
+	resources.addMaterial(mat);
+	resources.addShader(shader);
 	sky->setMaterial(mat);
 	sky->setScale(glm::vec3(100, 100, 100));
 	//sky->addTag(WORLD_OBJECT);
