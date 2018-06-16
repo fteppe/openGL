@@ -256,10 +256,15 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject, tetra
 	if (gameObject->getType() == tetraRender::GameObjectType::SOLID)
 	{
 		//We can do static cast because we know for sure that it's a Solid thanks to the check above.
-		tetraRender::Material * mat = static_cast<tetraRender::Solid*>(gameObject)->getMaterial();
-		ImGui::Text(("Material : " + mat->getName()).c_str());
+		tetraRender::Solid* solid = static_cast<tetraRender::Solid*>(gameObject);
+		tetraRender::Material * mat = solid->getMaterial();
+		ImGui::Button(("Material : " + mat->getName()).c_str());
+		std::shared_ptr<tetraRender::Material> selectedMaterial = selectMaterial(atlas);
+		if (selectedMaterial != nullptr)
+		{
+			solid->setMaterial(selectedMaterial);
+		}
 
-		MaterialUI(mat, atlas);
 
 	}
 	gameObject->update();
@@ -368,6 +373,36 @@ std::shared_ptr<tetraRender::Texture> WindowBuilder::selectTexture(std::string c
 		ImGui::EndPopup();
 	}
 	return selectedTexture;
+}
+
+std::shared_ptr<tetraRender::Material> WindowBuilder::selectMaterial(tetraRender::ResourceAtlas & atlas)
+{
+	std::shared_ptr<tetraRender::Material> selectedMat = nullptr;
+	if (ImGui::IsItemClicked())
+	{
+		ImGui::OpenPopup("choose mat");
+
+	}
+	if (ImGui::BeginPopupModal("choose mat"))
+	{
+		for (auto materialEntry : atlas.getMaterials())
+		{
+			ImGui::Button(materialEntry.second->getName().c_str());
+			if (ImGui::IsItemClicked())
+			{
+				selectedMat = materialEntry.second;
+				ImGui::CloseCurrentPopup();
+			}
+		}
+		ImGui::Button("cancel");
+		if (ImGui::IsItemClicked())
+		{
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+	return selectedMat;
 }
 
 

@@ -21,6 +21,7 @@ public:
 	static void parameterInput(tetraRender::ParameterContainer & param, tetraRender::Resource& resource);
 	static std::shared_ptr<tetraRender::Shader> selectShader(tetraRender::ResourceAtlas& atlas);
 	static std::shared_ptr<tetraRender::Texture> selectTexture(std::string channel, tetraRender::ResourceAtlas& atlas);
+	static std::shared_ptr<tetraRender::Material> selectMaterial(tetraRender::ResourceAtlas& atlas);
 	void gameObjectContext(tetraRender::GameObject* gameobject, int id);
 
 private:
