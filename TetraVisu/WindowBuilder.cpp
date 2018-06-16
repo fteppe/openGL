@@ -11,7 +11,6 @@
 #include <stdio.h>
 
 
-std::shared_ptr<tetraRender::Scene> WindowBuilder::scene = nullptr;
 
 //This will build a window using open GL and stuff, this is a way to unclutter the main.
 WindowBuilder::WindowBuilder()
@@ -124,7 +123,7 @@ void WindowBuilder::draw()
 		ImGui::Begin("Game object editor");
 		if (selectedObject)
 		{
-			gameObjectEditUI(selectedObject);
+			gameObjectEditUI(selectedObject, scene->getResources());
 		}
 		ImGui::End();
 
@@ -164,13 +163,13 @@ glm::vec3 WindowBuilder::Vec3Input(glm::vec3 vector, std::string label)
 	return vector;
 }
 
-void WindowBuilder::MaterialUI(tetraRender::Material* mat)
+void WindowBuilder::MaterialUI(tetraRender::Material* mat, tetraRender::ResourceAtlas& atlas)
 {
 	ImGui::Separator();
 	auto& val = mat->getParameters();
 	ImGui::Text(mat->getName().c_str());
 	ImGui::Button(mat->getShaderProgram()->getName().c_str());
-	std::shared_ptr<tetraRender::Shader> selectedShader = selectShader();
+	std::shared_ptr<tetraRender::Shader> selectedShader = selectShader(atlas);
 	
 	if (selectedShader != nullptr)
 	{
@@ -193,7 +192,7 @@ void WindowBuilder::MaterialUI(tetraRender::Material* mat)
 		{
 			ImGui::Button("set Texture");
 		}
-		std::shared_ptr<tetraRender::Texture> selectedTexture = selectTexture(channel.first);
+		std::shared_ptr<tetraRender::Texture> selectedTexture = selectTexture(channel.first, atlas);
 		if (selectedTexture != nullptr)
 		{
 			mat->setChannel(selectedTexture, channel.first);
@@ -247,7 +246,7 @@ void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int p
 
 }
 
-void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject)
+void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject, tetraRender::ResourceAtlas & atlas)
 {
 	ImGui::Text(gameObject->getName().c_str());
 	auto& paramContainer = gameObject->getParameters();
@@ -260,7 +259,7 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject)
 		tetraRender::Material * mat = static_cast<tetraRender::Solid*>(gameObject)->getMaterial();
 		ImGui::Text(("Material : " + mat->getName()).c_str());
 
-		MaterialUI(mat);
+		MaterialUI(mat, atlas);
 
 	}
 	gameObject->update();
@@ -310,10 +309,9 @@ void WindowBuilder::parameterInput(tetraRender::ParameterContainer & param, tetr
 	}
 }
 
-std::shared_ptr<tetraRender::Shader> WindowBuilder::selectShader()
+std::shared_ptr<tetraRender::Shader> WindowBuilder::selectShader(tetraRender::ResourceAtlas & atlas)
 {
 	std::shared_ptr<tetraRender::Shader> returnVal = nullptr;
-	tetraRender::ResourceAtlas& atlas = scene->getResources();
 	if (ImGui::IsItemClicked())
 	{
 		ImGui::OpenPopup("choose Shader");
@@ -342,13 +340,12 @@ std::shared_ptr<tetraRender::Shader> WindowBuilder::selectShader()
 	return returnVal;
 }
 
-std::shared_ptr<tetraRender::Texture> WindowBuilder::selectTexture(std::string channel)
+std::shared_ptr<tetraRender::Texture> WindowBuilder::selectTexture(std::string channel, tetraRender::ResourceAtlas & atlas)
 {
 	std::shared_ptr<tetraRender::Texture> selectedTexture = nullptr;
-	tetraRender::ResourceAtlas& atlas = scene->getResources();
 	if (ImGui::IsItemClicked())
 	{
-		ImGui::OpenPopup(("choose tex##"+channel).c_str());
+		ImGui::OpenPopup(("choose tex##" + channel).c_str());
 
 	}
 	if (ImGui::BeginPopupModal(("choose tex##" + channel).c_str()))
@@ -372,6 +369,8 @@ std::shared_ptr<tetraRender::Texture> WindowBuilder::selectTexture(std::string c
 	}
 	return selectedTexture;
 }
+
+
 
 void WindowBuilder::gameObjectContext(tetraRender::GameObject * gameobject, int id)
 { 

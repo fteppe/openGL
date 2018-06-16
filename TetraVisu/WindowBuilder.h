@@ -13,14 +13,14 @@ public:
 	~WindowBuilder();
 
 	void draw();
-	static void MaterialUI(tetraRender::Material* mat);
+	static void MaterialUI(tetraRender::Material* mat, tetraRender::ResourceAtlas& atlas);
 	//if a children is selected then a parent won't be (not sure if effective)
 	static void textureUI(tetraRender::Texture* tex);
 	void gameObjectTreeUI(tetraRender::GameObject* gameObject, int pos);
-	static void gameObjectEditUI(tetraRender::GameObject* gameObject);
+	static void gameObjectEditUI(tetraRender::GameObject* gameObject, tetraRender::ResourceAtlas & atlas);
 	static void parameterInput(tetraRender::ParameterContainer & param, tetraRender::Resource& resource);
-	static std::shared_ptr<tetraRender::Shader> selectShader();
-	static std::shared_ptr<tetraRender::Texture> selectTexture(std::string channel);
+	static std::shared_ptr<tetraRender::Shader> selectShader(tetraRender::ResourceAtlas& atlas);
+	static std::shared_ptr<tetraRender::Texture> selectTexture(std::string channel, tetraRender::ResourceAtlas& atlas);
 	void gameObjectContext(tetraRender::GameObject* gameobject, int id);
 
 private:
@@ -31,7 +31,7 @@ private:
 	SDL_Window* window;
 	SDL_GLContext gl_context;
 	EventHandler handler;
-	static std::shared_ptr<tetraRender::Scene> scene;
+	std::shared_ptr<tetraRender::Scene> scene;
 	ResourcesLibrary library;
 };
 
