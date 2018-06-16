@@ -17,5 +17,5 @@ void main()
 	vec4 IBL = texture(skybox, pos, 4);
 	IBL = pow(IBL + 0.2, vec4(5));
     FragColor = texture(skybox , normalize(pos)) * 5;
-	//FragColor = IBL;
+	
 }

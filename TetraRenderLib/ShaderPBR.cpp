@@ -12,6 +12,7 @@ ShaderPBR::ShaderPBR() : Shader({"texture.ver"}, { "PBR.frag","specularCalc.frag
 
 ShaderPBR::ShaderPBR(std::vector<std::string> vertexShaders, std::vector<std::string> fragmentShaders) : Shader(vertexShaders, fragmentShaders)
 {
+	getParameters().set("type", std::string("ShaderPBR"));
 }
 
 

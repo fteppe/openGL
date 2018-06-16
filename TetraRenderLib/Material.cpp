@@ -23,7 +23,11 @@ void tetraRender::Material::setShader(std::shared_ptr<Shader> newShader)
 	std::string name = getName();
 	this->shader_ptr = newShader;
 	fillParameterContainer();
-	setName(name);
+	if (name.size())
+	{
+		setName(name);
+
+	}
 }
 
 void Material::setChannel( std::shared_ptr<Texture> text, std::string channel )

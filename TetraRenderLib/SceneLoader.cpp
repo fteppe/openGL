@@ -75,6 +75,8 @@ void SceneLoader::loadShaders(ResourceAtlas& atlas)
 	//assert(shadersArray.IsArray());
 	for (unsigned int i = 0; i < shadersArray.Size(); i++)
 	{
+		std::shared_ptr<Shader> newShader = nullptr;
+
 		std::vector < std::string > vertexShaderFiles;
 		std::vector < std::string > fragmentShaderFiles;
 		std::string shaderName = shadersArray[i]["name"].GetString();
@@ -101,11 +103,19 @@ void SceneLoader::loadShaders(ResourceAtlas& atlas)
 		//if we have a PBR shader
 		if (shaderType == "shaderPBR")
 		{
-			auto newShader = std::shared_ptr<Shader>(new ShaderPBR(vertexShaderFiles, fragmentShaderFiles));
+			newShader = std::shared_ptr<Shader>(new ShaderPBR(vertexShaderFiles, fragmentShaderFiles));
 			newShader->setName(shaderName);
 			newShader->getParameters().set("type", std::string(shaderType));
 			atlas.addShader( newShader);
 		}
+		else
+		{
+			auto newShader = std::shared_ptr<Shader>(new Shader(vertexShaderFiles, fragmentShaderFiles));
+			newShader->setName(shaderName);
+			newShader->getParameters().set("type", std::string("Shader"));
+			atlas.addShader(newShader);
+		}
+		setResourceParam(*newShader, shadersArray[i]);
 	}
 
 }
