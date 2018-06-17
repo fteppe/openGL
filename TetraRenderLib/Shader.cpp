@@ -83,7 +83,12 @@ void tetraRender::Shader::compileAll()
 		compileShader(shaders[i], shaderDir + shaderFile.first);
 		i++;
 	}
+	if (program != 0)
+	{
+		glDeleteProgram(program);
+	}
 	program = glCreateProgram();
+	use();
 	//we attach each shader to the program
 	i = 0;
 	for (auto shaderFile : shaderFiles)
@@ -100,10 +105,7 @@ void tetraRender::Shader::compileAll()
 		glDeleteShader(shaders[i]);
 		i++;
 	}
-
-
-
-
+	this->uniforms.clear();
 }
 
 unsigned int Shader::getProgram() const
@@ -229,7 +231,7 @@ void Shader::getUniformLocations()
 	glUseProgram(program);
 	uniforms["mvp"] = glGetUniformLocation(program, "mvp");
 	uniforms["objectSpace"] = glGetUniformLocation(program, "objectSpace");
-	uniforms["light"] = glGetUniformLocation(program, "light");
+	//uniforms["light"] = glGetUniformLocation(program, "light");
 }
 
 void Shader::sendMatrix4(std::string name, glm::mat4 matrix)

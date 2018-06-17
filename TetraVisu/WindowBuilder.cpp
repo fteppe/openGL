@@ -247,13 +247,11 @@ void WindowBuilder::textureUI(tetraRender::Texture * tex)
 
 void WindowBuilder::shaderUI(tetraRender::Shader * shader)
 {
-	ImGui::Text(shader->getName().c_str());
 	shader->setName(WindowBuilder::stringInput(shader->getName(),"name"));
 	std::vector<std::pair<std::string, GLenum>> shaderFiles = shader->getShaderFiles();
 	std::vector<std::pair<std::string, GLenum>> newFiles;
 	for (auto shaderFile : shaderFiles)
 	{
-		ImGui::Text(shaderFile.first.c_str());
 		std::string newName = WindowBuilder::stringInput(shaderFile.first, shaderFile.first);
 		std::pair<std::string, GLenum> file(newName, shaderFile.second);
 		newFiles.push_back(file);
