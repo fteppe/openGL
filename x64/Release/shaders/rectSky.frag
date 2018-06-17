@@ -12,9 +12,13 @@ uniform sampler2D skybox;
 void main()
 {
 	fragDepthShadowOut = 1;
-	vec3 pos = vec3(vertexPos.x,vertexPos.y,vertexPos.z);
+    vec3 pos = normalize(vec3(vertexPos.x,vertexPos.y,vertexPos.z));
+    float theta = acos (pos.y);
+	float phi = atan (pos.x, -pos.z);
 	light = vec3(1);
 	normal  = vec3(0);
-    FragColor = texture(skybox , pos.xy);
+    FragColor = texture2D (skybox, vec2 (
+      0.5 + phi / 6.2831852,
+      theta / 3.1415926)) * 2;
 	
 }
