@@ -3,7 +3,9 @@
 #include "Scene.h"
 #include <iostream>
 using namespace tetraRender;
+using TagPair = std::pair<RenderTag, std::string>;
 
+const std::vector<TagPair> GameObject::tagTranslation = GameObject::initTranslation();
 const std::string GameObject::pos = "pos";
 const std::string GameObject::scale = "scale";
 const std::string GameObject::rotationAngle = "rotAngle";
@@ -164,6 +166,42 @@ GameObject * tetraRender::GameObject::removeFromParent()
 void tetraRender::GameObject::update()
 {
 	updateModelMatrix();
+}
+
+std::string tetraRender::GameObject::getTagString(RenderTag tag)
+{
+	std::string tagString = "";
+	for (std::pair<RenderTag, std::string> tagPair : tagTranslation)
+	{
+		if (tagPair.first == tag)
+		{
+			tagString = tagPair.second;
+		}
+	}
+	return tagString;
+}
+
+RenderTag tetraRender::GameObject::getTagEnum(std::string tag)
+{
+	RenderTag tagEnum = RenderTag();
+	for (std::pair<RenderTag, std::string> tagPair : tagTranslation)
+	{
+		if (tagPair.second == tag)
+		{
+			tagEnum = tagPair.first;
+		}
+	}
+	return tagEnum;
+}
+
+std::vector<std::pair<RenderTag, std::string>> tetraRender::GameObject::initTranslation()
+{
+	std::vector<TagPair> pairs;
+	pairs.push_back(TagPair(WORLD_OBJECT, "WORLD_OBJECT"));
+	pairs.push_back(TagPair(RenderTag::FORWARD_RENDER, "FORWARD_RENDER"));
+	pairs.push_back(TagPair(RenderTag::POST_PROCESS, "POST_PROCESS"));
+
+	return pairs;
 }
 
 void GameObject::updateModelMatrix()

@@ -78,7 +78,7 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 		writer.String("solid");
 		Solid* solid = static_cast<Solid*>(gameObject);
 		auto mat = solid->getMaterial();
-		if (mat != NULL)
+		if (mat != NULL && mat->getName().size()>0)
 		{
 			mats[mat->getName()] = mat;
 			writer.Key("material");
@@ -101,6 +101,22 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 		break;
 	}
 	
+	auto renderTags = gameObject->getRenderTags();
+	if (renderTags.size() > 0)
+	{
+		writer.Key("renderTags");
+		writer.StartArray();
+		for (RenderTag tag : renderTags)
+		{
+			std::string tagString = GameObject::getTagString(tag);
+			if (tagString.size())
+			{
+				writer.String(tagString.c_str());
+			}
+		}
+		writer.EndArray();
+
+	}
 
 	ParameterContainer& paramContainer = gameObject->getParameters();
 	parameterToJSON(writer, paramContainer);

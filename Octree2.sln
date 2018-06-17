@@ -36,6 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "frag", "frag", "{6BE65391-E
 		x64\Release\shaders\lightStruct.hfrag = x64\Release\shaders\lightStruct.hfrag
 		x64\Release\shaders\PBR.frag = x64\Release\shaders\PBR.frag
 		x64\Release\shaders\postProcessEffect.frag = x64\Release\shaders\postProcessEffect.frag
+		x64\Release\shaders\rectSky.frag = x64\Release\shaders\rectSky.frag
 		x64\Release\shaders\specular.frag = x64\Release\shaders\specular.frag
 		x64\Release\shaders\specularCalc.frag = x64\Release\shaders\specularCalc.frag
 		x64\Release\shaders\structDef.frag = x64\Release\shaders\structDef.frag
@@ -92,8 +93,8 @@ Global
 		{AA732BC1-7133-4458-B583-47FF6AAF60F1} = {07F9E6C2-15D8-414F-B0CD-1BA6BB44B81E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {39BABE6F-64FF-43C3-8F19-8EDDFF05CEE5}
 		Qt5Version = 10.1
+		SolutionGuid = {39BABE6F-64FF-43C3-8F19-8EDDFF05CEE5}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

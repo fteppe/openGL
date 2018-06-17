@@ -153,16 +153,18 @@ void SceneLoader::loadMaterials(ResourceAtlas& atlas)
 					else
 					{
 						texture = std::shared_ptr<Texture>(loadTexture(j->value));
+						atlas.addTexture(texture);
 					}
 				}
 				else
 				{
 					texture = std::shared_ptr<Texture>(loadTexture(j->value));
+					atlas.addTexture(texture);
 				}
 				
 				//We only add the new texture if it doesn't already exists
 
-				atlas.addTexture(texture);
+				
 
 				loadedMat->setChannel(texture, channelName);
 
@@ -227,6 +229,17 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(ResourceAtlas& atlas,
 	}
 	if(loadedGo != NULL)
 	{
+		if (go.HasMember("renderTags"))
+		{
+			for (rapidjson::Value& tag : go["renderTags"].GetArray())
+			{
+				std::string tagString = tag.GetString();
+				if (tagString.size())
+				{
+					loadedGo->addTag(GameObject::getTagEnum(tagString));
+				}
+			}
+		}
 		setResourceParam(*loadedGo, go);
 		loadedGo->update();
 		if (go.HasMember("children"))
@@ -257,7 +270,12 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(ResourceAtlas& atlas,
 Solid * tetraRender::SceneLoader::loadSolid(ResourceAtlas& atlas, rapidjson::Value & go)
 {
 	Solid * loadedGo = NULL;
-	std::string mat = go["material"].GetString();
+	std::string mat = "";
+	if (go.HasMember("material"))
+	{
+		mat = go["material"].GetString();
+	}
+	 
 	std::pair<std::string, std::string> filePath;
 	filePath.first = go["model"][0].GetString();
 	filePath.second = go["model"][1].GetString();
@@ -299,8 +317,7 @@ Solid * tetraRender::SceneLoader::loadSolid(ResourceAtlas& atlas, rapidjson::Val
 		if (material != nullptr)
 		{
 			loadedItem->setMaterial(material);
-			//Since it was loaded as a game object we give it the tag.
-			loadedItem->addTag(WORLD_OBJECT);
+
 			loadedItem->setName(filePath.first + "::" + filePath.second);
 		}
 		else

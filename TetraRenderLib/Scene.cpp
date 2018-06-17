@@ -82,7 +82,7 @@ void tetraRender::Scene::load(std::string scene)
 		gameObjects->addChild(go);
 	}
 
-	makeSkyBox();
+	//makeSkyBox();
 	renderPipeLine->update(*this);
 }
 

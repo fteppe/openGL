@@ -38,10 +38,16 @@ namespace tetraRender
 		GameObject* removeFromParent();
 		virtual void update();
 
+		static std::string getTagString(RenderTag tag);
+		static RenderTag getTagEnum(std::string);
+		static std::vector < std::pair < RenderTag, std::string>> initTranslation();
+
+		static const std::vector < std::pair < RenderTag, std::string>> tagTranslation;
 		static const std::string pos;
 		static const std::string scale;
 		static const std::string rotationAngle;
 		static const std::string childrenField;
+
 
 	protected:
 		void updateModelMatrix();
