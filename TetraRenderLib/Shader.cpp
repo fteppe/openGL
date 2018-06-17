@@ -169,6 +169,11 @@ void tetraRender::Shader::use()
 	glUseProgram(program);
 }
 
+void tetraRender::Shader::setShaderFiles(std::vector<std::pair<std::string, GLenum>> shaderFiles)
+{
+	this->shaderFiles = shaderFiles;
+}
+
 std::vector<std::pair<std::string, GLenum>> tetraRender::Shader::getShaderFiles()
 {
 	return shaderFiles;

@@ -10,5 +10,7 @@ public:
 private:
 	tetraRender::ResourceAtlas* resources;
 	int matEditorOpen;
+	int textureEditorOpen;
+	int shaderEditorOpen;
 };
 

@@ -227,6 +227,7 @@ void WindowBuilder::textureUI(tetraRender::Texture * tex)
 
 	std::string name = tex->getName();
 	std::string newName = stringInput(name, "nameTex");
+	tex->setName(newName);
 
 	std::string fileName = tex->getParameters().getString(tetraRender::Texture::file);
 	std::string newFileName = stringInput(fileName, ("filename##"+fileName).c_str());
@@ -235,13 +236,35 @@ void WindowBuilder::textureUI(tetraRender::Texture * tex)
 	ImGui::Button("reload");
 	if (ImGui::IsItemClicked())
 	{
-		tex->setName(newName);
+		
 		tex->getParameters().set(tetraRender::Texture::file, newFileName);
 		tex->update();
 	}
 
 
 	parameterInput(tex->getParameters(), *tex);
+}
+
+void WindowBuilder::shaderUI(tetraRender::Shader * shader)
+{
+	ImGui::Text(shader->getName().c_str());
+	shader->setName(WindowBuilder::stringInput(shader->getName(),"name"));
+	std::vector<std::pair<std::string, GLenum>> shaderFiles = shader->getShaderFiles();
+	std::vector<std::pair<std::string, GLenum>> newFiles;
+	for (auto shaderFile : shaderFiles)
+	{
+		ImGui::Text(shaderFile.first.c_str());
+		std::string newName = WindowBuilder::stringInput(shaderFile.first, shaderFile.first);
+		std::pair<std::string, GLenum> file(newName, shaderFile.second);
+		newFiles.push_back(file);
+	}
+	ImGui::Button("recompile");
+	if (ImGui::IsItemClicked())
+	{
+		shader->setShaderFiles(newFiles);
+
+		shader->compileAll();
+	}
 }
 
 void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int pos)

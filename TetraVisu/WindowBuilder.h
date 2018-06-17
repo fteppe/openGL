@@ -16,6 +16,7 @@ public:
 	static void MaterialUI(tetraRender::Material* mat, tetraRender::ResourceAtlas& atlas);
 	//if a children is selected then a parent won't be (not sure if effective)
 	static void textureUI(tetraRender::Texture* tex);
+	static void shaderUI(tetraRender::Shader* shader);
 	void gameObjectTreeUI(tetraRender::GameObject* gameObject, int pos);
 	static void gameObjectEditUI(tetraRender::GameObject* gameObject, tetraRender::ResourceAtlas & atlas);
 	static void parameterInput(tetraRender::ParameterContainer & param, tetraRender::Resource& resource);

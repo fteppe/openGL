@@ -29,6 +29,7 @@ namespace tetraRender
 		virtual void sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> textures);
 		void resetTextureUnitCount();
 		void use();
+		void setShaderFiles(std::vector<std::pair<std::string, GLenum>> shaderFiles);
 		std::vector<std::pair<std::string, GLenum>> getShaderFiles();
 
 		void sendMatrix4(std::string name, glm::mat4);
