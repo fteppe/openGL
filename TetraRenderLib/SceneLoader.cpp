@@ -240,6 +240,10 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(ResourceAtlas& atlas,
 				}
 			}
 		}
+		else
+		{
+			loadedGo->addTag(WORLD_OBJECT);
+		}
 		setResourceParam(*loadedGo, go);
 		loadedGo->update();
 		if (go.HasMember("children"))
