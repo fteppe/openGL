@@ -19,6 +19,7 @@ namespace tetraRender
 		Solid();
 		Solid(std::vector<glm::vec3> vertices, std::vector<std::vector<int>> index);
 		Solid(std::shared_ptr<Mesh> vbo);
+		virtual GameObject* getDeepCopy();
 		//directly loads the VBO from an obj file.
 		Solid(std::pair <std::string, std::string> objFile);
 		~Solid();

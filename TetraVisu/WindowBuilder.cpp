@@ -499,6 +499,15 @@ void WindowBuilder::gameObjectContext(tetraRender::GameObject * gameobject, int 
 				gameobject->addChild(selectedObject);
 			}
 		}
+		ImGui::Button("copy");
+		if (ImGui::IsItemClicked())
+		{
+			if (gameobject != selectedObject && gameobject != nullptr)
+			{
+				tetraRender::GameObject* newGameObject = selectedObject->getDeepCopy();
+				gameobject->addChild(newGameObject);
+			}
+		}
 		ImGui::EndPopup();
 	}
 }

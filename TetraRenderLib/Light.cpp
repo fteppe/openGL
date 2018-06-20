@@ -34,6 +34,13 @@ GameObjectType tetraRender::Light::getType() const
 	return GameObjectType::LIGHT;
 }
 
+GameObject * tetraRender::Light::getDeepCopy()
+{
+	GameObject* copy = new Light(*this);
+	copy->copyChildren();
+	return copy;
+}
+
 void tetraRender::Light::update()
 {
 	GameObject::update();

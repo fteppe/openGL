@@ -31,6 +31,15 @@ Solid::Solid(std::shared_ptr<Mesh> vbo) : Solid()
 	setName(vboFilePath.first + "::"+vboFilePath.second);
 }
 
+GameObject * tetraRender::Solid::getDeepCopy()
+{
+	GameObject* copy = new Solid(*this);
+	//the reason we do a deep copy of the children as well is that if we delete the copy we don't want to also delete the original's children.
+	copy->copyChildren();
+
+	return copy;
+}
+
 tetraRender::Solid::Solid(std::pair<std::string, std::string> objFile)
 {
 }

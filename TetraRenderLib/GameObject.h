@@ -33,10 +33,12 @@ namespace tetraRender
 		virtual void draw(Scene& scene, std::shared_ptr<Material> mat);
 		virtual tetraRender::GameObjectType getType() const;
 		std::vector<GameObject*> getChildren();
+		virtual GameObject* getDeepCopy();
 		GameObject* getParent();
 		GameObject* removeChild(GameObject * child);
 		GameObject* removeFromParent();
 		virtual void update();
+		void copyChildren();
 
 		static std::string getTagString(RenderTag tag);
 		static RenderTag getTagEnum(std::string);

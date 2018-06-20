@@ -20,6 +20,7 @@ namespace tetraRender
 		std::vector<float> getDataArray();
 		void setPos(glm::vec3 pos);
 		virtual GameObjectType getType() const;
+		virtual GameObject* getDeepCopy();
 		virtual void update();
 		~Light();
 

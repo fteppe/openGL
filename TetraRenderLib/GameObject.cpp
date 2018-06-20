@@ -122,6 +122,16 @@ std::vector<GameObject*> tetraRender::GameObject::getChildren()
 	return children;
 }
 
+GameObject * tetraRender::GameObject::getDeepCopy()
+{
+	GameObject * copy = new GameObject(*this);
+	//the reason we do a deep copy of the children as well is that if we delete the copy we don't want to also delete the original's children.
+	copy->copyChildren();
+
+	return copy;
+
+}
+
 GameObject * tetraRender::GameObject::getParent()
 {
 	return parentNode;
@@ -208,4 +218,23 @@ void GameObject::updateModelMatrix()
 {
 	glm::vec3 posVec = parametersContainer.getVec3(pos);
 	modelMatrix = glm::translate(getPos()) * glm::scale(getScale()) * glm::rotate(rotation, parametersContainer.getVec3(rotationAngle));
+}
+
+void tetraRender::GameObject::copyChildren()
+{
+	//In this function we make a deep copy of all the childrenand replace them by the copies. There might be a better way to do it.
+	//Because there is only one owner of the children, so in theory this case shouldn't even happen and it can create memory leaks if you copy the children without havin
+	//a game object that keeps a reference to the real children.
+	std::vector<GameObject*> newChildren;
+
+	for (GameObject* currentChild : this->getChildren())
+	{
+		newChildren.push_back(currentChild->getDeepCopy());
+	}
+	this->children.clear();
+
+	for (GameObject* newChild : newChildren)
+	{
+		addChild(newChild);
+	}
 }
