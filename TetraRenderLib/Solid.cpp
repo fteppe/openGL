@@ -53,7 +53,10 @@ void Solid::draw(tetraRender::Scene& scene)
 {
  	GameObject::draw(scene);
 	//we make sure the object still exists, if it does we render it.
-	material_ptr->apply(mesh_ptr.get(), scene, *this);
+	if (material_ptr != nullptr)
+	{
+		material_ptr->apply(mesh_ptr.get(), scene, *this);
+	}
 
 }
 

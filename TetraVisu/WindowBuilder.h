@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include "EventHandler.h"
 #include "ResourcesLibrary.h"
+#include "WaveFrontImporter.h"
 //
 class WindowBuilder
 {
@@ -29,7 +30,7 @@ private:
 	static glm::vec3 Vec3Input(glm::vec3 vec, std::string label);
 	static std::string stringInput(std::string input, std::string label);
 
-
+	WaveFrontImporter importer;
 	tetraRender::GameObject* selectedObject;
 	SDL_Window* window;
 	SDL_GLContext gl_context;

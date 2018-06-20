@@ -79,6 +79,13 @@ WindowBuilder::WindowBuilder(std::string sceneFile) : WindowBuilder()
 	tetraRender::SceneSaver saver;
 	handler = EventHandler(scene);
 	library = ResourcesLibrary(&scene->getResources());
+	std::shared_ptr<tetraRender::Shader> defaultShader(new  tetraRender::Shader( std::string("transform.ver"), std::string("col.frag")));
+	std::shared_ptr<tetraRender::Material> defaultMat(new tetraRender::Material(defaultShader));
+	defaultMat->setName("default");
+	scene->getResources().addShader(defaultShader);
+	scene->getResources().addMaterial(defaultMat);
+	defaultMat->getParameters().set("pu_color", glm::vec3(1));
+	importer.setDefaultMaterial(defaultMat);
 
 }
 
@@ -132,6 +139,17 @@ void WindowBuilder::draw()
 			tetraRender::SceneSaver().saveToFile(*scene, "scenes/saved.json");
 			std::cout << "scene saved to " << "scenes/saved.json \n";
 		}
+
+		std::string file = importer.getFile();
+		file = stringInput(file, "load");
+		importer.setFile(file);
+		ImGui::Button("load waveFront");
+		if (ImGui::IsItemClicked())
+		{
+			tetraRender::GameObject* sceneRoot = scene->getGameObjects();
+			sceneRoot->addChild(importer.load());
+		}
+
 		ImGui::End();
 		ImGui::ShowDemoWindow();
 		// Rendering

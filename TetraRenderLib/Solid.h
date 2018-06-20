@@ -18,7 +18,11 @@ namespace tetraRender
 	public:
 		Solid();
 		Solid(std::vector<glm::vec3> vertices, std::vector<std::vector<int>> index);
-		Solid(std::shared_ptr<Mesh> vbo);
+		Solid(std::shared_ptr<Mesh> vbo);		
+		/// <summary>
+		/// Gets the deep copy of this solid, it should be noted that the material and the mesh are not copied. So the copy will simply add +1 to the shared_ptr reference counter.
+		/// </summary>
+		/// <returns>returns a Solid* in a GameObject*</returns>
 		virtual GameObject* getDeepCopy();
 		//directly loads the VBO from an obj file.
 		Solid(std::pair <std::string, std::string> objFile);

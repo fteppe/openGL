@@ -32,12 +32,22 @@ namespace tetraRender
 		virtual void draw(Scene& scene);
 		virtual void draw(Scene& scene, std::shared_ptr<Material> mat);
 		virtual tetraRender::GameObjectType getType() const;
-		std::vector<GameObject*> getChildren();
+		std::vector<GameObject*> getChildren();		
+		/// <summary>
+		///	Creates a deep copy of the game object, it should be noted that the deep copy is to get a copy of the children so the there is still one owner of the childrenand the
+		/// owner is the parent of the children.
+		/// </summary>
+		/// <returns> returns the deep copy of this</returns>
 		virtual GameObject* getDeepCopy();
 		GameObject* getParent();
 		GameObject* removeChild(GameObject * child);
 		GameObject* removeFromParent();
 		virtual void update();
+		
+		/// <summary>
+		/// Copies the children. It has to be public so it can be used by the object making the copy. But using it if there is no copy of the parent beeing made a therefor an original
+		///referenced WILL result in a memory leak, be carefull when using this.
+		/// </summary>
 		void copyChildren();
 
 		static std::string getTagString(RenderTag tag);
