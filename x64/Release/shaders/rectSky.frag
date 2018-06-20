@@ -17,8 +17,8 @@ void main()
 	float phi = atan (pos.x, -pos.z);
 	light = vec3(1);
 	normal  = vec3(0);
-    FragColor = texture2D (skybox, vec2 (
+    FragColor = texture(skybox, vec2 (
       0.5 + phi / 6.2831852,
-      theta / 3.1415926)) * 2;
+      theta / 3.1415926)) ;
 	
 }
