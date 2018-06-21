@@ -19,6 +19,6 @@ void main()
 	normal  = vec3(0);
     FragColor = texture(skybox, vec2 (
       0.5 + phi / 6.2831852,
-      theta / 3.1415926)) ;
+      theta / 3.1415926));
 	
 }

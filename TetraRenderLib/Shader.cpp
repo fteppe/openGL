@@ -17,11 +17,11 @@ Shader::Shader()
 {
 	highestTextureUnitUsed = 0;
 	setName("shader");
-	parametersContainer.set("type", std::string("basicShader"));
+	parametersContainer.set("type", std::string("Shader"));
 }
 
 
-Shader::Shader(std::string vertex, std::string fragment)
+Shader::Shader(std::string vertex, std::string fragment) : Shader()
 {
 	std::vector<std::string> vertexShaders;
 	vertexShaders.push_back(vertex);
