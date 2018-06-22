@@ -110,7 +110,7 @@ void SceneLoader::loadShaders(ResourceAtlas& atlas)
 		}
 		else
 		{
-			auto newShader = std::shared_ptr<Shader>(new Shader(vertexShaderFiles, fragmentShaderFiles));
+			newShader = std::shared_ptr<Shader>(new Shader(vertexShaderFiles, fragmentShaderFiles));
 			newShader->setName(shaderName);
 			newShader->getParameters().set("type", std::string("Shader"));
 			atlas.addShader(newShader);
@@ -226,10 +226,6 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(ResourceAtlas& atlas,
 		{
 			loadedGo = new GameObject();
 		}
-	}
-	else if(go["type"].IsNull())
-	{
-		loadedGo = new GameObject();
 	}
 	if(loadedGo != NULL)
 	{
@@ -386,10 +382,7 @@ void tetraRender::SceneLoader::setResourceParam(Resource & resource, rapidjson::
 				glm::vec3 vector(vecParam[0].GetFloat(), vecParam[1].GetFloat(), vecParam[2].GetFloat());
 				resource.getParameters().set(paramName, vector);
 			}
-			else if (parameter.IsString())
-			{
-				resource.getParameters().set(paramName, parameter.GetString());
-			}
+
 		}
 		else if (parameter.IsBool())
 		{
@@ -398,6 +391,10 @@ void tetraRender::SceneLoader::setResourceParam(Resource & resource, rapidjson::
 		else if (parameter.IsNumber())
 		{
 			resource.getParameters().set(paramName, parameter.GetFloat());
+		}
+		else if (parameter.IsString())
+		{
+			resource.getParameters().set(paramName, std::string(parameter.GetString()));
 		}
 
 
