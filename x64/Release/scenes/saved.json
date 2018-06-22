@@ -19,6 +19,8 @@
       "scale": [ 1.0, 1.0, 1.0 ],
       "rotAngle": [ 0.0, 0.0, 1.0 ],
       "name": "obj/scene.obj::Grid",
+      "type": "solid",
+      "material": "stone",
       "children": []
     },
     {
@@ -30,7 +32,8 @@
       "name": "light",
       "hasShadow": true,
       "intensity": 5.900000095367432,
-      "color": [ 2.4000000953674318, 0.8999999761581421, 0.0 ],
+      "color": [ 1.0, 0.8999999761581421, 0.0 ],
+      "type": "light",
       "children": []
     },
     {
@@ -42,6 +45,8 @@
       "scale": [ 1.0, 1.0, 1.0 ],
       "rotAngle": [ 0.0, 0.0, 1.0 ],
       "name": "obj/scene.obj::Suzanne",
+      "type": "solid",
+      "material": "colors",
       "children": []
     },
     {
@@ -53,6 +58,8 @@
       "scale": [ 1.0, 1.0, 1.0 ],
       "rotAngle": [ 0.0, 0.0, 1.0 ],
       "name": "obj/scene.obj::Sphere",
+      "type": "solid",
+      "material": "island",
       "children": []
     },
     {
@@ -64,17 +71,21 @@
       "scale": [ 100.0, 100.0, 100.0 ],
       "rotAngle": [ 0.0, 0.0, 1.0 ],
       "name": "obj/common.obj::Cube",
+      "type": "solid",
+      "material": "skybox",
       "children": []
     },
     {
       "type": "solid",
-      "material": "stone",
+      "material": "colors",
       "model": [ "obj/scene.obj", "Grid" ],
       "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ 2.0, 0.0, 0.0 ],
       "scale": [ 1.0, 1.0, 1.0 ],
       "rotAngle": [ 0.0, 0.0, 1.0 ],
       "name": "obj/scene.obj::Grid",
+      "type": "solid",
+      "material": "stone",
       "children": []
     },
     {
@@ -87,6 +98,7 @@
       "hasShadow": true,
       "intensity": 18.899999618530275,
       "color": [ 0.6000000238418579, 0.30000001192092898, 0.6000000238418579 ],
+      "type": "light",
       "children": []
     },
     {
@@ -99,6 +111,7 @@
       "hasShadow": false,
       "intensity": 5.699999809265137,
       "color": [ 1.0, 0.30000001192092898, 0.0 ],
+      "type": "light",
       "children": []
     },
     {
@@ -108,6 +121,7 @@
       "scale": [ 1.0, 1.0, 1.0 ],
       "rotAngle": [ 0.0, 0.0, 1.0 ],
       "name": "nullObject",
+      "type": "GameObject",
       "children": [
         {
           "type": "solid",
@@ -118,6 +132,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Torus",
+          "type": "solid",
+          "material": "default",
           "children": []
         },
         {
@@ -129,6 +145,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Suzanne",
+          "type": "solid",
+          "material": "default",
           "children": []
         },
         {
@@ -140,6 +158,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Sphere",
+          "type": "solid",
+          "material": "default",
           "children": []
         },
         {
@@ -151,16 +171,20 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Grid",
+          "type": "solid",
+          "material": "default",
           "children": []
         }
       ]
     },
     {
       "type": "GameObject",
+      "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ 2.200000047683716, 0.0, 2.0 ],
       "scale": [ 1.0, 1.0, 1.0 ],
       "rotAngle": [ 0.0, 0.0, 1.0 ],
       "name": "obj/scene.obj",
+      "type": "GameObject",
       "children": [
         {
           "type": "solid",
@@ -171,6 +195,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Torus",
+          "type": "solid",
+          "material": "default1",
           "children": []
         },
         {
@@ -182,6 +208,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Suzanne",
+          "type": "solid",
+          "material": "default1",
           "children": []
         },
         {
@@ -193,6 +221,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Sphere",
+          "type": "solid",
+          "material": "default1",
           "children": []
         },
         {
@@ -204,16 +234,20 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Grid",
+          "type": "solid",
+          "material": "default1",
           "children": []
         }
       ]
     },
     {
       "type": "GameObject",
+      "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ -0.8999999761581421, 1.2000000476837159, 0.0 ],
       "scale": [ 1.0, 1.0, 1.0 ],
       "rotAngle": [ 0.0, 0.0, 1.0 ],
       "name": "obj/scene.obj",
+      "type": "GameObject",
       "children": [
         {
           "type": "solid",
@@ -224,6 +258,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Torus",
+          "type": "solid",
+          "material": "default1",
           "children": []
         },
         {
@@ -235,6 +271,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Suzanne",
+          "type": "solid",
+          "material": "default1",
           "children": []
         },
         {
@@ -246,6 +284,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Sphere",
+          "type": "solid",
+          "material": "default1",
           "children": []
         },
         {
@@ -257,16 +297,20 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Grid",
+          "type": "solid",
+          "material": "default1",
           "children": []
         }
       ]
     },
     {
       "type": "GameObject",
+      "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ -0.8999999761581421, 1.2000000476837159, 0.0 ],
       "scale": [ 1.0, 1.0, 1.0 ],
       "rotAngle": [ 0.0, 0.0, 1.0 ],
       "name": "obj/scene.obj",
+      "type": "GameObject",
       "children": [
         {
           "type": "solid",
@@ -277,6 +321,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Torus",
+          "type": "solid",
+          "material": "default1",
           "children": []
         },
         {
@@ -288,6 +334,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Suzanne",
+          "type": "solid",
+          "material": "default1",
           "children": []
         },
         {
@@ -299,6 +347,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Sphere",
+          "type": "solid",
+          "material": "default1",
           "children": []
         },
         {
@@ -310,6 +360,8 @@
           "scale": [ 1.0, 1.0, 1.0 ],
           "rotAngle": [ 0.0, 0.0, 1.0 ],
           "name": "obj/scene.obj::Grid",
+          "type": "solid",
+          "material": "default1",
           "children": []
         }
       ]
@@ -321,12 +373,14 @@
       "pu_spec": [ 0.20000000298023225, 32.70000076293945, 0.0 ],
       "name": "colors",
       "shader": "color",
+      "shader": "color",
       "channels": {}
     },
     {
       "pu_color": [ 1.0, 1.0, 1.0 ],
       "pu_spec": [ 0.0, 0.0, 0.0 ],
       "name": "default",
+      "shader": "shader",
       "shader": "shader",
       "channels": {}
     },
@@ -335,11 +389,13 @@
       "pu_spec": [ 0.0, 0.0, 0.0 ],
       "name": "default1",
       "shader": "shader1",
+      "shader": "shader1",
       "channels": {}
     },
     {
       "pu_depth": 0.0,
       "name": "island",
+      "shader": "multiMaps",
       "shader": "multiMaps",
       "channels": {
         "diffuse": "island",
@@ -349,11 +405,13 @@
     {
       "name": "skybox",
       "shader": "skybox",
+      "shader": "skybox",
       "channels": { "skybox": "sky" }
     },
     {
       "pu_depth": 0.10000000149011612,
       "name": "stone",
+      "shader": "multiMaps",
       "shader": "multiMaps",
       "channels": {
         "depthMap": "textures/cobblestone_height.jpg",

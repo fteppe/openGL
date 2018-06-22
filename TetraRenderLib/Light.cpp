@@ -46,6 +46,13 @@ void tetraRender::Light::update()
 	GameObject::update();
 	//this might seem a bit weird but we need to make sure that we properly update the position of the light respectively and the one of the shadowProjection.
 	glm::vec3 pos = getPos();
+	glm::vec3 col = parametersContainer.getVec3(Light::col);
+	col = clamp(col, glm::vec3(0), glm::vec3(1));
+	float intensity = parametersContainer.getFloat(Light::intensity);
+	intensity = glm::max(intensity, 0.0f);
+	parametersContainer.set(Light::col, col);
+	parametersContainer.set(Light::intensity, intensity);
+
 	if (parametersContainer.getBool(hasShadow))
 	{
 		shadowProjection.setPos(pos);
