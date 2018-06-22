@@ -10,6 +10,7 @@ const std::string GameObject::pos = "pos";
 const std::string GameObject::scale = "scale";
 const std::string GameObject::rotationAngle = "rotAngle";
 const std::string GameObject::childrenField = "children";
+const std::string GameObject::material = "material";
 
 GameObject::GameObject()
 {

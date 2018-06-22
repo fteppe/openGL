@@ -4,6 +4,8 @@
 
 using namespace tetraRender;
 
+const std::string Material::shaderField = "shader";
+
 Material::Material()
 {
 	setName("mat");

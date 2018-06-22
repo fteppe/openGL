@@ -69,20 +69,19 @@ void tetraRender::SceneSaver::saveToFile(Scene & scene, std::string filePath)
 void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::StringBuffer>& writer, GameObject * gameObject,std::map<std::string, Material*>& mats )
 {
 	writer.StartObject();
-	writer.Key("type");
+
 	//depending on the game object there might be different things to add.
 	switch (gameObject->getType())
 	{
 	case GameObjectType::SOLID:
 	{
-		writer.String("solid");
+
 		Solid* solid = static_cast<Solid*>(gameObject);
 		auto mat = solid->getMaterial();
 		if (mat != NULL && mat->getName().size()>0)
 		{
 			mats[mat->getName()] = mat;
-			writer.Key("material");
-			writer.String(mat->getName().c_str());
+			solid->getParameters().set(GameObject::material, std::string(mat->getName()));
 		}
 		writer.Key("model");
 		writer.StartArray();
@@ -94,10 +93,8 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 
 		break;
 	case GameObjectType::LIGHT:
-		writer.String("light");
 		break;
 	default:
-		writer.String("GameObject");
 		break;
 	}
 	
@@ -134,9 +131,9 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 void tetraRender::SceneSaver::materialToJSON(Writer & writer, Material * mat, std::map<std::string, Texture*>& textures)
 {
 	writer.StartObject();
+	mat->getParameters().set(Material::shaderField, std::string(mat->getShaderProgram()->getName()));
 	parameterToJSON(writer, mat->getParameters());
-	writer.Key("shader");
-	writer.String(mat->getShaderProgram()->getName().c_str());
+	
 	writer.Key("channels");
 	writer.StartObject();
 	for (auto pair : mat->getChannels())

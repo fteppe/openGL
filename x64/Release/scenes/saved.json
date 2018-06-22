@@ -1,7 +1,6 @@
 {
   "gameObjects": [
     {
-      "type": "solid",
       "model": [ "hard", "screen" ],
       "renderTags": [ "POST_PROCESS" ],
       "pos": [ 0.0, 0.0, 0.0 ],
@@ -11,8 +10,6 @@
       "children": []
     },
     {
-      "type": "solid",
-      "material": "stone",
       "model": [ "obj/scene.obj", "Grid" ],
       "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ 0.0, 0.0, 0.0 ],
@@ -24,7 +21,6 @@
       "children": []
     },
     {
-      "type": "light",
       "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ -0.20000000298023225, 0.20000000298023225, -0.30000001192092898 ],
       "scale": [ -0.4000000059604645, 1.0, 1.0 ],
@@ -37,8 +33,6 @@
       "children": []
     },
     {
-      "type": "solid",
-      "material": "colors",
       "model": [ "obj/scene.obj", "Suzanne" ],
       "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ 0.0, 0.0, 0.0 ],
@@ -50,8 +44,6 @@
       "children": []
     },
     {
-      "type": "solid",
-      "material": "island",
       "model": [ "obj/scene.obj", "Sphere" ],
       "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ 0.0, 0.0, 0.0 ],
@@ -63,8 +55,6 @@
       "children": []
     },
     {
-      "type": "solid",
-      "material": "skybox",
       "model": [ "obj/common.obj", "Cube" ],
       "renderTags": [ "FORWARD_RENDER" ],
       "pos": [ 0.20000000298023225, 0.0, 0.0 ],
@@ -76,8 +66,6 @@
       "children": []
     },
     {
-      "type": "solid",
-      "material": "colors",
       "model": [ "obj/scene.obj", "Grid" ],
       "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ 2.0, 0.0, 0.0 ],
@@ -85,11 +73,10 @@
       "rotAngle": [ 0.0, 0.0, 1.0 ],
       "name": "obj/scene.obj::Grid",
       "type": "solid",
-      "material": "stone",
+      "material": "colors",
       "children": []
     },
     {
-      "type": "light",
       "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ 1.2000000476837159, 1.2999999523162842, 0.10000000149011612 ],
       "scale": [ 1.0, 1.0, 1.0 ],
@@ -102,7 +89,6 @@
       "children": []
     },
     {
-      "type": "light",
       "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ 1.2999999523162842, 0.30000001192092898, -0.30000001192092898 ],
       "scale": [ 1.0, 1.0, 1.0 ],
@@ -115,7 +101,6 @@
       "children": []
     },
     {
-      "type": "GameObject",
       "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ 0.20000000298023225, 0.0, 2.0 ],
       "scale": [ 1.0, 1.0, 1.0 ],
@@ -124,8 +109,6 @@
       "type": "GameObject",
       "children": [
         {
-          "type": "solid",
-          "material": "default",
           "model": [ "obj/scene.obj", "Torus" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -137,8 +120,6 @@
           "children": []
         },
         {
-          "type": "solid",
-          "material": "default",
           "model": [ "obj/scene.obj", "Suzanne" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -150,8 +131,6 @@
           "children": []
         },
         {
-          "type": "solid",
-          "material": "default",
           "model": [ "obj/scene.obj", "Sphere" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -163,8 +142,6 @@
           "children": []
         },
         {
-          "type": "solid",
-          "material": "default",
           "model": [ "obj/scene.obj", "Grid" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -178,7 +155,6 @@
       ]
     },
     {
-      "type": "GameObject",
       "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ 2.200000047683716, 0.0, 2.0 ],
       "scale": [ 1.0, 1.0, 1.0 ],
@@ -187,8 +163,6 @@
       "type": "GameObject",
       "children": [
         {
-          "type": "solid",
-          "material": "default1",
           "model": [ "obj/scene.obj", "Torus" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -200,8 +174,6 @@
           "children": []
         },
         {
-          "type": "solid",
-          "material": "default1",
           "model": [ "obj/scene.obj", "Suzanne" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -213,8 +185,6 @@
           "children": []
         },
         {
-          "type": "solid",
-          "material": "default1",
           "model": [ "obj/scene.obj", "Sphere" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -226,8 +196,6 @@
           "children": []
         },
         {
-          "type": "solid",
-          "material": "default1",
           "model": [ "obj/scene.obj", "Grid" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -241,7 +209,6 @@
       ]
     },
     {
-      "type": "GameObject",
       "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ -0.8999999761581421, 1.2000000476837159, 0.0 ],
       "scale": [ 1.0, 1.0, 1.0 ],
@@ -250,8 +217,6 @@
       "type": "GameObject",
       "children": [
         {
-          "type": "solid",
-          "material": "default1",
           "model": [ "obj/scene.obj", "Torus" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -263,8 +228,6 @@
           "children": []
         },
         {
-          "type": "solid",
-          "material": "default1",
           "model": [ "obj/scene.obj", "Suzanne" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -276,8 +239,6 @@
           "children": []
         },
         {
-          "type": "solid",
-          "material": "default1",
           "model": [ "obj/scene.obj", "Sphere" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -289,8 +250,6 @@
           "children": []
         },
         {
-          "type": "solid",
-          "material": "default1",
           "model": [ "obj/scene.obj", "Grid" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -304,7 +263,6 @@
       ]
     },
     {
-      "type": "GameObject",
       "renderTags": [ "WORLD_OBJECT" ],
       "pos": [ -0.8999999761581421, 1.2000000476837159, 0.0 ],
       "scale": [ 1.0, 1.0, 1.0 ],
@@ -313,8 +271,6 @@
       "type": "GameObject",
       "children": [
         {
-          "type": "solid",
-          "material": "default1",
           "model": [ "obj/scene.obj", "Torus" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -326,8 +282,6 @@
           "children": []
         },
         {
-          "type": "solid",
-          "material": "default1",
           "model": [ "obj/scene.obj", "Suzanne" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -339,8 +293,6 @@
           "children": []
         },
         {
-          "type": "solid",
-          "material": "default1",
           "model": [ "obj/scene.obj", "Sphere" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -352,8 +304,6 @@
           "children": []
         },
         {
-          "type": "solid",
-          "material": "default1",
           "model": [ "obj/scene.obj", "Grid" ],
           "renderTags": [ "WORLD_OBJECT" ],
           "pos": [ 0.0, 0.0, 0.0 ],
@@ -373,14 +323,12 @@
       "pu_spec": [ 0.20000000298023225, 32.70000076293945, 0.0 ],
       "name": "colors",
       "shader": "color",
-      "shader": "color",
       "channels": {}
     },
     {
       "pu_color": [ 1.0, 1.0, 1.0 ],
       "pu_spec": [ 0.0, 0.0, 0.0 ],
       "name": "default",
-      "shader": "shader",
       "shader": "shader",
       "channels": {}
     },
@@ -389,13 +337,11 @@
       "pu_spec": [ 0.0, 0.0, 0.0 ],
       "name": "default1",
       "shader": "shader1",
-      "shader": "shader1",
       "channels": {}
     },
     {
       "pu_depth": 0.0,
       "name": "island",
-      "shader": "multiMaps",
       "shader": "multiMaps",
       "channels": {
         "diffuse": "island",
@@ -405,13 +351,11 @@
     {
       "name": "skybox",
       "shader": "skybox",
-      "shader": "skybox",
       "channels": { "skybox": "sky" }
     },
     {
       "pu_depth": 0.10000000149011612,
       "name": "stone",
-      "shader": "multiMaps",
       "shader": "multiMaps",
       "channels": {
         "depthMap": "textures/cobblestone_height.jpg",

@@ -29,6 +29,8 @@ namespace tetraRender
 		std::shared_ptr<Shader> getShaderProgram();
 		const std::map<std::string, std::shared_ptr<Texture>> getChannels();
 
+		static const std::string shaderField;
+
 	private:
 		
 		/// <summary>

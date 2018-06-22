@@ -59,7 +59,7 @@ namespace tetraRender
 		static const std::string scale;
 		static const std::string rotationAngle;
 		static const std::string childrenField;
-
+		static const std::string material;
 
 	protected:
 		void updateModelMatrix();
