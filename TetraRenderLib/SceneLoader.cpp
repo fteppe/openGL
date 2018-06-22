@@ -222,6 +222,10 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(ResourceAtlas& atlas,
 				loadingWorked = false;
 			}
 		}
+		else
+		{
+			loadedGo = new GameObject();
+		}
 	}
 	else if(go["type"].IsNull())
 	{

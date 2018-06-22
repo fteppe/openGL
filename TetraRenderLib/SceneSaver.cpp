@@ -97,7 +97,7 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 		writer.String("light");
 		break;
 	default:
-		writer.Null();
+		writer.String("GameObject");
 		break;
 	}
 	
