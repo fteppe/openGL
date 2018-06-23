@@ -18,9 +18,10 @@ GameObject::GameObject()
 	rotation = 0;
 	setPos(glm::vec3(0));
 	setScale(glm::vec3(1));
-	setRotation(0, glm::vec3(0, 0, 1));
+	glm::quat rotation;
 	updateModelMatrix();
 	setName("nullObject");
+	setRotation(glm::quat(0,0,0,0));
 	parametersContainer.set(typeField, std::string("GameObject"));
 
 }
@@ -42,10 +43,12 @@ void GameObject::setScale(glm::vec3 scaleVec)
 	updateModelMatrix();
 }
 
-void GameObject::setRotation(float rotation, glm::vec3 rotationAngleVec)
+void GameObject::setRotation(glm::quat rotationQuaternion)
 {
 	this->rotation = rotation;
-	parametersContainer.set(rotationAngle, rotationAngleVec);
+
+	glm::vec3 euler = glm::eulerAngles(rotationQuaternion);
+	parametersContainer.set(rotationAngle, euler);
 	updateModelMatrix();
 }
 
@@ -80,10 +83,17 @@ glm::vec3 GameObject::getScale()
 	return parametersContainer.getVec3(scale);
 }
 
-glm::vec4 GameObject::getRotation()
+glm::quat GameObject::getRotation()
 {
 	//TODO: see if this is right, might not be.
-	return glm::vec4(parametersContainer.getVec3(rotationAngle), rotation);
+	glm::vec3 rotationEuler = parametersContainer.getVec3(rotationAngle);
+	glm::quat qPitch = glm::angleAxis(rotationEuler.x, glm::vec3(1, 0, 0));
+	glm::quat qYaw = glm::angleAxis(rotationEuler.y, glm::vec3(0, 1, 0));
+	glm::quat qRoll = glm::angleAxis(rotationEuler.z, glm::vec3(0, 0, 1));
+
+	///x,y,z are in radians
+	glm::quat rotQuat =  qPitch * qYaw * qRoll;
+	return rotQuat;
 }
 
 glm::mat4 GameObject::getmodelMatrix() const
@@ -231,7 +241,9 @@ std::vector<std::pair<RenderTag, std::string>> tetraRender::GameObject::initTran
 void GameObject::updateModelMatrix()
 {
 	glm::vec3 posVec = parametersContainer.getVec3(pos);
-	modelMatrix = glm::translate(getPos()) * glm::scale(getScale()) * glm::rotate(rotation, parametersContainer.getVec3(rotationAngle));
+	glm::quat rotation = getRotation();
+
+	modelMatrix = glm::translate(getPos()) * glm::scale(getScale()) * glm::toMat4(rotation);
 }
 
 void tetraRender::GameObject::copyChildren()

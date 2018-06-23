@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <set>
 #include <memory>
 #include "Material.h"
@@ -20,14 +21,14 @@ namespace tetraRender
 		~GameObject();
 		virtual void setPos(glm::vec3 pos);
 		void setScale(glm::vec3 scale);
-		void setRotation(float rotation, glm::vec3 rotationAngle);
+		void setRotation(glm::quat rotationQuaternion);
 		void addTag(RenderTag tag);
 		void addChild(GameObject* child);
 		void setParent(GameObject* parent);
 		std::set<RenderTag> getRenderTags();
 		glm::vec3 getPos();
 		glm::vec3 getScale();
-		glm::vec4 getRotation();
+		glm::quat getRotation();
 		glm::mat4 getmodelMatrix() const;
 		virtual void draw(Scene& scene);
 		virtual void draw(Scene& scene, std::shared_ptr<Material> mat);
