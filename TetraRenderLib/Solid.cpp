@@ -12,6 +12,8 @@ using namespace tetraRender;
 
 Solid::Solid() : GameObject(), triangulated(false)
 {
+	parametersContainer.set(typeField, std::string("solid"));
+
 }
 
 

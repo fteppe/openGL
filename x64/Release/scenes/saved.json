@@ -1,13 +1,53 @@
 {
   "gameObjects": [
     {
-      "model": [ "hard", "screen" ],
-      "renderTags": [ "POST_PROCESS" ],
       "pos": [ 0.0, 0.0, 0.0 ],
       "scale": [ 1.0, 1.0, 1.0 ],
       "rotAngle": [ 0.0, 0.0, 1.0 ],
-      "name": "hard::screen",
-      "children": []
+      "name": "obj/scene.obj",
+      "type": "GameObject",
+      "children": [
+        {
+          "model": [ "obj/scene.obj", "Grid" ],
+          "renderTags": [ "WORLD_OBJECT" ],
+          "pos": [ 0.0, 0.0, 0.0 ],
+          "scale": [ 1.0, 1.0, 1.0 ],
+          "rotAngle": [ 0.0, 0.0, 1.0 ],
+          "name": "obj/scene.obj::Grid",
+          "type": "solid",
+          "children": []
+        },
+        {
+          "model": [ "obj/scene.obj", "Sphere" ],
+          "renderTags": [ "WORLD_OBJECT" ],
+          "pos": [ 0.0, 0.0, 0.0 ],
+          "scale": [ 1.0, 1.0, 1.0 ],
+          "rotAngle": [ 0.0, 0.0, 1.0 ],
+          "type": "solid",
+          "name": "obj/scene.obj::Sphere",
+          "children": []
+        },
+        {
+          "model": [ "obj/scene.obj", "Suzanne" ],
+          "renderTags": [ "WORLD_OBJECT" ],
+          "pos": [ 0.0, 0.0, 0.0 ],
+          "scale": [ 1.0, 1.0, 1.0 ],
+          "rotAngle": [ 0.0, 0.0, 1.0 ],
+          "type": "solid",
+          "name": "obj/scene.obj::Suzanne",
+          "children": []
+        },
+        {
+          "model": [ "obj/scene.obj", "Torus" ],
+          "renderTags": [ "WORLD_OBJECT" ],
+          "pos": [ 0.0, 0.0, 0.0 ],
+          "scale": [ 1.0, 1.0, 1.0 ],
+          "rotAngle": [ 0.0, 0.0, 1.0 ],
+          "type": "solid",
+          "name": "obj/scene.obj::Torus",
+          "children": []
+        }
+      ]
     },
     {
       "model": [ "obj/scene.obj", "Grid" ],
@@ -99,223 +139,8 @@
       "color": [ 1.0, 0.30000001192092898, 0.0 ],
       "type": "light",
       "children": []
-    },
-    {
-      "renderTags": [ "WORLD_OBJECT" ],
-      "pos": [ 0.20000000298023225, 0.0, 2.0 ],
-      "scale": [ 1.0, 1.0, 1.0 ],
-      "rotAngle": [ 0.0, 0.0, 1.0 ],
-      "name": "nullObject",
-      "type": "GameObject",
-      "children": [
-        {
-          "model": [ "obj/scene.obj", "Torus" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Torus",
-          "type": "solid",
-          "material": "default",
-          "children": []
-        },
-        {
-          "model": [ "obj/scene.obj", "Suzanne" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Suzanne",
-          "type": "solid",
-          "material": "default",
-          "children": []
-        },
-        {
-          "model": [ "obj/scene.obj", "Sphere" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Sphere",
-          "type": "solid",
-          "material": "default",
-          "children": []
-        },
-        {
-          "model": [ "obj/scene.obj", "Grid" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Grid",
-          "type": "solid",
-          "material": "default",
-          "children": []
-        }
-      ]
-    },
-    {
-      "renderTags": [ "WORLD_OBJECT" ],
-      "pos": [ 2.200000047683716, 0.0, 2.0 ],
-      "scale": [ 1.0, 1.0, 1.0 ],
-      "rotAngle": [ 0.0, 0.0, 1.0 ],
-      "name": "obj/scene.obj",
-      "type": "GameObject",
-      "children": [
-        {
-          "model": [ "obj/scene.obj", "Torus" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Torus",
-          "type": "solid",
-          "material": "default1",
-          "children": []
-        },
-        {
-          "model": [ "obj/scene.obj", "Suzanne" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Suzanne",
-          "type": "solid",
-          "material": "default1",
-          "children": []
-        },
-        {
-          "model": [ "obj/scene.obj", "Sphere" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Sphere",
-          "type": "solid",
-          "material": "default1",
-          "children": []
-        },
-        {
-          "model": [ "obj/scene.obj", "Grid" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Grid",
-          "type": "solid",
-          "material": "default1",
-          "children": []
-        }
-      ]
-    },
-    {
-      "renderTags": [ "WORLD_OBJECT" ],
-      "pos": [ -0.8999999761581421, 1.2000000476837159, 0.0 ],
-      "scale": [ 1.0, 1.0, 1.0 ],
-      "rotAngle": [ 0.0, 0.0, 1.0 ],
-      "name": "obj/scene.obj",
-      "type": "GameObject",
-      "children": [
-        {
-          "model": [ "obj/scene.obj", "Torus" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Torus",
-          "type": "solid",
-          "material": "default1",
-          "children": []
-        },
-        {
-          "model": [ "obj/scene.obj", "Suzanne" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Suzanne",
-          "type": "solid",
-          "material": "default1",
-          "children": []
-        },
-        {
-          "model": [ "obj/scene.obj", "Sphere" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Sphere",
-          "type": "solid",
-          "material": "default1",
-          "children": []
-        },
-        {
-          "model": [ "obj/scene.obj", "Grid" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Grid",
-          "type": "solid",
-          "material": "default1",
-          "children": []
-        }
-      ]
-    },
-    {
-      "renderTags": [ "WORLD_OBJECT" ],
-      "pos": [ -0.8999999761581421, 1.2000000476837159, 0.0 ],
-      "scale": [ 1.0, 1.0, 1.0 ],
-      "rotAngle": [ 0.0, 0.0, 1.0 ],
-      "name": "obj/scene.obj",
-      "type": "GameObject",
-      "children": [
-        {
-          "model": [ "obj/scene.obj", "Torus" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Torus",
-          "type": "solid",
-          "material": "default1",
-          "children": []
-        },
-        {
-          "model": [ "obj/scene.obj", "Suzanne" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Suzanne",
-          "type": "solid",
-          "material": "default1",
-          "children": []
-        },
-        {
-          "model": [ "obj/scene.obj", "Sphere" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Sphere",
-          "type": "solid",
-          "material": "default1",
-          "children": []
-        },
-        {
-          "model": [ "obj/scene.obj", "Grid" ],
-          "renderTags": [ "WORLD_OBJECT" ],
-          "pos": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 1.0, 1.0 ],
-          "rotAngle": [ 0.0, 0.0, 1.0 ],
-          "name": "obj/scene.obj::Grid",
-          "type": "solid",
-          "material": "default1",
-          "children": []
-        }
-      ]
     }
+
   ],
   "materials": [
     {
@@ -323,20 +148,6 @@
       "pu_spec": [ 0.20000000298023225, 32.70000076293945, 0.0 ],
       "name": "colors",
       "shader": "color",
-      "channels": {}
-    },
-    {
-      "pu_color": [ 1.0, 1.0, 1.0 ],
-      "pu_spec": [ 0.0, 0.0, 0.0 ],
-      "name": "default",
-      "shader": "shader",
-      "channels": {}
-    },
-    {
-      "pu_color": [ 1.0, 1.0, 1.0 ],
-      "pu_spec": [ 0.0, 0.0, 0.0 ],
-      "name": "default1",
-      "shader": "shader1",
       "channels": {}
     },
     {
@@ -369,18 +180,6 @@
     {
       "name": "color",
       "type": "shaderPBR",
-      "vertex": [ "transform.ver" ],
-      "fragment": [ "col.frag" ]
-    },
-    {
-      "name": "shader",
-      "type": "Shader",
-      "vertex": [ "transform.ver" ],
-      "fragment": [ "col.frag" ]
-    },
-    {
-      "name": "shader1",
-      "type": "Shader",
       "vertex": [ "transform.ver" ],
       "fragment": [ "col.frag" ]
     },

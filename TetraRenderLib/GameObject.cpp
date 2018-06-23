@@ -11,6 +11,7 @@ const std::string GameObject::scale = "scale";
 const std::string GameObject::rotationAngle = "rotAngle";
 const std::string GameObject::childrenField = "children";
 const std::string GameObject::material = "material";
+const std::string GameObject::typeField = "type";
 
 GameObject::GameObject()
 {
@@ -20,6 +21,7 @@ GameObject::GameObject()
 	setRotation(0, glm::vec3(0, 0, 1));
 	updateModelMatrix();
 	setName("nullObject");
+	parametersContainer.set(typeField, std::string("GameObject"));
 
 }
 
