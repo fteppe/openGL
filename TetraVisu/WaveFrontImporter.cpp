@@ -22,7 +22,7 @@ tetraRender::GameObject * WaveFrontImporter::load()
 	for (tetraRender::Mesh* mesh : meshes)
 	{
 		tetraRender::Solid* newSolid = new tetraRender::Solid(std::shared_ptr<tetraRender::Mesh>(mesh));
-		newSolid->setMaterial(defaultMaterial);
+		//newSolid->setMaterial(defaultMaterial);
 		newSolid->addTag(RenderTag::WORLD_OBJECT);
 		root->addChild(newSolid);
 	}

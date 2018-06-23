@@ -85,7 +85,7 @@ WindowBuilder::WindowBuilder(std::string sceneFile) : WindowBuilder()
 	scene->getResources().addShader(defaultShader);
 	scene->getResources().addMaterial(defaultMat);
 	defaultMat->getParameters().set("pu_color", glm::vec3(1));
-	importer.setDefaultMaterial(defaultMat);
+	scene->getGameObjects()->setMaterial(defaultMat);
 
 }
 
@@ -330,20 +330,26 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject, tetra
 	parameterInput(paramContainer, *gameObject);
 
 
-	if (gameObject->getType() == tetraRender::GameObjectType::SOLID)
+	//We can do static cast because we know for sure that it's a Solid thanks to the check above.
+	tetraRender::Material * mat = gameObject->getMaterial();
+	if (mat != nullptr)
 	{
-		//We can do static cast because we know for sure that it's a Solid thanks to the check above.
-		tetraRender::Solid* solid = static_cast<tetraRender::Solid*>(gameObject);
-		tetraRender::Material * mat = solid->getMaterial();
 		ImGui::Button(("Material : " + mat->getName()).c_str());
-		std::shared_ptr<tetraRender::Material> selectedMaterial = selectMaterial(atlas);
-		if (selectedMaterial != nullptr)
-		{
-			solid->setMaterial(selectedMaterial);
-		}
-
 
 	}
+	else
+	{
+		ImGui::Button("choose a material");
+
+	}
+
+
+	std::shared_ptr<tetraRender::Material> selectedMaterial = selectMaterial(atlas);
+	if (selectedMaterial != nullptr)
+	{
+		gameObject->setMaterial(selectedMaterial);
+	}
+
 	gameObject->update();
 }
 

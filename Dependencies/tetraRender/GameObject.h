@@ -43,6 +43,8 @@ namespace tetraRender
 		GameObject* removeChild(GameObject * child);
 		GameObject* removeFromParent();
 		virtual void update();
+		Material* getMaterial();
+		void setMaterial(std::shared_ptr<Material> const& mat);
 		
 		/// <summary>
 		/// Copies the children. It has to be public so it can be used by the object making the copy. But using it if there is no copy of the parent beeing made a therefor an original
@@ -63,6 +65,7 @@ namespace tetraRender
 
 	protected:
 		void updateModelMatrix();
+		std::shared_ptr<Material> material_ptr;
 
 		float rotation;
 		glm::mat4 modelMatrix;
