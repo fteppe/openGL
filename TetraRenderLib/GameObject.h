@@ -26,9 +26,9 @@ namespace tetraRender
 		void addChild(GameObject* child);
 		void setParent(GameObject* parent);
 		std::set<RenderTag> getRenderTags();
-		glm::vec3 getPos();
-		glm::vec3 getScale();
-		glm::quat getRotation();
+		glm::vec3 getPos() const;
+		glm::vec3 getScale() const;
+		glm::quat getRotation() const;
 		glm::mat4 getmodelMatrix() const;
 		virtual void draw(Scene& scene);
 		virtual void draw(Scene& scene, std::shared_ptr<Material> mat);

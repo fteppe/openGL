@@ -73,17 +73,17 @@ std::set<RenderTag> GameObject::getRenderTags()
 	return renderTags;
 }
 
-glm::vec3 GameObject::getPos()
+glm::vec3 GameObject::getPos() const
 {
 	return parametersContainer.getVec3(pos);
 }
 
-glm::vec3 GameObject::getScale()
+glm::vec3 GameObject::getScale() const
 {
 	return parametersContainer.getVec3(scale);
 }
 
-glm::quat GameObject::getRotation()
+glm::quat GameObject::getRotation() const
 {
 	//TODO: see if this is right, might not be.
 	glm::vec3 rotationEuler = parametersContainer.getVec3(rotationAngle);
@@ -100,11 +100,19 @@ glm::mat4 GameObject::getmodelMatrix() const
 {
 	GameObject* parent = this->parentNode;
 	glm::mat4 mat = modelMatrix;
+	glm::quat rotQuat = getRotation();
+	glm::mat4 rotation = glm::toMat4(rotQuat);
+	glm::mat4 translation = glm::translate(getPos());
+	glm::mat4 scale = glm::scale(getScale());
 	while (parent != NULL)
 	{
+		translation = translation * glm::translate(parent->getPos());
+		rotation = rotation * glm::toMat4(parent->getRotation());
+		scale = scale * glm::scale(parent->getScale());
 		mat = mat * parent->modelMatrix;
 		parent = parent->parentNode;
 	}
+	mat = translation * scale * rotation;
 	return mat;
 }
 
