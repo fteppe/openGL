@@ -24,6 +24,7 @@ namespace tetraRender
 		void setRotation(glm::quat rotationQuaternion);
 		void addTag(RenderTag tag);
 		void addChild(GameObject* child);
+		void addChildNoMove(GameObject* child);
 		void setParent(GameObject* parent);
 		std::set<RenderTag> getRenderTags();
 		glm::vec3 getPos() const;

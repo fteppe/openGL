@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Scene.h"
 #include <iostream>
+#include <glm/gtx/matrix_decompose.hpp>
 using namespace tetraRender;
 using TagPair = std::pair<RenderTag, std::string>;
 
@@ -59,8 +60,37 @@ void GameObject::addTag(RenderTag tag)
 
 void tetraRender::GameObject::addChild(GameObject * child)
 {
+
 	child->setParent(this);
+
+	//We now need to to cancel out the transformation matrix of the parent so the child doesn't move when it is placed under the parent.
+
+
+
+
 	children.push_back(child);
+}
+
+void tetraRender::GameObject::addChildNoMove(GameObject * child)
+{
+
+	glm::vec3 pos;
+	glm::quat quat;
+	glm::vec3 scale;
+	glm::mat4 transfo = getmodelMatrix();
+	glm::vec3 skewness;
+	glm::vec4 perpective;
+
+	glm::decompose((transfo), scale, quat, pos, skewness, perpective);
+
+	glm::mat4 newTransfo = glm::inverse(transfo)  * child->getmodelMatrix();
+
+	glm::decompose(newTransfo, scale, quat, pos, skewness, perpective);
+
+	child->setPos(pos);
+	child->setRotation(quat);
+	child->setScale(scale);
+	addChild(child);
 }
 
 void tetraRender::GameObject::setParent(GameObject * parent)
@@ -100,19 +130,14 @@ glm::mat4 GameObject::getmodelMatrix() const
 {
 	GameObject* parent = this->parentNode;
 	glm::mat4 mat = modelMatrix;
-	glm::quat rotQuat = getRotation();
-	glm::mat4 rotation = glm::toMat4(rotQuat);
-	glm::mat4 translation = glm::translate(getPos());
-	glm::mat4 scale = glm::scale(getScale());
 	while (parent != NULL)
 	{
-		translation = translation * glm::translate(parent->getPos());
-		rotation = rotation * glm::toMat4(parent->getRotation());
-		scale = scale * glm::scale(parent->getScale());
-		mat = mat * parent->modelMatrix;
+
+		//The basic way
+		mat =  parent->modelMatrix * mat;
 		parent = parent->parentNode;
 	}
-	mat = translation * scale * rotation;
+
 	return mat;
 }
 
@@ -200,6 +225,21 @@ GameObject * tetraRender::GameObject::removeFromParent()
 		{
 			std::cout << "removed from parent failed \n";
 		}
+		else
+		{
+			//We apply the parent's transformation to the child.
+			glm::vec3 pos;
+			glm::quat quat;
+			glm::vec3 scale;
+			glm::mat4 transfo = getmodelMatrix();
+			glm::vec3 skewness;
+			glm::vec4 perpective;
+			glm::decompose(transfo, scale, quat, pos, skewness, perpective);
+
+			setPos(pos);
+			setRotation(quat);
+			setScale(scale);
+		}
 		
 	}
 	return parent;
@@ -251,7 +291,7 @@ void GameObject::updateModelMatrix()
 	glm::vec3 posVec = parametersContainer.getVec3(pos);
 	glm::quat rotation = getRotation();
 
-	modelMatrix = glm::translate(getPos()) * glm::scale(getScale()) * glm::toMat4(rotation);
+	modelMatrix = glm::translate(getPos()) * glm::toMat4(rotation) * glm::scale(getScale());
 }
 
 void tetraRender::GameObject::copyChildren()

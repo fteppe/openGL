@@ -520,7 +520,7 @@ void WindowBuilder::gameObjectContext(tetraRender::GameObject * gameobject, int 
 			{
 				selectedObject->removeFromParent();
 				selectedObject->setParent(gameobject);
-				gameobject->addChild(selectedObject);
+				gameobject->addChildNoMove(selectedObject);
 			}
 		}
 		ImGui::Button("copy");
