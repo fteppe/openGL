@@ -81,7 +81,7 @@ void tetraRender::GameObject::addChildNoMove(GameObject * child)
 	glm::vec3 skewness;
 	glm::vec4 perpective;
 
-	glm::decompose((transfo), scale, quat, pos, skewness, perpective);
+	//glm::decompose((transfo), scale, quat, pos, skewness, perpective);
 
 	glm::mat4 newTransfo = glm::inverse(transfo)  * child->getmodelMatrix();
 
@@ -158,9 +158,9 @@ void GameObject::draw(tetraRender::Scene & scene,std::shared_ptr<Material> mat)
 	}
 }
 
-Material * tetraRender::GameObject::getMaterial()
+std::shared_ptr<Material> tetraRender::GameObject::getMaterial()
 {
-	return material_ptr.get();
+	return material_ptr;
 }
 
 

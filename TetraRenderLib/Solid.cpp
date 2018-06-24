@@ -55,7 +55,7 @@ void Solid::draw(tetraRender::Scene& scene)
 {
  	GameObject::draw(scene);
 	//we make sure the object still exists, if it does we render it.
-	Material* material = material_ptr.get();
+	std::shared_ptr<Material> material = material_ptr;
 	GameObject* parent = parentNode;
 	while (material == nullptr && parent != nullptr)
 	{

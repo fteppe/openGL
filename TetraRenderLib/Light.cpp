@@ -8,13 +8,15 @@ const std::string Light::hasShadow = "hasShadow";
 
 Light::Light()
 {
+	setName("light");
 	parametersContainer.set(hasShadow, false);
+	parametersContainer.set(col, glm::vec3(1));
+	parametersContainer.set(GameObject::typeField, std::string("light"));
 	parametersContainer.set(intensity, 1.0f);
 }
 
 Light::Light(glm::vec3 pos, float intensityIn) : Light()
 {
-	parametersContainer.set(col, glm::vec3(1));
 	parametersContainer.set(intensity, intensityIn);
 	setPos(pos);
 }

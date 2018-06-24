@@ -72,20 +72,9 @@ WindowBuilder::WindowBuilder()
 
 WindowBuilder::WindowBuilder(std::string sceneFile) : WindowBuilder()
 {
-	tetraRender::Camera cam(600.0f, 800.0f, 0.75f);
-	cam.setUp(glm::vec3(0, 0, 0));
-	scene = std::shared_ptr<tetraRender::Scene>(new tetraRender::Scene(cam));
-	scene->load(sceneFile);
 	tetraRender::SceneSaver saver;
-	handler = EventHandler(scene);
-	library = ResourcesLibrary(&scene->getResources());
-	std::shared_ptr<tetraRender::Shader> defaultShader(new  tetraRender::Shader( std::string("transform.ver"), std::string("col.frag")));
-	std::shared_ptr<tetraRender::Material> defaultMat(new tetraRender::Material(defaultShader));
-	defaultMat->setName("default");
-	scene->getResources().addShader(defaultShader);
-	scene->getResources().addMaterial(defaultMat);
-	defaultMat->getParameters().set("pu_color", glm::vec3(1));
-	scene->getGameObjects()->setMaterial(defaultMat);
+	loadScene(sceneFile);
+
 
 }
 
@@ -131,25 +120,10 @@ void WindowBuilder::draw()
 			gameObjectEditUI(selectedObject, scene->getResources());
 		}
 		ImGui::End();
+		bool open = true;
 
 		ImGui::Begin("menu");
-		ImGui::Button("save");
-		if (ImGui::IsItemClicked())
-		{
-			tetraRender::SceneSaver().saveToFile(*scene, "scenes/saved.json");
-			std::cout << "scene saved to " << "scenes/saved.json \n";
-		}
-
-		std::string file = importer.getFile();
-		file = stringInput(file, "load");
-		importer.setFile(file);
-		ImGui::Button("load waveFront");
-		if (ImGui::IsItemClicked())
-		{
-			tetraRender::GameObject* sceneRoot = scene->getGameObjects();
-			sceneRoot->addChild(importer.load());
-		}
-
+		menu();
 		ImGui::End();
 		ImGui::ShowDemoWindow();
 		// Rendering
@@ -168,6 +142,24 @@ void WindowBuilder::draw()
 	SDL_Quit();
 
 	
+}
+
+void WindowBuilder::loadScene(std::string sceneFileName)
+{
+	tetraRender::Camera cam(600.0f, 800.0f, 0.75f);
+	cam.setUp(glm::vec3(0, 0, 0));
+	scene = std::shared_ptr<tetraRender::Scene>(new tetraRender::Scene(cam));
+	scene->load(sceneFileName);
+	handler = EventHandler(scene);
+	library = ResourcesLibrary(&scene->getResources());
+	std::shared_ptr<tetraRender::Shader> defaultShader(new  tetraRender::Shader(std::string("transform.ver"), std::string("col.frag")));
+	std::shared_ptr<tetraRender::Material> defaultMat(new tetraRender::Material(defaultShader));
+	defaultMat->setName("default");
+	scene->getResources().addShader(defaultShader);
+	scene->getResources().addMaterial(defaultMat);
+	defaultMat->getParameters().set("pu_color", glm::vec3(1));
+	scene->getGameObjects()->setMaterial(defaultMat);
+	sceneName = sceneFileName;
 }
 
 glm::vec3 WindowBuilder::Vec3Input(glm::vec3 vector, std::string label)
@@ -331,7 +323,7 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject, tetra
 
 
 	//We can do static cast because we know for sure that it's a Solid thanks to the check above.
-	tetraRender::Material * mat = gameObject->getMaterial();
+	std::shared_ptr<tetraRender:: Material>  mat = gameObject->getMaterial();
 	if (mat != nullptr)
 	{
 		ImGui::Button(("Material : " + mat->getName()).c_str());
@@ -344,11 +336,10 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject, tetra
 	}
 
 
-	std::shared_ptr<tetraRender::Material> selectedMaterial = selectMaterial(atlas);
-	if (selectedMaterial != nullptr)
-	{
+	std::shared_ptr<tetraRender::Material> selectedMaterial = selectMaterial(atlas, mat);
+
 		gameObject->setMaterial(selectedMaterial);
-	}
+
 
 	gameObject->update();
 }
@@ -461,9 +452,9 @@ std::shared_ptr<tetraRender::Texture> WindowBuilder::selectTexture(std::string c
 	return selectedTexture;
 }
 
-std::shared_ptr<tetraRender::Material> WindowBuilder::selectMaterial(tetraRender::ResourceAtlas & atlas)
+std::shared_ptr<tetraRender::Material> WindowBuilder::selectMaterial(tetraRender::ResourceAtlas & atlas, std::shared_ptr<tetraRender::Material> currentMat)
 {
-	std::shared_ptr<tetraRender::Material> selectedMat = nullptr;
+	std::shared_ptr<tetraRender::Material> selectedMat = currentMat;
 	if (ImGui::IsItemClicked())
 	{
 		ImGui::OpenPopup("choose mat");
@@ -480,6 +471,15 @@ std::shared_ptr<tetraRender::Material> WindowBuilder::selectMaterial(tetraRender
 				ImGui::CloseCurrentPopup();
 			}
 		}
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(7.0f, 0.7f, 0.7f));
+
+		if (ImGui::Button("none"))
+		{
+			selectedMat = nullptr;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::PopStyleColor(2);
 		ImGui::Separator();
 		ImGui::Button("cancel");
 		if (ImGui::IsItemClicked())
@@ -534,5 +534,49 @@ void WindowBuilder::gameObjectContext(tetraRender::GameObject * gameobject, int 
 		}
 		ImGui::EndPopup();
 	}
+}
+
+void WindowBuilder::menu()
+{
+	ImGui::Columns(5, "menu");
+	sceneName = stringInput(sceneName, "load name");
+	ImGui::Button("load");
+	if (ImGui::IsItemClicked())
+	{
+
+		loadScene(sceneName);
+	}
+	ImGui::NextColumn();
+	sceneName = stringInput(sceneName, "save name");
+
+	ImGui::Button("save");
+	if (ImGui::IsItemClicked())
+	{
+		
+		tetraRender::SceneSaver().saveToFile(*scene, sceneName);
+		std::cout << "scene saved to " +sceneName<< std::endl;
+	}
+	ImGui::NextColumn();
+	std::string file = importer.getFile();
+	file = stringInput(file, "load");
+	importer.setFile(file);
+	ImGui::Button("load waveFront");
+	if (ImGui::IsItemClicked())
+	{
+		tetraRender::GameObject* sceneRoot = scene->getGameObjects();
+		sceneRoot->addChild(importer.load());
+	}
+	ImGui::NextColumn();
+	if (ImGui::Button("add light"))
+	{
+		scene->getGameObjects()->addChild(new tetraRender::Light());
+	}
+	ImGui::NextColumn();
+	if (ImGui::Button("add node"))
+	{
+
+		scene->getGameObjects()->addChild(new tetraRender:: GameObject());
+	}
+	ImGui::Columns(1);
 }
 

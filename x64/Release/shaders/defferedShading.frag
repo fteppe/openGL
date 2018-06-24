@@ -55,7 +55,7 @@ void main()
 	ColorOutput = colorSample;
 	
 	//ColorOutput = vec4(normal, 1);
-	float bloomThreshold = 1.0;
+	float bloomThreshold = 10.0;
 	//The numbers in the brightness calculations are based on human perception.
 	float brightness = dot(colorSample.rgb, vec3(0.2126, 0.7152, 0.0722));
 	float isABoveThreshold = float(brightness > bloomThreshold);

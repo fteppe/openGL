@@ -45,7 +45,7 @@ namespace tetraRender
 		GameObject* removeChild(GameObject * child);
 		GameObject* removeFromParent();
 		virtual void update();
-		Material* getMaterial();
+		std::shared_ptr<Material> getMaterial();
 		void setMaterial(std::shared_ptr<Material> const& mat);
 		
 		/// <summary>

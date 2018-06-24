@@ -129,7 +129,8 @@ vec3 normalValue(vec3 normal, vec3 tangent, vec3 biTangent,vec2 UVin)
 	vec3 baseLine = vec3(0.5); //since colors go from 0-1. a vector that is null has for value 0.5.
 	normalMapVal = normalMapVal - baseLine;
 	//We substract the Y value of the normal map because it seems that my map has the +y vector in the -y direction of the UV vector.
-	return normalize(normalMapVal.z*normalize(normal) + normalMapVal.x*normalize(tangent) - normalMapVal.y*normalize(biTangent));
+    vec3 returnVal = normalize(normalMapVal.z*normalize(normal) + normalMapVal.x*normalize(tangent) - normalMapVal.y*normalize(biTangent));
+	return max(returnVal, normal);
 }
 
 //we put the cos value in the last part of the vec4.

@@ -25,6 +25,12 @@ std::string tetraRender::SceneSaver::toJson(Scene & scene)
 	std::map<std::string, Material*> mats;
 	std::map<std::string, Texture*> texs;
 	
+
+	for (auto mat : scene.getResources().getMaterials())
+	{
+		mats[mat.second->getName()] = mat.second.get();
+	}
+
 	writer.StartObject();
 	writer.Key("gameObjects");
 	writer.StartArray();
@@ -44,7 +50,11 @@ std::string tetraRender::SceneSaver::toJson(Scene & scene)
 	writer.StartArray();
 	for (auto mat : mats)
 	{
-		shaderToJSON(writer, mat.second->getShaderProgram().get());
+		Shader* shader = mat.second->getShaderProgram().get();
+		if (shader != nullptr)
+		{
+			shaderToJSON(writer, shader);
+		}
 	}
 	writer.EndArray();
 
@@ -77,12 +87,7 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 	{
 
 		Solid* solid = static_cast<Solid*>(gameObject);
-		auto mat = solid->getMaterial();
-		if (mat != NULL && mat->getName().size()>0)
-		{
-			mats[mat->getName()] = mat;
-			solid->getParameters().set(GameObject::material, std::string(mat->getName()));
-		}
+
 		writer.Key("model");
 		writer.StartArray();
 		auto model = solid->getMesh().getFilePath();
@@ -97,7 +102,12 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 	default:
 		break;
 	}
-	
+	auto mat = gameObject->getMaterial();
+	if (mat != NULL && mat->getName().size()>0)
+	{
+		mats[mat->getName()] = mat.get();
+		gameObject->getParameters().set(GameObject::material, std::string(mat->getName()));
+	}
 	auto renderTags = gameObject->getRenderTags();
 	if (renderTags.size() > 0)
 	{
@@ -130,24 +140,29 @@ void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::S
 
 void tetraRender::SceneSaver::materialToJSON(Writer & writer, Material * mat, std::map<std::string, Texture*>& textures)
 {
-	writer.StartObject();
-	mat->getParameters().set(Material::shaderField, std::string(mat->getShaderProgram()->getName()));
-	parameterToJSON(writer, mat->getParameters());
-	
-	writer.Key("channels");
-	writer.StartObject();
-	for (auto pair : mat->getChannels())
+	if (mat->getShaderProgram() != nullptr)
 	{
-		std::shared_ptr<Texture> tex = pair.second;
-		if (tex != nullptr)
+		writer.StartObject();
+
+		mat->getParameters().set(Material::shaderField, std::string(mat->getShaderProgram()->getName()));
+		parameterToJSON(writer, mat->getParameters());
+
+		writer.Key("channels");
+		writer.StartObject();
+		for (auto pair : mat->getChannels())
 		{
-			textures[pair.second->getName()] = pair.second.get();
-			writer.Key(pair.first.c_str());
-			writer.String(pair.second->getName().c_str());
+			std::shared_ptr<Texture> tex = pair.second;
+			if (tex != nullptr)
+			{
+				textures[pair.second->getName()] = pair.second.get();
+				writer.Key(pair.first.c_str());
+				writer.String(pair.second->getName().c_str());
+			}
 		}
+		writer.EndObject();
+		writer.EndObject();
 	}
-	writer.EndObject();
-	writer.EndObject();
+
 }
 
 void tetraRender::SceneSaver::textureToJSON(Writer & writer, Texture * tex)

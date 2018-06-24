@@ -50,8 +50,9 @@ float shadowCalculation(vec4 fragShadowPos, sampler2D shadowMap)
     float outVal  = currentDepth - bias > shadowTex  ? 0.0 : 1.0;
 
 	//This is to know if what is outside the shadowmap is. We consider that it's in the shadow.
-	outVal = (shadowPos.x>1.0 || shadowPos.x<0.0) ? 0.0 : outVal;
-	outVal = (shadowPos.y>1.0 || shadowPos.y<0.0) ? 0.0 : outVal;
+    float outOfShadowValue = 1.0;
+	outVal = (shadowPos.x>1.0 || shadowPos.x<0.0) ? outOfShadowValue : outVal;
+	outVal = (shadowPos.y>1.0 || shadowPos.y<0.0) ? outOfShadowValue : outVal;
 
 	return outVal;
 }
