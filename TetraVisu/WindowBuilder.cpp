@@ -155,8 +155,8 @@ void WindowBuilder::loadScene(std::string sceneFileName)
 	std::shared_ptr<tetraRender::Shader> defaultShader(new  tetraRender::Shader(std::string("transform.ver"), std::string("col.frag")));
 	std::shared_ptr<tetraRender::Material> defaultMat(new tetraRender::Material(defaultShader));
 	defaultMat->setName("default");
-	scene->getResources().addShader(defaultShader);
-	scene->getResources().addMaterial(defaultMat);
+	//scene->getResources().addShader(defaultShader);
+	//scene->getResources().addMaterial(defaultMat);
 	defaultMat->getParameters().set("pu_color", glm::vec3(1));
 	scene->getGameObjects()->setMaterial(defaultMat);
 	sceneName = sceneFileName;

@@ -1,1 +1,211 @@
-{"gameObjects":[{"model":["hard","screen"],"renderTags":["POST_PROCESS"],"pos":[0.0,0.0,0.0],"scale":[1.0,1.0,1.0],"name":"hard::screen","rotAngle":[0.0,-0.0,0.0],"type":"solid","children":[]},{"model":["obj/scene.obj","Grid"],"renderTags":["WORLD_OBJECT"],"pos":[0.0,0.0,0.0],"scale":[1.0,1.0,1.0],"name":"obj/scene.obj::Grid","rotAngle":[0.0,0.0,0.0],"type":"solid","material":"stone","children":[]},{"renderTags":["WORLD_OBJECT"],"pos":[1.2000000476837159,0.699999988079071,-0.30000001192092898],"scale":[-0.4000000059604645,1.0,1.0],"name":"light","rotAngle":[0.0,0.0,0.0],"type":"light","hasShadow":true,"color":[1.0,0.30000001192092898,0.0],"intensity":5.900000095367432,"children":[]},{"model":["obj/scene.obj","Suzanne"],"renderTags":["WORLD_OBJECT"],"pos":[0.0,0.0,0.0],"scale":[1.0,1.0,1.0],"name":"obj/scene.obj::Suzanne","rotAngle":[0.0,0.0,0.0],"type":"solid","material":"colors","children":[]},{"model":["obj/scene.obj","Sphere"],"renderTags":["WORLD_OBJECT"],"pos":[0.0,0.0,0.0],"scale":[1.0,1.0,1.0],"name":"obj/scene.obj::Sphere","rotAngle":[0.0,0.0,0.0],"type":"solid","material":"island","children":[]},{"model":["obj/common.obj","Cube"],"renderTags":["FORWARD_RENDER"],"pos":[0.20000000298023225,0.0,0.0],"scale":[100.0,100.0,100.0],"name":"obj/common.obj::Cube","rotAngle":[0.0,0.0,0.0],"type":"solid","material":"skybox","children":[]},{"model":["obj/scene.obj","Grid"],"renderTags":["WORLD_OBJECT"],"pos":[2.0,0.0,0.0],"scale":[1.0,1.0,1.0],"name":"obj/scene.obj::Grid","rotAngle":[0.0,0.0,0.0],"type":"solid","material":"colors","children":[]},{"renderTags":["WORLD_OBJECT"],"pos":[1.5,1.399999976158142,0.800000011920929],"scale":[1.0,1.0,1.0],"name":"light","rotAngle":[0.0,0.0,0.0],"type":"light","hasShadow":true,"color":[0.5,0.5,0.20000000298023225],"intensity":18.899999618530275,"children":[]},{"renderTags":["WORLD_OBJECT"],"pos":[1.2999999523162842,0.30000001192092898,-0.30000001192092898],"scale":[1.0,1.0,1.0],"name":"light","rotAngle":[0.0,0.0,0.0],"type":"light","hasShadow":false,"color":[1.0,0.30000001192092898,0.0],"intensity":5.699999809265137,"children":[]}],"materials":[{"pu_color":[0.0,1.0,0.0],"pu_spec":[0.20000000298023225,32.70000076293945,0.0],"name":"colors","shader":"color","channels":{}},{"pu_color":[0.6000000238418579,0.699999988079071,0.30000001192092898],"pu_spec":[0.0,0.0,0.0],"name":"default","shader":"shader","channels":{}},{"pu_color":[0.5,0.5,0.800000011920929],"pu_spec":[0.0,0.0,0.0],"name":"default1","shader":"shader1","channels":{}},{"pu_color":[1.0,1.0,1.0],"pu_spec":[0.0,0.0,0.0],"name":"default2","shader":"shader2","channels":{}},{"pu_depth":0.0,"name":"island","shader":"multiMaps","channels":{"diffuse":"island","normalMap":"islandNormals"}},{"name":"skybox","shader":"skybox","channels":{"skybox":"sky"}},{"pu_depth":0.10000000149011612,"name":"stone","shader":"multiMaps","channels":{"depthMap":"textures/cobblestone_height.jpg","diffuse":"bricks","normalMap":"textures/cobblestone_normal.jpg","specularityMap":"sky"}}],"shaders":[{"name":"color","type":"shaderPBR","vertex":["transform.ver"],"fragment":["col.frag"]},{"name":"shader","type":"Shader","vertex":["transform.ver"],"fragment":["col.frag"]},{"name":"shader1","type":"Shader","vertex":["transform.ver"],"fragment":["col.frag"]},{"name":"shader2","type":"Shader","vertex":["transform.ver"],"fragment":["col.frag"]},{"name":"multiMaps","type":"shaderPBR","vertex":["texture.ver"],"fragment":["PBR.frag"]},{"name":"skybox","type":"Shader","vertex":["cubeMap.ver"],"fragment":["rectSky.frag"]},{"name":"multiMaps","type":"shaderPBR","vertex":["texture.ver"],"fragment":["PBR.frag"]}],"textures":[{"gammaCorrected":true,"HDRValues":false,"file":"textures/cobblestone_albedo.jpg","type":"TEXTURE2D","name":"bricks"},{"gammaCorrected":true,"HDRValues":false,"file":"textures/No-Mans-Sky-1.jpg","type":"TEXTURE2D","name":"island"},{"gammaCorrected":false,"HDRValues":false,"file":"textures/EyCkvNyNormal.jpg","type":"TEXTURE2D","name":"islandNormals"},{"gammaCorrected":false,"HDRValues":true,"file":"textures/hdrSky.hdr","type":"TEXTURE2D","name":"sky"},{"gammaCorrected":false,"HDRValues":false,"file":"textures/cobblestone_height.jpg","type":"TEXTURE2D","name":"textures/cobblestone_height.jpg"},{"gammaCorrected":false,"HDRValues":false,"file":"textures/cobblestone_normal.jpg","type":"TEXTURE2D","name":"textures/cobblestone_normal.jpg"}]}
+{
+  "gameObjects": [
+    {
+      "model": [ "hard", "screen" ],
+      "renderTags": [ "POST_PROCESS" ],
+      "pos": [ 0.0, 0.0, 0.0 ],
+      "scale": [ 1.0, 1.0, 1.0 ],
+      "name": "hard::screen",
+      "rotAngle": [ 0.0, -0.0, 0.0 ],
+      "type": "solid",
+      "children": []
+    },
+    {
+      "model": [ "obj/scene.obj", "Grid" ],
+      "renderTags": [ "WORLD_OBJECT" ],
+      "pos": [ 0.0, 0.0, 0.0 ],
+      "scale": [ 1.0, 1.0, 1.0 ],
+      "name": "obj/scene.obj::Grid",
+      "rotAngle": [ 0.0, 0.0, 0.0 ],
+      "type": "solid",
+      "material": "stone",
+      "children": []
+    },
+    {
+      "renderTags": [ "WORLD_OBJECT" ],
+      "pos": [ 1.2000000476837159, 0.699999988079071, -0.30000001192092898 ],
+      "scale": [ -0.4000000059604645, 1.0, 1.0 ],
+      "name": "light",
+      "rotAngle": [ 0.0, 0.0, 0.0 ],
+      "type": "light",
+      "hasShadow": true,
+      "color": [ 1.0, 0.30000001192092898, 0.0 ],
+      "intensity": 5.900000095367432,
+      "children": []
+    },
+    {
+      "model": [ "obj/scene.obj", "Suzanne" ],
+      "renderTags": [ "WORLD_OBJECT" ],
+      "pos": [ 0.0, 0.0, 0.0 ],
+      "scale": [ 1.0, 1.0, 1.0 ],
+      "name": "obj/scene.obj::Suzanne",
+      "rotAngle": [ 0.0, 0.0, 0.0 ],
+      "type": "solid",
+      "material": "colors",
+      "children": []
+    },
+    {
+      "model": [ "obj/scene.obj", "Sphere" ],
+      "renderTags": [ "WORLD_OBJECT" ],
+      "pos": [ 0.0, 0.0, 0.0 ],
+      "scale": [ 1.0, 1.0, 1.0 ],
+      "name": "obj/scene.obj::Sphere",
+      "rotAngle": [ 0.0, 0.0, 0.0 ],
+      "type": "solid",
+      "material": "island",
+      "children": []
+    },
+    {
+      "model": [ "obj/common.obj", "Cube" ],
+      "renderTags": [ "FORWARD_RENDER" ],
+      "pos": [ 0.20000000298023225, 0.0, 0.0 ],
+      "scale": [ 100.0, 100.0, 100.0 ],
+      "name": "obj/common.obj::Cube",
+      "rotAngle": [ 0.0, 0.0, 0.0 ],
+      "type": "solid",
+      "material": "skybox",
+      "children": []
+    },
+    {
+      "model": [ "obj/scene.obj", "Grid" ],
+      "renderTags": [ "WORLD_OBJECT" ],
+      "pos": [ 2.0, 0.0, 0.0 ],
+      "scale": [ 1.0, 1.0, 1.0 ],
+      "name": "obj/scene.obj::Grid",
+      "rotAngle": [ 0.0, 0.0, 0.0 ],
+      "type": "solid",
+      "material": "colors",
+      "children": []
+    },
+    {
+      "renderTags": [ "WORLD_OBJECT" ],
+      "pos": [ 1.5, 1.399999976158142, 0.800000011920929 ],
+      "scale": [ 1.0, 1.0, 1.0 ],
+      "name": "light",
+      "rotAngle": [ 0.0, 0.0, 0.0 ],
+      "type": "light",
+      "hasShadow": true,
+      "color": [ 0.5, 0.5, 0.20000000298023225 ],
+      "intensity": 18.899999618530275,
+      "children": []
+    },
+    {
+      "renderTags": [ "WORLD_OBJECT" ],
+      "pos": [ 1.2999999523162842, 0.30000001192092898, -0.30000001192092898 ],
+      "scale": [ 1.0, 1.0, 1.0 ],
+      "name": "light",
+      "rotAngle": [ 0.0, 0.0, 0.0 ],
+      "type": "light",
+      "hasShadow": false,
+      "color": [ 1.0, 0.30000001192092898, 0.0 ],
+      "intensity": 5.699999809265137,
+      "children": []
+    }
+  ],
+  "materials": [
+    {
+      "pu_color": [ 0.0, 1.0, 0.0 ],
+      "pu_spec": [ 0.20000000298023225, 32.70000076293945, 0.0 ],
+      "name": "colors",
+      "shader": "color",
+      "channels": {}
+    },
+
+    {
+      "pu_depth": 0.0,
+      "name": "island",
+      "shader": "multiMaps",
+      "channels": {
+        "diffuse": "island",
+        "normalMap": "islandNormals"
+      }
+    },
+    {
+      "name": "skybox",
+      "shader": "skybox",
+      "channels": { "skybox": "sky" }
+    },
+    {
+      "pu_depth": 0.10000000149011612,
+      "name": "stone",
+      "shader": "multiMaps",
+      "channels": {
+        "depthMap": "textures/cobblestone_height.jpg",
+        "diffuse": "bricks",
+        "normalMap": "textures/cobblestone_normal.jpg",
+        "specularityMap": "sky"
+      }
+    }
+  ],
+  "shaders": [
+    {
+      "name": "color",
+      "type": "shaderPBR",
+      "vertex": [ "transform.ver" ],
+      "fragment": [ "col.frag" ]
+    },
+
+    {
+      "name": "multiMaps",
+      "type": "shaderPBR",
+      "vertex": [ "texture.ver" ],
+      "fragment": [ "PBR.frag" ]
+    },
+    {
+      "name": "skybox",
+      "type": "Shader",
+      "vertex": [ "cubeMap.ver" ],
+      "fragment": [ "rectSky.frag" ]
+    },
+    {
+      "name": "multiMaps",
+      "type": "shaderPBR",
+      "vertex": [ "texture.ver" ],
+      "fragment": [ "PBR.frag" ]
+    }
+  ],
+  "textures": [
+    {
+      "gammaCorrected": true,
+      "HDRValues": false,
+      "file": "textures/cobblestone_albedo.jpg",
+      "type": "TEXTURE2D",
+      "name": "bricks"
+    },
+    {
+      "gammaCorrected": true,
+      "HDRValues": false,
+      "file": "textures/No-Mans-Sky-1.jpg",
+      "type": "TEXTURE2D",
+      "name": "island"
+    },
+    {
+      "gammaCorrected": false,
+      "HDRValues": false,
+      "file": "textures/EyCkvNyNormal.jpg",
+      "type": "TEXTURE2D",
+      "name": "islandNormals"
+    },
+    {
+      "gammaCorrected": false,
+      "HDRValues": true,
+      "file": "textures/hdrSky.hdr",
+      "type": "TEXTURE2D",
+      "name": "sky"
+    },
+    {
+      "gammaCorrected": false,
+      "HDRValues": false,
+      "file": "textures/cobblestone_height.jpg",
+      "type": "TEXTURE2D",
+      "name": "textures/cobblestone_height.jpg"
+    },
+    {
+      "gammaCorrected": false,
+      "HDRValues": false,
+      "file": "textures/cobblestone_normal.jpg",
+      "type": "TEXTURE2D",
+      "name": "textures/cobblestone_normal.jpg"
+    }
+  ]
+}

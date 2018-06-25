@@ -40,7 +40,7 @@ void ResourcesLibrary::display()
 			i++;
 		}
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.3, 1, 0.6f));
-		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.3, 1, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.3, 1, 0.7f));
 		ImGui::Button("add material");
 		ImGui::PopStyleColor(2);
 		if (ImGui::IsItemClicked())
@@ -73,7 +73,7 @@ void ResourcesLibrary::display()
 		}
 		
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.3, 1, 0.6f));
-		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.3, 1, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.3, 1, 0.7f));
 		ImGui::Button("add texture");
 		ImGui::PopStyleColor(2);
 		if (ImGui::IsItemClicked())
@@ -105,7 +105,7 @@ void ResourcesLibrary::display()
 			
 		}
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.3, 1, 0.6f));
-		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.3, 1, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.3, 1, 0.7f));
 
 		ImGui::Button("add shader");
 		if (ImGui::IsItemClicked())
