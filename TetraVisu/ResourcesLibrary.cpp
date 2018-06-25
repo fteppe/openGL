@@ -39,8 +39,10 @@ void ResourcesLibrary::display()
 			}
 			i++;
 		}
-		ImGui::Separator();
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.3, 1, 0.6f));
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.3, 1, 0.7f));
 		ImGui::Button("add material");
+		ImGui::PopStyleColor(2);
 		if (ImGui::IsItemClicked())
 		{
 			resources->addMaterial(std::shared_ptr<tetraRender::Material>(new tetraRender::Material));
@@ -70,7 +72,10 @@ void ResourcesLibrary::display()
 			i++;
 		}
 		
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.3, 1, 0.6f));
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.3, 1, 0.7f));
 		ImGui::Button("add texture");
+		ImGui::PopStyleColor(2);
 		if (ImGui::IsItemClicked())
 		{
 			resources->addTexture(std::shared_ptr<tetraRender::Texture>(new tetraRender::Texture));
@@ -99,6 +104,15 @@ void ResourcesLibrary::display()
 			i++;
 			
 		}
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.3, 1, 0.6f));
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.3, 1, 0.7f));
+
+		ImGui::Button("add shader");
+		if (ImGui::IsItemClicked())
+		{
+			resources->addShader(std::shared_ptr<tetraRender::Shader>(new tetraRender::Shader));
+		}
+		ImGui::PopStyleColor(2);
 	}
 
 	ImGui::End();

@@ -260,12 +260,45 @@ void WindowBuilder::shaderUI(tetraRender::Shader * shader)
 	shader->setName(WindowBuilder::stringInput(shader->getName(),"name"));
 	std::vector<std::pair<std::string, GLenum>> shaderFiles = shader->getShaderFiles();
 	std::vector<std::pair<std::string, GLenum>> newFiles;
+	shaderFiles.push_back(std::pair<std::string, GLenum> ("", GL_VERTEX_SHADER));
+	shaderFiles.push_back(std::pair<std::string, GLenum> ("", GL_FRAGMENT_SHADER));
+
+	ImGui::Columns(2);
+	int i = 0;
 	for (auto shaderFile : shaderFiles)
 	{
-		std::string newName = WindowBuilder::stringInput(shaderFile.first, shaderFile.first);
-		std::pair<std::string, GLenum> file(newName, shaderFile.second);
-		newFiles.push_back(file);
+		if (shaderFile.second == GL_VERTEX_SHADER)
+		{
+			std::string newName = WindowBuilder::stringInput(shaderFile.first, "##" + std::to_string(i));
+			std::pair<std::string, GLenum> file(newName, shaderFile.second);
+			if (file.first.length() > 0)
+			{
+				newFiles.push_back(file);
+
+			}
+			i++;
+		}
+
 	}
+	ImGui::NextColumn();
+
+	for (auto shaderFile : shaderFiles)
+	{
+		if (shaderFile.second == GL_FRAGMENT_SHADER)
+		{
+			std::string newName = WindowBuilder::stringInput(shaderFile.first, "##" + std::to_string(i));
+			std::pair<std::string, GLenum> file(newName, shaderFile.second);
+			if (file.first.length() > 0)
+			{
+				newFiles.push_back(file);
+
+			}
+			i++;
+
+		}
+	}
+	ImGui::Columns(1);
+
 	ImGui::Button("recompile");
 	if (ImGui::IsItemClicked())
 	{
