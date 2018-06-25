@@ -26,17 +26,5 @@ void ShaderPBR::setProgramInformation(tetraRender::Scene & scene, const Solid & 
 	Shader::setProgramInformation(scene, solid);
 
 	Camera cam = scene.getCam();
-	glm::vec3 camPos = cam.getPos();
-	glm::mat4 cameraSpace = cam.getProjection();
-	glm::mat4 world2Obj = glm::inverse(solid.getmodelMatrix());
-	sendMatrix4("world2obj", world2Obj);
-	//sending the camera position
-	if (uniforms.find("camPos") == uniforms.end())
-	{
-		uniforms["camPos"] = glGetUniformLocation(program, "camPos");
-	}
-	//std::cout << camPos.x<<" "<< camPos.y<<" "<< camPos.z << std::endl;
-	glUniform3f(uniforms["camPos"], camPos.x, camPos.y, camPos.z);
-	float time = scene.getElapsedTime();
-	sendFloat("time", time);
+
 }
