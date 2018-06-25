@@ -22,8 +22,8 @@ void main(){
     float depthThreshold = texture(depth, vec2(0.5,0.5)).r + 0.1;
     vec4 color = depthOfField(fullColor, depth, depthVal, depthThreshold, 4);
 	vec4 bloom = blur(bright, 0.01, 4);
-	//bloom = vec4(color);
-    colorOut = toneMapping((color)/2);
+	//color = (color + bloom)/2;
+    colorOut = toneMapping(color);
 	//colorOut = bloom;
 }
 

@@ -16,6 +16,7 @@ Resource::~Resource()
 
 void Resource::setName(std::string name)
 {
+	this->name = name;
 	parametersContainer.set(nameField, name);
 }
 

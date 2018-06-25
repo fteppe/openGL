@@ -12,6 +12,8 @@ using namespace tetraRender;
 
 Solid::Solid() : GameObject(), triangulated(false)
 {
+	parametersContainer.set(typeField, std::string("solid"));
+
 }
 
 
@@ -53,9 +55,16 @@ void Solid::draw(tetraRender::Scene& scene)
 {
  	GameObject::draw(scene);
 	//we make sure the object still exists, if it does we render it.
-	if (material_ptr != nullptr)
+	std::shared_ptr<Material> material = material_ptr;
+	GameObject* parent = parentNode;
+	while (material == nullptr && parent != nullptr)
 	{
-		material_ptr->apply(mesh_ptr.get(), scene, *this);
+		material = parent->getMaterial();
+		parent = parent->getParent();
+	}
+	if (material != nullptr)
+	{
+		material->apply(mesh_ptr.get(), scene, *this);
 	}
 
 }
@@ -63,6 +72,7 @@ void Solid::draw(tetraRender::Scene& scene)
 void Solid::draw(tetraRender::Scene& scene, std::shared_ptr<Material> mat)
 {
 	GameObject::draw(scene, mat);
+
 	mat->apply(mesh_ptr.get(), scene, *this);
 }
 
@@ -76,16 +86,7 @@ GameObjectType tetraRender::Solid::getType() const
 	return GameObjectType::SOLID;
 }
 
-Material * tetraRender::Solid::getMaterial()
-{
-	return material_ptr.get();
-}
 
-
-void Solid::setMaterial(std::shared_ptr<Material> const & mat)
-{
-	material_ptr = mat;
-}
 
 const Mesh & tetraRender::Solid::getMesh()
 {

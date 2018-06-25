@@ -201,9 +201,9 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(ResourceAtlas& atlas,
 {
 	bool loadingWorked = true;
 	GameObject* loadedGo = NULL;
-	if (go["type"].IsString())
+	if (go[GameObject::typeField.c_str()].IsString())
 	{
-		std::string type = go["type"].GetString();
+		std::string type = go[GameObject::typeField.c_str()].GetString();
 		//we check what kind of gameObject this is
 		if (type == "solid")
 		{
@@ -229,6 +229,16 @@ GameObject* tetraRender::SceneLoader::loadSingleGameObject(ResourceAtlas& atlas,
 	}
 	if(loadedGo != NULL)
 	{
+		if (go.HasMember("material"))
+		{
+			std::string mat = go["material"].GetString();
+			std::shared_ptr<Material> material = atlas.getMaterial(mat);
+			if (material != nullptr)
+			{
+				loadedGo->setMaterial(material);
+			}
+		}
+
 		if (go.HasMember("renderTags"))
 		{
 			for (rapidjson::Value& tag : go["renderTags"].GetArray())
@@ -317,20 +327,8 @@ Solid * tetraRender::SceneLoader::loadSolid(ResourceAtlas& atlas, rapidjson::Val
 		loadedGo = new Solid(VBO);
 
 		Solid* loadedItem = ((Solid *)loadedGo);
-		std::shared_ptr<Material> material = atlas.getMaterial(mat);
-		if (material != nullptr)
-		{
-			loadedItem->setMaterial(material);
-
-			loadedItem->setName(filePath.first + "::" + filePath.second);
-		}
-		else
-		{
-			delete loadedItem;
-			loadedGo = NULL;
-		}
-
-		
+		loadedItem->setName(filePath.first + "::" + filePath.second);
+	
 	}
 	else
 	{

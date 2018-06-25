@@ -1,5 +1,7 @@
 #version 430 core
 
+#include "sampleEquirectangular.glsl"
+
 in vec3 vertexPos;
 
 layout(location = 0) out vec4 FragColor;
@@ -17,8 +19,6 @@ void main()
 	float phi = atan (pos.x, -pos.z);
 	light = vec3(1);
 	normal  = vec3(0);
-    FragColor = texture(skybox, vec2 (
-      0.5 + phi / 6.2831852,
-      theta / 3.1415926));
+    FragColor = sampleEquirectangular(skybox, pos);
 	
 }

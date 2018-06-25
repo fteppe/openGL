@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <set>
 #include <memory>
 #include "Material.h"
@@ -20,14 +21,15 @@ namespace tetraRender
 		~GameObject();
 		virtual void setPos(glm::vec3 pos);
 		void setScale(glm::vec3 scale);
-		void setRotation(float rotation, glm::vec3 rotationAngle);
+		void setRotation(glm::quat rotationQuaternion);
 		void addTag(RenderTag tag);
 		void addChild(GameObject* child);
+		void addChildNoMove(GameObject* child);
 		void setParent(GameObject* parent);
 		std::set<RenderTag> getRenderTags();
-		glm::vec3 getPos();
-		glm::vec3 getScale();
-		glm::vec4 getRotation();
+		glm::vec3 getPos() const;
+		glm::vec3 getScale() const;
+		glm::quat getRotation() const;
 		glm::mat4 getmodelMatrix() const;
 		virtual void draw(Scene& scene);
 		virtual void draw(Scene& scene, std::shared_ptr<Material> mat);
@@ -43,6 +45,8 @@ namespace tetraRender
 		GameObject* removeChild(GameObject * child);
 		GameObject* removeFromParent();
 		virtual void update();
+		std::shared_ptr<Material> getMaterial();
+		void setMaterial(std::shared_ptr<Material> const& mat);
 		
 		/// <summary>
 		/// Copies the children. It has to be public so it can be used by the object making the copy. But using it if there is no copy of the parent beeing made a therefor an original
@@ -60,9 +64,11 @@ namespace tetraRender
 		static const std::string rotationAngle;
 		static const std::string childrenField;
 		static const std::string material;
+		static const std::string typeField;
 
 	protected:
 		void updateModelMatrix();
+		std::shared_ptr<Material> material_ptr;
 
 		float rotation;
 		glm::mat4 modelMatrix;
