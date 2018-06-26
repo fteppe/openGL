@@ -50,7 +50,8 @@ void main(){
         if(reflectHit.x < 1 && reflectHit.y < 1)
         {
             color = texture(fullColor, reflectHit.xy);
-            //colorOut = vec4(reflectHit,0);
+            //color = vec4(UV - reflectHit.xy,0,0);
+			//color = vec4(reflectHit,0);
         }
     }
     colorOut = toneMapping(color);
@@ -59,8 +60,9 @@ void main(){
 
 vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat4 viewSpaceMatrix)
 {
-    int steps = 1000;
-    vec3 moveVector = reflection / 100;
+    int steps = 100;
+    vec3 moveVector = reflection / (steps/10);
+	float multiplier = 2;
     vec3 currentPos = origin;
     //currentPos = currentPos + moveVector;
     bool continueRay = true;
@@ -76,18 +78,19 @@ vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat
         float depthRay = viewPos.z * 0.5 + 0.5 ;
 
         depthSample = texture(depthMap, UVpos).r;
-        depthSample = depthSample = 2.0 * depthSample - 1.0;
-        linearDepth = 2.0 * near * far / (far + near - depthSample * (far - near));
-        if(linearDepth < depthRay)
+		float bias = 0.005;
+        //depthSample = 2.0 * depthSample - 1.0;
+        //linearDepth = 2.0 * near * far / (far + near - depthSample * (far - near));
+        if(depthSample < depthRay - bias)
         {
             continueRay = false;
         }
         currentPos = currentPos + moveVector;
-        //moveVector = moveVector + 0.0002;
+        //moveVector = moveVector *multiplier;
 
     }
     //float(i)/float(steps)
-    return vec3(UVpos,0);
+    return vec3(UVpos, 0);
 }
 
 vec4 blur(sampler2D map, float initialOffset, int quality)
