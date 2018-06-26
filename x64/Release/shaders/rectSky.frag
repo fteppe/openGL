@@ -17,7 +17,7 @@ void main()
     vec3 pos = normalize(vec3(vertexPos.x,vertexPos.y,vertexPos.z));
     float theta = acos (pos.y);
 	float phi = atan (pos.x, -pos.z);
-	light = vec3(1);
+	light = vec3(0);
 	normal  = vec3(0);
     FragColor = sampleEquirectangular(skybox, pos);
 	

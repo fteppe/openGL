@@ -127,15 +127,16 @@ void Shader::setProgramInformation(tetraRender::Scene& scene, Solid const& objec
 	//we get the camera space and calulculate the projection that will be done to all the vertices
 	glm::mat4 cameraSpace = cam.getProjection();
 	glm::mat4 objectSpace = object.getmodelMatrix();
-	glm::mat4 worldSpace = cameraSpace * objectSpace;
+	glm::mat4 mvp = cameraSpace * objectSpace;
 	//the projection matrices sent to the shader
 	sendMatrix4("objectSpace", objectSpace);
-	sendMatrix4("mvp", worldSpace);
+	sendMatrix4("viewSpace", cameraSpace);
+	sendMatrix4("mvp", mvp);
 	sendFloat("near", cam.getNearFarPlanes().x);
 	sendFloat("far", cam.getNearFarPlanes().y);
 
+
 	glm::vec3 camPos = cam.getPos();
-	glm::mat4 cameraSpace = cam.getProjection();
 	glm::mat4 world2Obj = glm::inverse(object.getmodelMatrix());
 	sendMatrix4("world2obj", world2Obj);
 	//sending the camera position
@@ -147,6 +148,7 @@ void Shader::setProgramInformation(tetraRender::Scene& scene, Solid const& objec
 	glUniform3f(uniforms["camPos"], camPos.x, camPos.y, camPos.z);
 	float time = scene.getElapsedTime();
 	sendFloat("time", time);
+
 }
 
 void Shader::sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> textures)

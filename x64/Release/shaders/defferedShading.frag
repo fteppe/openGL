@@ -93,7 +93,7 @@ vec3 valLight()
 		Light light_ = lights[i];
 		lightIntensity = lightIntensity + diffuseCalc(light_, normal_, pos);
 		vec2 specValues = texture(specularity, UV).rg;
-        float specVal = clamp(specValues.r, 0, 10);
+        float specVal = clamp(specValues.r, 0, 1);
         float glossyness = clamp(specValues.g, 16 , 4096);
 		vec3 cameraPosition = camPos;
 		lightIntensity = lightIntensity + specCalc(light_, normal_, pos, cameraPosition, glossyness, specVal);

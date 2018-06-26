@@ -226,6 +226,11 @@ void tetraRender::RenderPipeline::setupPostProcessing(Scene & scene)
 	materialEffects->setChannel(gBuffer["fullColor"], "fullColor");
 	materialEffects->setChannel(gBuffer["bright"], "bright");
 	materialEffects->setChannel(gBuffer["depth"], "depth");
+	materialEffects->setChannel(gBuffer["normals"], "normals");
+	materialEffects->setChannel(gBuffer["fragPos"], "fragPos");
+	materialEffects->setChannel(gBuffer["specularity"], "specularity");
+
+
 	renderPasses.back()->setMat(materialEffects);
 
 	scene.addGameObject(screenObj);

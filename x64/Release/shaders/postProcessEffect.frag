@@ -9,11 +9,22 @@ out vec4 colorOut;
 uniform sampler2D fullColor;
 uniform sampler2D bright;
 uniform sampler2D depth;
+uniform sampler2D normals;
+uniform sampler2D fragPos;
+uniform sampler2D specularity;
 
+
+uniform vec3 camPos;
+uniform mat4 viewSpace;
+uniform float near;
+uniform float far;
 
 vec4 depthOfField(sampler2D map,sampler2D depth, float depthVal, float depthThreshold, int quality);
 vec4 blur(sampler2D map, float initialOffset, int quality);
 vec4 toneMapping(vec4 value);
+vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin ,mat4 viewSpaceMatrix);
+
+
 
 void main(){
     
@@ -22,9 +33,61 @@ void main(){
     float depthThreshold = texture(depth, vec2(0.5,0.5)).r + 0.1;
     vec4 color = depthOfField(fullColor, depth, depthVal, depthThreshold, 4);
 	vec4 bloom = blur(bright, 0.01, 4);
-	//color = (color + bloom)/2;
+	color = (color + bloom)/2;
+    vec3 pos = texture(fragPos, UV).rgb;
+    vec3 normal = texture(normals, UV).rgb;
+
+    vec3 reflection = reflect(pos - camPos, normal);
+    reflection = normalize(reflection);
+    float spec = texture(specularity, UV).r;
+
+    
+
+    if(spec > 0.01)
+    {
+    vec3 reflectHit = screenSpaceReflection(depth, reflection,pos, viewSpace);
+   
+        if(reflectHit.x < 1 && reflectHit.y < 1)
+        {
+            color = texture(fullColor, reflectHit.xy);
+            //colorOut = vec4(reflectHit,0);
+        }
+    }
     colorOut = toneMapping(color);
-	//colorOut = bloom;
+	
+}
+
+vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat4 viewSpaceMatrix)
+{
+    int steps = 1000;
+    vec3 moveVector = reflection / 100;
+    vec3 currentPos = origin;
+    //currentPos = currentPos + moveVector;
+    bool continueRay = true;
+    vec2 UVpos = vec2(0);
+    float depthSample;
+    int i = 0;
+    float linearDepth = 0;
+    for( i =0; i < steps && continueRay; i++)
+    {
+        vec4 viewPos = (viewSpaceMatrix * vec4(currentPos,1));
+        viewPos = viewPos / viewPos.w ;
+        UVpos = viewPos.xy * 0.5 +0.5;
+        float depthRay = viewPos.z * 0.5 + 0.5 ;
+
+        depthSample = texture(depthMap, UVpos).r;
+        depthSample = depthSample = 2.0 * depthSample - 1.0;
+        linearDepth = 2.0 * near * far / (far + near - depthSample * (far - near));
+        if(linearDepth < depthRay)
+        {
+            continueRay = false;
+        }
+        currentPos = currentPos + moveVector;
+        //moveVector = moveVector + 0.0002;
+
+    }
+    //float(i)/float(steps)
+    return vec3(UVpos,0);
 }
 
 vec4 blur(sampler2D map, float initialOffset, int quality)
@@ -107,3 +170,4 @@ vec4 toneMapping(vec4 value)
 	toneMapped = pow(toneMapped, vec4(1.0 / gamma));
 	return toneMapped;
 }
+
