@@ -133,12 +133,20 @@ void Shader::setProgramInformation(tetraRender::Scene& scene, Solid const& objec
 	sendMatrix4("mvp", worldSpace);
 	sendFloat("near", cam.getNearFarPlanes().x);
 	sendFloat("far", cam.getNearFarPlanes().y);
-	//glUniformMatrix4fv(uniforms["mvp"], 1, false, glm::value_ptr(worldSpace));
-	//the objectspace that can be used to calculate lights or the posiiton of a vertex to a point. We send it to the shader.
-	
-	//we send the light data to the shader, for now we can handle only one light
-	//glUniform1fv(uniforms["light"], lightData.size(), &lightData[0]);
 
+	glm::vec3 camPos = cam.getPos();
+	glm::mat4 cameraSpace = cam.getProjection();
+	glm::mat4 world2Obj = glm::inverse(object.getmodelMatrix());
+	sendMatrix4("world2obj", world2Obj);
+	//sending the camera position
+	if (uniforms.find("camPos") == uniforms.end())
+	{
+		uniforms["camPos"] = glGetUniformLocation(program, "camPos");
+	}
+	//std::cout << camPos.x<<" "<< camPos.y<<" "<< camPos.z << std::endl;
+	glUniform3f(uniforms["camPos"], camPos.x, camPos.y, camPos.z);
+	float time = scene.getElapsedTime();
+	sendFloat("time", time);
 }
 
 void Shader::sendTexChannels(std::map<std::string, std::shared_ptr<Texture>> textures)
