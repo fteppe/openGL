@@ -79,19 +79,19 @@ vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat
         float depthRay = viewPos.z  * 0.5 + 0.5 ;
 
         depthSample = texture(depthMap, UVpos).r;
-		float bias = abs(depthSample - previousDepth);
-		bias = 0.0005;
+		float bias = abs(depthRay - previousDepth);
+		//bias = 0.0005;
         if(depthSample < depthRay - bias)
         {
             continueRay = false;
-			if(abs(depthRay - depthSample) < abs(depthSample - previousDepth)*5)
+			if(abs(depthRay - depthSample) > bias * 5)
 			{
 				// it just means that it is out of bound and isn't a valid reflection hit.
 				UVpos = vec2(2);
 			}
 
         }
-		previousDepth = depthSample;
+		previousDepth = depthRay;
         currentPos = currentPos + moveVector;
 		//moveVector *= 1.1;
     }
