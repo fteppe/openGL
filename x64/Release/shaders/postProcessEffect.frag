@@ -75,7 +75,7 @@ vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat
     {
         vec4 viewPos = (viewSpaceMatrix * vec4(currentPos,1));
         viewPos = viewPos / viewPos.w ;
-        UVpos = viewPos.xy *viewPos.w * 0.5 +0.5;
+        UVpos = viewPos.xy * 0.5 +0.5;
         float depthRay = viewPos.z  * 0.5 + 0.5 ;
 
         depthSample = texture(depthMap, UVpos).r;
