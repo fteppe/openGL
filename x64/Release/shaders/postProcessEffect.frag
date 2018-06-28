@@ -20,7 +20,7 @@ uniform float near;
 uniform float far;
 
 vec4 depthOfField(sampler2D map,sampler2D depth, float depthVal, float depthThreshold, int quality);
-vec4 blur(sampler2D map, float initialOffset, int quality);
+vec4 blur(sampler2D map, vec2 UVin, float initialOffset, int quality);
 vec4 toneMapping(vec4 value);
 vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin ,mat4 viewSpaceMatrix);
 
@@ -32,7 +32,7 @@ void main(){
     float depthVal = texture(depth, UV).r;
     float depthThreshold = texture(depth, vec2(0.5,0.5)).r + 0.1;
     vec4 color = depthOfField(fullColor, depth, depthVal, depthThreshold, 4);
-	vec4 bloom = blur(bright, 0.01, 4);
+	vec4 bloom = blur(bright, UV,  0.01, 4);
 	color = (color + bloom)/2;
     vec3 pos = texture(fragPos, UV).rgb;
     vec3 normal = texture(normals, UV).rgb;
@@ -41,19 +41,22 @@ void main(){
     reflection = normalize(reflection);
     float spec = texture(specularity, UV).r;
 
-    
+    vec4 reflectionColor = vec4(0);
 
     if(spec > 0.01)
     {
     vec3 reflectHit = screenSpaceReflection(depth, reflection,pos, viewSpace);
    
-        if(reflectHit.x < 1 && reflectHit.y < 1)
+        if(reflectHit.x < 1 && reflectHit.y < 1 && reflectHit.x > 0 && reflectHit.y > 0)
         {
-            color = texture(fullColor, reflectHit.xy);
-            //color = vec4(UV - reflectHit.xy,0,0);
-			//color = vec4(reflectHit,0);
+            reflectionColor = texture(fullColor, reflectHit.xy);
+            //reflectionColor = blur(fullColor, reflectHit.xy , 0.01, 3);
+            float attenuation = (spec) * (1 - length(UV - reflectHit.xy)) * ( 1- length(reflectHit . y));
+            reflectionColor *= attenuation;
         }
     }
+
+    color = color + reflectionColor;
     colorOut = toneMapping(color);
 	
 }
@@ -110,7 +113,7 @@ vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat
     //return vec3(float(i)/steps,0, 0);
 }
 
-vec4 blur(sampler2D map, float initialOffset, int quality)
+vec4 blur(sampler2D map, vec2 UVin, float initialOffset, int quality)
 {
 	float kernel[9] = {
 	2,2,2,
@@ -128,7 +131,7 @@ vec4 blur(sampler2D map, float initialOffset, int quality)
         float kernelValAccumulation = 0.0;
 		for(int j = 0; j < 9; j++)
 		{
-			vec2 offsetUV = vec2 (UV + offsetMat[j]);
+			vec2 offsetUV = vec2 (UVin + offsetMat[j]);
             float depthValLocal = texture(depth, offsetUV).r;
             accumulation += texture(map, offsetUV) * kernel[j];
             kernelValAccumulation += kernel[j];
