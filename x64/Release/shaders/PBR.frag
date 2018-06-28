@@ -22,7 +22,7 @@ uniform sampler2D specularityMap;
 uniform sampler2D normalMap;
 uniform sampler2D depthMap;
 uniform samplerCube skybox;
-
+uniform vec3 pu_specIn;
 uniform sampler2D shadowMap;
 
 uniform float pu_depth;
@@ -63,17 +63,14 @@ void main()
 	//we add a constant value to the intensity, so it is never dark.
 	vec3 ambiant = vec3(0);
 	vec4 color = vec4(albedo(newUV),1);
-	//color = color * vec4( intensityVec+ specVec + ambiant,0);
-	//color = pow(color, vec4(2.2));;
-	
-    //FragColor = color;
+
 	
 	specOut = vec3(specVal,0,0);
 	//the output of the normal vector must fit in [0,1]
 	normalOut = normal_;
 	vec4 reflectionVal = cubeMapReflection(normal_, fragPosWorld, camPos);
 	FragColor =  color;
-	//FragColor = vec4(pu_var.color,0);
+	specOut = pu_specIn;
 }
 
 vec3 albedo(vec2 UVin)

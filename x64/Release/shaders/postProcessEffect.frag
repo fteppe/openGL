@@ -100,6 +100,10 @@ vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat
 				// it just means that it is out of bound and isn't a valid reflection hit.
 				UVpos = vec2(2);
 			}
+            if(depthRay < previousDepth - bias)
+            {
+                UVpos  =vec2(2);
+            }
 
         }
 		previousDepth = depthRay;
