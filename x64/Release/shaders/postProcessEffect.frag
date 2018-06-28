@@ -50,7 +50,7 @@ void main(){
         if(reflectHit.x < 1 && reflectHit.y < 1 && reflectHit.x > 0 && reflectHit.y > 0)
         {
             reflectionColor = texture(fullColor, reflectHit.xy);
-            float attenuation = (spec) * (1 - length(UV - reflectHit.xy)) * ( 1- length(reflectHit . y));
+            float attenuation = clamp((spec) * (1 - length(UV - reflectHit.xy)) * ( 1- length(reflectHit . y)) * 1.5, 0, 1);
             reflectionColor *= attenuation;
         }
     }
