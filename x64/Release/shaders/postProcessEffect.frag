@@ -41,22 +41,21 @@ void main(){
     reflection = normalize(reflection);
     float spec = texture(specularity, UV).r;
 
-    vec4 reflectionCol = vec4(0);
+    vec4 reflectionColor = vec4(0);
 
-    if(spec > 0.001)
+    if(spec > 0.01)
     {
     vec3 reflectHit = screenSpaceReflection(depth, reflection,pos, viewSpace);
    
         if(reflectHit.x < 1 && reflectHit.y < 1 && reflectHit.x > 0 && reflectHit.y > 0)
         {
-            reflectionCol = texture(fullColor, reflectHit.xy) ;
-			float attenuation = max(0 , (spec) * (1 - length(reflectHit.y)));
-			reflectionCol *= attenuation;
-
+            reflectionColor = texture(fullColor, reflectHit.xy);
+            float attenuation = clamp((spec) * (1 - length(UV - reflectHit.xy)) * ( 1- length(reflectHit . y)) * 1.5, 0, 1);
+            reflectionColor *= attenuation;
         }
     }
 
-	color = color + reflectionCol;
+    color = color + reflectionColor;
     colorOut = toneMapping(color);
 	
 }
@@ -101,6 +100,10 @@ vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat
 				// it just means that it is out of bound and isn't a valid reflection hit.
 				UVpos = vec2(2);
 			}
+            if(depthRay < previousDepth - bias)
+            {
+                UVpos  =vec2(2);
+            }
 
         }
 		previousDepth = depthRay;
@@ -109,11 +112,6 @@ vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat
         currentPos = currentPos + moveVector;
 		//moveVector *= 1.1;
     }
-	//I'm trying something
-	if (continueRay == true)
-	{
-		UVpos = vec2(0);
-	}
 	return vec3(UVpos, 0);
     //return vec3(float(i)/steps,0, 0);
 }
