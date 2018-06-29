@@ -41,19 +41,22 @@ void main(){
     reflection = normalize(reflection);
     float spec = texture(specularity, UV).r;
 
-    
+    vec4 reflectionCol = vec4(0);
 
-    if(spec > 0.01)
+    if(spec > 0.001)
     {
     vec3 reflectHit = screenSpaceReflection(depth, reflection,pos, viewSpace);
    
-        if(reflectHit.x < 1 && reflectHit.y < 1)
+        if(reflectHit.x < 1 && reflectHit.y < 1 && reflectHit.x > 0 && reflectHit.y > 0)
         {
-            color = texture(fullColor, reflectHit.xy);
-            //color = vec4(UV - reflectHit.xy,0,0);
-			//color = vec4(reflectHit,0);
+            reflectionCol = texture(fullColor, reflectHit.xy) ;
+			float attenuation = max(0 , (spec) * (1 - length(reflectHit.y)));
+			reflectionCol *= attenuation;
+
         }
     }
+
+	color = color + reflectionCol;
     colorOut = toneMapping(color);
 	
 }
@@ -106,6 +109,11 @@ vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat
         currentPos = currentPos + moveVector;
 		//moveVector *= 1.1;
     }
+	//I'm trying something
+	if (continueRay == true)
+	{
+		UVpos = vec2(0);
+	}
 	return vec3(UVpos, 0);
     //return vec3(float(i)/steps,0, 0);
 }

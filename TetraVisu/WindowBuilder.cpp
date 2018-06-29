@@ -166,7 +166,7 @@ glm::vec3 WindowBuilder::Vec3Input(glm::vec3 vector, std::string label)
 {
 	float vec[3] = { vector.x, vector.y, vector.z };
 	//Imgui::InputFloat3(param.first.c_str(), vec, 5);
-	ImGui::DragFloat3(label.c_str(), vec, 0.1f);
+	ImGui::DragFloat3(label.c_str(), vec, 0.01f);
 	vector.x = vec[0]; vector.y = vec[1]; vector.z = vec[2];
 	return vector;
 }
