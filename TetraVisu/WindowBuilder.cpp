@@ -370,9 +370,12 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject, tetra
 
 
 	std::shared_ptr<tetraRender::Material> selectedMaterial = selectMaterial(atlas, mat);
-
-		gameObject->setMaterial(selectedMaterial);
-
+	gameObject->setMaterial(selectedMaterial);
+	std::set<RenderTag> tags = gameObject->getRenderTags();
+	for (RenderTag tag:tags)
+	{
+		ImGui::Text(tetraRender::GameObject::getTagString(tag).c_str());
+	}
 
 	gameObject->update();
 }
