@@ -23,6 +23,8 @@ namespace tetraRender
 		void setScale(glm::vec3 scale);
 		void setRotation(glm::quat rotationQuaternion);
 		void addTag(RenderTag tag);
+		bool removeTag(RenderTag tag);
+
 		void addChild(GameObject* child);
 		void addChildNoMove(GameObject* child);
 		void setParent(GameObject* parent);

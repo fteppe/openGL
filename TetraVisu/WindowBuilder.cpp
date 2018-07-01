@@ -374,7 +374,22 @@ void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject, tetra
 	std::set<RenderTag> tags = gameObject->getRenderTags();
 	for (RenderTag tag:tags)
 	{
-		ImGui::Text(tetraRender::GameObject::getTagString(tag).c_str());
+		std::string tagname = tetraRender::GameObject::getTagString(tag).c_str();
+		ImGui::Text(tagname.c_str());
+		ImGui::SameLine();
+		if (ImGui::Button(("remove##" + tagname).c_str()))
+		{
+			gameObject->removeTag(tag);
+		}
+	}
+	if (ImGui::Button("add world Object"))
+	{
+		gameObject->addTag(RenderTag::WORLD_OBJECT);
+	}
+	if (ImGui::Button("add forward render"))
+	{
+		gameObject->addTag(RenderTag::FORWARD_RENDER);
+
 	}
 
 	gameObject->update();
@@ -593,12 +608,15 @@ void WindowBuilder::menu()
 		std::cout << "scene saved to " +sceneName<< std::endl;
 	}
 	ImGui::NextColumn();
-	std::string file = importer.getFile();
-	file = stringInput(file, "load");
-	importer.setFile(file);
+	//std::string file = importer.getFile();
+	std::string file;
+	file = stringInput(file, "load wavefront");
 	ImGui::Button("load waveFront");
+	importer.setFile(file);
+
 	if (ImGui::IsItemClicked())
 	{
+
 		tetraRender::GameObject* sceneRoot = scene->getGameObjects();
 		sceneRoot->addChild(importer.load());
 	}
