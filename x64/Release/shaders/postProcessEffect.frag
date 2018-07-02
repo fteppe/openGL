@@ -62,7 +62,7 @@ void main(){
 
 vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat4 viewSpaceMatrix)
 {
-    int steps = 100;
+    int steps = 50;
     vec3 moveVector = reflection / (steps/10);
 	float multiplier = 2;
     vec3 currentPos = origin;
