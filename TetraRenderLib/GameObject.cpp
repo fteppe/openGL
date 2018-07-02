@@ -58,6 +58,18 @@ void GameObject::addTag(RenderTag tag)
 	renderTags.insert(tag);
 }
 
+bool tetraRender::GameObject::removeTag(RenderTag tag)
+{
+	bool deleted = false;
+	auto found  = renderTags.find(tag);
+	if (found != renderTags.end())
+	{
+		deleted = true;
+		renderTags.erase(tag);
+	}
+	return deleted;
+}
+
 void tetraRender::GameObject::addChild(GameObject * child)
 {
 
