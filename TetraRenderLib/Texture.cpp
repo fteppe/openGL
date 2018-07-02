@@ -10,6 +10,7 @@ using namespace tetraRender;
 const std::string Texture::file = "file";
 const std::string Texture::gammaCorrected = "gammaCorrected";
 const std::string Texture::HDRvalue = "HDRValues";
+const std::string Texture::repeat = "repeat";
 
 Texture::Texture()
 {
@@ -20,6 +21,7 @@ Texture::Texture()
 	nrChannels = 0;
 	parametersContainer.set(gammaCorrected, false);
 	parametersContainer.set(HDRvalue, false);
+	parametersContainer.set(repeat, true);
 	parametersContainer.set(file, std::string(""));
 	parametersContainer.set("type", std::string("TEXTURE2D"));
 	setName("texture");
@@ -234,9 +236,17 @@ void tetraRender::Texture::update()
 
 void Texture::setTextureParameters()
 {
-	
-	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	if (parametersContainer.getBool(repeat))
+	{
+		glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	}
+	else
+	{
+		glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	}
+
 	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	

@@ -37,6 +37,8 @@ namespace tetraRender
 		static const std::string file;
 		static const std::string gammaCorrected;
 		static const std::string HDRvalue;
+		static const std::string repeat;
+
 
 	protected:
 

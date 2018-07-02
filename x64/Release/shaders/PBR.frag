@@ -26,6 +26,7 @@ uniform vec3 pu_specIn;
 uniform sampler2D shadowMap;
 
 uniform float pu_depth;
+uniform vec3 pu_col;
 
 vec3 fragLight(float light[7], vec3 normalWorld, vec3 fragPosWorld);
 vec3 albedo(vec2 UV);
@@ -36,7 +37,6 @@ vec4 cubeMapReflection(vec3 normalWorld, vec3 fragPosWorld, vec3 camPos);
 float shadowCalculation(vec4 fragShadowPos, sampler2D shadowMap);
 
 
-
 void main()
 {
    
@@ -45,7 +45,7 @@ void main()
 	vec3 normal_ = vec3(0,1,0);//normalWorld;
 	vec2 translation = parralax(camTan, posTan);
 	vec2 newUV = UV + translation;
-    
+    newUV = UV *5;
 
 	vec3 bumpVal = texture(normalMap, UV).rgb;
 	normal_ = normalValue(normalWorld, tangentWorld, biTangentWorld, newUV);
@@ -62,7 +62,16 @@ void main()
 	//We use the spec map as a bump map as well, to make it look a bit better
 	//we add a constant value to the intensity, so it is never dark.
 	vec3 ambiant = vec3(0);
-	vec4 color = vec4(albedo(newUV),1);
+	vec4 color = vec4(pu_col,1);
+	if(length(pu_col) < 0.1)
+	{
+		color = vec4(albedo(newUV),1);
+	}
+	else
+	{
+		
+	}
+
 
 	
 	specOut = vec3(specVal,0,0);
@@ -83,7 +92,7 @@ vec2 parralax(vec3 camTan, vec3 posTan)
 {
 	float heightScale = pu_depth;
 	//If there is no bound map we get out of the function without trying to give a valid result.
-	if(textureSize(depthMap,0).x < 2)
+	if(textureSize(depthMap,0).x < 2 || pu_depth < 0.001)
 	{
 		return vec2(0);
 	}
