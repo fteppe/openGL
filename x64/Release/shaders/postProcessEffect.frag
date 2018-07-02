@@ -64,7 +64,7 @@ vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat
 {
     int steps = 50;
     vec3 moveVector = reflection / (steps/10);
-	float multiplier = 2;
+	float multiplier = 1.05;
     vec3 currentPos = origin;
     //currentPos = currentPos + moveVector;
     bool continueRay = true;
@@ -94,12 +94,13 @@ vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat
 			float weight = delta1 / (delta1+delta2);
 			depthRay = mix(depthRay, previousDepth, weight);
 			UVpos = mix(UVpos, previousUVpos, weight);
-
-			if(abs(depthRay - depthSample) > bias * 5)
+			//This is to figure out if the ray is BEHIND the geometry.
+			if(abs(depthRay - depthSample) > bias )
 			{
 				// it just means that it is out of bound and isn't a valid reflection hit.
 				UVpos = vec2(2);
 			}
+			//To figure out if the ray is going towards the camera.
             if(depthRay < previousDepth - bias)
             {
                 UVpos  =vec2(2);
@@ -110,7 +111,7 @@ vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat
 		previousSample = depthSample;
 		previousUVpos =  UVpos;
         currentPos = currentPos + moveVector;
-		//moveVector *= 1.1;
+		moveVector *= multiplier;
     }
 	return vec3(UVpos, 0);
     //return vec3(float(i)/steps,0, 0);
