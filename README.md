@@ -37,3 +37,18 @@ you can call ./TetraVisu.exe scenes/saved.json to load a scene. In future releas
 - better .obj loading that can be slow for more complex objects. 
 
 It is all very simple, but allowed me to learn about a lot of different techniques. And I try to build the library so it is easy to add more to it fast.
+
+
+Some images of it :
+
+The editor
+![editor](pictures/editor.PNG)
+
+screen space reflections
+![screen space reflection](pictures/SSR.PNG)
+
+realtime shadows with shadowmaps
+![shadows](pictures/Shadows.PNG)
+
+different values of color and specularity for different materials using the same shader
+![materials](pictures/specularity.PNG)
