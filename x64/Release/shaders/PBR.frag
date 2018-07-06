@@ -27,10 +27,11 @@ uniform sampler2D shadowMap;
 
 uniform float pu_depth;
 uniform vec3 pu_col;
+uniform float pu_Normalstrength;
 
 vec3 fragLight(float light[7], vec3 normalWorld, vec3 fragPosWorld);
 vec3 albedo(vec2 UV);
-vec3 normalValue(vec3 normal, vec3 tangent, vec3 bitTangent,vec2 UVin);
+vec3 normalValue(vec3 normal, vec3 tangent, vec3 bitTangent,vec2 UVin, float strength);
 vec2 parralax(vec3 camTan, vec3 posTan);
 float water();
 vec4 cubeMapReflection(vec3 normalWorld, vec3 fragPosWorld, vec3 camPos);
@@ -45,19 +46,15 @@ void main()
 	vec3 normal_ = vec3(0,1,0);//normalWorld;
 	vec2 translation = parralax(camTan, posTan);
 	vec2 newUV = UV + translation;
-    newUV = UV *5;
+    //newUV = UV *5;
 
 	vec3 bumpVal = texture(normalMap, UV).rgb;
-	normal_ = normalValue(normalWorld, tangentWorld, biTangentWorld, newUV);
+	normal_ = normalValue(normalWorld, tangentWorld, biTangentWorld, newUV, pu_Normalstrength);
 
 	//We move the position so that we get the position of the fragment after parallax.
     pos =  pos + translation.x * tangentWorld + translation.y * biTangentWorld;
 	fragPos = pos;
 	
-	vec4 specularity = vec4(texture(specularityMap, newUV));
-	float specVal = (specularity.r);
-	specVal = specVal;
-	specVal = 0.0;
 	float specPow = 32;
 	//We use the spec map as a bump map as well, to make it look a bit better
 	//we add a constant value to the intensity, so it is never dark.
@@ -74,7 +71,6 @@ void main()
 
 
 	
-	specOut = vec3(specVal,0,0);
 	//the output of the normal vector must fit in [0,1]
 	normalOut = normal_;
 	vec4 reflectionVal = cubeMapReflection(normal_, fragPosWorld, camPos);
@@ -129,9 +125,10 @@ float water()
 	return (abs((sin(time * 4 + fragPosWorld.x * 20) +  2 * sin( - time  + fragPosWorld.x*10 + 5) +  sin( - time  + fragPosWorld.z*10 + 5))/50 ));
 }
 
-vec3 normalValue(vec3 normal, vec3 tangent, vec3 biTangent,vec2 UVin)
+vec3 normalValue(vec3 normal, vec3 tangent, vec3 biTangent,vec2 UVin, float strength)
 {
 	vec3 normalMapVal = vec3(texture(normalMap, UVin));
+	//normalMapVal = normalMapVal  *strength;
 	vec3 baseLine = vec3(0.5); //since colors go from 0-1. a vector that is null has for value 0.5.
 	normalMapVal = normalMapVal - baseLine;
 	//We substract the Y value of the normal map because it seems that my map has the +y vector in the -y direction of the UV vector.

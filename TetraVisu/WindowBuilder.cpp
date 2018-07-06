@@ -210,22 +210,21 @@ void WindowBuilder::MaterialUI(tetraRender::Material* mat, tetraRender::Resource
 	{
 		ImGui::Text(channel.first.c_str());
 		ImGui::SameLine();
-
+		std::shared_ptr<tetraRender::Texture > tex = nullptr;
 		if (channel.second != nullptr)
 		{
 
-			std::shared_ptr<tetraRender::Texture > tex = channel.second;
+			tex = channel.second;
 			ImGui::Button((tex->getName()).c_str());
 		}
 		else
 		{
 			ImGui::Button("set Texture");
 		}
-		std::shared_ptr<tetraRender::Texture> selectedTexture = selectTexture(channel.first, atlas);
-		if (selectedTexture != nullptr)
-		{
-			mat->setChannel(selectedTexture, channel.first);
-		}
+		std::shared_ptr<tetraRender::Texture> selectedTexture = selectTexture(channel.first, atlas, tex);
+
+		mat->setChannel(selectedTexture, channel.first);
+
 	}
 	ImGui::Separator();
 
@@ -471,9 +470,8 @@ std::shared_ptr<tetraRender::Shader> WindowBuilder::selectShader(tetraRender::Re
 	return returnVal;
 }
 
-std::shared_ptr<tetraRender::Texture> WindowBuilder::selectTexture(std::string channel, tetraRender::ResourceAtlas & atlas)
+std::shared_ptr<tetraRender::Texture> WindowBuilder::selectTexture(std::string channel, tetraRender::ResourceAtlas & atlas, std::shared_ptr<tetraRender::Texture> selectedTexture)
 {
-	std::shared_ptr<tetraRender::Texture> selectedTexture = nullptr;
 	if (ImGui::IsItemClicked())
 	{
 		ImGui::OpenPopup(("choose tex##" + channel).c_str());
@@ -490,6 +488,15 @@ std::shared_ptr<tetraRender::Texture> WindowBuilder::selectTexture(std::string c
 				ImGui::CloseCurrentPopup();
 			}
 		}
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(7.0f, 0.7f, 0.7f));
+
+		if (ImGui::Button("none"))
+		{
+			selectedTexture = nullptr;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::PopStyleColor(2);
 		ImGui::Separator();
 
 		ImGui::Button("cancel");

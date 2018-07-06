@@ -23,7 +23,7 @@ public:
 	static void gameObjectEditUI(tetraRender::GameObject* gameObject, tetraRender::ResourceAtlas & atlas);
 	static void parameterInput(tetraRender::ParameterContainer & param, tetraRender::Resource& resource);
 	static std::shared_ptr<tetraRender::Shader> selectShader(tetraRender::ResourceAtlas& atlas);
-	static std::shared_ptr<tetraRender::Texture> selectTexture(std::string channel, tetraRender::ResourceAtlas& atlas);
+	static std::shared_ptr<tetraRender::Texture> selectTexture(std::string channel, tetraRender::ResourceAtlas& atlas, std::shared_ptr<tetraRender::Texture> selectedTexture);
 	static std::shared_ptr<tetraRender::Material> selectMaterial(tetraRender::ResourceAtlas& atlas, std::shared_ptr<tetraRender::Material> currentMat);
 	void gameObjectContext(tetraRender::GameObject* gameobject, int id);
 	void menu();

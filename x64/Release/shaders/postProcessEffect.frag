@@ -83,7 +83,7 @@ vec3 screenSpaceReflection(sampler2D depthMap, vec3 reflection, vec3 origin, mat
         float depthRay = viewPos.z  * 0.5 + 0.5 ;
 
         depthSample = texture(depthMap, UVpos).r;
-		float bias = abs(depthRay - previousDepth) ;
+		float bias = abs(depthRay - previousDepth) * 1.  ;
 		//bias = 0.0005;
         if(depthSample < depthRay - bias)
         {
