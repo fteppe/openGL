@@ -7,9 +7,11 @@ I managed to get some simple shapes and shaders to render including parralax occ
 
 I have a basic rendering pipeline that offers the ability to do post processing.
 
-There are 3 main projects here, one library that handles the whole 3D thing, loading and stuffs.
-One is a tool do visaualize scene, it allows me to debug stuffs, and see if what I implemented works, it is mostly just a window to load an openGL context and a call to render a scene. All th rest is done by the library I built.
-The last project is barely started I have justa  skeleton, the purpose is to get a scene and material editor.
+There are 2 main projects here, one library that handles the whole 3D thing, loading and stuffs.
+One is a tool to load, visualize, edit and save scenes. The editor is built on the seconf part: the rendering library. TetraVisu the editor is just a Gui built using ImGui for the functionalities of the rendering library TetraRenderLib.
+
+you can call ./TetraVisu.exe scenes/saved.json to load a scene. In future releases there should be more than one available.
+
 
 ## Main features
 - object loading and display
