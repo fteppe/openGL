@@ -40,10 +40,10 @@ void main(){
     vec3 reflection = reflect(pos - camPos, normal);
     reflection = normalize(reflection);
     float spec = texture(specularity, UV).r;
-
+    float activateScreenSpaceReflection = texture(specularity, UV).b;
     vec4 reflectionColor = vec4(0);
 
-    if(spec > 0.01)
+    if(spec > 0.01 && activateScreenSpaceReflection > 0.01)
     {
     vec3 reflectHit = screenSpaceReflection(depth, reflection,pos, viewSpace);
    
