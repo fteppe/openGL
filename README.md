@@ -50,5 +50,8 @@ screen space reflections
 realtime shadows with shadowmaps
 ![shadows](pictures/Shadows.PNG)
 
+Before/after picture showing parralax
+![parralex](pictures/parralax_comparison.gif)
+
 different values of color and specularity for different materials using the same shader
 ![materials](pictures/specularity.PNG)
