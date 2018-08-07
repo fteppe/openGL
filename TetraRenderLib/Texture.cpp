@@ -40,19 +40,27 @@ void Texture::bind()
 
 void Texture::loadTexture(std::string textureName, GLenum textureTypeIn)
 {
+	
+	
 	void* data = readFile(textureName);
 	if (data)
 	{
+		glBindTexture(textureType, textureID);
+
 		if (parametersContainer.getBool(Texture::HDRvalue))
 		{
-			data = stbi_loadf(textureName.c_str(), &width, &height, &nrChannels, 0);
-			loadHDR(textureTypeIn, width, height, nrChannels, (float*)data);
+			loadHDR(textureTypeIn, width.load(), height.load(), nrChannels.load(), (float*)data);
 		}
 		else
 		{
-			data = stbi_load(textureName.c_str(), &width, &height, &nrChannels, 0);
-			loadImage(textureTypeIn, width, height, nrChannels, (unsigned char*)data);
+			loadImage(textureTypeIn, width.load(), height.load(), nrChannels.load(), (unsigned char*)data);
 		}
+
+		//Depending on the number of channels the texture is loaded differently.
+
+		setTextureParameters();
+		//once the texture has been loaded we free it from the ram where it is no longer used.
+		//glGenerateMipmap(textureType);
 		glGenerateMipmap(textureTypeIn);
 		stbi_image_free(data);
 	}
@@ -65,13 +73,13 @@ void Texture::loadTexture(std::string textureName, GLenum textureTypeIn)
 void * tetraRender::Texture::readFile(std::string textureName)
 {
 	//parametersContainer.set(file, textureName);
-	glBindTexture(textureType, textureID);
 	void* data = nullptr;
 	//If we have no name for our texture we create an empty one
+	int tempWidth, tempHeight, tempChannel;
+
 	if (textureName.size() == 0)
 	{
-		glBindTexture(textureType, textureID);
-		glTexImage2D(textureType, 0, GL_RED, 0, 0, 0, GL_RED, GL_UNSIGNED_BYTE, NULL);
+
 	}
 	else
 	{
@@ -82,13 +90,12 @@ void * tetraRender::Texture::readFile(std::string textureName)
 		//if we are loading a HDR texture then we need to load it differently
 		if (parametersContainer.getBool(Texture::HDRvalue))
 		{
-			data = stbi_loadf(textureName.c_str(), &width, &height, &nrChannels, 0);
-			//loadHDR(textureType, width, height, nrChannels, dataFloat);
-			//stbi_image_free(dataFloat);
+			data = stbi_loadf(textureName.c_str(), &tempWidth, &tempHeight, &tempChannel, 0);
+
 		}
 		else
 		{
-			data = stbi_load(textureName.c_str(), &width, &height, &nrChannels, 0);
+			data = stbi_load(textureName.c_str(), &tempWidth, &tempHeight, &tempChannel, 0);
 
 		}
 		if (data)
@@ -104,17 +111,52 @@ void * tetraRender::Texture::readFile(std::string textureName)
 		//textureData = std::vector<unsigned char>(data, data+width* height* nrChannels);
 		std::cout << "done loading " << textureName << std::endl;
 
+
+	}
+	width.store(tempWidth);
+	height.store(tempHeight);
+	nrChannels.store(tempChannel);
+
+	return data;
+}
+
+std::future<void*> tetraRender::Texture::asyncReadFile(std::string textureName)
+{
+	return std::async(std::launch::async,&Texture::readFile,this, textureName);
+}
+
+void tetraRender::Texture::asyncLoadTexture(std::string textureName, GLenum textureType)
+{
+	dataMutex.lock();
+	data = std::async(std::launch::async, &Texture::readFile, this, textureName);
+	this->textureType = textureType;
+}
+
+void tetraRender::Texture::asyncLoadCheck()
+{
+	if (data.valid())
+	{
+		void* dataTemp = data.get();
 		glBindTexture(textureType, textureID);
+
+		if (parametersContainer.getBool(Texture::HDRvalue))
+		{
+			loadHDR(textureType, width.load(), height.load(), nrChannels.load(), (float*)dataTemp);
+		}
+		else
+		{
+			loadImage(textureType, width.load(), height.load(), nrChannels.load(), (unsigned char*)dataTemp);
+		}
 
 		//Depending on the number of channels the texture is loaded differently.
 
 		setTextureParameters();
 		//once the texture has been loaded we free it from the ram where it is no longer used.
 		//glGenerateMipmap(textureType);
+		glGenerateMipmap(textureType);
+		stbi_image_free(dataTemp);
+		dataMutex.unlock();
 	}
-
-
-	return data;
 }
 
 
@@ -122,12 +164,13 @@ void Texture::applyTexture(GLuint program, GLuint texturePos, int textureUnit)
 {
 	
 	glUseProgram(program);
-	if (1)
+	if (dataMutex.try_lock())
 	{		
 		glActiveTexture(GL_TEXTURE0 + textureUnit);
 		glBindTexture(textureType, textureID);
 
 		glUniform1i(texturePos, textureUnit); // set it manually
+		dataMutex.unlock();
 	}
 	else
 	{
@@ -174,9 +217,7 @@ GLuint Texture::getId()
 
 void Texture::loadImage(GLuint texType, int width, int height, int nrChannels, unsigned char * data)
 {
-	this->width = width;
-	this->height = height;
-	this->nrChannels = nrChannels;
+
 	if (nrChannels == 1)
 	{
 		glTexImage2D(texType, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
@@ -202,9 +243,7 @@ void Texture::loadImage(GLuint texType, int width, int height, int nrChannels, u
 
 void tetraRender::Texture::loadHDR(GLuint textureType, int width, int height, int channels, float * data)
 {
-	this->width = width;
-	this->height = height;
-	this->nrChannels = nrChannels;
+
 	if (nrChannels == 1)
 	{
 		glTexImage2D(textureType, 0, GL_R16F, width, height, 0, GL_RED, GL_FLOAT, data);
