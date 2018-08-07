@@ -281,7 +281,7 @@ Mesh * WaveFrontLoader::makeVBOFromData()
 	vbo->setNormals(normals);
 	vbo->setUVs(UVs);
 	vbo->setFilePath(file);
-
+	vbo->updateObjectAttributes();
 	//We clear the info that are exclusive to a single solid
 	solidVertices.clear();
 	vertexSynonyme.clear();

@@ -40,8 +40,8 @@ void Texture::bind()
 
 void Texture::loadTexture(std::string textureName, GLenum textureTypeIn)
 {
-	
-	
+	asyncLoadTexture( textureName, textureTypeIn);
+	/*
 	void* data = readFile(textureName);
 	if (data)
 	{
@@ -68,6 +68,7 @@ void Texture::loadTexture(std::string textureName, GLenum textureTypeIn)
 	{
 		std::cout << "no data in " + textureName << std::endl;
 	}
+	*/
 }
 
 void * tetraRender::Texture::readFile(std::string textureName)
@@ -127,7 +128,6 @@ std::future<void*> tetraRender::Texture::asyncReadFile(std::string textureName)
 
 void tetraRender::Texture::asyncLoadTexture(std::string textureName, GLenum textureType)
 {
-	dataMutex.lock();
 	data = std::async(std::launch::async, &Texture::readFile, this, textureName);
 	this->textureType = textureType;
 }
@@ -155,22 +155,20 @@ void tetraRender::Texture::asyncLoadCheck()
 		//glGenerateMipmap(textureType);
 		glGenerateMipmap(textureType);
 		stbi_image_free(dataTemp);
-		dataMutex.unlock();
 	}
 }
 
 
 void Texture::applyTexture(GLuint program, GLuint texturePos, int textureUnit)
 {
-	
+	this->asyncLoadCheck();
 	glUseProgram(program);
-	if (dataMutex.try_lock())
+	if (1)
 	{		
 		glActiveTexture(GL_TEXTURE0 + textureUnit);
 		glBindTexture(textureType, textureID);
 
 		glUniform1i(texturePos, textureUnit); // set it manually
-		dataMutex.unlock();
 	}
 	else
 	{

@@ -28,13 +28,15 @@ namespace tetraRender
 		//THis function is used to find the tangent and bi-tangent that make the link between object coordinate 
 		//and the UV coordinate.
 		void findTangents();
+				//if we add a new component to our object, we need to update the information on the GC
+		void updateObjectAttributes();
 
 	private:
-		//if we add a new component to our object, we need to update the information on the GC
-		void updateObjectAttributes();
+
 		void computeTangent(unsigned int P0, unsigned int P1, unsigned int P2);
 		//This member tells us from which file, and which geometry in the file this was.
 		std::pair <std::string, std::string> filePath;
+		bool upToDate;
 
 		unsigned int indexSize;
 		GLuint vertexbuffer;

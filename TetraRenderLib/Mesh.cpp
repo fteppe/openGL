@@ -57,7 +57,7 @@ Mesh::~Mesh()
 void Mesh::setUVs(std::vector<glm::vec3> UVin)
 {
 	UVs = UVin;
-	updateObjectAttributes();
+	upToDate = false;
 }
 
 void Mesh::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData)
@@ -99,6 +99,7 @@ void Mesh::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int
 		//since each attributes is packed together, the offset is each time all the attributes.
 		offset += vertices[i].size() * sizeof(GLfloat);
 	}
+
 }
 
 void Mesh::setFilePath(std::pair<std::string, std::string> filePath)
@@ -133,10 +134,16 @@ void Mesh::findTangents()
 			computeTangent(P2, P1, P0);
 		}
 	}
+	upToDate = false;
+
 }
 
 void Mesh::drawObject(const Shader& shader)
 {
+	if (!upToDate)
+	{
+		updateObjectAttributes();
+	}
 	int error;
 	//error = glGetError();
 	GLuint program = shader.getProgram();
@@ -153,7 +160,7 @@ void Mesh::drawObject(const Shader& shader)
 void Mesh::setNormals(std::vector<glm::vec3> normalIn)
 {
 	normals = normalIn;
-	updateObjectAttributes();
+	upToDate = false;
 }
 
 void Mesh::updateObjectAttributes()
@@ -234,6 +241,7 @@ void Mesh::updateObjectAttributes()
 		attributeSize.push_back(3);
 	}
 	setVertex(vertexData, flatIndex, attributeSize);
+	upToDate = true;
 }
 
 void Mesh::computeTangent(unsigned int P0, unsigned int P1, unsigned int P2)
