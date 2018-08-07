@@ -4,6 +4,8 @@
 #include "stb_image.h"
 #include <glew/glew.h>
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 using namespace tetraRender;
 
@@ -79,7 +81,7 @@ void * tetraRender::Texture::readFile(std::string textureName)
 	void* data = nullptr;
 	//If we have no name for our texture we create an empty one
 	int tempWidth, tempHeight, tempChannel;
-
+	//std::this_thread::sleep_for(std::chrono::seconds(2));
 	if (textureName.size() == 0)
 	{
 
@@ -135,8 +137,9 @@ std::future<void*> tetraRender::Texture::asyncReadFile(std::string textureName)
 void tetraRender::Texture::asyncLoadTexture(std::string textureName, GLenum textureType)
 {
 	std::cout << "sync call " << std::this_thread::get_id() << std::endl;
-	if (dataMutex.try_lock())
+	if (!isLoading)
 	{
+		isLoading = true;
 		data = std::async(std::launch::async, &Texture::readFile, this, textureName);
 		this->textureType = textureType;
 	}
@@ -145,29 +148,34 @@ void tetraRender::Texture::asyncLoadTexture(std::string textureName, GLenum text
 
 void tetraRender::Texture::asyncLoadCheck()
 {
-	if (data.valid())
+	//This is the only way to get the status from the future.
+	if (isLoading)
 	{
-		void* dataTemp = data.get();
-		glBindTexture(textureType, textureID);
-
-		if (parametersContainer.getBool(Texture::HDRvalue))
+		if (data.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
 		{
-			loadHDR(textureType, width.load(), height.load(), nrChannels.load(), (float*)dataTemp);
-		}
-		else
-		{
-			loadImage(textureType, width.load(), height.load(), nrChannels.load(), (unsigned char*)dataTemp);
-		}
+			void* dataTemp = data.get();
+			glBindTexture(textureType, textureID);
 
-		//Depending on the number of channels the texture is loaded differently.
+			if (parametersContainer.getBool(Texture::HDRvalue))
+			{
+				loadHDR(textureType, width.load(), height.load(), nrChannels.load(), (float*)dataTemp);
+			}
+			else
+			{
+				loadImage(textureType, width.load(), height.load(), nrChannels.load(), (unsigned char*)dataTemp);
+			}
 
-		setTextureParameters();
-		//once the texture has been loaded we free it from the ram where it is no longer used.
-		//glGenerateMipmap(textureType);
-		glGenerateMipmap(textureType);
-		stbi_image_free(dataTemp);
-		dataMutex.unlock();
+			//Depending on the number of channels the texture is loaded differently.
+
+			setTextureParameters();
+			//once the texture has been loaded we free it from the ram where it is no longer used.
+			//glGenerateMipmap(textureType);
+			glGenerateMipmap(textureType);
+			stbi_image_free(dataTemp);
+			isLoading = false;
+		}
 	}
+
 }
 
 

@@ -48,7 +48,7 @@ namespace tetraRender
 		void asyncLoadTexture(std::string textureName, GLenum textureType = GL_TEXTURE_2D);
 		void asyncLoadCheck();
 
-		std::mutex dataMutex;
+		bool isLoading;
 		std::future<void*> data;
 
 		void setTextureParameters();
