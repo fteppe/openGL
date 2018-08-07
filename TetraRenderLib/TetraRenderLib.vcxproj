@@ -199,6 +199,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="waveFrontLoader.h" />
   </ItemGroup>
   <ItemGroup>

@@ -153,6 +153,9 @@
     <ClInclude Include="ResourceAtlas.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="tiny_obj_loader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="script.bat" />

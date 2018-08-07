@@ -25,7 +25,7 @@ Mesh::Mesh()
 
 Mesh::Mesh(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn) : Mesh()
 {
-	 vertices = verticesIn;
+	vertices = verticesIn;
 	std::vector<std::vector<int>> triangles;
 	int offset = 0;
 	for (int i = 0; i < indexIn.size(); i++)

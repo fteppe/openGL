@@ -8,6 +8,7 @@
 #include <vector>
 #include <stdlib.h>     /* strtol */
 
+//#include "tiny_obj_loader.h"
 using namespace tetraRender;
 
 WaveFrontLoader::WaveFrontLoader()
@@ -177,6 +178,29 @@ void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::
 
 	//TODO: change that
 	std::cout << "done loading file" << std::endl;
+}
+
+void tetraRender::WaveFrontLoader::tinyLoader(std::string filename, std::vector<Mesh*>& vertexObjects)
+{
+	//tinyobj::attrib_t attrib;
+	//std::vector<tinyobj::shape_t> shapes;
+	//std::vector<tinyobj::material_t> materials;
+
+	//std::string err;
+	//bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filename.c_str());
+
+	//for (tinyobj::shape_t shape : shapes)
+	//{
+	//	std::vector<glm::vec2> UVs;
+	//	std::vector<glm::vec3> normals;
+	//	std::vector<glm::vec3> vertices;
+	//	tinyobj::mesh_t mesh = shape.mesh;
+	//	for (unsigned int i = 0; i < mesh.num_face_vertices.size())
+	//	{
+
+	//	}
+	//	
+	//}
 }
 
 Mesh * WaveFrontLoader::loadSpecificVBO(std::string fileName, std::string objectName)
