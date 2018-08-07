@@ -74,6 +74,8 @@ void Texture::loadTexture(std::string textureName, GLenum textureTypeIn)
 void * tetraRender::Texture::readFile(std::string textureName)
 {
 	//parametersContainer.set(file, textureName);
+	std::cout << "async call "<< std::this_thread::get_id() << std::endl;
+
 	void* data = nullptr;
 	//If we have no name for our texture we create an empty one
 	int tempWidth, tempHeight, tempChannel;
@@ -114,6 +116,9 @@ void * tetraRender::Texture::readFile(std::string textureName)
 
 
 	}
+
+	int lol;
+	//std::cin >> lol;
 	width.store(tempWidth);
 	height.store(tempHeight);
 	nrChannels.store(tempChannel);
@@ -123,13 +128,19 @@ void * tetraRender::Texture::readFile(std::string textureName)
 
 std::future<void*> tetraRender::Texture::asyncReadFile(std::string textureName)
 {
+
 	return std::async(std::launch::async,&Texture::readFile,this, textureName);
 }
 
 void tetraRender::Texture::asyncLoadTexture(std::string textureName, GLenum textureType)
 {
-	data = std::async(std::launch::async, &Texture::readFile, this, textureName);
-	this->textureType = textureType;
+	std::cout << "sync call " << std::this_thread::get_id() << std::endl;
+	if (dataMutex.try_lock())
+	{
+		data = std::async(std::launch::async, &Texture::readFile, this, textureName);
+		this->textureType = textureType;
+	}
+
 }
 
 void tetraRender::Texture::asyncLoadCheck()
@@ -155,6 +166,7 @@ void tetraRender::Texture::asyncLoadCheck()
 		//glGenerateMipmap(textureType);
 		glGenerateMipmap(textureType);
 		stbi_image_free(dataTemp);
+		dataMutex.unlock();
 	}
 }
 
