@@ -43,45 +43,15 @@ void Texture::bind()
 void Texture::loadTexture(std::string textureName, GLenum textureTypeIn)
 {
 	asyncLoadTexture( textureName, textureTypeIn);
-	/*
-	void* data = readFile(textureName);
-	if (data)
-	{
-		glBindTexture(textureType, textureID);
-
-		if (parametersContainer.getBool(Texture::HDRvalue))
-		{
-			loadHDR(textureTypeIn, width.load(), height.load(), nrChannels.load(), (float*)data);
-		}
-		else
-		{
-			loadImage(textureTypeIn, width.load(), height.load(), nrChannels.load(), (unsigned char*)data);
-		}
-
-		//Depending on the number of channels the texture is loaded differently.
-
-		setTextureParameters();
-		//once the texture has been loaded we free it from the ram where it is no longer used.
-		//glGenerateMipmap(textureType);
-		glGenerateMipmap(textureTypeIn);
-		stbi_image_free(data);
-	}
-	else
-	{
-		std::cout << "no data in " + textureName << std::endl;
-	}
-	*/
 }
 
 void * tetraRender::Texture::readFile(std::string textureName)
 {
 	//parametersContainer.set(file, textureName);
-	std::cout << "async call "<< std::this_thread::get_id() << std::endl;
 
 	void* data = nullptr;
 	//If we have no name for our texture we create an empty one
 	int tempWidth, tempHeight, tempChannel;
-	//std::this_thread::sleep_for(std::chrono::seconds(2));
 	if (textureName.size() == 0)
 	{
 
@@ -128,15 +98,10 @@ void * tetraRender::Texture::readFile(std::string textureName)
 	return data;
 }
 
-std::future<void*> tetraRender::Texture::asyncReadFile(std::string textureName)
-{
-
-	return std::async(std::launch::async,&Texture::readFile,this, textureName);
-}
 
 void tetraRender::Texture::asyncLoadTexture(std::string textureName, GLenum textureType)
 {
-	std::cout << "sync call " << std::this_thread::get_id() << std::endl;
+	//We don't start laoding again if there is an operation happening. This is to avoid memory leaks and loss of std::future objects.
 	if (!isLoading)
 	{
 		isLoading = true;
@@ -148,11 +113,13 @@ void tetraRender::Texture::asyncLoadTexture(std::string textureName, GLenum text
 
 void tetraRender::Texture::asyncLoadCheck()
 {
-	//This is the only way to get the status from the future.
+	//If there was a load operation happening, we check if it's over.
 	if (isLoading)
 	{
+		//This is the only way to get the status from the future
 		if (data.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
 		{
+			//In the case the loading is done, we send the texture data to the GPU.
 			void* dataTemp = data.get();
 			glBindTexture(textureType, textureID);
 
@@ -171,6 +138,8 @@ void tetraRender::Texture::asyncLoadCheck()
 			//once the texture has been loaded we free it from the ram where it is no longer used.
 			//glGenerateMipmap(textureType);
 			glGenerateMipmap(textureType);
+
+			//Once the data has been sent to the GPU it can be deleted from the memory.
 			stbi_image_free(dataTemp);
 			isLoading = false;
 		}

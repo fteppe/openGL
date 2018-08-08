@@ -44,7 +44,6 @@ namespace tetraRender
 	protected:
 		void* readFile(std::string textureName);
 
-		std::future<void*> asyncReadFile(std::string textureName);
 		void asyncLoadTexture(std::string textureName, GLenum textureType = GL_TEXTURE_2D);
 		void asyncLoadCheck();
 
