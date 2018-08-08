@@ -73,6 +73,9 @@
     <ClCompile Include="ResourceAtlas.cpp">
       <Filter>sources</Filter>
     </ClCompile>
+    <ClCompile Include="MeshLoader.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -154,6 +157,9 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="tiny_obj_loader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshLoader.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -52,11 +52,7 @@ void * tetraRender::Texture::readFile(std::string textureName)
 	void* data = nullptr;
 	//If we have no name for our texture we create an empty one
 	int tempWidth, tempHeight, tempChannel;
-	if (textureName.size() == 0)
-	{
-
-	}
-	else
+	if (textureName.size() != 0)
 	{
 		//unsigned char* data = nullptr;
 
@@ -73,13 +69,7 @@ void * tetraRender::Texture::readFile(std::string textureName)
 			data = stbi_load(textureName.c_str(), &tempWidth, &tempHeight, &tempChannel, 0);
 
 		}
-		if (data)
-		{
-			//loadImage(textureType, width, height, nrChannels, data);
-			//stbi_image_free(data);
-
-		}
-		else
+		if(!data)
 		{
 			std::cout << "no texture" << std::endl;
 		}
@@ -105,7 +95,7 @@ void tetraRender::Texture::asyncLoadTexture(std::string textureName, GLenum text
 	if (!isLoading)
 	{
 		isLoading = true;
-		data = std::async(std::launch::async, &Texture::readFile, this, textureName);
+		data = std::async(std::launch::async | std::launch::deferred, &Texture::readFile, this, textureName);
 		this->textureType = textureType;
 	}
 
