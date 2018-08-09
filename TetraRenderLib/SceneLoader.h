@@ -11,11 +11,11 @@
 #include "GameObject.h"
 #include "ResourceAtlas.h"
 #include "Common.h"
-
+#include "MeshLoader.h"
 
 namespace tetraRender
 {
-
+	class MeshLoader;
 
 	class SceneLoader
 	{
@@ -23,7 +23,7 @@ namespace tetraRender
 		SceneLoader();
 		~SceneLoader();
 		void setSceneToLoad(std::string file);
-		void  loadModels(ResourceAtlas& atlas);
+		void loadModels(ResourceAtlas& atlas);
 		void loadTextures(ResourceAtlas& atlas);
 		void loadShaders(ResourceAtlas& atlas);
 		void loadMaterials(ResourceAtlas& atlas);
@@ -34,6 +34,8 @@ namespace tetraRender
 		void setResourceParam(Resource& resource, rapidjson::Value& resourceJSON);
 	private:
 		Texture * loadTexture(rapidjson::Value& texture);
+
+		std::shared_ptr<MeshLoader> meshLoader;
 		rapidjson::Document doc;
 
 	};

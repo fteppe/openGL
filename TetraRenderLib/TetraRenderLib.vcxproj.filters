@@ -76,6 +76,9 @@
     <ClCompile Include="MeshLoader.cpp">
       <Filter>sources</Filter>
     </ClCompile>
+    <ClCompile Include="tiny_obj_loader.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">

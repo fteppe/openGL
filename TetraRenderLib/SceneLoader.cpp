@@ -51,6 +51,8 @@ void SceneLoader::loadModels(ResourceAtlas& atlas)
 		std::pair<std::string, std::string> path = obj->getFilePath();
 		atlas.addMesh(std::shared_ptr<Mesh>(obj));
 	}
+	
+	meshLoader = std::shared_ptr<MeshLoader>(new MeshLoader(atlas));
 }
 
 void SceneLoader::loadTextures(ResourceAtlas& atlas)

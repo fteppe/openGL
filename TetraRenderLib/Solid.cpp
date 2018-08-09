@@ -33,6 +33,12 @@ Solid::Solid(std::shared_ptr<Mesh> vbo) : Solid()
 	setName(vboFilePath.first + "::"+vboFilePath.second);
 }
 
+tetraRender::Solid::Solid(std::shared_ptr<MeshLoader> loader, std::pair<std::string, std::string> meshName)
+{
+	this->loader = loader;
+	this->meshName = meshName;
+}
+
 GameObject * tetraRender::Solid::getDeepCopy()
 {
 	GameObject* copy = new Solid(*this);
@@ -54,6 +60,7 @@ Solid::~Solid()
 void Solid::draw(tetraRender::Scene& scene)
 {
  	GameObject::draw(scene);
+	asynchronousMeshUpdate();
 	//we make sure the object still exists, if it does we render it.
 	std::shared_ptr<Material> material = material_ptr;
 	GameObject* parent = parentNode;
@@ -64,7 +71,10 @@ void Solid::draw(tetraRender::Scene& scene)
 	}
 	if (material != nullptr)
 	{
-		material->apply(mesh_ptr.get(), scene, *this);
+		if (asynchronousMeshUpdate())
+		{
+			material->apply(mesh_ptr.get(), scene, *this);
+		}
 	}
 
 }
@@ -72,8 +82,10 @@ void Solid::draw(tetraRender::Scene& scene)
 void Solid::draw(tetraRender::Scene& scene, std::shared_ptr<Material> mat)
 {
 	GameObject::draw(scene, mat);
-
-	mat->apply(mesh_ptr.get(), scene, *this);
+	if (asynchronousMeshUpdate())
+	{
+		mat->apply(mesh_ptr.get(), scene, *this);
+	}
 }
 
 std::string Solid::description()
@@ -91,5 +103,24 @@ GameObjectType tetraRender::Solid::getType() const
 const Mesh & tetraRender::Solid::getMesh()
 {
 	return *mesh_ptr;
+}
+
+bool tetraRender::Solid::asynchronousMeshUpdate()
+{
+	bool meshReady = false;
+	//in the case we don't have a mesh
+	if (mesh_ptr == nullptr)
+	{
+		mesh_ptr = loader->getMesh(meshName);
+	}
+	if (mesh_ptr != nullptr)
+	{
+		meshReady = true;
+		if (loader != nullptr)
+		{
+			loader.reset();
+		}
+	}
+	return meshReady;
 }
 

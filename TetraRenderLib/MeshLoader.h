@@ -16,13 +16,11 @@ namespace tetraRender
 		tinyobj::attrib_t attrib;
 		std::vector<tinyobj::shape_t> shapes;
 	};
-	/// <summary>
-	/// 
-	/// </summary>
+
 	class MeshLoader
 	{
 	public:
-		MeshLoader(MeshContainer* meshesIn);
+		MeshLoader(ResourceAtlas& meshesIn);
 		~MeshLoader();
 		
 		/// <summary>
@@ -56,7 +54,7 @@ namespace tetraRender
 
 		void createMeshUpdateTasks(objData* loaded, std::string fileName);
 		std::map<std::string, std::future<objData*>> fileLoadingFutures;
-		MeshContainer* meshes;
+		ResourceAtlas& atlas;
 		
 	};
 }

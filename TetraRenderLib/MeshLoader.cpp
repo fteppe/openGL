@@ -1,15 +1,15 @@
 #include "MeshLoader.h"
 
 #include <functional>
+
 using namespace tetraRender;
 
-MeshLoader::MeshLoader(MeshContainer* meshesIn)
+tetraRender::MeshLoader::MeshLoader(ResourceAtlas& atlas) : atlas(atlas)
 {
-	meshes = meshesIn;
 }
 
 
-MeshLoader::~MeshLoader()
+tetraRender::MeshLoader::~MeshLoader()
 {
 }
 
@@ -18,9 +18,10 @@ std::shared_ptr<Mesh> tetraRender::MeshLoader::getMesh(std::pair<std::string, st
 	objData* loaded = new objData;
 	std::shared_ptr<Mesh> foundMesh = nullptr;
 	//If this file has been loaded;
-	if (meshes->find(meshName.first) != meshes->end())
+	auto meshes = atlas.getMeshes();
+	if (meshes.find(meshName.first) != meshes.end())
 	{
-		auto meshIterator = meshes->find(meshName.first)->second;
+		auto meshIterator = meshes.find(meshName.first)->second;
 		//and we find a mesh with that name
 		if (meshIterator.find(meshName.second) != meshIterator.end())
 		{
@@ -32,7 +33,7 @@ std::shared_ptr<Mesh> tetraRender::MeshLoader::getMesh(std::pair<std::string, st
 		//If the loading is done we can grab the mesh
 		if (checkFileLoadingProgress(meshName))
 		{
-			foundMesh = meshes->find(meshName.first)->second[meshName.second];
+			foundMesh = meshes.find(meshName.first)->second[meshName.second];
 		}
 	}
 	return foundMesh;
@@ -132,6 +133,7 @@ objData * tetraRender::MeshLoader::loadFile(std::string fileName)
 
 void tetraRender::MeshLoader::createMeshUpdateTasks(objData * loaded, std::string fileName)
 {
+	auto meshes = atlas.getMeshes();
 	std::vector<std::packaged_task<GLfloat*()>*> tasks;
 	//We do in a single thread the work of updating all elements that have been loaded, but the meshes can know with
 	//the future object if their update is done which can be before the end of the thread execution.
@@ -142,7 +144,7 @@ void tetraRender::MeshLoader::createMeshUpdateTasks(objData * loaded, std::strin
 		std::packaged_task<GLfloat*()>* updateMeshTask = new std::packaged_task<GLfloat*()>(std::bind(&MeshLoader::updateMesh, this, newMesh, loaded, i));
 		newMesh->setDataFuture(std::move(updateMeshTask->get_future()));
 		tasks.push_back(updateMeshTask);
-		(meshes->find(fileName)->second)[mesh_ptr->name] = newMesh;
+		(meshes.find(fileName)->second)[mesh_ptr->name] = newMesh;
 	}
 	//Asynchronously all the tasks are done in a serie; This means few new threads are done 
 	//and we avoid blocking the execution on the main thread.
