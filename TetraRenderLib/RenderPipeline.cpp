@@ -196,6 +196,7 @@ void tetraRender::RenderPipeline::setupPostProcessing(Scene & scene)
 	screen->setUVs(uvs);
 	//we give it a name so we can more easely follow it.
 	screen->setFilePath(std::pair<std::string, std::string>("hard", "screen"));
+	screen->updateObjectAttributes();
 	std::shared_ptr<Mesh> vbo_ptr(screen);
 	Solid* screenObj = new Solid(vbo_ptr);
 	//models["hard"]["screen"] = vbo_ptr;

@@ -19,6 +19,7 @@ namespace tetraRender
 		*/
 		
 		void drawObject(const Shader& shader);
+		void setVertexAndIndex(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn);
 		void setNormals(std::vector<glm::vec3> normalIn);
 		void setUVs(std::vector<glm::vec2> UVin);
 

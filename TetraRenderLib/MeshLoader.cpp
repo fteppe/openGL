@@ -90,6 +90,10 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 
 			polygon.push_back(translatedIndex);
 		}
+		mesh->setVertexAndIndex(vertices, polygons);
+		mesh->setNormals(normals);
+		mesh->setUVs(UVs);
+		mesh->findTangents();
 	}
 
 	return nullptr;
@@ -98,7 +102,7 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 bool tetraRender::MeshLoader::checkFileLoadingProgress(std::pair<std::string, std::string> meshName)
 {
 	bool loadingDone = false;
-	//The the file hasn't been loaded, we try to figure out if there is a task started out there to do it.
+	//We the file hasn't been loaded, we try to figure out if there is a task started out there to do it.
 	if (fileLoadingFutures.find(meshName.first) != fileLoadingFutures.end())
 	{
 		//Since the task was started, we try to figure out if it is over or not.
@@ -111,7 +115,19 @@ bool tetraRender::MeshLoader::checkFileLoadingProgress(std::pair<std::string, st
 			createMeshUpdateTasks(loaded, meshName.first);
 		}
 	}
+	else {
+		fileLoadingFutures[meshName.first] = std::async(&MeshLoader::loadFile, this, meshName.first);
+	}
 	return loadingDone;
+}
+
+objData * tetraRender::MeshLoader::loadFile(std::string fileName)
+{
+	std::vector<tinyobj::material_t> materials;
+	std::string err;
+	objData * fileObjContent = new objData;
+	bool ret = tinyobj::LoadObj(&fileObjContent->attrib, &fileObjContent->shapes, &materials, &err, fileName.c_str());
+	return fileObjContent;
 }
 
 void tetraRender::MeshLoader::createMeshUpdateTasks(objData * loaded, std::string fileName)
@@ -140,3 +156,5 @@ void tetraRender::MeshLoader::createMeshUpdateTasks(objData * loaded, std::strin
 		delete loaded;
 	});
 }
+
+

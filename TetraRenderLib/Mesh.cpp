@@ -25,22 +25,7 @@ Mesh::Mesh()
 
 Mesh::Mesh(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn) : Mesh()
 {
-	vertices = verticesIn;
-	std::vector<std::vector<int>> triangles;
-	int offset = 0;
-	for (int i = 0; i < indexIn.size(); i++)
-	{
-		if (indexIn[i].size() > 3)
-		{
-			//std::cout << __FILE__ << "::" << __LINE__ << "ERROR :: not a triangle" << std::endl;
-			triangles = tetraRender::Polygon::triangleSplittingIndex(vertices, indexIn[i], offset);
-			index.insert(index.end(), triangles.begin(), triangles.end());
-		}
-		else
-		{
-			index.push_back(indexIn[i]);
-		}
-	}
+	setVertexAndIndex(verticesIn, indexIn);
 }
 
 
@@ -193,7 +178,17 @@ void tetraRender::Mesh::asyncAttributesUpdate()
 		{
 			GLfloat* data = dataFuture.get();
 			std::vector<int> flatIndex;
+			for (int i = 0; i < index.size(); i++)
+			{
 
+				for (int j = 0; j < index[i].size(); j++)
+				{
+					flatIndex.push_back(index[i][j]);
+				}
+			}
+			setVertex(data, attributesSize, flatIndex);
+			delete data;
+			upToDate = true;
 		}
 	}
 }
@@ -260,10 +255,7 @@ void Mesh::findTangents()
 
 void Mesh::drawObject(const Shader& shader)
 {
-	if (!upToDate)
-	{
-		updateObjectAttributes();
-	}
+	asyncAttributesUpdate();
 	int error;
 	//error = glGetError();
 	GLuint program = shader.getProgram();
@@ -275,6 +267,26 @@ void Mesh::drawObject(const Shader& shader)
 
 	glDrawElements(GL_TRIANGLES, nbVertices, GL_UNSIGNED_INT, (void*)0);
 
+}
+
+void tetraRender::Mesh::setVertexAndIndex(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn)
+{
+	vertices = verticesIn;
+	std::vector<std::vector<int>> triangles;
+	int offset = 0;
+	for (int i = 0; i < indexIn.size(); i++)
+	{
+		if (indexIn[i].size() > 3)
+		{
+			//std::cout << __FILE__ << "::" << __LINE__ << "ERROR :: not a triangle" << std::endl;
+			triangles = tetraRender::Polygon::triangleSplittingIndex(vertices, indexIn[i], offset);
+			index.insert(index.end(), triangles.begin(), triangles.end());
+		}
+		else
+		{
+			index.push_back(indexIn[i]);
+		}
+	}
 }
 
 void Mesh::setNormals(std::vector<glm::vec3> normalIn)

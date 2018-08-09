@@ -52,6 +52,8 @@ namespace tetraRender
 		/// <returns></returns>
 		bool checkFileLoadingProgress(std::pair<std::string, std::string> meshName);
 
+		objData* loadFile(std::string fileName);
+
 		void createMeshUpdateTasks(objData* loaded, std::string fileName);
 		std::map<std::string, std::future<objData*>> fileLoadingFutures;
 		MeshContainer* meshes;
