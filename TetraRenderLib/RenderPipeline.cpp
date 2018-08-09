@@ -192,7 +192,7 @@ void tetraRender::RenderPipeline::setupPostProcessing(Scene & scene)
 	std::vector<glm::vec3> points = { glm::vec3(-1,-1,0), glm::vec3(3,-1,0),glm::vec3(-1,3,0) };
 	Mesh * screen = new Mesh(points, faces);
 	//the UVs of our screen, the way it is set up we should have the sides of the screen aligned with the side of the square in the triangle.
-	std::vector<glm::vec3> uvs = { glm::vec3(0,0,0), glm::vec3(2,0,0), glm::vec3(0,2,0) };
+	std::vector<glm::vec2> uvs = { glm::vec2(0,0), glm::vec2(2,0), glm::vec2(0,2) };
 	screen->setUVs(uvs);
 	//we give it a name so we can more easely follow it.
 	screen->setFilePath(std::pair<std::string, std::string>("hard", "screen"));

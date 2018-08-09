@@ -281,7 +281,7 @@ int WaveFrontLoader::vertexAndAttributeLink(unsigned int vertex, unsigned int at
 Mesh * WaveFrontLoader::makeVBOFromData()
 {
 	std::cout << "making obj" << std::endl;
-	std::vector<glm::vec3> UVs;
+	std::vector<glm::vec2> UVs;
 	//the normals indexed as in the solid
 	std::vector<glm::vec3> normals;
 	for (int i = 0; i < solidVertices.size(); i++)
@@ -295,7 +295,7 @@ Mesh * WaveFrontLoader::makeVBOFromData()
 		if (UVobj.size() > 0)
 		{
 			int UVindex = vertexToUV[vertexIndex];
-			glm::vec3 UV = UVobj[UVindex];
+			glm::vec2 UV = glm::vec2(UVobj[UVindex].x, UVobj[UVindex].y);
 			UVs.push_back(UV);
 		}
 
