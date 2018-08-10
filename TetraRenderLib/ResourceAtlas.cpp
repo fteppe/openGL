@@ -101,6 +101,22 @@ std::shared_ptr<Material> tetraRender::ResourceAtlas::getMaterial(std::string ma
 	return materials.find(materialName)->second;
 }
 
+std::shared_ptr<Mesh> tetraRender::ResourceAtlas::getMesh(std::pair<std::string, std::string> meshName)
+{
+	std::shared_ptr<Mesh> foundMesh = nullptr;
+	if (meshes.find(meshName.first) != meshes.end())
+	{
+		auto meshIterator = meshes.find(meshName.first)->second;
+		//and we find a mesh with that name
+		if (meshIterator.find(meshName.second) != meshIterator.end())
+		{
+			foundMesh = meshIterator.find(meshName.second)->second;
+		}
+	}
+
+	return foundMesh;
+}
+
 const AtlasContainer<Texture>& tetraRender::ResourceAtlas::getTextures()
 {
 	return textures;

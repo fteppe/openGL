@@ -3,8 +3,9 @@
 #include <tetraRender\waveFrontLoader.h>
 #include <tetraRender\Solid.h>
 
-WaveFrontImporter::WaveFrontImporter()
+WaveFrontImporter::WaveFrontImporter(tetraRender::ResourceAtlas & atlas) : loader(tetraRender::MeshLoader(atlas))
 {
+
 }
 
 void WaveFrontImporter::setDefaultMaterial(std::shared_ptr<tetraRender::Material> mat)
@@ -12,22 +13,38 @@ void WaveFrontImporter::setDefaultMaterial(std::shared_ptr<tetraRender::Material
 	defaultMaterial = mat;
 }
 
-tetraRender::GameObject * WaveFrontImporter::load()
+void WaveFrontImporter::asyncLoad()
 {
-	tetraRender::WaveFrontLoader loader;
-	std::vector<tetraRender:: Mesh* > meshes;
-	loader.loadVertexObjectVectorFromFile(file, meshes);
-	tetraRender::GameObject* root = new tetraRender::GameObject();
-	root->setName(file);
-	for (tetraRender::Mesh* mesh : meshes)
-	{
-		tetraRender::Solid* newSolid = new tetraRender::Solid(std::shared_ptr<tetraRender::Mesh>(mesh));
-		//newSolid->setMaterial(defaultMaterial);
-		newSolid->addTag(RenderTag::WORLD_OBJECT);
-		root->addChild(newSolid);
-	}
+	loader.getAllMeshes(file);
+	waitingLoad.emplace(file);
+}
 
-	return root;
+std::vector<tetraRender::GameObject*> WaveFrontImporter::getAsyncLoadResult()
+{
+	std::vector<tetraRender::GameObject*> objects;
+	std::vector<std::string> filesDone;
+	for (std::string loadingFile : waitingLoad)
+	{
+		auto meshes = loader.getAllMeshes(loadingFile);
+		if (meshes.size())
+		{
+			tetraRender::GameObject* object = new tetraRender::GameObject();
+			object->setName(loadingFile);
+			for (auto mesh : meshes)
+			{
+				tetraRender::Solid* solid = new tetraRender::Solid(mesh);
+				solid->addTag(RenderTag::WORLD_OBJECT);
+				object->addChild(solid);
+			}
+			objects.push_back(object);
+			filesDone.push_back(loadingFile);
+		}
+	}
+	for (auto file : filesDone)
+	{
+		waitingLoad.erase(file);
+	}
+	return objects;
 }
 
 void WaveFrontImporter::setFile(std::string fileName)

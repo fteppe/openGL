@@ -74,8 +74,6 @@ WindowBuilder::WindowBuilder(std::string sceneFile) : WindowBuilder()
 {
 	tetraRender::SceneSaver saver;
 	loadScene(sceneFile);
-
-
 }
 
 
@@ -100,6 +98,16 @@ void WindowBuilder::draw()
 		// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
 		// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
 		SDL_Event event;
+
+		auto loadedGameObjects = importer->getAsyncLoadResult();
+		if (loadedGameObjects.size())
+		{
+			for (auto object : loadedGameObjects)
+			{
+				scene->addGameObject(object);
+			}
+		}
+
 		while (SDL_PollEvent(&event))
 		{
 			ImGui_ImplSdlGL3_ProcessEvent(&event);
@@ -160,6 +168,7 @@ void WindowBuilder::loadScene(std::string sceneFileName)
 	defaultMat->getParameters().set("pu_color", glm::vec3(1));
 	scene->getGameObjects()->setMaterial(defaultMat);
 	sceneName = sceneFileName;
+	importer = std::unique_ptr<WaveFrontImporter>( new WaveFrontImporter(scene->getResources()));
 }
 
 glm::vec3 WindowBuilder::Vec3Input(glm::vec3 vector, std::string label)
@@ -349,7 +358,7 @@ void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int p
 void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject, tetraRender::ResourceAtlas & atlas)
 {
 	gameObject->setName(stringInput(gameObject->getName(), "name"));
-	//ImGui::Text(gameObject->getName().c_str());
+	//ImGui::Text(gameObject->getName().c_str()); 
 	auto& paramContainer = gameObject->getParameters();
 	parameterInput(paramContainer, *gameObject);
 
@@ -601,7 +610,7 @@ void WindowBuilder::menu()
 	ImGui::Button("load");
 	if (ImGui::IsItemClicked())
 	{
-
+		this->selectedObject = nullptr;
 		loadScene(sceneName);
 	}
 	ImGui::NextColumn();
@@ -619,13 +628,13 @@ void WindowBuilder::menu()
 	std::string file;
 	file = stringInput(file, "load wavefront");
 	ImGui::Button("load waveFront");
-	importer.setFile(file);
+	importer->setFile(file);
 
 	if (ImGui::IsItemClicked())
 	{
 
 		tetraRender::GameObject* sceneRoot = scene->getGameObjects();
-		sceneRoot->addChild(importer.load());
+		importer->asyncLoad();
 	}
 	ImGui::NextColumn();
 	if (ImGui::Button("add light"))

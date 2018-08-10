@@ -33,7 +33,7 @@ void main(){
     float depthThreshold = texture(depth, vec2(0.5,0.5)).r + 0.1;
     vec4 color = depthOfField(fullColor, depth, depthVal, depthThreshold, 4);
 	vec4 bloom = blur(bright, 0.01, 4);
-	color = (color + bloom)/2;
+	//color = (color + bloom)/2;
     vec3 pos = texture(fragPos, UV).rgb;
     vec3 normal = texture(normals, UV).rgb;
 
@@ -42,7 +42,7 @@ void main(){
     float spec = texture(specularity, UV).r;
     float activateScreenSpaceReflection = texture(specularity, UV).b;
     vec4 reflectionColor = vec4(0);
-
+	
     if(spec > 0.01 && activateScreenSpaceReflection > 0.01)
     {
     vec3 reflectHit = screenSpaceReflection(depth, reflection,pos, viewSpace);
@@ -54,8 +54,8 @@ void main(){
             reflectionColor *= attenuation;
         }
     }
-
-    color = color + reflectionColor;
+	
+    color = color + reflectionColor; 
     colorOut = toneMapping(color);
 	
 }

@@ -181,6 +181,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="ParameterContainer.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="PreprocessorShader.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="waveFrontLoader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +210,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="ParameterContainer.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="PreprocessorShader.cpp" />
@@ -230,6 +233,7 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="tiny_obj_loader.cc" />
     <ClCompile Include="waveFrontLoader.cpp" />
   </ItemGroup>
   <ItemGroup>

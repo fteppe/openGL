@@ -11,6 +11,8 @@ namespace tetraRender
 		WaveFrontLoader();
 		~WaveFrontLoader();
 		void loadVertexObjectVectorFromFile(std::string filename, std::vector<Mesh*> &vertexObjects);
+		void tinyLoader(std::string filename, std::vector<Mesh*> &vertexObjects);
+
 		Mesh* loadSpecificVBO(std::string fileName, std::string objectName);
 
 	private:

@@ -5,6 +5,8 @@
 #include <glew/glew.h>
 #include "stb_image.h"
 #include "Resource.h"
+#include <atomic>
+#include <future>
 
 #ifndef  STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
@@ -20,7 +22,6 @@ namespace tetraRender
 		~Texture();
 		void bind();
 		void loadTexture(std::string textureName, GLenum textureType = GL_TEXTURE_2D);
-		void* readFile(std::string textureName);
 		void applyTexture(GLuint program, GLuint texturePos, int textureUnit);
 		void setDataType(GLenum dataType);
 		void setFormat(GLenum format);
@@ -41,13 +42,20 @@ namespace tetraRender
 
 
 	protected:
+		void* readFile(std::string textureName);
+
+		void asyncLoadTexture(std::string textureName, GLenum textureType = GL_TEXTURE_2D);
+		void asyncLoadCheck();
+
+		bool isLoading;
+		std::future<void*> data;
 
 		void setTextureParameters();
 		GLuint textureID;
 		GLint textureType;
 		GLenum dataType;
 		GLenum internalFormat;
-		int width, height, nrChannels;
+		std::atomic<int> width, height, nrChannels;
 		std::string texturePath;
 
 		//std::vector<unsigned char> textureData;

@@ -51,6 +51,7 @@ void SceneLoader::loadModels(ResourceAtlas& atlas)
 		std::pair<std::string, std::string> path = obj->getFilePath();
 		atlas.addMesh(std::shared_ptr<Mesh>(obj));
 	}
+	
 }
 
 void SceneLoader::loadTextures(ResourceAtlas& atlas)
@@ -177,6 +178,8 @@ void SceneLoader::loadMaterials(ResourceAtlas& atlas)
 
 std::vector<GameObject*> SceneLoader::loadGameObjects(ResourceAtlas& atlas)
 {
+	meshLoader = std::shared_ptr<MeshLoader>(new MeshLoader(atlas));
+
 	std::vector<GameObject * > gameObjects;
 	rapidjson::Value& gos = doc["gameObjects"];
 	assert(gos.IsArray());
@@ -194,6 +197,7 @@ std::vector<GameObject*> SceneLoader::loadGameObjects(ResourceAtlas& atlas)
 			gameObjects.push_back(loadedGo);
 		}
 	}
+	meshLoader.reset();
 	return gameObjects;
 }
 
@@ -297,6 +301,12 @@ Solid * tetraRender::SceneLoader::loadSolid(ResourceAtlas& atlas, rapidjson::Val
 	std::shared_ptr<Mesh> VBO;// = objects[filePath.first][filePath.second];
 							  //In the case the object doesn't seem to exist.
 
+	VBO = meshLoader->getMesh(filePath);
+	if (VBO == nullptr)
+	{
+		loadedGo = new Solid(meshLoader, filePath);
+	}
+	/*
 	const MeshContainer& objects = atlas.getMeshes();
 	//That means the mesh hasn't been loaded already.
 	if (objects.find(filePath.first) == objects.end())
@@ -334,6 +344,8 @@ Solid * tetraRender::SceneLoader::loadSolid(ResourceAtlas& atlas, rapidjson::Val
 	{
 		std::cout << "ERROR " + filePath.first + " " + filePath.second + " doesn't seem to exist" << std::endl;
 	}
+
+	*/
 
 	return loadedGo;
 }

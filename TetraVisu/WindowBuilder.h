@@ -32,7 +32,7 @@ private:
 	static glm::vec3 Vec3Input(glm::vec3 vec, std::string label);
 	static std::string stringInput(std::string input, std::string label);
 
-	WaveFrontImporter importer;
+	std::unique_ptr<WaveFrontImporter> importer;
 	std::string sceneName;
 	tetraRender::GameObject* selectedObject;
 	SDL_Window* window;

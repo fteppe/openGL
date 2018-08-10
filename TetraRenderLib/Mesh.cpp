@@ -25,23 +25,7 @@ Mesh::Mesh()
 
 Mesh::Mesh(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn) : Mesh()
 {
-	 vertices = verticesIn;
-	std::vector<std::vector<int>> triangles;
-	int offset = 0;
-	for (int i = 0; i < indexIn.size(); i++)
-	{
-		if (indexIn[i].size() > 3)
-		{
-			//std::cout << __FILE__ << "::" << __LINE__ << "ERROR :: not a triangle" << std::endl;
-			triangles = tetraRender::Polygon::triangleSplittingIndex(vertices, indexIn[i], offset);
-			index.insert(index.end(), triangles.begin(), triangles.end());
-		}
-		else
-		{
-			index.push_back(indexIn[i]);
-		}
-	}
-
+	setVertexAndIndex(verticesIn, indexIn);
 }
 
 
@@ -54,10 +38,10 @@ Mesh::~Mesh()
 	std::cout << "destruction VBO "<< vertexbuffer << std::endl;
 }
 
-void Mesh::setUVs(std::vector<glm::vec3> UVin)
+void Mesh::setUVs(std::vector<glm::vec2> UVin)
 {
 	UVs = UVin;
-	updateObjectAttributes();
+	upToDate = false;
 }
 
 void Mesh::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData)
@@ -67,7 +51,7 @@ void Mesh::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int
 	//We bind this element buffer to the VAO.
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 	//This is the size of the index but once it's flat.
-	indexSize = index.size();
+	nbVertices = index.size();
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
 	int arraySize = 0;
 	std::vector<GLfloat> flatVert;
@@ -99,6 +83,138 @@ void Mesh::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int
 		//since each attributes is packed together, the offset is each time all the attributes.
 		offset += vertices[i].size() * sizeof(GLfloat);
 	}
+}
+
+void tetraRender::Mesh::setVertex(GLfloat * verticesData, std::vector<int> attributesSize, std::vector<int> flatFaces)
+{
+	//We bind these buffers because they are the one we are gooing to do these operations on.
+	glBindVertexArray(VertexArrayID);
+	//We bind this element buffer to the VAO.
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	//This is the size of the index but once it's flat.
+	nbVertices = flatFaces.size();
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, flatFaces.size() * sizeof(int), &flatFaces[0], GL_STATIC_DRAW);
+	int arraySize = 0;
+	int totalFloatNumber = 0;
+	int vertexNumber = vertices.size();
+	for (int attributeSize : attributesSize)
+	{
+		totalFloatNumber += attributeSize * vertexNumber;
+	}
+
+	//We specify which buffer we use.
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	// Give our vertices to OpenGL.
+	glBufferData(GL_ARRAY_BUFFER, totalFloatNumber * sizeof(GLfloat), verticesData, GL_STATIC_DRAW);
+	//We are going to set each vertex data
+	int offset = 0;
+	glBindVertexArray(VertexArrayID);
+	//This allows us to tell openGL how to separate all of our datas.
+	for (unsigned i = 0; i < attributesSize.size(); i++)
+	{
+		//we enable the attrib array, meaning i is the number of attribute for one vertex, if there is vertexPos + normal + uv 
+		//i=0 => vertex; i=1 => normal ... 
+		glEnableVertexAttribArray(i);
+		//all the argments are one after the other, so there is no stride, but we set the offset
+		//nbData[i] tells openGL the size of each type of data one (vertex = 3 doubles, UV = 2 doubles)
+		//the stride variable is set to 0 because each element is back to back VVVVVVVVVVVVVVVVNNNNNNNNNUUUUUUUU ....
+		glVertexAttribPointer(i, attributesSize[i], GL_FLOAT, GL_FALSE, 0, (void*)(offset));
+		//The offset is used to position openGL in the vertex buffer object array. It tells openGL when the vertexAttributes starts.
+		//since each attributes is packed together, the offset is each time all the attributes.
+		offset += vertices.size() * attributesSize[i] * sizeof(GLfloat);
+	}
+}
+
+GLfloat * tetraRender::Mesh::createDataArray()
+{
+	unsigned ArraySize = vertices.size() * 3;
+	ArraySize += UVs.size() * 2;
+	ArraySize += normals.size() * 3;
+	ArraySize += tangents.size() * 3;
+	ArraySize += biTangents.size() * 3;
+
+	GLfloat* datas = new GLfloat[ArraySize];
+	unsigned int offset = 0;
+	attributesSize.clear();
+	if (vertices.size())
+	{
+		offset = updateDataArray(datas, offset, vertices);
+		attributesSize.push_back(3);
+	}
+	if (normals.size())
+	{
+		offset = updateDataArray(datas, offset, normals);
+		attributesSize.push_back(3);
+
+	}
+	if (UVs.size())
+	{
+		offset = updateDataArray(datas, offset, UVs);
+		attributesSize.push_back(2);
+
+	}
+	if (tangents.size())
+	{
+		offset = updateDataArray(datas, offset, tangents);
+		attributesSize.push_back(3);
+
+	}
+	if (biTangents.size())
+	{
+		offset = updateDataArray(datas, offset, biTangents);
+		attributesSize.push_back(3);
+
+	}
+	return datas;
+}
+
+void tetraRender::Mesh::asyncAttributesUpdate()
+{
+	//If we are waiting for some data.
+	if (dataFuture.valid())
+	{
+		//If the data has been updated, then we will send it to the GPU
+		if (dataFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+		{
+			GLfloat* data = dataFuture.get();
+			std::vector<int> flatIndex;
+			for (int i = 0; i < index.size(); i++)
+			{
+
+				for (int j = 0; j < index[i].size(); j++)
+				{
+					flatIndex.push_back(index[i][j]);
+				}
+			}
+			setVertex(data, attributesSize, flatIndex);
+			delete data;
+			upToDate = true;
+		}
+	}
+}
+
+int tetraRender::Mesh::updateDataArray(GLfloat * dataArray, int offset, std::vector<glm::vec3>& datatoAdd)
+{
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		dataArray[offset + i * 3] = datatoAdd[i].x;
+		dataArray[offset + i * 3 + 1] = datatoAdd[i].y;
+		dataArray[offset + i * 3 + 2] = datatoAdd[i].z;
+	}
+	offset += datatoAdd.size() * 3;
+
+	return offset;
+}
+
+int tetraRender::Mesh::updateDataArray(GLfloat * dataArray, int offset, std::vector<glm::vec2>& datatoAdd)
+{
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		dataArray[offset + i * 2] = datatoAdd[i].x;
+		dataArray[offset + i * 2 + 1] = datatoAdd[i].y;
+	}
+	offset += datatoAdd.size() * 2;
+	return offset;
 }
 
 void Mesh::setFilePath(std::pair<std::string, std::string> filePath)
@@ -133,10 +249,13 @@ void Mesh::findTangents()
 			computeTangent(P2, P1, P0);
 		}
 	}
+	upToDate = false;
+
 }
 
 void Mesh::drawObject(const Shader& shader)
 {
+	asyncAttributesUpdate();
 	int error;
 	//error = glGetError();
 	GLuint program = shader.getProgram();
@@ -146,14 +265,34 @@ void Mesh::drawObject(const Shader& shader)
 
 	glBindVertexArray(VertexArrayID);
 
-	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, (void*)0);
+	glDrawElements(GL_TRIANGLES, nbVertices, GL_UNSIGNED_INT, (void*)0);
 
+}
+
+void tetraRender::Mesh::setVertexAndIndex(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn)
+{
+	vertices = verticesIn;
+	std::vector<std::vector<int>> triangles;
+	int offset = 0;
+	for (int i = 0; i < indexIn.size(); i++)
+	{
+		if (indexIn[i].size() > 3)
+		{
+			//std::cout << __FILE__ << "::" << __LINE__ << "ERROR :: not a triangle" << std::endl;
+			triangles = tetraRender::Polygon::triangleSplittingIndex(vertices, indexIn[i], offset);
+			index.insert(index.end(), triangles.begin(), triangles.end());
+		}
+		else
+		{
+			index.push_back(indexIn[i]);
+		}
+	}
 }
 
 void Mesh::setNormals(std::vector<glm::vec3> normalIn)
 {
 	normals = normalIn;
-	updateObjectAttributes();
+	upToDate = false;
 }
 
 void Mesh::updateObjectAttributes()
@@ -161,6 +300,7 @@ void Mesh::updateObjectAttributes()
 	//if we add a new component to our object, we need to update the information on the GC
 	//We also look for the tangents;
 	findTangents();
+	/*
 	std::vector<GLfloat> vertArray;
 	std::vector<GLfloat> normalArray;
 	std::vector<GLfloat> UVArray;
@@ -196,14 +336,7 @@ void Mesh::updateObjectAttributes()
 			biTangentsArray.insert(biTangentsArray.end(), tan.begin(), tan.end());
 		}
 	}
-	for (int i = 0; i < index.size(); i++)
-	{
 
-		for (int j = 0; j < index[i].size(); j++)
-		{
-			flatIndex.push_back(index[i][j]);
-		}
-	}
 
 	std::vector<std::vector<GLfloat>> vertexData;
 	//We add the vertex coord to the vertex Data array.
@@ -233,7 +366,26 @@ void Mesh::updateObjectAttributes()
 		vertexData.push_back(biTangentsArray);
 		attributeSize.push_back(3);
 	}
-	setVertex(vertexData, flatIndex, attributeSize);
+	*/
+	
+	std::vector<int> flatIndex;
+	for (int i = 0; i < index.size(); i++)
+	{
+
+		for (int j = 0; j < index[i].size(); j++)
+		{
+			flatIndex.push_back(index[i][j]);
+		}
+	}
+	GLfloat* vertexData = createDataArray();
+	setVertex(vertexData,  attributesSize, flatIndex);
+	delete vertexData;
+	upToDate = true;
+}
+
+void tetraRender::Mesh::setDataFuture(std::future<GLfloat*> future)
+{
+	dataFuture = std::move(future);
 }
 
 void Mesh::computeTangent(unsigned int P0, unsigned int P1, unsigned int P2)

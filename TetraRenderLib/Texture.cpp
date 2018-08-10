@@ -4,6 +4,8 @@
 #include "stb_image.h"
 #include <glew/glew.h>
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 using namespace tetraRender;
 
@@ -40,40 +42,17 @@ void Texture::bind()
 
 void Texture::loadTexture(std::string textureName, GLenum textureTypeIn)
 {
-	void* data = readFile(textureName);
-	if (data)
-	{
-		if (parametersContainer.getBool(Texture::HDRvalue))
-		{
-			data = stbi_loadf(textureName.c_str(), &width, &height, &nrChannels, 0);
-			loadHDR(textureTypeIn, width, height, nrChannels, (float*)data);
-		}
-		else
-		{
-			data = stbi_load(textureName.c_str(), &width, &height, &nrChannels, 0);
-			loadImage(textureTypeIn, width, height, nrChannels, (unsigned char*)data);
-		}
-		glGenerateMipmap(textureTypeIn);
-		stbi_image_free(data);
-	}
-	else
-	{
-		std::cout << "no data in " + textureName << std::endl;
-	}
+	asyncLoadTexture( textureName, textureTypeIn);
 }
 
 void * tetraRender::Texture::readFile(std::string textureName)
 {
 	//parametersContainer.set(file, textureName);
-	glBindTexture(textureType, textureID);
+
 	void* data = nullptr;
 	//If we have no name for our texture we create an empty one
-	if (textureName.size() == 0)
-	{
-		glBindTexture(textureType, textureID);
-		glTexImage2D(textureType, 0, GL_RED, 0, 0, 0, GL_RED, GL_UNSIGNED_BYTE, NULL);
-	}
-	else
+	int tempWidth, tempHeight, tempChannel;
+	if (textureName.size() != 0)
 	{
 		//unsigned char* data = nullptr;
 
@@ -82,45 +61,86 @@ void * tetraRender::Texture::readFile(std::string textureName)
 		//if we are loading a HDR texture then we need to load it differently
 		if (parametersContainer.getBool(Texture::HDRvalue))
 		{
-			data = stbi_loadf(textureName.c_str(), &width, &height, &nrChannels, 0);
-			//loadHDR(textureType, width, height, nrChannels, dataFloat);
-			//stbi_image_free(dataFloat);
-		}
-		else
-		{
-			data = stbi_load(textureName.c_str(), &width, &height, &nrChannels, 0);
-
-		}
-		if (data)
-		{
-			//loadImage(textureType, width, height, nrChannels, data);
-			//stbi_image_free(data);
+			data = stbi_loadf(textureName.c_str(), &tempWidth, &tempHeight, &tempChannel, 0);
 
 		}
 		else
+		{
+			data = stbi_load(textureName.c_str(), &tempWidth, &tempHeight, &tempChannel, 0);
+
+		}
+		if(!data)
 		{
 			std::cout << "no texture" << std::endl;
 		}
 		//textureData = std::vector<unsigned char>(data, data+width* height* nrChannels);
 		std::cout << "done loading " << textureName << std::endl;
 
-		glBindTexture(textureType, textureID);
 
-		//Depending on the number of channels the texture is loaded differently.
-
-		setTextureParameters();
-		//once the texture has been loaded we free it from the ram where it is no longer used.
-		//glGenerateMipmap(textureType);
 	}
 
+	int lol;
+	//std::cin >> lol;
+	width.store(tempWidth);
+	height.store(tempHeight);
+	nrChannels.store(tempChannel);
 
 	return data;
 }
 
 
+void tetraRender::Texture::asyncLoadTexture(std::string textureName, GLenum textureType)
+{
+	//We don't start laoding again if there is an operation happening. This is to avoid memory leaks and loss of std::future objects.
+	if (!isLoading)
+	{
+		isLoading = true;
+		data = std::async(std::launch::async | std::launch::deferred, &Texture::readFile, this, textureName);
+		this->textureType = textureType;
+	}
+
+}
+
+void tetraRender::Texture::asyncLoadCheck()
+{
+	//If there was a load operation happening, we check if it's over.
+	if (isLoading)
+	{
+		//This is the only way to get the status from the future
+		if (data.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+		{
+			//In the case the loading is done, we send the texture data to the GPU.
+			void* dataTemp = data.get();
+			glBindTexture(textureType, textureID);
+
+			if (parametersContainer.getBool(Texture::HDRvalue))
+			{
+				loadHDR(textureType, width.load(), height.load(), nrChannels.load(), (float*)dataTemp);
+			}
+			else
+			{
+				loadImage(textureType, width.load(), height.load(), nrChannels.load(), (unsigned char*)dataTemp);
+			}
+
+			//Depending on the number of channels the texture is loaded differently.
+
+			setTextureParameters();
+			//once the texture has been loaded we free it from the ram where it is no longer used.
+			//glGenerateMipmap(textureType);
+			glGenerateMipmap(textureType);
+
+			//Once the data has been sent to the GPU it can be deleted from the memory.
+			stbi_image_free(dataTemp);
+			isLoading = false;
+		}
+	}
+
+}
+
+
 void Texture::applyTexture(GLuint program, GLuint texturePos, int textureUnit)
 {
-	
+	this->asyncLoadCheck();
 	glUseProgram(program);
 	if (1)
 	{		
@@ -174,9 +194,7 @@ GLuint Texture::getId()
 
 void Texture::loadImage(GLuint texType, int width, int height, int nrChannels, unsigned char * data)
 {
-	this->width = width;
-	this->height = height;
-	this->nrChannels = nrChannels;
+
 	if (nrChannels == 1)
 	{
 		glTexImage2D(texType, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
@@ -202,9 +220,7 @@ void Texture::loadImage(GLuint texType, int width, int height, int nrChannels, u
 
 void tetraRender::Texture::loadHDR(GLuint textureType, int width, int height, int channels, float * data)
 {
-	this->width = width;
-	this->height = height;
-	this->nrChannels = nrChannels;
+
 	if (nrChannels == 1)
 	{
 		glTexImage2D(textureType, 0, GL_R16F, width, height, 0, GL_RED, GL_FLOAT, data);

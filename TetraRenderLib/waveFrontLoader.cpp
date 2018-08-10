@@ -8,6 +8,7 @@
 #include <vector>
 #include <stdlib.h>     /* strtol */
 
+//#include "tiny_obj_loader.h"
 using namespace tetraRender;
 
 WaveFrontLoader::WaveFrontLoader()
@@ -179,6 +180,29 @@ void WaveFrontLoader::loadVertexObjectVectorFromFile(std::string fileName, std::
 	std::cout << "done loading file" << std::endl;
 }
 
+void tetraRender::WaveFrontLoader::tinyLoader(std::string filename, std::vector<Mesh*>& vertexObjects)
+{
+	//tinyobj::attrib_t attrib;
+	//std::vector<tinyobj::shape_t> shapes;
+	//std::vector<tinyobj::material_t> materials;
+
+	//std::string err;
+	//bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filename.c_str());
+
+	//for (tinyobj::shape_t shape : shapes)
+	//{
+	//	std::vector<glm::vec2> UVs;
+	//	std::vector<glm::vec3> normals;
+	//	std::vector<glm::vec3> vertices;
+	//	tinyobj::mesh_t mesh = shape.mesh;
+	//	for (unsigned int i = 0; i < mesh.num_face_vertices.size())
+	//	{
+
+	//	}
+	//	
+	//}
+}
+
 Mesh * WaveFrontLoader::loadSpecificVBO(std::string fileName, std::string objectName)
 {
 	std::vector<Mesh*> obj;
@@ -257,7 +281,7 @@ int WaveFrontLoader::vertexAndAttributeLink(unsigned int vertex, unsigned int at
 Mesh * WaveFrontLoader::makeVBOFromData()
 {
 	std::cout << "making obj" << std::endl;
-	std::vector<glm::vec3> UVs;
+	std::vector<glm::vec2> UVs;
 	//the normals indexed as in the solid
 	std::vector<glm::vec3> normals;
 	for (int i = 0; i < solidVertices.size(); i++)
@@ -271,7 +295,7 @@ Mesh * WaveFrontLoader::makeVBOFromData()
 		if (UVobj.size() > 0)
 		{
 			int UVindex = vertexToUV[vertexIndex];
-			glm::vec3 UV = UVobj[UVindex];
+			glm::vec2 UV = glm::vec2(UVobj[UVindex].x, UVobj[UVindex].y);
 			UVs.push_back(UV);
 		}
 
@@ -281,7 +305,7 @@ Mesh * WaveFrontLoader::makeVBOFromData()
 	vbo->setNormals(normals);
 	vbo->setUVs(UVs);
 	vbo->setFilePath(file);
-
+	vbo->updateObjectAttributes();
 	//We clear the info that are exclusive to a single solid
 	solidVertices.clear();
 	vertexSynonyme.clear();
