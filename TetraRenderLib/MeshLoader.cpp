@@ -21,12 +21,17 @@ std::shared_ptr<Mesh> tetraRender::MeshLoader::getMesh(std::pair<std::string, st
 	if (foundMesh == nullptr)
 	{
 		//If the loading is done we can grab the mesh, but we need to make sure the loading was successfull. If it wasn't the mesh won't be available
-		if (checkFileLoadingProgress(meshName))
+		if (checkFileLoadingProgress(meshName.first))
 		{
 			foundMesh = atlas.getMesh(meshName);
 		}
 	}
 	return foundMesh;
+}
+
+std::vector<std::shared_ptr<Mesh>> tetraRender::MeshLoader::getAllMeshes(std::string fileName)
+{
+	return std::vector<std::shared_ptr<Mesh>>();
 }
 
 GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objData* objDataLoaded, unsigned meshId)
@@ -92,15 +97,14 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 	return mesh->createDataArray();
 }
 
-bool tetraRender::MeshLoader::checkFileLoadingProgress(std::pair<std::string, std::string> meshName)
+bool tetraRender::MeshLoader::checkFileLoadingProgress(std::string fileName)
 {
 	bool loadingDone = false;
-	std::string fileName = meshName.first;
 	//We the file hasn't been loaded, we try to figure out if there is a task started out there to do it.
-	if (fileLoadingFutures.find(meshName.first) != fileLoadingFutures.end())
+	if (fileLoadingFutures.find(fileName) != fileLoadingFutures.end())
 	{
 		//Since the task was started, we try to figure out if it is over or not.
-		std::future<objData*>* future_ptr = &(fileLoadingFutures.find(meshName.first)->second);
+		std::future<objData*>* future_ptr = &(fileLoadingFutures.find(fileName)->second);
 		if (future_ptr->valid())
 		{
 			if (future_ptr->wait_for(std::chrono::seconds(0)) == std::future_status::ready)
@@ -108,12 +112,12 @@ bool tetraRender::MeshLoader::checkFileLoadingProgress(std::pair<std::string, st
 				loadingDone = true;
 				//The task of loading the file is over. It's now necessary to build the meshes.
 				objData* loaded = future_ptr->get();
-				createMeshUpdateTasks(loaded, meshName.first);
+				createMeshUpdateTasks(loaded, fileName);
 			}
 		}
 	}
 	else {
-		fileLoadingFutures[meshName.first] = std::async(&MeshLoader::loadFile, this, meshName.first);
+		fileLoadingFutures[fileName] = std::async(&MeshLoader::loadFile, this, fileName);
 	}
 	return loadingDone;
 }
@@ -127,9 +131,10 @@ objData * tetraRender::MeshLoader::loadFile(std::string fileName)
 	return fileObjContent;
 }
 
-void tetraRender::MeshLoader::createMeshUpdateTasks(objData * loaded, std::string fileName)
+std::vector<MeshName> tetraRender::MeshLoader::createMeshUpdateTasks(objData * loaded, std::string fileName)
 {
 	std::vector<std::packaged_task<GLfloat*()>*> tasks;
+	std::vector<MeshName> meshesLoaded;
 	//We do in a single thread the work of updating all elements that have been loaded, but the meshes can know with
 	//the future object if their update is done which can be before the end of the thread execution.
 	for (unsigned i = 0; i < loaded->shapes.size(); i++)
@@ -138,13 +143,18 @@ void tetraRender::MeshLoader::createMeshUpdateTasks(objData * loaded, std::strin
 		std::shared_ptr<Mesh> newMesh = std::shared_ptr<Mesh>( new Mesh);
 		std::packaged_task<GLfloat*()>* updateMeshTask = new std::packaged_task<GLfloat*()>(std::bind(&MeshLoader::updateMesh, this, newMesh, loaded, i));
 		newMesh->setDataFuture(std::move(updateMeshTask->get_future()));
-		newMesh->setFilePath(std::pair<std::string, std::string>(fileName, mesh_ptr->name));
+		newMesh->setFilePath(MeshName(fileName, mesh_ptr->name));
+		meshesLoaded.push_back(MeshName(fileName, mesh_ptr->name));
 		tasks.push_back(updateMeshTask);
 		atlas.addMesh(newMesh);
 	}
+
+
+
 	//Asynchronously all the tasks are done in a serie; This means few new threads are done 
 	//and we avoid blocking the execution on the main thread.
-	std::async([&tasks, loaded]() {
+	meshUpdateFutures.emplace_back(
+		std::async([](std::vector<std::packaged_task<GLfloat*()>*> tasks, objData* loaded) {
 		for (int i = 0; i < tasks.size(); i++)
 		{
 			tasks[i]->operator()();
@@ -152,7 +162,9 @@ void tetraRender::MeshLoader::createMeshUpdateTasks(objData * loaded, std::strin
 		}
 		tasks.clear();
 		delete loaded;
-	});
+	}, tasks, loaded));
+
+	return meshesLoaded;
 }
 
 

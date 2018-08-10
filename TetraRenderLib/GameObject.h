@@ -78,9 +78,7 @@ namespace tetraRender
 		GameObject* parentNode;
 		//These tags are an indication for the renderer, depending on what it needs to render, this gives a indication.
 		// for now the most used tags are WORLD_OBJECT et POST_PROCESSING. But I can make the difference betwen dynamic and static objects that can be interesting for lightmaps.
-		std::set<RenderTag> renderTags;
-
-		
+		std::set<RenderTag> renderTags;		
 	};
 
 }

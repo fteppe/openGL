@@ -30,6 +30,8 @@ namespace tetraRender
 		/// <returns>either a mesh that might not be done loading or a nullptr if the parsing of the file isn't over.</returns
 		std::shared_ptr<Mesh> getMesh(std::pair<std::string, std::string> meshName);
 
+		std::vector<std::shared_ptr<Mesh>> getAllMeshes(std::string fileName);
+
 	protected:
 		
 		/// <summary>
@@ -48,12 +50,15 @@ namespace tetraRender
 		/// </summary>
 		/// <param name="meshName">Name of the mesh.</param>
 		/// <returns></returns>
-		bool checkFileLoadingProgress(std::pair<std::string, std::string> meshName);
+		bool checkFileLoadingProgress(std::string fileName);
 
 		objData* loadFile(std::string fileName);
 
-		void createMeshUpdateTasks(objData* loaded, std::string fileName);
+		std::vector<MeshName> createMeshUpdateTasks(objData* loaded, std::string fileName);
+		//void executeUpdateMeshes()
+
 		std::map<std::string, std::future<objData*>> fileLoadingFutures;
+		std::vector<std::future<void>> meshUpdateFutures;
 		ResourceAtlas& atlas;
 		
 	};

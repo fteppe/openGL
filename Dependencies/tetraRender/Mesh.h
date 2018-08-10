@@ -6,6 +6,8 @@
 //The vertex Buffer object contains all the geometry elements of an object.
 namespace tetraRender
 {
+	typedef std::pair<std::string, std::string> MeshName;
+
 	class Mesh
 	{
 	public:
