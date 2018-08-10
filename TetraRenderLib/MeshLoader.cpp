@@ -20,8 +20,9 @@ std::shared_ptr<Mesh> tetraRender::MeshLoader::getMesh(std::pair<std::string, st
 	//If this file has been loaded;
 	if (foundMesh == nullptr)
 	{
+
 		//If the loading is done we can grab the mesh, but we need to make sure the loading was successfull. If it wasn't the mesh won't be available
-		if (checkFileLoadingProgress(meshName.first))
+		if (checkFileLoadingProgress(meshName.first).size())
 		{
 			foundMesh = atlas.getMesh(meshName);
 		}
@@ -31,7 +32,17 @@ std::shared_ptr<Mesh> tetraRender::MeshLoader::getMesh(std::pair<std::string, st
 
 std::vector<std::shared_ptr<Mesh>> tetraRender::MeshLoader::getAllMeshes(std::string fileName)
 {
-	return std::vector<std::shared_ptr<Mesh>>();
+	std::vector<std::shared_ptr<Mesh>> loadedMeshes;
+	auto meshes = checkFileLoadingProgress(fileName);
+	//The file is done loading.
+	if (meshes.size());
+	{
+		for (MeshName mesh : meshes)
+		{
+			loadedMeshes.push_back(getMesh(mesh));
+		}
+	}
+	return loadedMeshes;
 }
 
 GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objData* objDataLoaded, unsigned meshId)
@@ -97,9 +108,10 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 	return mesh->createDataArray();
 }
 
-bool tetraRender::MeshLoader::checkFileLoadingProgress(std::string fileName)
+std::vector<MeshName> tetraRender::MeshLoader::checkFileLoadingProgress(std::string fileName)
 {
 	bool loadingDone = false;
+	std::vector<MeshName> meshesLoaded;
 	//We the file hasn't been loaded, we try to figure out if there is a task started out there to do it.
 	if (fileLoadingFutures.find(fileName) != fileLoadingFutures.end())
 	{
@@ -112,14 +124,14 @@ bool tetraRender::MeshLoader::checkFileLoadingProgress(std::string fileName)
 				loadingDone = true;
 				//The task of loading the file is over. It's now necessary to build the meshes.
 				objData* loaded = future_ptr->get();
-				createMeshUpdateTasks(loaded, fileName);
+				meshesLoaded = createMeshUpdateTasks(loaded, fileName);
 			}
 		}
 	}
 	else {
 		fileLoadingFutures[fileName] = std::async(&MeshLoader::loadFile, this, fileName);
 	}
-	return loadingDone;
+	return meshesLoaded;
 }
 
 objData * tetraRender::MeshLoader::loadFile(std::string fileName)

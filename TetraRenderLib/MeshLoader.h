@@ -32,6 +32,14 @@ namespace tetraRender
 
 		std::vector<std::shared_ptr<Mesh>> getAllMeshes(std::string fileName);
 
+		/// <summary>
+		/// Checks if the file containing the mesh has  started loading. If it hasn't it launches loading tasks
+		/// If the loading is over it adds incomplete meshes to the atlas and starts mesh update tasks.
+		/// </summary>
+		/// <param name="meshName">Name of the mesh.</param>
+		/// <returns></returns>
+		std::vector<MeshName> checkFileLoadingProgress(std::string fileName);
+
 	protected:
 		
 		/// <summary>
@@ -43,14 +51,6 @@ namespace tetraRender
 		/// <returns>the data that we need to send to the GPU</returns>
 		GLfloat * updateMesh(std::shared_ptr<Mesh> mesh, objData* objDataLoaded, unsigned meshId);
 
-
-		/// <summary>
-		/// Checks if the file containing the mesh has  started loading. If it hasn't it launches loading tasks
-		/// If the loading is over it adds incomplete meshes to the atlas and starts mesh update tasks.
-		/// </summary>
-		/// <param name="meshName">Name of the mesh.</param>
-		/// <returns></returns>
-		bool checkFileLoadingProgress(std::string fileName);
 
 		objData* loadFile(std::string fileName);
 
