@@ -91,9 +91,9 @@ GameObjectType tetraRender::Solid::getType() const
 
 
 
-const Mesh & tetraRender::Solid::getMesh()
+const std::shared_ptr<Mesh> tetraRender::Solid::getMesh()
 {
-	return *mesh_ptr;
+	return mesh_ptr;
 }
 
 bool tetraRender::Solid::asynchronousMeshUpdate()

@@ -358,7 +358,7 @@ void WindowBuilder::gameObjectTreeUI(tetraRender::GameObject * gameObject, int p
 void WindowBuilder::gameObjectEditUI(tetraRender::GameObject * gameObject, tetraRender::ResourceAtlas & atlas)
 {
 	gameObject->setName(stringInput(gameObject->getName(), "name"));
-	//ImGui::Text(gameObject->getName().c_str());
+	//ImGui::Text(gameObject->getName().c_str()); 
 	auto& paramContainer = gameObject->getParameters();
 	parameterInput(paramContainer, *gameObject);
 
@@ -610,7 +610,7 @@ void WindowBuilder::menu()
 	ImGui::Button("load");
 	if (ImGui::IsItemClicked())
 	{
-
+		this->selectedObject = nullptr;
 		loadScene(sceneName);
 	}
 	ImGui::NextColumn();

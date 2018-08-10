@@ -78,64 +78,88 @@ void tetraRender::SceneSaver::saveToFile(Scene & scene, std::string filePath)
 
 void tetraRender::SceneSaver::addGameObjectToJSON(rapidjson::Writer<rapidjson::StringBuffer>& writer, GameObject * gameObject,std::map<std::string, Material*>& mats )
 {
-	writer.StartObject();
-
-	//depending on the game object there might be different things to add.
-	switch (gameObject->getType())
+	bool hadErrors = false;
+	//Here are some reasons the fiel shouldn't be saved
+	if (gameObject->getType() == GameObjectType::SOLID)
 	{
-	case GameObjectType::SOLID:
-	{
-
 		Solid* solid = static_cast<Solid*>(gameObject);
-
-		writer.Key("model");
-		writer.StartArray();
-		auto model = solid->getMesh().getFilePath();
-		writer.String(model.first.c_str());
-		writer.String(model.second.c_str());
-		writer.EndArray();
-	}
-
-		break;
-	case GameObjectType::LIGHT:
-		break;
-	default:
-		break;
-	}
-	auto mat = gameObject->getMaterial();
-	if (mat != NULL && mat->getName().size()>0)
-	{
-		mats[mat->getName()] = mat.get();
-		gameObject->getParameters().set(GameObject::material, std::string(mat->getName()));
-	}
-	auto renderTags = gameObject->getRenderTags();
-	if (renderTags.size() > 0)
-	{
-		writer.Key("renderTags");
-		writer.StartArray();
-		for (RenderTag tag : renderTags)
+		auto mesh = solid->getMesh();
+		if (mesh == nullptr)
 		{
-			std::string tagString = GameObject::getTagString(tag);
-			if (tagString.size())
+			hadErrors = true;
+		}
+		else
+		{
+			if (mesh->getFilePath().first == "hard")
 			{
-				writer.String(tagString.c_str());
+				hadErrors == true;
 			}
 		}
-		writer.EndArray();
 
 	}
 
-	ParameterContainer& paramContainer = gameObject->getParameters();
-	parameterToJSON(writer, paramContainer);
-
-	writer.Key(GameObject::childrenField.c_str());
-	writer.StartArray();
-	for (auto child : gameObject->getChildren())
+	if (!hadErrors)
 	{
-		addGameObjectToJSON(writer, child, mats);
+		writer.StartObject();
+
+		//depending on the game object there might be different things to add.
+		switch (gameObject->getType())
+		{
+		case GameObjectType::SOLID:
+		{
+
+			Solid* solid = static_cast<Solid*>(gameObject);
+			auto model = solid->getMesh()->getFilePath();
+			writer.Key("model");
+			writer.StartArray();
+
+			writer.String(model.first.c_str());
+			writer.String(model.second.c_str());
+			writer.EndArray();
+		}
+
+		break;
+		case GameObjectType::LIGHT:
+			break;
+		default:
+			break;
+		}
+		auto mat = gameObject->getMaterial();
+		if (mat != NULL && mat->getName().size()>0)
+		{
+			mats[mat->getName()] = mat.get();
+			gameObject->getParameters().set(GameObject::material, std::string(mat->getName()));
+		}
+		auto renderTags = gameObject->getRenderTags();
+		if (renderTags.size() > 0)
+		{
+			writer.Key("renderTags");
+			writer.StartArray();
+			for (RenderTag tag : renderTags)
+			{
+				std::string tagString = GameObject::getTagString(tag);
+				if (tagString.size())
+				{
+					writer.String(tagString.c_str());
+				}
+			}
+			writer.EndArray();
+
+		}
+
+		ParameterContainer& paramContainer = gameObject->getParameters();
+		parameterToJSON(writer, paramContainer);
+
+		writer.Key(GameObject::childrenField.c_str());
+		writer.StartArray();
+		for (auto child : gameObject->getChildren())
+		{
+			addGameObjectToJSON(writer, child, mats);
+		}
+		writer.EndArray();
+		writer.EndObject();
 	}
-	writer.EndArray();
-	writer.EndObject();
+
 }
 
 void tetraRender::SceneSaver::materialToJSON(Writer & writer, Material * mat, std::map<std::string, Texture*>& textures)
