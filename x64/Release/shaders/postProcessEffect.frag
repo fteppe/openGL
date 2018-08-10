@@ -55,7 +55,7 @@ void main(){
         }
     }
 	
-    color = color + reflectionColor; 
+    color = mix(color , reflectionColor, activateScreenSpaceReflection); 
     colorOut = toneMapping(color);
 	
 }
