@@ -54,6 +54,12 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
 	std::map < std::vector < unsigned>, unsigned> indexTranslation;
+	auto& waveFrontUVs = objDataLoaded->attrib.texcoords;
+	auto& waveFrontNormals = objDataLoaded->attrib.normals;
+	auto& waveFrontVertices = objDataLoaded->attrib.vertices;
+
+
+
 
 	//Tiny obj has all the faces in a "flat" indices array. And num_face_vertices keeps track of how many vertices for each face. This makes the offset.
 	for (unsigned face = 0; face < mesh_ptr->mesh.num_face_vertices.size(); face++)
@@ -79,19 +85,16 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 			else
 			{
 				//We get the data for the vertex and add it at the end of our vertices.
-				auto waveFrontVertices = objDataLoaded->attrib.vertices;
 				glm::vec3 vertex = glm::vec3(waveFrontVertices[3 * vertexIndex], waveFrontVertices[3 * vertexIndex + 1], waveFrontVertices[3 * vertexIndex + 2]);
 				vertices.push_back(vertex);
 
-				auto waveFrontUVs = objDataLoaded->attrib.texcoords;
 				if (waveFrontUVs.size())
 				{
-					glm::vec2 UV = glm::vec2(waveFrontUVs[2 * UVindex], waveFrontUVs[2 * UVindex + 1]);
+					glm::vec2 UV = glm::vec2(waveFrontUVs[2 * UVindex], 1 - waveFrontUVs[2 * UVindex + 1]);
 					UVs.push_back(UV);
 				}
 
 
-				auto waveFrontNormals = objDataLoaded->attrib.normals;
 				if (waveFrontNormals.size())
 				{
 					glm::vec3 normal = glm::vec3(waveFrontNormals[3 * normalIndex], waveFrontNormals[3 * normalIndex + 1], waveFrontNormals[3 * normalIndex + 2]);

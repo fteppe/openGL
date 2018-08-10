@@ -9,6 +9,7 @@
 #include "imgui.h"
 #include "imgui_impl_sdl_gl3.h"
 #include <stdio.h>
+#include <algorithm>
 
 
 
@@ -182,7 +183,7 @@ glm::vec3 WindowBuilder::Vec3Input(glm::vec3 vector, std::string label)
 
 std::string WindowBuilder::stringInput(std::string input, std::string label)
 {
-	unsigned int maxNameSize = 50;
+	auto maxNameSize = std::max(50, (int) input.size() + 1);
 	char * name = new char[maxNameSize];
 	strcpy_s(name, maxNameSize, input.c_str());
 	ImGui::InputText(label.c_str(), name, maxNameSize);

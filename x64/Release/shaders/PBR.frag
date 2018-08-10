@@ -41,12 +41,14 @@ float shadowCalculation(vec4 fragShadowPos, sampler2D shadowMap);
 void main()
 {
    
+    vec2 newUV = vec2(UV.x ,UV.y);
+	
     
 	vec3 pos = fragPosWorld;
 	vec3 normal_ = vec3(0,1,0);//normalWorld;
 	vec2 translation = parralax(camTan, posTan);
-	vec2 newUV = UV + translation;
-    newUV = vec2(newUV.x , 1 - newUV.y);
+	newUV = translation + newUV;
+    //newUV = vec2(newUV.x , 1 - newUV.y);
 
 	vec3 bumpVal = texture(normalMap, UV).rgb;
 	normal_ = normalValue(normalWorld, tangentWorld, biTangentWorld, newUV, pu_Normalstrength);

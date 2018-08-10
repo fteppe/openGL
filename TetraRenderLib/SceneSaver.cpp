@@ -40,21 +40,26 @@ std::string tetraRender::SceneSaver::toJson(Scene & scene)
 
 	writer.Key("materials");
 	writer.StartArray();
+	std::map<std::string, Shader*> shaders;
+
 	for (auto mat : mats)
 	{
 		materialToJSON(writer, mat.second, texs);
+		Shader* shader = mat.second->getShaderProgram().get();
+		if (shader != nullptr)
+		{
+			shaders.emplace(shader->getName(), shader);
+		}
+
 	}
 	writer.EndArray();
 
 	writer.Key("shaders");
 	writer.StartArray();
-	for (auto mat : mats)
+	for (auto shader : shaders)
 	{
-		Shader* shader = mat.second->getShaderProgram().get();
-		if (shader != nullptr)
-		{
-			shaderToJSON(writer, shader);
-		}
+		shaderToJSON(writer, shader.second);
+		
 	}
 	writer.EndArray();
 
