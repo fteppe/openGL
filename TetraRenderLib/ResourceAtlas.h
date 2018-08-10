@@ -22,6 +22,7 @@ namespace tetraRender
 		std::shared_ptr<Shader> getShader(std::string shaderName);
 		std::string addMaterial(std::shared_ptr<Material> mat);
 		std::shared_ptr<Material> getMaterial(std::string materialName);
+		std::shared_ptr<Mesh> getMesh(std::pair<std::string, std::string>);
 		const MeshContainer& getMeshes();
 		const AtlasContainer<Texture>& getTextures();
 		const AtlasContainer<Shader>& getShaders();

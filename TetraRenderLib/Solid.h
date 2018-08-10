@@ -12,15 +12,15 @@
 #include "GameObject.h"
 #include "MeshLoader.h"
 
-class MeshLoader;
 
 namespace tetraRender
 {
+	class MeshLoader;
+
 	class Solid : public GameObject
 	{
 	public:
 		Solid();
-		Solid(std::vector<glm::vec3> vertices, std::vector<std::vector<int>> index);
 		Solid(std::shared_ptr<Mesh> vbo);		
 
 		

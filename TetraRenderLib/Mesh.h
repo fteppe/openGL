@@ -31,6 +31,8 @@ namespace tetraRender
 		//if we add a new component to our object, we need to update the information on the GC
 		void updateObjectAttributes();
 		void setDataFuture(std::future<GLfloat*> future);
+		GLfloat* createDataArray();
+
 
 	private:
 
@@ -39,7 +41,6 @@ namespace tetraRender
 		void setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int> index, std::vector<int> nbData);
 		void setVertex(GLfloat* verticesData, std::vector<int> attributesSize, std::vector<int> flatFaces);
 
-		GLfloat* createDataArray();
 		void asyncAttributesUpdate();
 
 

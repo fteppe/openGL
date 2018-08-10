@@ -35,7 +35,7 @@ namespace tetraRender
 	private:
 		Texture * loadTexture(rapidjson::Value& texture);
 
-		std::shared_ptr<MeshLoader> meshLoader;
+		std::shared_ptr<tetraRender::MeshLoader> meshLoader;
 		rapidjson::Document doc;
 
 	};

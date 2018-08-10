@@ -93,7 +93,7 @@ void tetraRender::Mesh::setVertex(GLfloat * verticesData, std::vector<int> attri
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 	//This is the size of the index but once it's flat.
 	nbVertices = flatFaces.size();
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, nbVertices * sizeof(unsigned int), &flatFaces[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, flatFaces.size() * sizeof(int), &flatFaces[0], GL_STATIC_DRAW);
 	int arraySize = 0;
 	int totalFloatNumber = 0;
 	int vertexNumber = vertices.size();

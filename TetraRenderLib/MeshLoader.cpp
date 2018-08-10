@@ -16,24 +16,14 @@ tetraRender::MeshLoader::~MeshLoader()
 std::shared_ptr<Mesh> tetraRender::MeshLoader::getMesh(std::pair<std::string, std::string> meshName)
 {
 	objData* loaded = new objData;
-	std::shared_ptr<Mesh> foundMesh = nullptr;
+	std::shared_ptr<Mesh> foundMesh = atlas.getMesh(meshName);
 	//If this file has been loaded;
-	auto meshes = atlas.getMeshes();
-	if (meshes.find(meshName.first) != meshes.end())
+	if (foundMesh == nullptr)
 	{
-		auto meshIterator = meshes.find(meshName.first)->second;
-		//and we find a mesh with that name
-		if (meshIterator.find(meshName.second) != meshIterator.end())
-		{
-			foundMesh = meshIterator.find(meshName.second)->second;
-		}
-	}
-	else
-	{
-		//If the loading is done we can grab the mesh
+		//If the loading is done we can grab the mesh, but we need to make sure the loading was successfull. If it wasn't the mesh won't be available
 		if (checkFileLoadingProgress(meshName))
 		{
-			foundMesh = meshes.find(meshName.first)->second[meshName.second];
+			foundMesh = atlas.getMesh(meshName);
 		}
 	}
 	return foundMesh;
@@ -52,8 +42,8 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 	//Tiny obj has all the faces in a "flat" indices array. And num_face_vertices keeps track of how many vertices for each face. This makes the offset.
 	for (unsigned face = 0; face < mesh_ptr->mesh.num_face_vertices.size(); face++)
 	{
-		unsigned polygonSize = mesh_ptr->mesh.num_face_vertices.size();
-		std::vector<unsigned> polygon;
+		unsigned polygonSize = mesh_ptr->mesh.num_face_vertices[face];
+		std::vector<int> polygon;
 		for (int i = 0; i < polygonSize; i++)
 		{
 			unsigned translatedIndex;
@@ -74,46 +64,52 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 			{
 				//We get the data for the vertex and add it at the end of our vertices.
 				auto waveFrontVertices = objDataLoaded->attrib.vertices;
-				glm::vec3 vertex = glm::vec3(waveFrontVertices[vertexIndex], waveFrontVertices[vertexIndex + 1], waveFrontVertices[vertexIndex + 2]);
+				glm::vec3 vertex = glm::vec3(waveFrontVertices[3 * vertexIndex], waveFrontVertices[3 * vertexIndex + 1], waveFrontVertices[3 * vertexIndex + 2]);
 				vertices.push_back(vertex);
 
 				auto waveFrontUVs = objDataLoaded->attrib.texcoords;
-				glm::vec2 UV = glm::vec2(waveFrontUVs[UVindex], waveFrontUVs[UVindex + 1]);
+				glm::vec2 UV = glm::vec2(waveFrontUVs[2 * UVindex], waveFrontUVs[2 * UVindex + 1]);
 				UVs.push_back(vertex);
 
 				auto waveFrontNormals = objDataLoaded->attrib.normals;
-				glm::vec3 normal = glm::vec3(waveFrontNormals[normalIndex], waveFrontNormals[normalIndex + 1], waveFrontNormals[normalIndex + 2]);
+				glm::vec3 normal = glm::vec3(waveFrontNormals[3 * normalIndex], waveFrontNormals[3 * normalIndex + 1], waveFrontNormals[3 * normalIndex + 2]);
 				normals.push_back(vertex);
-				
 				//We are sure that there are always the same number of normal, vertex and UVs. the attributes of vertex i are vertices[i] normals[i] UVs[i]
-				translatedIndex = vertices.size();
+				translatedIndex = vertices.size() -1 ;
+				indexTranslation[{vertexIndex, UVindex, normalIndex}] = translatedIndex;
 			}
 
 			polygon.push_back(translatedIndex);
 		}
-		mesh->setVertexAndIndex(vertices, polygons);
-		mesh->setNormals(normals);
-		mesh->setUVs(UVs);
-		mesh->findTangents();
+		indexOffset += polygonSize;
+		polygons.push_back(polygon);
+		polygon.clear();
 	}
-
-	return nullptr;
+	mesh->setVertexAndIndex(vertices, polygons);
+	mesh->setNormals(normals);
+	mesh->setUVs(UVs);
+	mesh->findTangents();
+	return mesh->createDataArray();
 }
 
 bool tetraRender::MeshLoader::checkFileLoadingProgress(std::pair<std::string, std::string> meshName)
 {
 	bool loadingDone = false;
+	std::string fileName = meshName.first;
 	//We the file hasn't been loaded, we try to figure out if there is a task started out there to do it.
 	if (fileLoadingFutures.find(meshName.first) != fileLoadingFutures.end())
 	{
 		//Since the task was started, we try to figure out if it is over or not.
 		std::future<objData*>* future_ptr = &(fileLoadingFutures.find(meshName.first)->second);
-		if (future_ptr->wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+		if (future_ptr->valid())
 		{
-			loadingDone = true;
-			//The task of loading the file is over. It's now necessary to build the meshes.
-			objData* loaded = future_ptr->get();
-			createMeshUpdateTasks(loaded, meshName.first);
+			if (future_ptr->wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+			{
+				loadingDone = true;
+				//The task of loading the file is over. It's now necessary to build the meshes.
+				objData* loaded = future_ptr->get();
+				createMeshUpdateTasks(loaded, meshName.first);
+			}
 		}
 	}
 	else {
@@ -133,18 +129,18 @@ objData * tetraRender::MeshLoader::loadFile(std::string fileName)
 
 void tetraRender::MeshLoader::createMeshUpdateTasks(objData * loaded, std::string fileName)
 {
-	auto meshes = atlas.getMeshes();
 	std::vector<std::packaged_task<GLfloat*()>*> tasks;
 	//We do in a single thread the work of updating all elements that have been loaded, but the meshes can know with
 	//the future object if their update is done which can be before the end of the thread execution.
 	for (unsigned i = 0; i < loaded->shapes.size(); i++)
 	{
 		tinyobj::shape_t* mesh_ptr = &loaded->shapes[i];
-		std::shared_ptr<Mesh> newMesh;
+		std::shared_ptr<Mesh> newMesh = std::shared_ptr<Mesh>( new Mesh);
 		std::packaged_task<GLfloat*()>* updateMeshTask = new std::packaged_task<GLfloat*()>(std::bind(&MeshLoader::updateMesh, this, newMesh, loaded, i));
 		newMesh->setDataFuture(std::move(updateMeshTask->get_future()));
+		newMesh->setFilePath(std::pair<std::string, std::string>(fileName, mesh_ptr->name));
 		tasks.push_back(updateMeshTask);
-		(meshes.find(fileName)->second)[mesh_ptr->name] = newMesh;
+		atlas.addMesh(newMesh);
 	}
 	//Asynchronously all the tasks are done in a serie; This means few new threads are done 
 	//and we avoid blocking the execution on the main thread.

@@ -17,15 +17,6 @@ Solid::Solid() : GameObject(), triangulated(false)
 }
 
 
-Solid::Solid(std::vector<glm::vec3> verticesIn, std::vector<std::vector<int>> indexIn): Solid()
-{
-
-	//shader_ptr = std::shared_ptr<Shader>(new Shader("transform.ver", "col.frag"));
-	//VBO_ptr = std::shared_ptr<VertexBufferObject>(new VertexBufferObject);
-
-
-}
-
 Solid::Solid(std::shared_ptr<Mesh> vbo) : Solid()
 {
 	mesh_ptr = vbo;
