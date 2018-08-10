@@ -84,12 +84,20 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 				vertices.push_back(vertex);
 
 				auto waveFrontUVs = objDataLoaded->attrib.texcoords;
-				glm::vec2 UV = glm::vec2(waveFrontUVs[2 * UVindex], waveFrontUVs[2 * UVindex + 1]);
-				UVs.push_back(UV);
+				if (waveFrontUVs.size())
+				{
+					glm::vec2 UV = glm::vec2(waveFrontUVs[2 * UVindex], waveFrontUVs[2 * UVindex + 1]);
+					UVs.push_back(UV);
+				}
+
 
 				auto waveFrontNormals = objDataLoaded->attrib.normals;
-				glm::vec3 normal = glm::vec3(waveFrontNormals[3 * normalIndex], waveFrontNormals[3 * normalIndex + 1], waveFrontNormals[3 * normalIndex + 2]);
-				normals.push_back(normal);
+				if (waveFrontNormals.size())
+				{
+					glm::vec3 normal = glm::vec3(waveFrontNormals[3 * normalIndex], waveFrontNormals[3 * normalIndex + 1], waveFrontNormals[3 * normalIndex + 2]);
+					normals.push_back(normal);
+				}
+
 				//We are sure that there are always the same number of normal, vertex and UVs. the attributes of vertex i are vertices[i] normals[i] UVs[i]
 				translatedIndex = vertices.size() -1 ;
 				indexTranslation[{vertexIndex, UVindex, normalIndex}] = translatedIndex;

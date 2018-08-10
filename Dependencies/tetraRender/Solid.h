@@ -46,7 +46,7 @@ namespace tetraRender
 		std::string description();
 		virtual GameObjectType getType() const;
 		
-		const Mesh& getMesh();
+		const std::shared_ptr<Mesh> getMesh();
 
 	protected:		
 		/// <summary>
