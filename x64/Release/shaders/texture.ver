@@ -33,6 +33,7 @@ void main()
 	mat3 worldRot = mat3(objectSpace[0].xyz,objectSpace[1].xyz, objectSpace[2].xyz);
 	normalWorld = normalize(aNormal);
 	normalWorld = vec3(worldRot*(normalWorld));
+	normalWorld = normalize(normalWorld);
 	tangentWorld = vec3(worldRot*(aTangent));
 	biTangentWorld = vec3(worldRot*(aBiTangent));
 	fragPosWorld = vec3(objectSpace * vec4(aPos,1));

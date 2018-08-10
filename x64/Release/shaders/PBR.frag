@@ -46,7 +46,7 @@ void main()
 	vec3 normal_ = vec3(0,1,0);//normalWorld;
 	vec2 translation = parralax(camTan, posTan);
 	vec2 newUV = UV + translation;
-    //newUV = UV *5;
+    newUV = vec2(newUV.x , 1 - newUV.y);
 
 	vec3 bumpVal = texture(normalMap, UV).rgb;
 	normal_ = normalValue(normalWorld, tangentWorld, biTangentWorld, newUV, pu_Normalstrength);
@@ -68,10 +68,8 @@ void main()
 	{
 		
 	}
+	//color = vec4(newUV, 0, 0);
 
-
-	
-	//the output of the normal vector must fit in [0,1]
 	normalOut = normal_;
 	vec4 reflectionVal = cubeMapReflection(normal_, fragPosWorld, camPos);
 	FragColor =  color;
@@ -128,12 +126,18 @@ float water()
 vec3 normalValue(vec3 normal, vec3 tangent, vec3 biTangent,vec2 UVin, float strength)
 {
 	vec3 normalMapVal = vec3(texture(normalMap, UVin));
-	//normalMapVal = normalMapVal  *strength;
-	vec3 baseLine = vec3(0.5); //since colors go from 0-1. a vector that is null has for value 0.5.
-	normalMapVal = normalMapVal - baseLine;
-	//We substract the Y value of the normal map because it seems that my map has the +y vector in the -y direction of the UV vector.
-    vec3 returnVal = normalize(normalMapVal.z*normalize(normal) + normalMapVal.x*normalize(tangent) - normalMapVal.y*normalize(biTangent));
-	return max(returnVal, normal);
+	vec3 newNormal = normal;
+	if(length(normalMapVal) > 0.5)
+	{
+			//normalMapVal = normalMapVal  *strength;
+		vec3 baseLine = vec3(0.5); //since colors go from 0-1. a vector that is null has for value 0.5.
+		normalMapVal = normalMapVal - baseLine;
+		//We substract the Y value of the normal map because it seems that my map has the +y vector in the -y direction of the UV vector.
+		vec3 returnVal = normalize(normalMapVal.z*normalize(normal) + normalMapVal.x*normalize(tangent) - normalMapVal.y*normalize(biTangent));
+		newNormal = max(returnVal, normal);
+	}
+
+	return newNormal;
 }
 
 //we put the cos value in the last part of the vec4.
