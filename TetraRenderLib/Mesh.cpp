@@ -87,6 +87,7 @@ void Mesh::setVertex(std::vector<std::vector<GLfloat>> vertices, std::vector<int
 
 void tetraRender::Mesh::setVertex(GLfloat * verticesData, std::vector<int> attributesSize, std::vector<int> flatFaces)
 {
+	std::cout << "updating GPU data of " << VertexArrayID << std::endl;
 	//We bind these buffers because they are the one we are gooing to do these operations on.
 	glBindVertexArray(VertexArrayID);
 	//We bind this element buffer to the VAO.
