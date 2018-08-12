@@ -28,18 +28,20 @@ you can call ./TetraVisu.exe scenes/saved.json to load a scene. In future releas
 - shader preProcessor that allows to understand #include directives to allow for easier shader writing.
 - materials can get the uniforms used by it's shader, and offer an interface to edit them if the uniform is of type vec3, float or sampler2D.
 -a complete user interface to edit rotation, scale position of objects, add textures, create new materials, recompile shaders, edit material values depending on the content of the shaders, and a tree of items where nodes, lights and object can be added, edited, removed or copy/pasted.
+-asynchrnous texture and mesh loading, it's faster and doesn't block the UI anymore
 
 ## wanted features
 - more scene files to hilight different features
 - cascaded shadows
 - instanciation for particle system.
 - use tiled rendering and a compute shader to diminish the amount of light/fragment calculation.
-- better .obj loading that can be slow for more complex objects. 
 
 It is all very simple, but allowed me to learn about a lot of different techniques. And I try to build the library so it is easy to add more to it fast.
 
 
 Some images of it :
+a scene with loaded obj models that show cases complex meshes
+![complex meshes]( tetraEngine/pictures/modèles complexes.JPG )
 
 The editor
 ![editor](pictures/editor.PNG)
