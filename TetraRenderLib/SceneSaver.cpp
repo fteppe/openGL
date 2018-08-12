@@ -48,13 +48,19 @@ std::string tetraRender::SceneSaver::toJson(Scene & scene)
 
 	writer.Key("shaders");
 	writer.StartArray();
+	std::set<Shader*> shaders;
 	for (auto mat : mats)
 	{
 		Shader* shader = mat.second->getShaderProgram().get();
 		if (shader != nullptr)
 		{
-			shaderToJSON(writer, shader);
+			shaders.insert(shader);
 		}
+	}
+
+	for (auto shader : shaders)
+	{
+		shaderToJSON(writer, shader);
 	}
 	writer.EndArray();
 
