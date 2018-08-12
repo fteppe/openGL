@@ -41,7 +41,7 @@ It is all very simple, but allowed me to learn about a lot of different techniqu
 
 Some images of it :
 a scene with loaded obj models that show cases complex meshes
-![complex meshes]( tetraEngine/pictures/modèles complexes.JPG )
+![complex meshes](pictures/modèles complexes.JPG )
 
 The editor
 ![editor](pictures/editor.PNG)
