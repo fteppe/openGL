@@ -15,6 +15,7 @@ void main()
 	mat3 worldRot = mat3(objectSpace[0].xyz,objectSpace[1].xyz, objectSpace[2].xyz);
 	normal = normalize(aNormal);
 	normal = vec3(worldRot*(normal));
+	normal = normalize(normal);
 	vertexPos = vec3(objectSpace * vec4(aPos,1));
 	vertexColor = (normal);
 	gl_Position = mvp*vec4(aPos, 1.0);

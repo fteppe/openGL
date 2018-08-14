@@ -53,13 +53,10 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 	std::vector<glm::vec2> UVs;
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
-	std::map < std::vector < unsigned>, unsigned> indexTranslation;
+	std::map < std::vector < int>, int> indexTranslation;
 	auto& waveFrontUVs = objDataLoaded->attrib.texcoords;
 	auto& waveFrontNormals = objDataLoaded->attrib.normals;
 	auto& waveFrontVertices = objDataLoaded->attrib.vertices;
-
-
-
 
 	//Tiny obj has all the faces in a "flat" indices array. And num_face_vertices keeps track of how many vertices for each face. This makes the offset.
 	for (unsigned face = 0; face < mesh_ptr->mesh.num_face_vertices.size(); face++)
@@ -68,19 +65,21 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 		std::vector<int> polygon;
 		for (int i = 0; i < polygonSize; i++)
 		{
-			unsigned translatedIndex;
+			int translatedIndex;
 			auto vertexObj = mesh_ptr->mesh.indices[indexOffset + i];
-			unsigned vertexIndex = vertexObj.vertex_index;
-			unsigned UVindex = vertexObj.texcoord_index;
-			unsigned normalIndex = vertexObj.normal_index;
+			int vertexIndex = vertexObj.vertex_index;
+			int UVindex = vertexObj.texcoord_index;
+			int normalIndex = vertexObj.normal_index;
+			auto vectorIndex = std::vector<int>({ vertexIndex, UVindex, normalIndex });
 			//The issue is the difference in data format between openGL and waveFront .Obj; openGL a vertex data is the combination of all the elemeent (vertex, UV...)
 			//Together, but Obj can have a vertex and it's norma with different indices. So we need as many UVs  as normals as vertices
 			//two vertices can be shared between faces if and only if they have all the same attributes.
 			//This is what index translation is for, we check if a vertex exists with all the attributes of an existing one. If it does we use
 			//The existing one, otherwise we add it.
-			if (indexTranslation.find({ vertexIndex, UVindex, normalIndex }) != indexTranslation.end())
+			auto findIndex = indexTranslation.find(vectorIndex);
+			if (findIndex != indexTranslation.end())
 			{
-				translatedIndex = indexTranslation.find({ vertexIndex, UVindex, normalIndex })->second;
+				translatedIndex = findIndex->second;
 			}
 			else
 			{
@@ -103,7 +102,7 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 
 				//We are sure that there are always the same number of normal, vertex and UVs. the attributes of vertex i are vertices[i] normals[i] UVs[i]
 				translatedIndex = vertices.size() -1 ;
-				indexTranslation[{vertexIndex, UVindex, normalIndex}] = translatedIndex;
+				indexTranslation[vectorIndex] =  translatedIndex;
 			}
 
 			polygon.push_back(translatedIndex);
