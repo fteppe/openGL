@@ -86,8 +86,6 @@ void WindowBuilder::draw()
 {
 
 
-	bool show_demo_window = true;
-	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	// Main loop
@@ -134,7 +132,7 @@ void WindowBuilder::draw()
 		ImGui::Begin("menu");
 		menu();
 		ImGui::End();
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
 		// Rendering
 		glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
 		ImGui::Render();
