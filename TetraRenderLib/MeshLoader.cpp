@@ -76,12 +76,15 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 			//two vertices can be shared between faces if and only if they have all the same attributes.
 			//This is what index translation is for, we check if a vertex exists with all the attributes of an existing one. If it does we use
 			//The existing one, otherwise we add it.
-			auto findIndex = indexTranslation.find(vectorIndex);
-			if (findIndex != indexTranslation.end())
-			{
-				translatedIndex = findIndex->second;
-			}
-			else
+			auto it = indexTranslation.begin();
+			std::pair<std::map<std::vector<int>, int>::iterator, bool> insertion = indexTranslation.insert(std::pair<std::vector<int>, int>(vectorIndex, translatedIndex = vertices.size()));
+			//auto findIndex = indexTranslation.find(vectorIndex);
+			//if (findIndex != indexTranslation.end())
+			//{
+			//	translatedIndex = findIndex->second;
+			//}
+			translatedIndex = insertion.first->second;
+			if(insertion.second)
 			{
 				//We get the data for the vertex and add it at the end of our vertices.
 				glm::vec3 vertex = glm::vec3(waveFrontVertices[3 * vertexIndex], waveFrontVertices[3 * vertexIndex + 1], waveFrontVertices[3 * vertexIndex + 2]);
@@ -101,8 +104,8 @@ GLfloat * tetraRender::MeshLoader::updateMesh(std::shared_ptr<Mesh> mesh, objDat
 				}
 
 				//We are sure that there are always the same number of normal, vertex and UVs. the attributes of vertex i are vertices[i] normals[i] UVs[i]
-				translatedIndex = vertices.size() -1 ;
-				indexTranslation[vectorIndex] =  translatedIndex;
+				//translatedIndex = vertices.size() -1 ;
+				//indexTranslation[vectorIndex] =  translatedIndex;
 			}
 
 			polygon.push_back(translatedIndex);
